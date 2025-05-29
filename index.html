@@ -24,7 +24,7 @@
     }
 
     .logo {
-      height: 40px;
+      height: 32px;
     }
 
     .usuario {
@@ -57,14 +57,26 @@
 
     .resumen-item {
       flex: 1;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
       font-size: 0.8rem;
+      text-align: left;
     }
 
     .resumen-item img {
       width: 20px;
       height: 20px;
-      margin-bottom: 4px;
+    }
+
+    .resumen-item .texto {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .resumen-item .texto strong {
+      font-size: 0.85rem;
     }
 
     .superavit {
@@ -141,15 +153,24 @@
   <section class="resumen">
     <div class="resumen-item">
       <img src="assets/icons/ingreso.png" alt="Ingresos" />
-      <div>Ingresos<br><strong>$6,000.00</strong></div>
+      <div class="texto">
+        <span>Ingresos</span>
+        <strong>$6,000.00</strong>
+      </div>
     </div>
     <div class="resumen-item">
       <img src="assets/icons/gastos.png" alt="Gastos" />
-      <div>Gastos<br><strong>$3,531.23</strong></div>
+      <div class="texto">
+        <span>Gastos</span>
+        <strong>$3,531.23</strong>
+      </div>
     </div>
     <div class="resumen-item">
       <img src="assets/icons/ahorro.png" alt="Ahorros" />
-      <div>Ahorros<br><strong>$600.00</strong></div>
+      <div class="texto">
+        <span>Ahorros</span>
+        <strong>$600.00</strong>
+      </div>
     </div>
   </section>
 
