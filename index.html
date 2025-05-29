@@ -13,26 +13,37 @@
       color: #000000;
       padding-bottom: 80px;
     }
+
     header {
-      background-color: #3956E8;
+      background-color: #594AE2;
       color: #fff;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 1rem;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
     }
-    header img.logo {
-      height: 48px;
+
+    .logo {
+      height: 56px;
     }
-     header {
-      height: auto;           /* o quitar height fija */
-      padding: 0.75rem 1rem;  /* reduce espacio */
+
+    .usuario {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
+
     .usuario img {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
     }
+
+    .usuario span {
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
     .resumen {
       display: flex;
       justify-content: space-between;
@@ -43,16 +54,19 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       gap: 0.5rem;
     }
+
     .resumen-item {
       flex: 1;
       text-align: center;
       font-size: 0.8rem;
     }
+
     .resumen-item img {
       width: 20px;
       height: 20px;
       margin-bottom: 4px;
     }
+
     .superavit {
       background: #e8fdf2;
       color: #0a8754;
@@ -61,21 +75,25 @@
       border-radius: 8px;
       font-size: 0.85rem;
     }
+
     .fechas {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin: 1rem;
     }
+
     .fechas input {
       width: 45%;
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 8px;
     }
+
     .seccion-graficos {
       margin: 1rem;
     }
+
     .grafico-placeholder {
       width: 100%;
       height: 180px;
@@ -83,6 +101,7 @@
       border-radius: 12px;
       margin-bottom: 1.5rem;
     }
+
     footer.navbar {
       position: fixed;
       bottom: 0;
@@ -94,6 +113,7 @@
       align-items: center;
       padding: 0.4rem 0;
     }
+
     .nav-item {
       display: flex;
       flex-direction: column;
@@ -101,6 +121,7 @@
       font-size: 0.65rem;
       color: #64748B;
     }
+
     .nav-item img {
       width: 22px;
       height: 22px;
@@ -110,11 +131,11 @@
 </head>
 <body>
   <header>
-    <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
     <div class="usuario">
-      <span>Hola xavier</span>
       <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
+      <span>Hola xavier</span>
     </div>
+    <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
   </header>
 
   <section class="resumen">
