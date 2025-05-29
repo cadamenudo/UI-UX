@@ -189,9 +189,10 @@
     <input type="date" value="2025-05-31" />
   </div>
 
-  <section class="seccion-graficos">
-    <h4>Meta para el año</h4>
-    <div class="grafico-placeholder"></div>
+<section class="seccion-graficos">
+  <h4>Meta para el año</h4>
+  <canvas id="graficoMetas" height="250"></canvas>
+</section>
 
     <h4>Ingresos vs. Gastos</h4>
     <div class="grafico-placeholder"></div>
@@ -222,5 +223,75 @@
       <span>Buscar</span>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('graficoMetas').getContext('2d');
+  const graficoMetas = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Meta', 'Progreso'],
+      datasets: [
+        {
+          label: 'Meta',
+          data: [5000, 0],
+          backgroundColor: '#E8C239',
+          borderRadius: 10,
+          barThickness: 30,
+          stack: 'Stack 0'
+        },
+        {
+          label: 'Logrado',
+          data: [0, 2500],
+          backgroundColor: '#3956E8',
+          borderRadius: 10,
+          barThickness: 30,
+          stack: 'Stack 1'
+        },
+        {
+          label: 'Faltante',
+          data: [0, 2500],
+          backgroundColor: '#AAB8F2',
+          borderRadius: 10,
+          barThickness: 30,
+          stack: 'Stack 1'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          backgroundColor: '#fff',
+          titleColor: '#000',
+          bodyColor: '#000',
+          borderWidth: 1,
+          borderColor: '#ccc'
+        },
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
+            display: false
+          }
+        },
+        y: {
+          beginAtZero: true,
+          stacked: true,
+          grid: {
+            display: true
+          },
+          ticks: {
+            display: true
+          }
+        }
+      }
+    }
+  });
+</script>
+
 </body>
 </html>
