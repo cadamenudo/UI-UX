@@ -10,23 +10,40 @@
       margin: 0;
       font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
-      color: #000;
+      color: #000000;
       padding-bottom: 80px;
     }
 
     header {
       background-color: #594AE2;
-      color: white;
+      color: #fff;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 1rem 1.5rem 3.5rem;
     }
 
-    .logo { height: 28px; }
-    .usuario { display: flex; align-items: center; gap: 0.5rem; }
-    .usuario img { width: 36px; height: 36px; border-radius: 50%; }
-    .usuario span { font-size: 0.85rem; font-weight: bold; }
+    .logo {
+      height: 28px;
+    }
+
+    .usuario {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .usuario img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
+
+    .usuario span {
+      font-size: 0.85rem;
+      font-weight: bold;
+      white-space: nowrap;
+    }
 
     .resumen {
       display: flex;
@@ -46,7 +63,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 0.5rem;
       font-size: 0.8rem;
+      text-align: left;
+    }
+
+    .resumen-item img {
+      width: 30px;
+      height: 30px;
     }
 
     .resumen-item .texto {
@@ -65,39 +89,6 @@
       padding: 0.8rem;
       border-radius: 8px;
       font-size: 0.85rem;
-    }
-
-    .fechas-dos-columnas {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      margin: 1rem;
-    }
-
-    .bloque-fecha {
-      flex: 1;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .bloque-fecha label {
-      font-size: 0.75rem;
-      color: #64748B;
-      margin-bottom: 4px;
-    }
-
-    .bloque-fecha input[type="date"] {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 0.85rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: inherit;
-      box-sizing: border-box;
     }
 
     .encabezado-transacciones {
@@ -154,8 +145,12 @@
       padding: 0.75rem 1rem;
       border-top: 1px solid #eee;
       border-bottom: 1px solid #eee;
-      background: #fff;
       cursor: pointer;
+      background: #fff;
+    }
+
+    .subcategoria:hover {
+      background: #F9FAFB;
     }
 
     .detalles-subcategoria {
@@ -206,32 +201,68 @@
       height: 20px;
       margin-bottom: 4px;
     }
-  </style>
+  
+    .fechas-dos-columnas {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1rem;
+    }
+
+    .bloque-fecha {
+      flex: 1;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .bloque-fecha label {
+      font-size: 0.75rem;
+      color: #64748B;
+      margin-bottom: 4px;
+    }
+
+    .bloque-fecha input[type="date"] {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: 'Greycliff CF', sans-serif;
+      box-sizing: border-box;
+    }
+$1
 </head>
 <body>
-
   <header>
-    <img src="https://via.placeholder.com/100x28" class="logo" alt="Logo" />
+    <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
     <div class="usuario">
-      <img src="https://randomuser.me/api/portraits/men/32.jpg" />
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
       <span>Hola xavier</span>
     </div>
   </header>
 
   <section class="resumen">
     <div class="resumen-item">
+      <img src="assets/icons/ingreso.png" alt="Ingresos" />
       <div class="texto">
         <span>Ingresos</span>
         <strong>$6,000.00</strong>
       </div>
     </div>
     <div class="resumen-item">
+      <img src="assets/icons/gastos.png" alt="Gastos" />
       <div class="texto">
         <span>Gastos</span>
         <strong>$3,531.23</strong>
       </div>
     </div>
     <div class="resumen-item">
+      <img src="assets/icons/ahorro.png" alt="Ahorros" />
       <div class="texto">
         <span>Ahorros</span>
         <strong>$600.00</strong>
@@ -239,9 +270,7 @@
     </div>
   </section>
 
-  <div class="superavit">
-    ✅ SUPER: Tienes un sobrante de <strong>$1,868.77</strong>
-  </div>
+  $1
 
   <div class="fechas-dos-columnas">
     <div class="bloque-fecha">
@@ -260,10 +289,10 @@
   </div>
 
   <div class="tabs-transacciones">
-    <button onclick="mostrarCategoria('ingresos', event)">
+    <button class="tab-activa" onclick="mostrarCategoria('ingresos', event)">
       <span class="punto-tab" style="background:#3956E8;"></span> Ingresos
     </button>
-    <button class="tab-activa" onclick="mostrarCategoria('gastos', event)">
+    <button onclick="mostrarCategoria('gastos', event)">
       <span class="punto-tab" style="background:#BA1B1D;"></span> Gastos
     </button>
     <button onclick="mostrarCategoria('ahorros', event)">
@@ -271,11 +300,43 @@
     </button>
   </div>
 
-  <div id="gastos" class="categoria-activa">
+  $1
+
+  <div id="ingresos" style="display: none;">
     <div class="subcategoria" onclick="toggleDetalles(this)">
-      <span>Alimentación</span>
-      <strong>$5,187.87</strong>
+      <span>Sueldo</span>
+      <strong>$2,400.00</strong>
     </div>
+    <div class="detalles-subcategoria">
+      <table class="tabla-detalle">
+        <thead>
+          <tr><th>Fuente</th><th>Valor</th><th>Fecha</th><th>File</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Empresa</td><td>$1,200.00</td><td>01/05/2025</td><td>PDF</td></tr>
+          <tr><td>Freelance</td><td>$1,200.00</td><td>15/05/2025</td><td>PDF</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="ahorros" style="display: none;">
+    <div class="subcategoria" onclick="toggleDetalles(this)">
+      <span>Meta Viaje</span>
+      <strong>$500.00</strong>
+    </div>
+    <div class="detalles-subcategoria">
+      <table class="tabla-detalle">
+        <thead>
+          <tr><th>Destino</th><th>Valor</th><th>Fecha</th><th>File</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cuenta ahorro</td><td>$300.00</td><td>10/05/2025</td><td>-</td></tr>
+          <tr><td>Cuenta ahorro</td><td>$200.00</td><td>24/05/2025</td><td>-</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
     <div class="detalles-subcategoria">
       <table class="tabla-detalle">
         <thead>
@@ -290,9 +351,18 @@
   </div>
 
   <footer class="navbar">
-    <div class="nav-item"><img src="https://via.placeholder.com/24" /><span>Inicio</span></div>
-    <div class="nav-item"><img src="https://via.placeholder.com/24" /><span>Transacciones</span></div>
-    <div class="nav-item"><img src="https://via.placeholder.com/24" /><span>Metas</span></div>
+    <div class="nav-item">
+      <img src="assets/icons/home.png" alt="Home" />
+      <span>Inicio</span>
+    </div>
+    <div class="nav-item">
+      <img src="assets/icons/transacciones.png" alt="Movimientos" />
+      <span>Transacciones</span>
+    </div>
+    <div class="nav-item">
+      <img src="assets/icons/metas.png" alt="Metas" />
+      <span>Metas</span>
+    </div>
   </footer>
 
   <script>
@@ -302,16 +372,13 @@
       detalles.style.display = visible ? 'none' : 'block';
     }
 
-    function mostrarCategoria(id, e) {
-      ['ingresos', 'gastos', 'ahorros'].forEach(cat => {
-        const el = document.getElementById(cat);
-        if (el) el.style.display = (cat === id) ? 'block' : 'none';
-      });
+    function mostrarCategoria(id, event) {
+      document.querySelectorAll('.categoria-activa').forEach(cat => cat.style.display = 'none');
+      const target = document.getElementById(id);
+      if (target) target.style.display = 'block';
 
-      document.querySelectorAll('.tabs-transacciones button').forEach(btn => {
-        btn.classList.remove('tab-activa');
-      });
-      if (e?.target) e.target.classList.add('tab-activa');
+      document.querySelectorAll('.tabs-transacciones button').forEach(b => b.classList.remove('tab-activa'));
+      event.target.classList.add('tab-activa');
     }
   </script>
 </body>
