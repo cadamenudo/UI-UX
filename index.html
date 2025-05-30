@@ -119,7 +119,15 @@
       border-radius: 12px;
       margin-bottom: 1.5rem;
     }
-
+    .grafico-lineal-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
     footer.navbar {
       position: fixed;
       bottom: 0;
@@ -220,7 +228,7 @@
 <section class="bloque-sin-sombra">
   <h4>Ingresos vs Gastos</h4>
   <div class="grafico-lineal-container">
-    <canvas id="graficoLineal" width="400" height="200"></canvas>
+    <canvas id="graficoLineal"></canvas>
   </div>
 </section>
   
