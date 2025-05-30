@@ -199,8 +199,14 @@
   <div class="grafico-lineal-container">
     <canvas id="graficoLineal"></canvas>
   </div>
+  
+<section class="seccion-graficos">
+  <h4>Ingresos Totales</h4>
+  <div class="grafico-dona-ingresos" style="max-width: 320px; margin: 0 auto;">
+    <canvas id="graficoDonaIngresos" width="280" height="280"></canvas>
+  </div>
 </section>
-
+  
     <h4>Gastos Totales</h4>
     <div class="grafico-placeholder"></div>
   </section>
@@ -373,7 +379,42 @@ new Chart(ctxLineal, {
     }
   }
 });
-
+    // Gráfico Ingresos totales (dona)
+const ctxDona = document.getElementById('graficoDonaIngresos').getContext('2d');
+new Chart(ctxDona, {
+  type: 'doughnut',
+  data: {
+    labels: ['Sueldo', 'Negocio', 'Inversiones', 'Otros'],
+    datasets: [{
+      data: [4200, 1300, 900, 600],
+      backgroundColor: ['#3956E8', '#7459D9', '#E8C239', '#AAB8F2'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: {
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        callbacks: {
+          label: function(context) {
+            const label = context.label;
+            const value = context.formattedValue;
+            return `${label}: $${value}`;
+          }
+        }
+      },
+      legend: {
+        display: false
+      }
+    }
+  }
+});
 </script>
 
 </body>
