@@ -20,6 +20,7 @@
       padding: 2rem;
       border-radius: 16px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-sizing: border-box;
     }
     h2 {
       margin-bottom: 1.5rem;
@@ -33,6 +34,22 @@
       border-radius: 10px;
       margin-bottom: 1rem;
       font-family: 'Greycliff CF', sans-serif;
+      box-sizing: border-box;
+    }
+    .campo-con-icono {
+      position: relative;
+    }
+    .campo-con-icono input {
+      padding-right: 2.5rem;
+    }
+    .icono-fecha {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 1.1rem;
+      color: #64748B;
     }
     .monto {
       font-size: 2.5rem;
@@ -86,34 +103,20 @@
       border: none;
       cursor: pointer;
     }
-    .formulario {
-  max-width: 400px;
-  margin: auto;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  box-sizing: border-box;
-}
-
-input, textarea, select {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  box-sizing: border-box;
-}
-
   </style>
 </head>
 <body>
   <div class="formulario">
     <h2>Editar Transacción</h2>
     <div class="monto">$120.00</div>
-    <input type="text" placeholder="Categoría" value="Alimentación">
-    <input type="date" value="2025-05-22">
+
+    <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="window.location.href='lista-categorias-transaccion.html'">
+
+    <div class="campo-con-icono">
+      <input type="date" id="fecha" name="fecha" value="2025-05-22">
+      <span class="icono-fecha">📅</span>
+    </div>
+
     <input type="text" placeholder="Comercio" value="Walmart">
     <textarea rows="3" placeholder="Comentario opcional">Compra semanal</textarea>
 
@@ -131,5 +134,15 @@ input, textarea, select {
       <button class="btn-guardar">Guardar</button>
     </div>
   </div>
+
+  <script>
+    window.onload = function() {
+      const seleccion = localStorage.getItem('subcategoriaSeleccionada');
+      if (seleccion) {
+        document.getElementById('categoria').value = seleccion;
+        localStorage.removeItem('subcategoriaSeleccionada');
+      }
+    };
+  </script>
 </body>
 </html>
