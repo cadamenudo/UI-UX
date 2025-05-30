@@ -13,19 +13,16 @@
       color: #000000;
       padding: 1rem;
     }
-
     .encabezado {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
     }
-
     .encabezado h4 {
       margin: 0;
       font-size: 1.1rem;
     }
-
     .btn-nueva {
       background: #594AE2;
       color: white;
@@ -35,7 +32,6 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
-
     .tabs {
       display: flex;
       justify-content: space-around;
@@ -46,7 +42,6 @@
       margin-bottom: 1rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-
     .tabs button {
       background: none;
       border: none;
@@ -59,33 +54,29 @@
       cursor: pointer;
       padding: 0.25rem 0.5rem;
     }
-
     .tabs .activo {
       color: #000;
       border-bottom: 2px solid #5849E1;
     }
-
     .punto {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       display: inline-block;
     }
-
     .bloque-categoria {
       background: #fff;
       padding: 1rem;
       border-radius: 12px;
       margin-bottom: 1rem;
     }
-
     .bloque-categoria h5 {
-      margin: 0 0 1rem;
+      margin: 0;
+      font-size: 1rem;
       display: flex;
       justify-content: space-between;
-      font-size: 1rem;
+      cursor: pointer;
     }
-
     .tarjeta-transaccion {
       background: #fff;
       border-top: 1px solid #f0f0f0;
@@ -96,17 +87,12 @@
       font-size: 0.85rem;
       gap: 1rem;
     }
-
     .col-1, .col-2, .col-3 {
       display: flex;
       flex-direction: column;
       gap: 0.2rem;
     }
-
-    .col-1 {
-      flex: 1;
-    }
-
+    .col-1 { flex: 1; }
     .col-2 {
       flex: 1;
       justify-content: flex-start;
@@ -114,39 +100,20 @@
       text-align: left;
       margin-top: 0.1rem;
     }
-
-    .col-3 {
-      align-items: flex-end;
-    }
-
-    .monto {
-      font-weight: bold;
-      font-size: 1rem;
-    }
-
-    .subcategoria, .fuente {
-      color: #777;
-      font-size: 0.8rem;
-    }
-
-    .fecha {
-      font-size: 0.85rem;
-    }
-
+    .col-3 { align-items: flex-end; }
+    .monto { font-weight: bold; font-size: 1rem; }
+    .subcategoria, .fuente { color: #777; font-size: 0.8rem; }
+    .fecha { font-size: 0.85rem; }
     .editar {
       color: #147efb;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
     }
-
-    .categoria {
-      display: none;
-    }
-
-    .categoria.activa {
-      display: block;
-    }
+    .categoria { display: none; }
+    .categoria.activa { display: block; }
+    .contenido-subcategoria { display: none; margin-top: 0.75rem; }
+    .bloque-categoria.abierto .contenido-subcategoria { display: block; }
   </style>
 </head>
 <body>
@@ -297,10 +264,17 @@
     function cambiarCategoria(id, boton) {
       document.querySelectorAll('.categoria').forEach(el => el.classList.remove('activa'));
       document.getElementById(id).classList.add('activa');
-
       document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('activo'));
       boton.classList.add('activo');
     }
+
+    document.querySelectorAll('.bloque-categoria h5').forEach(header => {
+      header.addEventListener('click', () => {
+        const categoria = header.closest('.categoria');
+        categoria.querySelectorAll('.bloque-categoria').forEach(b => b.classList.remove('abierto'));
+        header.parentElement.classList.add('abierto');
+      });
+    });
   </script>
 </body>
 </html>
