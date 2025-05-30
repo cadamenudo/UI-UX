@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Editar Transacción</title>
-  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     body {
       font-family: 'Greycliff CF', sans-serif;
@@ -26,14 +26,13 @@
       margin-bottom: 1.5rem;
       font-size: 1.25rem;
     }
-    input, textarea, select {
+    input, textarea {
       width: 100%;
       padding: 0.75rem;
       font-size: 0.9rem;
       border: 1px solid #ccc;
       border-radius: 10px;
       margin-bottom: 1rem;
-      font-family: 'Greycliff CF', sans-serif;
       box-sizing: border-box;
     }
     .campo-con-icono {
@@ -71,18 +70,9 @@
       cursor: pointer;
       font-size: 0.85rem;
     }
-    .btn-cancelar {
-      background: transparent;
-      color: #64748B;
-    }
-    .btn-guardar {
-      background: #3956E8;
-      color: #fff;
-    }
-    .btn-eliminar {
-      background: #3956E8;
-      color: #fff;
-    }
+    .btn-cancelar { background: transparent; color: #64748B; }
+    .btn-guardar, .btn-eliminar { background: #3956E8; color: #fff; }
+
     .imagen-adjunta {
       background: #F1F5F9;
       padding: 1rem;
@@ -103,42 +93,77 @@
       border: none;
       cursor: pointer;
     }
+
+    /* Modal de Categorías */
+    .modal-categorias {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .modal-contenido {
+      background: #fff;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border-radius: 12px;
+      padding: 1rem;
+    }
     .grupo {
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
       margin-bottom: 1rem;
-      overflow: hidden;
     }
     .grupo-header {
-      background: #F1F5F9;
-      padding: 0.75rem 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
       font-weight: bold;
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #F3F4F6;
+      margin-top: 0.5rem;
     }
     .circle {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       margin-right: 0.5rem;
     }
     .contenido {
       display: none;
-      padding: 1rem;
-      background: #fff;
+      margin-left: 1rem;
+      margin-top: 0.5rem;
     }
     .subtitulo {
+      font-size: 0.9rem;
       font-weight: bold;
-      margin-top: 0.75rem;
+      margin-top: 0.8rem;
     }
     ul {
       list-style: none;
-      padding-left: 1rem;
+      padding: 0;
+      margin: 0.3rem 0;
     }
-    ul li {
-      margin: 0.25rem 0;
+    li {
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      background: #F9FAFB;
+      margin-bottom: 0.3rem;
+      cursor: pointer;
+    }
+    li:hover {
+      background: #E5E7EB;
+    }
+    .btn-cerrar {
+      margin-top: 1rem;
+      background: transparent;
+      color: #64748B;
+      font-size: 0.85rem;
+      border: none;
       cursor: pointer;
     }
   </style>
@@ -151,8 +176,8 @@
     <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="abrirModalCategorias()">
 
     <div class="campo-con-icono">
-      <input type="date" id="fecha" name="fecha" value="2025-05-22">
-      <span class="icono-fecha">📅</span>
+      <input type="date" id="fecha" value="2025-05-22">
+      <span class="icono-fecha"></span>
     </div>
 
     <input type="text" placeholder="Comercio" value="Walmart">
@@ -173,160 +198,85 @@
     </div>
   </div>
 
+  <!-- Modal de Categorías -->
+  <div id="modalCategorias" class="modal-categorias">
+    <div class="modal-contenido">
+      <h3>Seleccionar Categoría</h3>
 
-  <div class="grupo" style="--color:#3956E8;">
-    <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
-      <div style="display:flex;align-items:center;">
-        <div class="circle" style="background:#3956E8;"></div>
-        Ingresos
+      <!-- Aquí puedes seguir añadiendo más grupos y subcategorías -->
+      <div class="grupo">
+        <div class="grupo-header" onclick="toggleGrupo(this)">
+          <div style="display:flex;align-items:center;">
+            <div class="circle" style="background:#3956E8;"></div>
+            Ingresos
+          </div><span>⌄</span>
+        </div>
+        <div class="contenido">
+          <div class="subtitulo">Pago por trabajo</div>
+          <ul>
+            <li onclick="seleccionarSubcategoria('Salario')">Salario</li>
+            <li onclick="seleccionarSubcategoria('Comisión')">Comisión</li>
+            <li onclick="seleccionarSubcategoria('Bono')">Bono</li>
+          </ul>
+          <div class="subtitulo">Ingreso pasivo</div>
+          <ul>
+            <li onclick="seleccionarSubcategoria('Renta inmueble')">Renta inmueble</li>
+          </ul>
+        </div>
       </div>
-      <span>⌄</span>
-    </div>
-    <div class="contenido">
-      <div class="subtitulo">Pago por trabajo</div>
-      <ul>
-        <li>Bono</li>
-        <li>Comisión</li>
-        <li>Ganancia empleado cuenta propia</li>
-        <li>Pago por hora</li>
-        <li>Propina</li>
-        <li>Salario</li>
-      </ul>
-      <div class="subtitulo">Ganancia de capital</div>
-      <ul>
-        <li>Acciones</li>
-        <li>Auto</li>
-        <li>Bonos o renta fija</li>
-        <li>Casa/Apartamento/Tierra</li>
-        <li>ETF, fondo mutuo, etc.</li>
-      </ul>
-      <div class="subtitulo">Ingreso pasivo</div>
-      <ul>
-        <li>Anualidad</li>
-        <li>Dividendos e Intereses</li>
-        <li>Pensión</li>
-        <li>Renta inmueble</li>
-        <li>Seguro Social</li>
-      </ul>
-    </div>
-  </div>
 
-  <div class="grupo">
-    <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
-      <div style="display:flex;align-items:center;">
-        <div class="circle" style="background:#6B7280;"></div>
-        Gastos
+      <div class="grupo">
+        <div class="grupo-header" onclick="toggleGrupo(this)">
+          <div style="display:flex;align-items:center;">
+            <div class="circle" style="background:#6B7280;"></div>
+            Gastos
+          </div><span>⌄</span>
+        </div>
+        <div class="contenido">
+          <div class="subtitulo">Alimentación</div>
+          <ul>
+            <li onclick="seleccionarSubcategoria('Supermercado')">Supermercado</li>
+            <li onclick="seleccionarSubcategoria('Comidas fuera')">Comidas fuera</li>
+          </ul>
+        </div>
       </div>
-      <span>⌄</span>
-    </div>
-    <div class="contenido">
-      <div class="subtitulo">Alimentación</div>
-      <ul>
-        <li>Supermercado</li>
-        <li>Comidas fuera</li>
-        <li>Pedido a domicilio</li>
-      </ul>
-      <div class="subtitulo">Casa</div>
-      <ul>
-        <li>Hipoteca / Alquiler</li>
-        <li>Servicios básicos</li>
-        <li>Mantenimiento</li>
-      </ul>
-      <div class="subtitulo">Impuestos</div>
-      <ul>
-        <li>Seguro social</li>
-        <li>Propiedad</li>
-        <li>Venta</li>
-        <li>Estatales</li>
-        <li>Federales</li>
-        <li>Municipales</li>
-      </ul>
-      <div class="subtitulo">Transportación</div>
-      <ul>
-        <li>Gasolina</li>
-        <li>Mantenimiento</li>
-        <li>Transporte público / Uber</li>
-      </ul>
-      <div class="subtitulo">Seguros</div>
-      <ul>
-        <li>Salud</li>
-        <li>Auto</li>
-        <li>Vida</li>
-      </ul>
-      <div class="subtitulo">Regalos y donaciones</div>
-      <ul>
-        <li>Familia</li>
-        <li>Amigos</li>
-        <li>Instituciones</li>
-      </ul>
-      <div class="subtitulo">Gastos Médicos</div>
-      <ul>
-        <li>Consultas</li>
-        <li>Medicamentos</li>
-        <li>Procedimientos</li>
-      </ul>
-      <div class="subtitulo">Cuidado Personal</div>
-      <ul>
-        <li>Peluquería</li>
-        <li>Cosméticos</li>
-        <li>Spa / Barbería</li>
-      </ul>
-      <div class="subtitulo">Dependientes</div>
-      <ul>
-        <li>Cuidado de niños</li>
-        <li>Cuidado de mayores</li>
-        <li>Educación</li>
-      </ul>
-      <div class="subtitulo">Deuda</div>
-      <ul>
-        <li>Tarjetas de crédito</li>
-        <li>Préstamos estudiantiles</li>
-        <li>Otros préstamos</li>
-      </ul>
-      <div class="subtitulo">Entretenimiento</div>
-      <ul>
-        <li>Cine</li>
-        <li>Conciertos</li>
-        <li>Streaming</li>
-      </ul>
-      <div class="subtitulo">Telecomunicaciones</div>
-      <ul>
-        <li>Teléfono</li>
-        <li>Internet</li>
-        <li>TV</li>
-      </ul>
-    </div>
-  </div>
 
-  <div class="grupo">
-    <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
-      <div style="display:flex;align-items:center;">
-        <div class="circle" style="background:#E8C239;"></div>
-        Ahorro
+      <div class="grupo">
+        <div class="grupo-header" onclick="toggleGrupo(this)">
+          <div style="display:flex;align-items:center;">
+            <div class="circle" style="background:#E8C239;"></div>
+            Ahorro
+          </div><span>⌄</span>
+        </div>
+        <div class="contenido">
+          <ul>
+            <li onclick="seleccionarSubcategoria('Reserva emergencia')">Reserva emergencia</li>
+          </ul>
+        </div>
       </div>
-      <span>⌄</span>
-    </div>
-    <div class="contenido">
-      <ul>
-        <li>Contribución al retiro</li>
-        <li>Cuenta hijo(a)</li>
-        <li>Reserva emergencia</li>
-        <li>Cuenta de ahorro</li>
-        <li>Contribución del empleador</li>
-      </ul>
+
+      <button class="btn-cerrar" onclick="cerrarModalCategorias()">Cerrar</button>
     </div>
   </div>
 
   <script>
     function abrirModalCategorias() {
-      alert('Aquí se abriría el modal con categorías.');
+      document.getElementById('modalCategorias').style.display = 'flex';
     }
-    function toggleGrupo(grupo) {
-      const contenido = grupo.querySelector('.contenido');
-      const estaVisible = contenido.style.display === 'block';
+    function cerrarModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'none';
+    }
+    function seleccionarSubcategoria(nombre) {
+      document.getElementById('categoria').value = nombre;
+      cerrarModalCategorias();
+    }
+    function toggleGrupo(header) {
+      const contenido = header.nextElementSibling;
+      const abierto = contenido.style.display === 'block';
       document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
-      if (!estaVisible) contenido.style.display = 'block';
+      contenido.style.display = abierto ? 'none' : 'block';
     }
   </script>
 </body>
 </html>
+
