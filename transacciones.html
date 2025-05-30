@@ -9,15 +9,21 @@
     body {
       margin: 0;
       font-family: 'Greycliff CF', sans-serif;
-      background: #FAFBFF;
+      background: #F8F9FB;
       color: #000000;
+      padding: 1rem;
     }
 
-    .encabezado-transacciones {
+    .encabezado {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .encabezado h4 {
+      margin: 0;
+      font-size: 1.1rem;
     }
 
     .btn-nueva {
@@ -25,168 +31,119 @@
       color: white;
       border: none;
       padding: 0.5rem 1rem;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 0.85rem;
       cursor: pointer;
     }
 
-    .tabs-transacciones {
+    .tabs {
       display: flex;
+      background: #fff;
+      padding: 0.5rem;
+      border-radius: 12px;
       gap: 1rem;
-      margin: 0 1rem 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    .tabs-transacciones button {
+    .tabs button {
       background: none;
       border: none;
-      font-weight: bold;
-      font-size: 0.9rem;
-      color: #64748B;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #666;
       cursor: pointer;
+      padding: 0.25rem 0.5rem;
     }
 
-    .tabs-transacciones .tab-activa {
+    .tabs .activo {
       color: #000;
-      border-bottom: 2px solid #3956E8;
+      border-bottom: 2px solid #594AE2;
     }
 
-    .punto-tab {
+    .punto {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       display: inline-block;
     }
 
-    .subcategoria {
+    .bloque-categoria {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .bloque-categoria h5 {
+      margin: 0 0 1rem;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .tarjeta-transaccion {
       background: #fff;
-    }
-
-    .subcategoria:hover {
-      background: #F9FAFB;
-    }
-
-    .detalles-subcategoria {
-      background: #fff;
-      padding: 0 1rem 1rem;
-      display: none;
-    }
-
-    .tabla-detalle {
-      width: 100%;
+      border-top: 1px solid #f0f0f0;
+      padding: 0.75rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       font-size: 0.85rem;
-      border-collapse: collapse;
     }
 
-    .tabla-detalle th {
-      text-align: left;
-      padding: 0.5rem 0;
-      color: #6B7280;
+    .tarjeta-transaccion strong {
+      font-size: 1rem;
     }
 
-    .tabla-detalle td {
-      padding: 0.4rem 0;
-      border-bottom: 1px solid #F1F1F1;
+    .info-transaccion {
+      flex: 1;
+    }
+
+    .editar {
+      color: #147efb;
+      font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="encabezado-transacciones">
+  <div class="encabezado">
     <h4>Lista de Transacciones</h4>
     <button class="btn-nueva">+ Nueva Transacción</button>
   </div>
 
-  <div class="tabs-transacciones">
-    <button class="tab-activa" onclick="mostrarCategoria('ingresos', event)">
-      <span class="punto-tab" style="background:#3956E8;"></span> Ingresos
-    </button>
-    <button onclick="mostrarCategoria('gastos', event)">
-      <span class="punto-tab" style="background:#BA1B1D;"></span> Gastos
-    </button>
-    <button onclick="mostrarCategoria('ahorros', event)">
-      <span class="punto-tab" style="background:#E8C239;"></span> Ahorros
-    </button>
+  <div class="tabs">
+    <button class="activo"><span class="punto" style="background:#3956E8;"></span> Ingresos</button>
+    <button><span class="punto" style="background:#BA1B1D;"></span> Gastos</button>
+    <button><span class="punto" style="background:#E8C239;"></span> Ahorro</button>
   </div>
 
-  <div id="ingresos" class="categoria-activa">
-    <div class="subcategoria" onclick="toggleDetalles(this)">
-      <span>Sueldo</span>
-      <strong>$2,400.00</strong>
-    </div>
-    <div class="detalles-subcategoria">
-      <table class="tabla-detalle">
-        <thead>
-          <tr><th>Fuente</th><th>Valor</th><th>Fecha</th><th>File</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Empresa</td><td>$1,200.00</td><td>01/05/2025</td><td>PDF</td></tr>
-          <tr><td>Freelance</td><td>$1,200.00</td><td>15/05/2025</td><td>PDF</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div class="bloque-categoria">
+    <h5><span>Sueldo</span><span>$2,400.00</span></h5>
 
-  <div id="gastos" class="categoria-activa" style="display: none;">
-    <div class="subcategoria" onclick="toggleDetalles(this)">
-      <span>Comidas afuera</span>
-      <strong>$123.94</strong>
+    <div class="tarjeta-transaccion">
+      <div class="info-transaccion">
+        <strong>$1,200.00</strong>
+        <div>12 mayo 2025</div>
+        <div>Sueldo <br />Banco BCP</div>
+      </div>
+      <div class="editar">Editar</div>
     </div>
-    <div class="detalles-subcategoria">
-      <table class="tabla-detalle">
-        <thead>
-          <tr><th>Categoría</th><th>Valor</th><th>Fecha</th><th>File</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Comidas afuera</td><td>$74.99</td><td>18/05/2025</td><td>PDF</td></tr>
-          <tr><td>Comidas afuera</td><td>$48.95</td><td>16/05/2025</td><td>PDF</td></tr>
-        </tbody>
-      </table>
+
+    <div class="tarjeta-transaccion">
+      <div class="info-transaccion">
+        <strong>$1,200.00</strong>
+        <div>12 mayo 2025</div>
+        <div>Sueldo <br />Banco BCP</div>
+      </div>
+      <div class="editar">Editar</div>
     </div>
   </div>
 
-  <div id="ahorros" class="categoria-activa" style="display: none;">
-    <div class="subcategoria" onclick="toggleDetalles(this)">
-      <span>Meta Viaje</span>
-      <strong>$500.00</strong>
-    </div>
-    <div class="detalles-subcategoria">
-      <table class="tabla-detalle">
-        <thead>
-          <tr><th>Destino</th><th>Valor</th><th>Fecha</th><th>File</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Cuenta ahorro</td><td>$300.00</td><td>10/05/2025</td><td>-</td></tr>
-          <tr><td>Cuenta ahorro</td><td>$200.00</td><td>24/05/2025</td><td>-</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <script>
-    function toggleDetalles(element) {
-      const detalles = element.nextElementSibling;
-      const visible = detalles.style.display === 'block';
-      detalles.style.display = visible ? 'none' : 'block';
-    }
-
-    function mostrarCategoria(id, event) {
-      document.querySelectorAll('.categoria-activa').forEach(cat => cat.style.display = 'none');
-      const target = document.getElementById(id);
-      if (target) target.style.display = 'block';
-
-      document.querySelectorAll('.tabs-transacciones button').forEach(b => b.classList.remove('tab-activa'));
-      event.currentTarget.classList.add('tab-activa');
-    }
-  </script>
 </body>
 </html>
