@@ -292,28 +292,28 @@ new Chart(ctxMetas, {
     datasets: [
       {
         label: 'Meta',
-        data: [5000, null], // 👈 solo aparece en la primera barra
+        data: [5000, null],
         backgroundColor: '#E8C239',
         borderRadius: 10,
-        barThickness: 60,
-        categoryPercentage: 0.5
+        barThickness: 40,
+        categoryPercentage: 0.7
       },
       {
         label: 'Logrado',
-        data: [null, 2500], // 👈 solo en Progreso
+        data: [null, 2500],
         backgroundColor: '#3956E8',
-        borderRadius: 10,
-        barThickness: 60,
-        categoryPercentage: 0.5,
+        borderRadius: { topLeft: 10, topRight: 10 },
+        barThickness: 40,
+        categoryPercentage: 0.7,
         stack: 'progreso'
       },
       {
         label: 'Faltante',
-        data: [null, 2500], // 👈 solo en Progreso
+        data: [null, 2500],
         backgroundColor: '#AAB8F2',
-        borderRadius: 10,
-        barThickness: 60,
-        categoryPercentage: 0.5,
+        borderRadius: { bottomLeft: 10, bottomRight: 10 },
+        barThickness: 40,
+        categoryPercentage: 0.7,
         stack: 'progreso'
       }
     ]
@@ -326,31 +326,27 @@ new Chart(ctxMetas, {
         titleColor: '#000',
         bodyColor: '#000',
         borderWidth: 1,
-        borderColor: '#ccc'
+        borderColor: '#ccc',
+        callbacks: {
+          label: (context) => `${context.dataset.label}: $${context.formattedValue}`
+        }
       },
-      legend: {
-        display: false
-      }
+      legend: { display: false }
     },
     scales: {
       x: {
         stacked: true,
-        grid: {
-          display: false
-        },
+        grid: { display: false },
         ticks: {
-          color: '#64748B'
+          color: '#64748B',
+          align: 'center'
         }
       },
       y: {
-        beginAtZero: true,
         stacked: true,
-        grid: {
-          color: '#eee'
-        },
-        ticks: {
-          color: '#64748B'
-        }
+        beginAtZero: true,
+        grid: { color: '#eee' },
+        ticks: { color: '#64748B' }
       }
     }
   }
