@@ -139,24 +139,30 @@
       cursor: pointer;
       white-space: nowrap;
     }
+
+    .categoria {
+      display: none;
+    }
+
+    .categoria.activa {
+      display: block;
+    }
   </style>
 </head>
 <body>
-
   <div class="encabezado">
     <h4>Lista de Transacciones</h4>
     <button class="btn-nueva">+ Nueva Transacción</button>
   </div>
 
   <div class="tabs">
-    <button class="activo"><span class="punto" style="background:#5849E1;"></span> Ingresos</button>
-    <button><span class="punto" style="background:#BDBDBD;"></span> Gastos</button>
-    <button><span class="punto" style="background:#E8C239;"></span> Ahorro</button>
+    <button class="activo" onclick="cambiarCategoria('ingresos', this)"><span class="punto" style="background:#5849E1;"></span> Ingresos</button>
+    <button onclick="cambiarCategoria('gastos', this)"><span class="punto" style="background:#BDBDBD;"></span> Gastos</button>
+    <button onclick="cambiarCategoria('ahorro', this)"><span class="punto" style="background:#E8C239;"></span> Ahorro</button>
   </div>
 
-  <div class="bloque-categoria">
+  <div id="ingresos" class="bloque-categoria categoria activa">
     <h5><span>Sueldo</span><span>$2,400.00</span></h5>
-
     <div class="tarjeta-transaccion">
       <div class="col-1">
         <span class="monto">$1,200.00</span>
@@ -170,7 +176,6 @@
         <span class="editar">Editar</span>
       </div>
     </div>
-
     <div class="tarjeta-transaccion">
       <div class="col-1">
         <span class="monto">$1,200.00</span>
@@ -186,5 +191,48 @@
     </div>
   </div>
 
+  <div id="gastos" class="bloque-categoria categoria">
+    <h5><span>Comidas</span><span>$123.00</span></h5>
+    <div class="tarjeta-transaccion">
+      <div class="col-1">
+        <span class="monto">$74.00</span>
+        <span class="subcategoria">Comida</span>
+      </div>
+      <div class="col-2">
+        <span class="fecha">10 mayo 2025</span>
+        <span class="fuente">Tarjeta BCP</span>
+      </div>
+      <div class="col-3">
+        <span class="editar">Editar</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="ahorro" class="bloque-categoria categoria">
+    <h5><span>Meta viaje</span><span>$500.00</span></h5>
+    <div class="tarjeta-transaccion">
+      <div class="col-1">
+        <span class="monto">$300.00</span>
+        <span class="subcategoria">Ahorro</span>
+      </div>
+      <div class="col-2">
+        <span class="fecha">05 mayo 2025</span>
+        <span class="fuente">Cuenta BCP</span>
+      </div>
+      <div class="col-3">
+        <span class="editar">Editar</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function cambiarCategoria(id, boton) {
+      document.querySelectorAll('.categoria').forEach(el => el.classList.remove('activa'));
+      document.getElementById(id).classList.add('activa');
+
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('activo'));
+      boton.classList.add('activo');
+    }
+  </script>
 </body>
 </html>
