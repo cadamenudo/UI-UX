@@ -97,9 +97,10 @@
       gap: 1rem;
     }
 
-    .col-1, .col-2 {
+    .col-1, .col-2, .col-3 {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 0.2rem;
     }
 
@@ -107,34 +108,35 @@
       flex: 1;
     }
 
-    .fila1, .fila2 {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
+    .col-2 {
+      flex: 1;
+      align-items: center;
+      text-align: center;
     }
 
-    .fila2 {
-      align-items: center;
+    .col-3 {
+      align-items: flex-end;
+    }
+
+    .monto {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .subcategoria, .fuente {
       color: #777;
       font-size: 0.8rem;
     }
 
-    .fila2 span {
-      flex: 1;
-      text-align: center;
+    .fecha {
+      font-size: 0.85rem;
     }
 
     .editar {
       color: #147efb;
       font-weight: 600;
       cursor: pointer;
-      text-align: center;
       white-space: nowrap;
-    }
-
-    .col-2 {
-      justify-content: center;
-      align-items: center;
     }
   </style>
 </head>
@@ -156,33 +158,29 @@
 
     <div class="tarjeta-transaccion">
       <div class="col-1">
-        <div class="fila1">
-          <strong>$1,200.00</strong>
-          <span>12 mayo 2025</span>
-        </div>
-        <div class="fila2">
-          <span>Sueldo</span>
-          <span>Banco BCP</span>
-        </div>
+        <span class="monto">$1,200.00</span>
+        <span class="subcategoria">Sueldo</span>
       </div>
       <div class="col-2">
-        <div class="editar">Editar</div>
+        <span class="fecha">12 mayo 2025</span>
+        <span class="fuente">Banco BCP</span>
+      </div>
+      <div class="col-3">
+        <span class="editar">Editar</span>
       </div>
     </div>
 
     <div class="tarjeta-transaccion">
       <div class="col-1">
-        <div class="fila1">
-          <strong>$1,200.00</strong>
-          <span>12 mayo 2025</span>
-        </div>
-        <div class="fila2">
-          <span>Sueldo</span>
-          <span>Banco BCP</span>
-        </div>
+        <span class="monto">$1,200.00</span>
+        <span class="subcategoria">Sueldo</span>
       </div>
       <div class="col-2">
-        <div class="editar">Editar</div>
+        <span class="fecha">12 mayo 2025</span>
+        <span class="fuente">Banco BCP</span>
+      </div>
+      <div class="col-3">
+        <span class="editar">Editar</span>
       </div>
     </div>
   </div>
