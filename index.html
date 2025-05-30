@@ -209,7 +209,7 @@
 <section class="seccion-graficos">
   <h4>Ingresos vs Gastos</h4>
   <div class="grafico-lineal-container">
-    <canvas id="graficoLineal"></canvas>
+    <canvas id="graficoLineal" width="400" height="200"></canvas>
   </div>
   
 <section class="seccion-graficos">
@@ -367,8 +367,8 @@ new Chart(ctxLineal, {
         backgroundColor: 'rgba(186, 104, 200, 0.1)',
         tension: 0.4,
         fill: true,
-        pointRadius: 0,
-        pointHoverRadius: 4
+        pointRadius: 3,
+        pointHoverRadius: 6
       }
     ]
   },
