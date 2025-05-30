@@ -20,15 +20,17 @@
       padding-bottom: 80px;
     }
 
-    .header-curvo {
+    header {
       background-color: #594AE2;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
       position: relative;
-      padding-bottom: 2.5rem;
-      border-bottom-left-radius: 24px;
-      border-bottom-right-radius: 24px;
-      overflow: hidden;
+      z-index: 1;
     }
-    
+  
     .contenido-header {
       display: flex;
       align-items: center;
@@ -62,13 +64,14 @@
       display: flex;
       justify-content: space-between;
       background: #fff;
-      margin: 1rem;
+      margin: -2.5rem 1rem 1rem; /* sube sobre el header */
       padding: 1rem;
-      border-radius: 12px;
+      border-radius: 24px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       gap: 0.5rem;
+      position: relative;
+      z-index: 10;
     }
-
     .resumen-item {
       flex: 1;
       display: flex;
