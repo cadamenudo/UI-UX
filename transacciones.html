@@ -11,84 +11,6 @@
       font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
       color: #000000;
-      padding-bottom: 80px;
-    }
-
-    header {
-      background-color: #594AE2;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.5rem 3.5rem;
-    }
-
-    .logo {
-      height: 28px;
-    }
-
-    .usuario {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .usuario img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-    }
-
-    .usuario span {
-      font-size: 0.85rem;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    .resumen {
-      display: flex;
-      justify-content: space-between;
-      background: #fff;
-      width: 90%;
-      margin: -2rem auto 1rem;
-      padding: 1rem;
-      border-radius: 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      gap: 0.5rem;
-      max-width: 700px;
-    }
-
-    .resumen-item {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      text-align: left;
-    }
-
-    .resumen-item img {
-      width: 30px;
-      height: 30px;
-    }
-
-    .resumen-item .texto {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .resumen-item .texto strong {
-      font-size: 0.85rem;
-    }
-
-    .superavit {
-      background: #e8fdf2;
-      color: #0a8754;
-      margin: 0 1rem;
-      padding: 0.8rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
     }
 
     .encabezado-transacciones {
@@ -175,113 +97,9 @@
       padding: 0.4rem 0;
       border-bottom: 1px solid #F1F1F1;
     }
-
-    footer.navbar {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #ffffff;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 0.4rem 0;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 0.65rem;
-      color: #64748B;
-    }
-
-    .nav-item img {
-      width: 26px;
-      height: 20px;
-      margin-bottom: 4px;
-    }
-  
-    .fechas-dos-columnas {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      margin: 1rem;
-    }
-
-    .bloque-fecha {
-      flex: 1;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .bloque-fecha label {
-      font-size: 0.75rem;
-      color: #64748B;
-      margin-bottom: 4px;
-    }
-
-    .bloque-fecha input[type="date"] {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 0.85rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: 'Greycliff CF', sans-serif;
-      box-sizing: border-box;
-    }
-$1
+  </style>
 </head>
 <body>
-  <header>
-    <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
-    <div class="usuario">
-      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
-      <span>Hola xavier</span>
-    </div>
-  </header>
-
-  <section class="resumen">
-    <div class="resumen-item">
-      <img src="assets/icons/ingreso.png" alt="Ingresos" />
-      <div class="texto">
-        <span>Ingresos</span>
-        <strong>$6,000.00</strong>
-      </div>
-    </div>
-    <div class="resumen-item">
-      <img src="assets/icons/gastos.png" alt="Gastos" />
-      <div class="texto">
-        <span>Gastos</span>
-        <strong>$3,531.23</strong>
-      </div>
-    </div>
-    <div class="resumen-item">
-      <img src="assets/icons/ahorro.png" alt="Ahorros" />
-      <div class="texto">
-        <span>Ahorros</span>
-        <strong>$600.00</strong>
-      </div>
-    </div>
-  </section>
-
-  $1
-
-  <div class="fechas-dos-columnas">
-    <div class="bloque-fecha">
-      <label for="fechaDesde">Desde</label>
-      <input id="fechaDesde" type="date" value="2025-01-01" />
-    </div>
-    <div class="bloque-fecha">
-      <label for="fechaHasta">Hasta</label>
-      <input id="fechaHasta" type="date" value="2025-05-31" />
-    </div>
-  </div>
 
   <div class="encabezado-transacciones">
     <h4>Lista de Transacciones</h4>
@@ -300,9 +118,7 @@ $1
     </button>
   </div>
 
-  $1
-
-  <div id="ingresos" style="display: none;">
+  <div id="ingresos" class="categoria-activa">
     <div class="subcategoria" onclick="toggleDetalles(this)">
       <span>Sueldo</span>
       <strong>$2,400.00</strong>
@@ -320,7 +136,25 @@ $1
     </div>
   </div>
 
-  <div id="ahorros" style="display: none;">
+  <div id="gastos" class="categoria-activa" style="display: none;">
+    <div class="subcategoria" onclick="toggleDetalles(this)">
+      <span>Comidas afuera</span>
+      <strong>$123.94</strong>
+    </div>
+    <div class="detalles-subcategoria">
+      <table class="tabla-detalle">
+        <thead>
+          <tr><th>Categoría</th><th>Valor</th><th>Fecha</th><th>File</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Comidas afuera</td><td>$74.99</td><td>18/05/2025</td><td>PDF</td></tr>
+          <tr><td>Comidas afuera</td><td>$48.95</td><td>16/05/2025</td><td>PDF</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="ahorros" class="categoria-activa" style="display: none;">
     <div class="subcategoria" onclick="toggleDetalles(this)">
       <span>Meta Viaje</span>
       <strong>$500.00</strong>
@@ -337,33 +171,6 @@ $1
       </table>
     </div>
   </div>
-    <div class="detalles-subcategoria">
-      <table class="tabla-detalle">
-        <thead>
-          <tr><th>Categoría</th><th>Valor</th><th>Fecha</th><th>File</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Comidas afuera</td><td>$74.99</td><td>18/05/2025</td><td>...</td></tr>
-          <tr><td>Comidas afuera</td><td>$48.95</td><td>16/05/2025</td><td>...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer class="navbar">
-    <div class="nav-item">
-      <img src="assets/icons/home.png" alt="Home" />
-      <span>Inicio</span>
-    </div>
-    <div class="nav-item">
-      <img src="assets/icons/transacciones.png" alt="Movimientos" />
-      <span>Transacciones</span>
-    </div>
-    <div class="nav-item">
-      <img src="assets/icons/metas.png" alt="Metas" />
-      <span>Metas</span>
-    </div>
-  </footer>
 
   <script>
     function toggleDetalles(element) {
@@ -378,7 +185,7 @@ $1
       if (target) target.style.display = 'block';
 
       document.querySelectorAll('.tabs-transacciones button').forEach(b => b.classList.remove('tab-activa'));
-      event.target.classList.add('tab-activa');
+      event.currentTarget.classList.add('tab-activa');
     }
   </script>
 </body>
