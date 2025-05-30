@@ -20,13 +20,21 @@
       padding-bottom: 80px;
     }
 
-    header {
+    .header-curvo {
       background-color: #594AE2;
-      color: #fff;
+      position: relative;
+      padding-bottom: 2.5rem;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      overflow: hidden;
+    }
+    
+    .contenido-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0.75rem 1rem;
+      color: white;
     }
 
     .logo {
@@ -179,13 +187,15 @@ canvas {
   </style>
 </head>
 <body>
-  <header>
+<header class="header-curvo">
+  <div class="contenido-header">
     <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
     <div class="usuario">
       <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
       <span>Hola xavier</span>
     </div>
-  </header>
+  </div>
+</header>
 
   <section class="resumen">
     <div class="resumen-item">
