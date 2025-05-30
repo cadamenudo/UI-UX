@@ -194,8 +194,12 @@
   <canvas id="graficoMetas" height="250"></canvas>
 </section>
 
-    <h4>Ingresos vs. Gastos</h4>
-    <div class="grafico-placeholder"></div>
+<section class="seccion-graficos">
+  <h4>Ingresos vs Gastos</h4>
+  <div class="grafico-lineal-container">
+    <canvas id="graficoLineal"></canvas>
+  </div>
+</section>
 
     <h4>Gastos Totales</h4>
     <div class="grafico-placeholder"></div>
@@ -295,6 +299,70 @@
       }
     });
   </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('graficoLineal').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
+      datasets: [
+        {
+          data: [3200, 3300, 3100, 3400, 3500],
+          borderColor: '#3716B3',
+          backgroundColor: 'rgba(55, 22, 179, 0.1)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 0,
+          pointHoverRadius: 0
+        },
+        {
+          data: [2800, 2900, 2700, 3000, 3100],
+          borderColor: '#BA68C8',
+          backgroundColor: 'rgba(186, 104, 200, 0.1)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 0,
+          pointHoverRadius: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          backgroundColor: '#fff',
+          titleColor: '#000',
+          bodyColor: '#000',
+          borderWidth: 1,
+          borderColor: '#ccc'
+        },
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#64748B'
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: '#64748B'
+          },
+          grid: {
+            color: '#eee'
+          }
+        }
+      }
+    }
+  });
+</script>
 
 </body>
 </html>
