@@ -307,6 +307,79 @@
   });
 
   // Gráfico de ingresos vs gastos (línea)
+  const ctxLineal = document.getElementById('graficoLineal').getContext('2d');
+new Chart(ctxLineal, {
+  type: 'line',
+  data: {
+    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
+    datasets: [
+      {
+        label: 'Ingresos',
+        data: [3200, 3300, 3100, 3400, 3500],
+        borderColor: '#3716B3',
+        backgroundColor: 'rgba(55, 22, 179, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 0,
+        pointHoverRadius: 4
+      },
+      {
+        label: 'Gastos',
+        data: [2800, 2900, 2700, 3000, 3100],
+        borderColor: '#BA68C8',
+        backgroundColor: 'rgba(186, 104, 200, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 0,
+        pointHoverRadius: 4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        displayColors: false,
+        callbacks: {
+          label: function(context) {
+            const label = context.dataset.label || '';
+            const value = context.formattedValue;
+            return `${label}: $${value}`;
+          }
+        }
+      },
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#64748B'
+        }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+          color: '#64748B'
+        },
+        grid: {
+          color: '#eee'
+        }
+      }
+    }
+  }
+});
+ // Gráfico de ingresos totales (dona)
 Chart.register({
   id: 'centerText',
   beforeDraw: function(chart) {
