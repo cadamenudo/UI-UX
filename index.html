@@ -207,9 +207,31 @@
   </div>
 </section>
   
-    <h4>Gastos Totales</h4>
-    <div class="grafico-placeholder"></div>
-  </section>
+<section class="seccion-graficos">
+  <h4>Gastos Totales</h4>
+  <div style="max-width: 320px; margin: auto;">
+    <canvas id="graficoDonaGastos" width="280" height="280"></canvas>
+
+    <label for="selectorCategoria" style="margin-top: 16px; display: block;">Ver subcategorías:</label>
+    <select id="selectorCategoria" style="width: 100%; padding: 8px; font-family: 'Greycliff CF'; font-size: 14px;">
+      <option value="">Selecciona una categoría</option>
+      <option value="alimentacion">Alimentación</option>
+      <option value="casa">Casa</option>
+      <option value="cuidado">Cuidado Personal</option>
+      <option value="dependientes">Dependientes</option>
+      <option value="deuda">Deuda</option>
+      <option value="entretenimiento">Entretenimiento</option>
+      <option value="medicos">Gastos Médicos</option>
+      <option value="impuestos">Impuestos</option>
+      <option value="donaciones">Regalos y Donaciones</option>
+      <option value="seguros">Seguros</option>
+      <option value="telecom">Telecomunicaciones</option>
+      <option value="transporte">Transportación</option>
+    </select>
+
+    <canvas id="graficoSubcategoria" width="280" height="280" style="margin-top: 30px;"></canvas>
+  </div>
+</section>
 
   <footer class="navbar">
     <div class="nav-item">
@@ -413,6 +435,80 @@ new Chart(ctxDona, {
         display: false
       }
     }
+  }
+});
+
+// Gráfico de gastos totales (dona)
+  const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
+
+const categoriasGasto = {
+  labels: ['Alimentación', 'Casa', 'Cuidado Personal', 'Deuda', 'Entretenimiento', 'Impuestos'],
+  data: [1200, 900, 400, 600, 350, 450]
+};
+
+const subcategorias = {
+  alimentacion: { labels: ['Supermercado', 'Comidas fuera', 'Café'], data: [800, 300, 100] },
+  casa: { labels: ['Hipoteca', 'Servicios', 'Mantenimiento'], data: [500, 250, 150] },
+  cuidado: { labels: ['Higiene', 'Peluquería'], data: [250, 150] },
+  dependientes: { labels: ['Escuela', 'Ropa', 'Cuidado niños'], data: [400, 200, 150] },
+  deuda: { labels: ['Tarjetas', 'Préstamos'], data: [350, 250] },
+  entretenimiento: { labels: ['Cine', 'Streaming'], data: [200, 150] },
+  medicos: { labels: ['Seguro', 'Copagos'], data: [300, 150] },
+  impuestos: { labels: ['Federal', 'Propiedad'], data: [300, 150] },
+  donaciones: { labels: ['ONG', 'Familia'], data: [200, 150] },
+  seguros: { labels: ['Auto', 'Vida'], data: [250, 150] },
+  telecom: { labels: ['Internet', 'Celular'], data: [100, 80] },
+  transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
+};
+
+// Gráfico principal
+const ctxGastos = document.getElementById('graficoDonaGastos').getContext('2d');
+new Chart(ctxGastos, {
+  type: 'doughnut',
+  data: {
+    labels: categoriasGasto.labels,
+    datasets: [{
+      data: categoriasGasto.data,
+      backgroundColor: colores
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: { legend: { display: false } }
+  }
+});
+
+// Gráfico subcategorías
+const ctxSub = document.getElementById('graficoSubcategoria').getContext('2d');
+let chartSub = new Chart(ctxSub, {
+  type: 'doughnut',
+  data: {
+    labels: [],
+    datasets: [{
+      data: [],
+      backgroundColor: colores
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: { legend: { display: false } }
+  }
+});
+
+// Selector dinámico
+document.getElementById('selectorCategoria').addEventListener('change', function() {
+  const seleccion = this.value;
+  if (subcategorias[seleccion]) {
+    const nuevaData = subcategorias[seleccion];
+    chartSub.data.labels = nuevaData.labels;
+    chartSub.data.datasets[0].data = nuevaData.data;
+    chartSub.update();
+  } else {
+    chartSub.data.labels = [];
+    chartSub.data.datasets[0].data = [];
+    chartSub.update();
   }
 });
 </script>
