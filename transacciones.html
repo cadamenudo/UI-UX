@@ -77,6 +77,13 @@
       justify-content: space-between;
       cursor: pointer;
     }
+    .contenido-subcategoria {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .bloque-categoria.abierto .contenido-subcategoria {
+      display: block;
+    }
     .tarjeta-transaccion {
       background: #fff;
       border-top: 1px solid #f0f0f0;
@@ -112,8 +119,6 @@
     }
     .categoria { display: none; }
     .categoria.activa { display: block; }
-    .contenido-subcategoria { display: none; margin-top: 0.75rem; }
-    .bloque-categoria.abierto .contenido-subcategoria { display: block; }
   </style>
 </head>
 <body>
@@ -268,11 +273,16 @@
       boton.classList.add('activo');
     }
 
-    document.querySelectorAll('.bloque-categoria h5').forEach(header => {
-      header.addEventListener('click', () => {
-        const categoria = header.closest('.categoria');
-        categoria.querySelectorAll('.bloque-categoria').forEach(b => b.classList.remove('abierto'));
-        header.parentElement.classList.add('abierto');
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.categoria').forEach(categoria => {
+        const bloques = categoria.querySelectorAll('.bloque-categoria');
+        bloques.forEach(bloque => {
+          const header = bloque.querySelector('h5');
+          header.addEventListener('click', () => {
+            bloques.forEach(b => b.classList.remove('abierto'));
+            bloque.classList.add('abierto');
+          });
+        });
       });
     });
   </script>
