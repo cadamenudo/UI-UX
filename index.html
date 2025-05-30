@@ -98,34 +98,32 @@
       border-radius: 8px;
       font-size: 0.85rem;
     }
+.fechas-dos-columnas {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem;
+}
 
-    .fechas {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 1rem;
-      margin: 1rem;
-    }
-    
-    .campo-fecha {
-      flex: 1;
-    }
-    
-    .campo-fecha label {
-      font-size: 0.75rem;
-      color: #64748B;
-      margin-bottom: 4px;
-      display: inline-block;
-    }
-    
-    .campo-fecha input[type="date"] {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: 'Greycliff CF', sans-serif;
-      font-size: 14px;
-    }
+.bloque-fecha {
+  flex: 1;
+}
+
+.bloque-fecha label {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-bottom: 4px;
+}
+
+.bloque-fecha input[type="date"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: 'Greycliff CF', sans-serif;
+  font-size: 14px;
+}
 
     .seccion-graficos {
       margin: 1rem;
@@ -235,12 +233,12 @@ canvas {
     ✅ SUPER: Tienes un sobrante de <strong>$1,868.77</strong>
   </div>
 
-<div class="bloque-sin-sombra fechas">
-  <div class="campo-fecha">
+<div class="fechas-dos-columnas">
+  <div class="bloque-sin-sombra bloque-fecha">
     <label for="fechaDesde">Desde</label>
     <input id="fechaDesde" type="date" value="2025-01-01" />
   </div>
-  <div class="campo-fecha">
+  <div class="bloque-sin-sombra bloque-fecha">
     <label for="fechaHasta">Hasta</label>
     <input id="fechaHasta" type="date" value="2025-05-31" />
   </div>
