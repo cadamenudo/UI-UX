@@ -38,6 +38,7 @@
 
     .tabs {
       display: flex;
+      justify-content: space-around;
       background: #fff;
       padding: 0.5rem;
       border-radius: 12px;
@@ -61,7 +62,7 @@
 
     .tabs .activo {
       color: #000;
-      border-bottom: 2px solid #594AE2;
+      border-bottom: 2px solid #5849E1;
     }
 
     .punto {
@@ -91,22 +92,37 @@
       padding: 0.75rem 0;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       font-size: 0.85rem;
+      gap: 1rem;
     }
 
-    .tarjeta-transaccion strong {
-      font-size: 1rem;
+    .col-1, .col-2 {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
     }
 
-    .info-transaccion {
-      flex: 1;
+    .fila1 {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .fila2 {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: #777;
+      font-size: 0.8rem;
     }
 
     .editar {
       color: #147efb;
       font-weight: 600;
       cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -118,8 +134,8 @@
   </div>
 
   <div class="tabs">
-    <button class="activo"><span class="punto" style="background:#3956E8;"></span> Ingresos</button>
-    <button><span class="punto" style="background:#BA1B1D;"></span> Gastos</button>
+    <button class="activo"><span class="punto" style="background:#5849E1;"></span> Ingresos</button>
+    <button><span class="punto" style="background:#BDBDBD;"></span> Gastos</button>
     <button><span class="punto" style="background:#E8C239;"></span> Ahorro</button>
   </div>
 
@@ -127,21 +143,35 @@
     <h5><span>Sueldo</span><span>$2,400.00</span></h5>
 
     <div class="tarjeta-transaccion">
-      <div class="info-transaccion">
-        <strong>$1,200.00</strong>
-        <div>12 mayo 2025</div>
-        <div>Sueldo <br />Banco BCP</div>
+      <div class="col-1">
+        <div class="fila1">
+          <strong>$1,200.00</strong>
+          <span>12 mayo 2025</span>
+        </div>
+        <div class="fila2">
+          <span>Sueldo</span>
+          <span>Banco BCP</span>
+        </div>
       </div>
-      <div class="editar">Editar</div>
+      <div class="col-2">
+        <div class="editar">Editar</div>
+      </div>
     </div>
 
     <div class="tarjeta-transaccion">
-      <div class="info-transaccion">
-        <strong>$1,200.00</strong>
-        <div>12 mayo 2025</div>
-        <div>Sueldo <br />Banco BCP</div>
+      <div class="col-1">
+        <div class="fila1">
+          <strong>$1,200.00</strong>
+          <span>12 mayo 2025</span>
+        </div>
+        <div class="fila2">
+          <span>Sueldo</span>
+          <span>Banco BCP</span>
+        </div>
       </div>
-      <div class="editar">Editar</div>
+      <div class="col-2">
+        <div class="editar">Editar</div>
+      </div>
     </div>
   </div>
 
