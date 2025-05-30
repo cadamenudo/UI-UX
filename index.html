@@ -384,26 +384,26 @@ Chart.register({
   id: 'centerText',
   beforeDraw: function(chart) {
     if (chart.config.options.elements.center) {
-      const ctx = chart.ctx;
+      const { ctx } = chart;
       const centerConfig = chart.config.options.elements.center;
       const fontStyle = centerConfig.fontStyle || 'Greycliff CF';
       const txt = centerConfig.text;
       const color = centerConfig.color || '#000';
       const sidePadding = centerConfig.sidePadding || 20;
 
-      const innerRadius = chart._metasets[0].data[0].innerRadius;
-      const outerRadius = chart._metasets[0].data[0].outerRadius;
-      const width = outerRadius - innerRadius;
-      const height = width;
-      let fontSize = (height / 3);
+      const chartArea = chart.chartArea;
+      const centerX = (chartArea.left + chartArea.right) / 2;
+      const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+      // Tamaño proporcional al tamaño del gráfico
+      const width = chartArea.right - chartArea.left;
+      let fontSize = Math.min(width / 5, 24);
 
       ctx.save();
       ctx.font = `${fontSize}px ${fontStyle}`;
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
-      const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
       ctx.fillText(txt, centerX, centerY);
       ctx.restore();
     }
