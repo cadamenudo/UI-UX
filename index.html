@@ -228,78 +228,81 @@
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const ctx = document.getElementById('graficoMetas').getContext('2d');
-    const graficoMetas = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Meta', 'Progreso'],
-        datasets: [
-          {
-            label: 'Meta',
-            data: [5000, 0],
-            backgroundColor: '#E8C239',
-            borderRadius: 10,
-            barThickness: 60,
-            categoryPercentage: 0.5,
-            stack: 'Stack 0'
-          },
-          {
-            label: 'Logrado',
-            data: [0, 2500],
-            backgroundColor: '#3956E8',
-            borderRadius: 10,
-            barThickness: 60,
-            categoryPercentage: 0.5,
-            stack: 'Stack 1'
-          },
-          {
-            label: 'Faltante',
-            data: [0, 2500],
-            backgroundColor: '#AAB8F2',
-            borderRadius: 10,
-            barThickness: 60,
-            categoryPercentage: 0.5,
-            stack: 'Stack 1'
-          }
-        ]
+<script>
+  // Gráfico de metas (barras verticales apiladas)
+  const ctxMetas = document.getElementById('graficoMetas').getContext('2d');
+  const graficoMetas = new Chart(ctxMetas, {
+    type: 'bar',
+    data: {
+      labels: ['Meta', 'Progreso'],
+      datasets: [
+        {
+          label: 'Meta',
+          data: [5000, 0],
+          backgroundColor: '#E8C239',
+          borderRadius: 10,
+          barThickness: 60,
+          categoryPercentage: 0.5,
+          stack: 'Stack 0'
+        },
+        {
+          label: 'Logrado',
+          data: [0, 2500],
+          backgroundColor: '#3956E8',
+          borderRadius: 10,
+          barThickness: 60,
+          categoryPercentage: 0.5,
+          stack: 'Stack 1'
+        },
+        {
+          label: 'Faltante',
+          data: [0, 2500],
+          backgroundColor: '#AAB8F2',
+          borderRadius: 10,
+          barThickness: 60,
+          categoryPercentage: 0.5,
+          stack: 'Stack 1'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          backgroundColor: '#fff',
+          titleColor: '#000',
+          bodyColor: '#000',
+          borderWidth: 1,
+          borderColor: '#ccc'
+        },
+        legend: {
+          display: false
+        }
       },
-      options: {
-        responsive: true,
-        plugins: {
-          tooltip: {
-            backgroundColor: '#fff',
-            titleColor: '#000',
-            bodyColor: '#000',
-            borderWidth: 1,
-            borderColor: '#ccc'
-          },
-          legend: {
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
             display: false
           }
         },
-        scales: {
-          x: {
-            stacked: true,
-            grid: {
-              display: false
-            }
+        y: {
+          beginAtZero: true,
+          stacked: true,
+          grid: {
+            display: true
           },
-          y: {
-            beginAtZero: true,
-            stacked: true,
-            grid: {
-              display: true
-            },
-            ticks: {
-              display: true
-            }
+          ticks: {
+            display: true
           }
         }
       }
-    });
-  const ctx = document.getElementById('graficoLineal').getContext('2d');
-  new Chart(ctx, {
+    }
+  });
+
+  // Gráfico de ingresos vs gastos (línea)
+  const ctxLineal = document.getElementById('graficoLineal').getContext('2d');
+  new Chart(ctxLineal, {
     type: 'line',
     data: {
       labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
@@ -360,5 +363,6 @@
     }
   });
 </script>
+
 </body>
 </html>
