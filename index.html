@@ -72,8 +72,8 @@
     }
 
     .resumen-item img {
-      width: 20px;
-      height: 20px;
+      width: 30px;
+      height: 30px;
     }
 
     .resumen-item .texto {
@@ -380,28 +380,6 @@ new Chart(ctxLineal, {
   }
 });
  // Gráfico de ingresos totales (dona)
-Chart.register({
-  id: 'centerText',
-  beforeDraw(chart) {
-    const centerText = chart.config.options.elements.center;
-    if (centerText) {
-      const { ctx } = chart;
-      const { width, height } = chart;
-      const centerX = width / 2;
-      const centerY = height / 2;
-
-      ctx.save();
-      ctx.font = 'bold 20px "Greycliff CF", sans-serif';
-      ctx.fillStyle = centerText.color || '#000';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(centerText.text, centerX, centerY);
-      ctx.restore();
-    }
-  }
-});
-
-// Gráfico de dona
 const ctxDona = document.getElementById('graficoDonaIngresos').getContext('2d');
 new Chart(ctxDona, {
   type: 'doughnut',
@@ -417,29 +395,26 @@ new Chart(ctxDona, {
     responsive: true,
     cutout: '60%',
     plugins: {
-      legend: { display: false },
       tooltip: {
         backgroundColor: '#fff',
         titleColor: '#000',
         bodyColor: '#000',
-        borderColor: '#ccc',
         borderWidth: 1,
+        borderColor: '#ccc',
         callbacks: {
-          label: function (context) {
-            return `${context.label}: $${context.formattedValue}`;
+          label: function(context) {
+            const label = context.label;
+            const value = context.formattedValue;
+            return `${label}: $${value}`;
           }
         }
-      }
-    },
-    elements: {
-      center: {
-        text: '$7,000',
-        color: '#000'
+      },
+      legend: {
+        display: false
       }
     }
   }
 });
-
 </script>
 
 </body>
