@@ -198,62 +198,160 @@
     </div>
   </div>
 
-  <!-- Modal de Categorías -->
-  <div id="modalCategorias" class="modal-categorias">
-    <div class="modal-contenido">
-      <h3>Seleccionar Categoría</h3>
+<!-- MODAL CATEGORÍAS -->
+<div id="modalCategorias" class="modal-categorias">
+  <div class="modal-contenido">
+    <h3>Selecciona una subcategoría</h3>
 
-      <!-- Aquí puedes seguir añadiendo más grupos y subcategorías -->
-      <div class="grupo">
-        <div class="grupo-header" onclick="toggleGrupo(this)">
-          <div style="display:flex;align-items:center;">
-            <div class="circle" style="background:#3956E8;"></div>
-            Ingresos
-          </div><span>⌄</span>
+    <!-- INGRESOS -->
+    <div class="grupo">
+      <div class="grupo-header" onclick="toggleGrupo(this)">
+        <div style="display:flex;align-items:center;">
+          <div class="circle" style="background:#3956E8;"></div>
+          Ingresos
         </div>
-        <div class="contenido">
-          <div class="subtitulo">Pago por trabajo</div>
-          <ul>
-            <li onclick="seleccionarSubcategoria('Salario')">Salario</li>
-            <li onclick="seleccionarSubcategoria('Comisión')">Comisión</li>
-            <li onclick="seleccionarSubcategoria('Bono')">Bono</li>
-          </ul>
-          <div class="subtitulo">Ingreso pasivo</div>
-          <ul>
-            <li onclick="seleccionarSubcategoria('Renta inmueble')">Renta inmueble</li>
-          </ul>
-        </div>
+        <span>⌄</span>
       </div>
+      <div class="contenido">
+        <div class="subtitulo">Pago por trabajo</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Bono')">Bono</li>
+          <li onclick="seleccionarSubcategoria('Comisión')">Comisión</li>
+          <li onclick="seleccionarSubcategoria('Ganancia empleado cuenta propia')">Ganancia empleado cuenta propia</li>
+          <li onclick="seleccionarSubcategoria('Pago por hora')">Pago por hora</li>
+          <li onclick="seleccionarSubcategoria('Propina')">Propina</li>
+          <li onclick="seleccionarSubcategoria('Salario')">Salario</li>
+        </ul>
+        <div class="subtitulo">Ganancia de capital</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Acciones')">Acciones</li>
+          <li onclick="seleccionarSubcategoria('Auto')">Auto</li>
+          <li onclick="seleccionarSubcategoria('Bonos o renta fija')">Bonos o renta fija</li>
+          <li onclick="seleccionarSubcategoria('Casa/Apartamento/Tierra')">Casa/Apartamento/Tierra</li>
+          <li onclick="seleccionarSubcategoria('ETF, fondo mutuo, etc.')">ETF, fondo mutuo, etc.</li>
+        </ul>
+        <div class="subtitulo">Ingreso pasivo</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Anualidad')">Anualidad</li>
+          <li onclick="seleccionarSubcategoria('Dividendos e Intereses')">Dividendos e Intereses</li>
+          <li onclick="seleccionarSubcategoria('Pensión')">Pensión</li>
+          <li onclick="seleccionarSubcategoria('Renta inmueble')">Renta inmueble</li>
+          <li onclick="seleccionarSubcategoria('Seguro Social')">Seguro Social</li>
+        </ul>
+      </div>
+    </div>
 
-      <div class="grupo">
-        <div class="grupo-header" onclick="toggleGrupo(this)">
-          <div style="display:flex;align-items:center;">
-            <div class="circle" style="background:#6B7280;"></div>
-            Gastos
-          </div><span>⌄</span>
+    <!-- GASTOS -->
+    <div class="grupo">
+      <div class="grupo-header" onclick="toggleGrupo(this)">
+        <div style="display:flex;align-items:center;">
+          <div class="circle" style="background:#6B7280;"></div>
+          Gastos
         </div>
-        <div class="contenido">
-          <div class="subtitulo">Alimentación</div>
-          <ul>
-            <li onclick="seleccionarSubcategoria('Supermercado')">Supermercado</li>
-            <li onclick="seleccionarSubcategoria('Comidas fuera')">Comidas fuera</li>
-          </ul>
-        </div>
+        <span>⌄</span>
       </div>
+      <div class="contenido">
+        <div class="subtitulo">Alimentación</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Supermercado')">Supermercado</li>
+          <li onclick="seleccionarSubcategoria('Comidas fuera')">Comidas fuera</li>
+          <li onclick="seleccionarSubcategoria('Pedido a domicilio')">Pedido a domicilio</li>
+        </ul>
+        <div class="subtitulo">Casa</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Hipoteca / Alquiler')">Hipoteca / Alquiler</li>
+          <li onclick="seleccionarSubcategoria('Servicios básicos')">Servicios básicos</li>
+          <li onclick="seleccionarSubcategoria('Mantenimiento')">Mantenimiento</li>
+        </ul>
+        <div class="subtitulo">Impuestos</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Seguro social')">Seguro social</li>
+          <li onclick="seleccionarSubcategoria('Propiedad')">Propiedad</li>
+          <li onclick="seleccionarSubcategoria('Venta')">Venta</li>
+          <li onclick="seleccionarSubcategoria('Estatales')">Estatales</li>
+          <li onclick="seleccionarSubcategoria('Federales')">Federales</li>
+          <li onclick="seleccionarSubcategoria('Municipales')">Municipales</li>
+        </ul>
+        <div class="subtitulo">Transportación</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Gasolina')">Gasolina</li>
+          <li onclick="seleccionarSubcategoria('Mantenimiento')">Mantenimiento</li>
+          <li onclick="seleccionarSubcategoria('Transporte público / Uber')">Transporte público / Uber</li>
+        </ul>
+        <div class="subtitulo">Seguros</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Salud')">Salud</li>
+          <li onclick="seleccionarSubcategoria('Auto')">Auto</li>
+          <li onclick="seleccionarSubcategoria('Vida')">Vida</li>
+        </ul>
+        <div class="subtitulo">Regalos y donaciones</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Familia')">Familia</li>
+          <li onclick="seleccionarSubcategoria('Amigos')">Amigos</li>
+          <li onclick="seleccionarSubcategoria('Instituciones')">Instituciones</li>
+        </ul>
+        <div class="subtitulo">Gastos Médicos</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Consultas')">Consultas</li>
+          <li onclick="seleccionarSubcategoria('Medicamentos')">Medicamentos</li>
+          <li onclick="seleccionarSubcategoria('Procedimientos')">Procedimientos</li>
+        </ul>
+        <div class="subtitulo">Cuidado Personal</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Peluquería')">Peluquería</li>
+          <li onclick="seleccionarSubcategoria('Cosméticos')">Cosméticos</li>
+          <li onclick="seleccionarSubcategoria('Spa / Barbería')">Spa / Barbería</li>
+        </ul>
+        <div class="subtitulo">Dependientes</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Cuidado de niños')">Cuidado de niños</li>
+          <li onclick="seleccionarSubcategoria('Cuidado de mayores')">Cuidado de mayores</li>
+          <li onclick="seleccionarSubcategoria('Educación')">Educación</li>
+        </ul>
+        <div class="subtitulo">Deuda</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Tarjetas de crédito')">Tarjetas de crédito</li>
+          <li onclick="seleccionarSubcategoria('Préstamos estudiantiles')">Préstamos estudiantiles</li>
+          <li onclick="seleccionarSubcategoria('Otros préstamos')">Otros préstamos</li>
+        </ul>
+        <div class="subtitulo">Entretenimiento</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Cine')">Cine</li>
+          <li onclick="seleccionarSubcategoria('Conciertos')">Conciertos</li>
+          <li onclick="seleccionarSubcategoria('Streaming')">Streaming</li>
+        </ul>
+        <div class="subtitulo">Telecomunicaciones</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Teléfono')">Teléfono</li>
+          <li onclick="seleccionarSubcategoria('Internet')">Internet</li>
+          <li onclick="seleccionarSubcategoria('TV')">TV</li>
+        </ul>
+      </div>
+    </div>
 
-      <div class="grupo">
-        <div class="grupo-header" onclick="toggleGrupo(this)">
-          <div style="display:flex;align-items:center;">
-            <div class="circle" style="background:#E8C239;"></div>
-            Ahorro
-          </div><span>⌄</span>
+    <!-- AHORRO -->
+    <div class="grupo">
+      <div class="grupo-header" onclick="toggleGrupo(this)">
+        <div style="display:flex;align-items:center;">
+          <div class="circle" style="background:#E8C239;"></div>
+          Ahorro
         </div>
-        <div class="contenido">
-          <ul>
-            <li onclick="seleccionarSubcategoria('Reserva emergencia')">Reserva emergencia</li>
-          </ul>
-        </div>
+        <span>⌄</span>
       </div>
+      <div class="contenido">
+        <ul>
+          <li onclick="seleccionarSubcategoria('Contribución al retiro')">Contribución al retiro</li>
+          <li onclick="seleccionarSubcategoria('Cuenta hijo(a)')">Cuenta hijo(a)</li>
+          <li onclick="seleccionarSubcategoria('Reserva emergencia')">Reserva emergencia</li>
+          <li onclick="seleccionarSubcategoria('Cuenta de ahorro')">Cuenta de ahorro</li>
+          <li onclick="seleccionarSubcategoria('Contribución del empleador')">Contribución del empleador</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="btn-cancelar" onclick="cerrarModalCategorias()" style="margin-top:1rem;width:100%;">Cerrar</button>
+  </div>
+</div>
 
       <button class="btn-cerrar" onclick="cerrarModalCategorias()">Cerrar</button>
     </div>
