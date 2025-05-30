@@ -103,6 +103,44 @@
       border: none;
       cursor: pointer;
     }
+    .grupo {
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .grupo-header {
+      background: #F1F5F9;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .contenido {
+      display: none;
+      padding: 1rem;
+      background: #fff;
+    }
+    .subtitulo {
+      font-weight: bold;
+      margin-top: 0.75rem;
+    }
+    ul {
+      list-style: none;
+      padding-left: 1rem;
+    }
+    ul li {
+      margin: 0.25rem 0;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -110,7 +148,7 @@
     <h2>Editar Transacción</h2>
     <div class="monto">$120.00</div>
 
-    <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="window.location.href='lista-categorias-transaccion.html'">
+    <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="abrirModalCategorias()">
 
     <div class="campo-con-icono">
       <input type="date" id="fecha" name="fecha" value="2025-05-22">
@@ -135,14 +173,160 @@
     </div>
   </div>
 
+
+  <div class="grupo" style="--color:#3956E8;">
+    <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
+      <div style="display:flex;align-items:center;">
+        <div class="circle" style="background:#3956E8;"></div>
+        Ingresos
+      </div>
+      <span>⌄</span>
+    </div>
+    <div class="contenido">
+      <div class="subtitulo">Pago por trabajo</div>
+      <ul>
+        <li>Bono</li>
+        <li>Comisión</li>
+        <li>Ganancia empleado cuenta propia</li>
+        <li>Pago por hora</li>
+        <li>Propina</li>
+        <li>Salario</li>
+      </ul>
+      <div class="subtitulo">Ganancia de capital</div>
+      <ul>
+        <li>Acciones</li>
+        <li>Auto</li>
+        <li>Bonos o renta fija</li>
+        <li>Casa/Apartamento/Tierra</li>
+        <li>ETF, fondo mutuo, etc.</li>
+      </ul>
+      <div class="subtitulo">Ingreso pasivo</div>
+      <ul>
+        <li>Anualidad</li>
+        <li>Dividendos e Intereses</li>
+        <li>Pensión</li>
+        <li>Renta inmueble</li>
+        <li>Seguro Social</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grupo">
+    <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
+      <div style="display:flex;align-items:center;">
+        <div class="circle" style="background:#6B7280;"></div>
+        Gastos
+      </div>
+      <span>⌄</span>
+    </div>
+    <div class="contenido">
+      <div class="subtitulo">Alimentación</div>
+      <ul>
+        <li>Supermercado</li>
+        <li>Comidas fuera</li>
+        <li>Pedido a domicilio</li>
+      </ul>
+      <div class="subtitulo">Casa</div>
+      <ul>
+        <li>Hipoteca / Alquiler</li>
+        <li>Servicios básicos</li>
+        <li>Mantenimiento</li>
+      </ul>
+      <div class="subtitulo">Impuestos</div>
+      <ul>
+        <li>Seguro social</li>
+        <li>Propiedad</li>
+        <li>Venta</li>
+        <li>Estatales</li>
+        <li>Federales</li>
+        <li>Municipales</li>
+      </ul>
+      <div class="subtitulo">Transportación</div>
+      <ul>
+        <li>Gasolina</li>
+        <li>Mantenimiento</li>
+        <li>Transporte público / Uber</li>
+      </ul>
+      <div class="subtitulo">Seguros</div>
+      <ul>
+        <li>Salud</li>
+        <li>Auto</li>
+        <li>Vida</li>
+      </ul>
+      <div class="subtitulo">Regalos y donaciones</div>
+      <ul>
+        <li>Familia</li>
+        <li>Amigos</li>
+        <li>Instituciones</li>
+      </ul>
+      <div class="subtitulo">Gastos Médicos</div>
+      <ul>
+        <li>Consultas</li>
+        <li>Medicamentos</li>
+        <li>Procedimientos</li>
+      </ul>
+      <div class="subtitulo">Cuidado Personal</div>
+      <ul>
+        <li>Peluquería</li>
+        <li>Cosméticos</li>
+        <li>Spa / Barbería</li>
+      </ul>
+      <div class="subtitulo">Dependientes</div>
+      <ul>
+        <li>Cuidado de niños</li>
+        <li>Cuidado de mayores</li>
+        <li>Educación</li>
+      </ul>
+      <div class="subtitulo">Deuda</div>
+      <ul>
+        <li>Tarjetas de crédito</li>
+        <li>Préstamos estudiantiles</li>
+        <li>Otros préstamos</li>
+      </ul>
+      <div class="subtitulo">Entretenimiento</div>
+      <ul>
+        <li>Cine</li>
+        <li>Conciertos</li>
+        <li>Streaming</li>
+      </ul>
+      <div class="subtitulo">Telecomunicaciones</div>
+      <ul>
+        <li>Teléfono</li>
+        <li>Internet</li>
+        <li>TV</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grupo">
+    <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
+      <div style="display:flex;align-items:center;">
+        <div class="circle" style="background:#E8C239;"></div>
+        Ahorro
+      </div>
+      <span>⌄</span>
+    </div>
+    <div class="contenido">
+      <ul>
+        <li>Contribución al retiro</li>
+        <li>Cuenta hijo(a)</li>
+        <li>Reserva emergencia</li>
+        <li>Cuenta de ahorro</li>
+        <li>Contribución del empleador</li>
+      </ul>
+    </div>
+  </div>
+
   <script>
-    window.onload = function() {
-      const seleccion = localStorage.getItem('subcategoriaSeleccionada');
-      if (seleccion) {
-        document.getElementById('categoria').value = seleccion;
-        localStorage.removeItem('subcategoriaSeleccionada');
-      }
-    };
+    function abrirModalCategorias() {
+      alert('Aquí se abriría el modal con categorías.');
+    }
+    function toggleGrupo(grupo) {
+      const contenido = grupo.querySelector('.contenido');
+      const estaVisible = contenido.style.display === 'block';
+      document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
+      if (!estaVisible) contenido.style.display = 'block';
+    }
   </script>
 </body>
 </html>
