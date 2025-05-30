@@ -98,19 +98,27 @@
       border-radius: 8px;
       font-size: 0.85rem;
     }
+    
 .fechas-dos-columnas {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   margin: 1rem;
+  padding: 0; /* opcional */
 }
 
 .bloque-fecha {
   flex: 1;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* previene overflow */
 }
 
 .bloque-fecha label {
-  display: block;
   font-size: 0.75rem;
   color: #64748B;
   margin-bottom: 4px;
@@ -118,13 +126,13 @@
 
 .bloque-fecha input[type="date"] {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.5rem;
+  font-size: 0.85rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-family: 'Greycliff CF', sans-serif;
-  font-size: 14px;
+  box-sizing: border-box;
 }
-
     .seccion-graficos {
       margin: 1rem;
     }
@@ -234,16 +242,15 @@ canvas {
   </div>
 
 <div class="fechas-dos-columnas">
-  <div class="bloque-sin-sombra bloque-fecha">
+  <div class="bloque-fecha">
     <label for="fechaDesde">Desde</label>
     <input id="fechaDesde" type="date" value="2025-01-01" />
   </div>
-  <div class="bloque-sin-sombra bloque-fecha">
+  <div class="bloque-fecha">
     <label for="fechaHasta">Hasta</label>
     <input id="fechaHasta" type="date" value="2025-05-31" />
   </div>
 </div>
-
 
 <section class="bloque-sin-sombra">
   <h4>Meta para el año</h4>
