@@ -280,79 +280,78 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   // Gráfico de metas (barras verticales apiladas)
-  const ctxMetas = document.getElementById('graficoMetas').getContext('2d');
-  const graficoMetas = new Chart(ctxMetas, {
-    type: 'bar',
-    data: {
-      labels: ['Meta', 'Progreso'],
-      datasets: [
-        {
-          label: 'Meta',
-          data: [5000, 0],
-          backgroundColor: '#E8C239',
-          borderRadius: 10,
-          barThickness: 60,
-          categoryPercentage: 0.5,
-          stack: 'Stack 0'
-        },
-        {
-          label: 'Logrado',
-          data: [0, 2500],
-          backgroundColor: '#3956E8',
-          borderRadius: 10,
-          barThickness: 60,
-          categoryPercentage: 0.5,
-          stack: 'Stack 1'
-        },
-        {
-          label: 'Faltante',
-          data: [0, 2500],
-          backgroundColor: '#AAB8F2',
-          borderRadius: 10,
-          barThickness: 60,
-          categoryPercentage: 0.5,
-          stack: 'Stack 1'
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-        interaction: {
-    mode: 'nearest',
-    intersect: false
+const ctxMetas = document.getElementById('graficoMetas').getContext('2d');
+new Chart(ctxMetas, {
+  type: 'bar',
+  data: {
+    labels: ['Meta', 'Progreso'],
+    datasets: [
+      {
+        label: 'Meta',
+        data: [5000, null], // 👈 solo aparece en la primera barra
+        backgroundColor: '#E8C239',
+        borderRadius: 10,
+        barThickness: 60,
+        categoryPercentage: 0.5
+      },
+      {
+        label: 'Logrado',
+        data: [null, 2500], // 👈 solo en Progreso
+        backgroundColor: '#3956E8',
+        borderRadius: 10,
+        barThickness: 60,
+        categoryPercentage: 0.5,
+        stack: 'progreso'
+      },
+      {
+        label: 'Faltante',
+        data: [null, 2500], // 👈 solo en Progreso
+        backgroundColor: '#AAB8F2',
+        borderRadius: 10,
+        barThickness: 60,
+        categoryPercentage: 0.5,
+        stack: 'progreso'
+      }
+    ]
   },
-      plugins: {
-        tooltip: {
-          backgroundColor: '#fff',
-          titleColor: '#000',
-          bodyColor: '#000',
-          borderWidth: 1,
-          borderColor: '#ccc'
-        },
-        legend: {
+  options: {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderWidth: 1,
+        borderColor: '#ccc'
+      },
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: {
           display: false
+        },
+        ticks: {
+          color: '#64748B'
         }
       },
-      scales: {
-        x: {
-          stacked: true,
-          grid: {
-            display: false
-          }
+      y: {
+        beginAtZero: true,
+        stacked: true,
+        grid: {
+          color: '#eee'
         },
-        y: {
-          beginAtZero: true,
-          stacked: true,
-          grid: {
-            display: true
-          },
-          ticks: {
-            display: true
-          }
+        ticks: {
+          color: '#64748B'
         }
       }
     }
-  });
+  }
+});
+
 
   // Gráfico de ingresos vs gastos (línea)
   const ctxLineal = document.getElementById('graficoLineal').getContext('2d');
