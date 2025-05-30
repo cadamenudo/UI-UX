@@ -157,6 +157,13 @@
   color: #64748B;
   text-decoration: none;
 }
+    .bloque-sin-sombra {
+  background: #fff;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
   </style>
 </head>
 <body>
@@ -196,31 +203,30 @@
     ✅ SUPER: Tienes un sobrante de <strong>$1,868.77</strong>
   </div>
 
-  <div class="fechas">
-    <input type="date" value="2025-01-01" />
-    <input type="date" value="2025-05-31" />
-  </div>
+<div class="bloque-sin-sombra fechas">
+  <input type="date" value="2025-01-01" />
+  <input type="date" value="2025-05-31" />
+</div>
 
-<section class="seccion-graficos">
+<section class="bloque-sin-sombra">
   <h4>Meta para el año</h4>
   <canvas id="graficoMetas" height="250"></canvas>
 </section>
 
-<section class="seccion-graficos">
+<section class="bloque-sin-sombra">
   <h4>Ingresos vs Gastos</h4>
   <div class="grafico-lineal-container">
     <canvas id="graficoLineal" width="400" height="200"></canvas>
   </div>
+</section>
   
-<section class="seccion-graficos">
+<section class="bloque-sin-sombra">
   <h4>Ingresos Totales</h4>
   <div class="grafico-dona-ingresos" style="max-width: 320px; margin: 0 auto;">
     <canvas id="graficoDonaIngresos" width="280" height="280"></canvas>
   </div>
-</section>
   
-<section class="seccion-graficos">
-  <h4>Gastos Totales</h4>
+  <h4 style="margin-top: 2rem;">Gastos Totales</h4>
   <div style="max-width: 320px; margin: auto;">
     <canvas id="graficoDonaGastos" width="280" height="280"></canvas>
 
