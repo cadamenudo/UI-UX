@@ -454,7 +454,7 @@ new Chart(ctxDona, {
 });
 
 // Gráfico de gastos totales (dona)
-  const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
+const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
 
 const categoriasGasto = {
   labels: ['Alimentación', 'Casa', 'Cuidado Personal', 'Deuda', 'Entretenimiento', 'Impuestos'],
@@ -476,7 +476,6 @@ const subcategorias = {
   transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
 };
 
-// Gráfico principal
 const ctxGastos = document.getElementById('graficoDonaGastos').getContext('2d');
 new Chart(ctxGastos, {
   type: 'doughnut',
@@ -490,39 +489,63 @@ new Chart(ctxGastos, {
   options: {
     responsive: true,
     cutout: '60%',
-    plugins: { legend: { display: false } }
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        callbacks: {
+          label: function(context) {
+            return `${context.label}: $${context.formattedValue}`;
+          }
+        }
+      }
+    }
   }
 });
 
-// Gráfico subcategorías
 const ctxSub = document.getElementById('graficoSubcategoria').getContext('2d');
 let chartSub = new Chart(ctxSub, {
   type: 'doughnut',
   data: {
-    labels: [],
+    labels: subcategorias['alimentacion'].labels,
     datasets: [{
-      data: [],
+      data: subcategorias['alimentacion'].data,
       backgroundColor: colores
     }]
   },
   options: {
     responsive: true,
     cutout: '60%',
-    plugins: { legend: { display: false } }
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        callbacks: {
+          label: function(context) {
+            return `${context.label}: $${context.formattedValue}`;
+          }
+        }
+      }
+    }
   }
 });
 
 // Selector dinámico
-document.getElementById('selectorCategoria').addEventListener('change', function() {
+const selector = document.getElementById('selectorCategoria');
+selector.addEventListener('change', function() {
   const seleccion = this.value;
   if (subcategorias[seleccion]) {
     const nuevaData = subcategorias[seleccion];
     chartSub.data.labels = nuevaData.labels;
     chartSub.data.datasets[0].data = nuevaData.data;
-    chartSub.update();
-  } else {
-    chartSub.data.labels = [];
-    chartSub.data.datasets[0].data = [];
     chartSub.update();
   }
 });
