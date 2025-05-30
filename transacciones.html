@@ -103,23 +103,25 @@
       gap: 0.2rem;
     }
 
-    .col-2 {
-      justify-content: center;
-      align-items: center;
+    .col-1 {
+      flex: 1;
     }
 
-    .fila1 {
+    .fila1, .fila2 {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
     }
 
     .fila2 {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
+      align-items: center;
       color: #777;
       font-size: 0.8rem;
+    }
+
+    .fila2 span {
+      flex: 1;
+      text-align: center;
     }
 
     .editar {
@@ -128,6 +130,11 @@
       cursor: pointer;
       text-align: center;
       white-space: nowrap;
+    }
+
+    .col-2 {
+      justify-content: center;
+      align-items: center;
     }
   </style>
 </head>
