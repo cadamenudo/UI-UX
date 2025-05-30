@@ -307,79 +307,36 @@
   });
 
   // Gráfico de ingresos vs gastos (línea)
- const ctxLineal = document.getElementById('graficoLineal').getContext('2d');
-new Chart(ctxLineal, {
-  type: 'line',
-  data: {
-    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
-    datasets: [
-      {
-        label: 'Ingresos',
-        data: [3200, 3300, 3100, 3400, 3500],
-        borderColor: '#3716B3',
-        backgroundColor: 'rgba(55, 22, 179, 0.1)',
-        tension: 0.4,
-        fill: true,
-        pointRadius: 0,
-        pointHoverRadius: 4
-      },
-      {
-        label: 'Gastos',
-        data: [2800, 2900, 2700, 3000, 3100],
-        borderColor: '#BA68C8',
-        backgroundColor: 'rgba(186, 104, 200, 0.1)',
-        tension: 0.4,
-        fill: true,
-        pointRadius: 0,
-        pointHoverRadius: 4
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        backgroundColor: '#fff',
-        titleColor: '#000',
-        bodyColor: '#000',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        displayColors: false,
-        callbacks: {
-          label: function(context) {
-            const label = context.dataset.label || '';
-            const value = context.formattedValue;
-            return `${label}: $${value}`;
-          }
-        }
-      },
-      legend: {
-        display: false
-      }
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          color: '#64748B'
-        }
-      },
-      y: {
-        beginAtZero: true,
-        ticks: {
-          color: '#64748B'
-        },
-        grid: {
-          color: '#eee'
-        }
-      }
+Chart.register({
+  id: 'centerText',
+  beforeDraw: function(chart) {
+    if (chart.config.options.elements.center) {
+      const ctx = chart.ctx;
+      const centerConfig = chart.config.options.elements.center;
+      const fontStyle = centerConfig.fontStyle || 'Greycliff CF';
+      const txt = centerConfig.text;
+      const color = centerConfig.color || '#000';
+      const sidePadding = centerConfig.sidePadding || 20;
+
+      const innerRadius = chart._metasets[0].data[0].innerRadius;
+      const outerRadius = chart._metasets[0].data[0].outerRadius;
+      const width = outerRadius - innerRadius;
+      const height = width;
+      let fontSize = (height / 3);
+
+      ctx.save();
+      ctx.font = `${fontSize}px ${fontStyle}`;
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
+      const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+      ctx.fillText(txt, centerX, centerY);
+      ctx.restore();
     }
   }
 });
-    // Gráfico Ingresos totales (dona)
+
 const ctxDona = document.getElementById('graficoDonaIngresos').getContext('2d');
 new Chart(ctxDona, {
   type: 'doughnut',
@@ -403,14 +360,20 @@ new Chart(ctxDona, {
         borderColor: '#ccc',
         callbacks: {
           label: function(context) {
-            const label = context.label;
-            const value = context.formattedValue;
-            return `${label}: $${value}`;
+            return `${context.label}: $${context.formattedValue}`;
           }
         }
       },
       legend: {
         display: false
+      }
+    },
+    elements: {
+      center: {
+        text: '$7,000',
+        color: '#000',
+        fontStyle: 'Greycliff CF',
+        sidePadding: 20
       }
     }
   }
