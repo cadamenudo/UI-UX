@@ -295,25 +295,31 @@ new Chart(ctxMetas, {
         data: [5000, null],
         backgroundColor: '#E8C239',
         borderRadius: 10,
-        barThickness: 40,
-        categoryPercentage: 0.7
-      },
-      {
-        label: 'Logrado',
-        data: [null, 2500],
-        backgroundColor: '#3956E8',
-        borderRadius: { topLeft: 10, topRight: 10 },
-        barThickness: 40,
-        categoryPercentage: 0.7,
-        stack: 'progreso'
+        barThickness: 50,
+        categoryPercentage: 0.6
       },
       {
         label: 'Faltante',
-        data: [null, 2500],
+        data: [null, 2500], // primero faltante
         backgroundColor: '#AAB8F2',
-        borderRadius: { bottomLeft: 10, bottomRight: 10 },
-        barThickness: 40,
-        categoryPercentage: 0.7,
+        borderRadius: {
+          bottomLeft: 10,
+          bottomRight: 10
+        },
+        barThickness: 50,
+        categoryPercentage: 0.6,
+        stack: 'progreso'
+      },
+      {
+        label: 'Logrado',
+        data: [null, 2500], // luego logrado
+        backgroundColor: '#3956E8',
+        borderRadius: {
+          topLeft: 10,
+          topRight: 10
+        },
+        barThickness: 50,
+        categoryPercentage: 0.6,
         stack: 'progreso'
       }
     ]
@@ -328,30 +334,40 @@ new Chart(ctxMetas, {
         borderWidth: 1,
         borderColor: '#ccc',
         callbacks: {
-          label: (context) => `${context.dataset.label}: $${context.formattedValue}`
+          label: function (context) {
+            const label = context.dataset.label || '';
+            const value = context.parsed.y;
+            return `${label}: $${value.toLocaleString()}`;
+          }
         }
       },
-      legend: { display: false }
+      legend: {
+        display: false
+      }
     },
     scales: {
       x: {
         stacked: true,
-        grid: { display: false },
+        grid: {
+          display: false
+        },
         ticks: {
-          color: '#64748B',
-          align: 'center'
+          color: '#64748B'
         }
       },
       y: {
-        stacked: true,
         beginAtZero: true,
-        grid: { color: '#eee' },
-        ticks: { color: '#64748B' }
+        stacked: true,
+        grid: {
+          color: '#eee'
+        },
+        ticks: {
+          color: '#64748B'
+        }
       }
     }
   }
 });
-
 
   // Gráfico de ingresos vs gastos (línea)
   const ctxLineal = document.getElementById('graficoLineal').getContext('2d');
