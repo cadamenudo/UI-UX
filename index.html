@@ -222,9 +222,16 @@ canvas {
   </div>
 
 <div class="bloque-sin-sombra fechas">
-  <input type="date" value="2025-01-01" />
-  <input type="date" value="2025-05-31" />
+  <div style="flex: 1;">
+    <label for="fechaDesde" style="font-size: 0.75rem; color: #64748B; margin-bottom: 4px; display: block;">Desde</label>
+    <input id="fechaDesde" type="date" value="2025-01-01" />
+  </div>
+  <div style="flex: 1;">
+    <label for="fechaHasta" style="font-size: 0.75rem; color: #64748B; margin-bottom: 4px; display: block;">Hasta</label>
+    <input id="fechaHasta" type="date" value="2025-05-31" />
+  </div>
 </div>
+
 
 <section class="bloque-sin-sombra">
   <h4>Meta para el año</h4>
