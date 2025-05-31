@@ -200,7 +200,14 @@ canvas {
   padding: 1rem;
   border-radius: 12px;
 }
-
+.titulo-grafico {
+  font-family: 'Greycliff CF', sans-serif;
+  font-size: 1.25rem;        /* Tamaño grande */
+  font-weight: 700;          /* Negrita */
+  color: #000000;            /* Negro */
+  margin: 1rem 0 0.75rem;    /* Espaciado arriba/abajo */
+  text-align: left;          /* Alineación izquierda */
+}
   </style>
 </head>
 <body>
@@ -253,29 +260,30 @@ canvas {
 </div>
 
 <section class="bloque-sin-sombra">
-  <h4>Meta para el año</h4>
+  <h4 class="titulo-grafico">Meta para el año</h4>
   <canvas id="graficoMetas" height="250"></canvas>
 </section>
 
 <section class="bloque-sin-sombra">
-  <h4>Ingresos vs Gastos</h4>
+  <h4 class="titulo-grafico">Ingresos vs Gastos</h4>
   <div class="grafico-lineal-container">
     <canvas id="graficoLineal"></canvas>
   </div>
 </section>
   
 <section class="bloque-sin-sombra">
-  <h4>Ingresos Totales</h4>
+  <h4 class="titulo-grafico">Ingresos Totales</h4>
   <div class="grafico-dona-ingresos" style="max-width: 320px; margin: 0 auto;">
     <canvas id="graficoDonaIngresos" width="280" height="280"></canvas>
   </div>
+</section>
   
-  <h4 style="margin-top: 2rem;">Gastos Totales</h4>
-  <div style="max-width: 320px; margin: auto;">
-    <canvas id="graficoDonaGastos" width="280" height="280"></canvas>
+<h4 class="titulo-grafico">Gastos Totales</h4>
+<div style="max-width: 320px; margin: auto;">
+  <canvas id="graficoDonaGastos" width="280" height="280"></canvas>
 
-    <label for="selectorCategoria" style="margin-top: 16px; display: block;">Ver subcategorías:</label>
-    <select id="selectorCategoria" style="width: 100%; padding: 8px; font-family: 'Greycliff CF'; font-size: 14px;">
+  <label for="selectorCategoria" class="subtitulo-select">Ver subcategorías:</label>
+  <select id="selectorCategoria" class="select-categorias">
       <option value="alimentacion" selected>Alimentación</option>
       <option value="alimentacion">Alimentación</option>
       <option value="casa">Casa</option>
