@@ -136,121 +136,49 @@
     <button onclick="cambiarCategoria('gastos', this)"><span class="punto" style="background:#BDBDBD;"></span> Gastos</button>
     <button onclick="cambiarCategoria('ahorro', this)"><span class="punto" style="background:#E8C239;"></span> Ahorro</button>
   </div>
-<div id="ingresos" class="categoria activa">
-  <div class="bloque-categoria">
-    <h5><span>Sueldo</span><span>$2,400.00</span></h5>
-    <div class="contenido-transacciones">
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$1,200.00</span><span class="subcategoria">Sueldo</span></div><div class="col-2"><span class="fecha">12 mayo 2025</span><span class="fuente">Banco BCP</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$1,200.00</span><span class="subcategoria">Sueldo</span></div><div class="col-2"><span class="fecha">12 mayo 2025</span><span class="fuente">Banco BCP</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    </div>
-  </div>
-</div>
-<div id="gastos" class="categoria">
-  <div class="bloque-categoria">
-    <h5 onclick="this.nextElementSibling.classList.toggle('visible')">
-      <span>Cuidado Personal</span><span>$135.00</span>
-    </h5>
-    <div class="contenido-transacciones">
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$45.00</span><span class="subcategoria">Peluquería</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Efectivo</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Spa</span></div><div class="col-2"><span class="fecha">07 mayo 2025</span><span class="fuente">Tarjeta</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$40.00</span><span class="subcategoria">Productos</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">Amazon</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    </div>
-  </div>
-</div>
-  <div class="bloque-categoria">
-    <h5><span>Alimentación</span><span>$130.00</span></h5>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Supermercado</span></div><div class="col-2"><span class="fecha">05 mayo 2025</span><span class="fuente">Walmart</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$30.00</span><span class="subcategoria">Panadería</span></div><div class="col-2"><span class="fecha">06 mayo 2025</span><span class="fuente">Local</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Comida rápida</span></div><div class="col-2"><span class="fecha">08 mayo 2025</span><span class="fuente">Uber Eats</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  </div>
 
-  <div class="bloque-categoria">
-    <h5><span>Casa</span><span>$1,260.00</span></h5>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$1,000.00</span><span class="subcategoria">Renta</span></div><div class="col-2"><span class="fecha">01 mayo 2025</span><span class="fuente">Transferencia</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$150.00</span><span class="subcategoria">Mantenimiento</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Efectivo</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$110.00</span><span class="subcategoria">Servicios básicos</span></div><div class="col-2"><span class="fecha">04 mayo 2025</span><span class="fuente">Banco</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  </div>
-
-  <div class="bloque-categoria">
-    <h5><span>Entretenimiento</span><span>$210.00</span></h5>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$70.00</span><span class="subcategoria">Cine</span></div><div class="col-2"><span class="fecha">06 mayo 2025</span><span class="fuente">Tarjeta</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$90.00</span><span class="subcategoria">Concierto</span></div><div class="col-2"><span class="fecha">08 mayo 2025</span><span class="fuente">Tarjeta</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Netflix</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">Débito</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  </div>
-
-  <div class="bloque-categoria">
-    <h5><span>Impuestos</span><span>$360.00</span></h5>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$120.00</span><span class="subcategoria">Propiedad</span></div><div class="col-2"><span class="fecha">05 mayo 2025</span><span class="fuente">Estado</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$120.00</span><span class="subcategoria">Ingresos</span></div><div class="col-2"><span class="fecha">12 mayo 2025</span><span class="fuente">IRS</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$120.00</span><span class="subcategoria">Otros</span></div><div class="col-2"><span class="fecha">20 mayo 2025</span><span class="fuente">Municipal</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  </div>
-
-  <div class="bloque-categoria">
-  <h5><span>Ropa</span><span>$180.00</span></h5>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$60.00</span><span class="subcategoria">Camisa</span></div><div class="col-2"><span class="fecha">02 mayo 2025</span><span class="fuente">Zara</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$70.00</span><span class="subcategoria">Pantalón</span></div><div class="col-2"><span class="fecha">06 mayo 2025</span><span class="fuente">Uniqlo</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Zapatos</span></div><div class="col-2"><span class="fecha">09 mayo 2025</span><span class="fuente">Footlocker</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-</div>
-
-<div class="bloque-categoria">
-  <h5><span>Seguro</span><span>$300.00</span></h5>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$100.00</span><span class="subcategoria">Salud</span></div><div class="col-2"><span class="fecha">01 mayo 2025</span><span class="fuente">BlueCross</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$100.00</span><span class="subcategoria">Auto</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">GEICO</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$100.00</span><span class="subcategoria">Vida</span></div><div class="col-2"><span class="fecha">15 mayo 2025</span><span class="fuente">StateFarm</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-</div>
-
-<div class="bloque-categoria">
-  <h5><span>Servicio de deuda</span><span>$900.00</span></h5>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$300.00</span><span class="subcategoria">Préstamo estudiantil</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Nelnet</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$300.00</span><span class="subcategoria">Tarjeta de crédito</span></div><div class="col-2"><span class="fecha">09 mayo 2025</span><span class="fuente">Chase</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$300.00</span><span class="subcategoria">Préstamo personal</span></div><div class="col-2"><span class="fecha">20 mayo 2025</span><span class="fuente">SoFi</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-</div>
-
-<div class="bloque-categoria">
-  <h5><span>Servicios profesionales</span><span>$420.00</span></h5>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$150.00</span><span class="subcategoria">Contador</span></div><div class="col-2"><span class="fecha">04 mayo 2025</span><span class="fuente">Firma ABC</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$120.00</span><span class="subcategoria">Abogado</span></div><div class="col-2"><span class="fecha">08 mayo 2025</span><span class="fuente">LegalPlus</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$150.00</span><span class="subcategoria">Asesoría</span></div><div class="col-2"><span class="fecha">13 mayo 2025</span><span class="fuente">Coach Pro</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-</div>
-
-<div class="bloque-categoria">
-  <h5><span>Telecomunicaciones</span><span>$210.00</span></h5>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$70.00</span><span class="subcategoria">Internet</span></div><div class="col-2"><span class="fecha">01 mayo 2025</span><span class="fuente">Xfinity</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$70.00</span><span class="subcategoria">Teléfono</span></div><div class="col-2"><span class="fecha">05 mayo 2025</span><span class="fuente">T-Mobile</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$70.00</span><span class="subcategoria">TV</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">DirectTV</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-</div>
-
-<div class="bloque-categoria">
-  <h5><span>Transporte</span><span>$285.00</span></h5>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$95.00</span><span class="subcategoria">Gasolina</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Shell</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$100.00</span><span class="subcategoria">Mantenimiento</span></div><div class="col-2"><span class="fecha">12 mayo 2025</span><span class="fuente">Taller</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-  <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$90.00</span><span class="subcategoria">Uber</span></div><div class="col-2"><span class="fecha">16 mayo 2025</span><span class="fuente">Uber App</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-</div>
-</div>
-
-  <div id="ahorro" class="bloque-categoria categoria">
+  <!-- INGRESOS -->
+  <div id="ingresos" class="categoria activa">
     <div class="bloque-categoria">
-      <h5><span>Contribución al retiro</span><span>$900.00</span></h5>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$300.00</span><span class="subcategoria">401k</span></div><div class="col-2"><span class="fecha">05 mayo 2025</span><span class="fuente">Nómina</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$300.00</span><span class="subcategoria">IRA</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">Transferencia</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$300.00</span><span class="subcategoria">Roth IRA</span></div><div class="col-2"><span class="fecha">15 mayo 2025</span><span class="fuente">Automático</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    </div>
-
-    <div class="bloque-categoria">
-      <h5><span>Reserva de Emergencia</span><span>$750.00</span></h5>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$250.00</span><span class="subcategoria">Transferencia 1</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Banco X</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$250.00</span><span class="subcategoria">Transferencia 2</span></div><div class="col-2"><span class="fecha">09 mayo 2025</span><span class="fuente">Banco X</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$250.00</span><span class="subcategoria">Transferencia 3</span></div><div class="col-2"><span class="fecha">14 mayo 2025</span><span class="fuente">Banco X</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    </div>
-
-    <div class="bloque-categoria">
-      <h5><span>Cuenta de ahorro</span><span>$600.00</span></h5>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$200.00</span><span class="subcategoria">Depósito 1</span></div><div class="col-2"><span class="fecha">01 mayo 2025</span><span class="fuente">Banco Y</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$200.00</span><span class="subcategoria">Depósito 2</span></div><div class="col-2"><span class="fecha">11 mayo 2025</span><span class="fuente">Banco Y</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$200.00</span><span class="subcategoria">Depósito 3</span></div><div class="col-2"><span class="fecha">20 mayo 2025</span><span class="fuente">Banco Y</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+      <h5><span>Sueldo</span><span>$2,400.00</span></h5>
+      <div class="contenido-transacciones">
+        <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$1,200.00</span><span class="subcategoria">Sueldo</span></div><div class="col-2"><span class="fecha">12 mayo 2025</span><span class="fuente">Banco BCP</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+        <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$1,200.00</span><span class="subcategoria">Sueldo</span></div><div class="col-2"><span class="fecha">12 mayo 2025</span><span class="fuente">Banco BCP</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+      </div>
     </div>
   </div>
 
+  <!-- GASTOS -->
+  <div id="gastos" class="categoria">
+    <div class="bloque-categoria">
+      <h5><span>Cuidado Personal</span><span>$135.00</span></h5>
+      <div class="contenido-transacciones">
+        <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$45.00</span><span class="subcategoria">Peluquería</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Efectivo</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+        <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Spa</span></div><div class="col-2"><span class="fecha">07 mayo 2025</span><span class="fuente">Tarjeta</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+        <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$40.00</span><span class="subcategoria">Productos</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">Amazon</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+      </div>
+    </div>
+
+    <!-- todos los siguientes bloques estaban mal ubicados antes -->
+    <div class="bloque-categoria"><h5><span>Alimentación</span><span>$130.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Casa</span><span>$1,260.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Entretenimiento</span><span>$210.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Impuestos</span><span>$360.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Ropa</span><span>$180.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Seguro</span><span>$300.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Servicio de deuda</span><span>$900.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Servicios profesionales</span><span>$420.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Telecomunicaciones</span><span>$210.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Transporte</span><span>$285.00</span></h5>... </div>
+  </div>
+
+  <!-- AHORRO -->
+  <div id="ahorro" class="categoria">
+    <div class="bloque-categoria"><h5><span>Contribución al retiro</span><span>$900.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Reserva de Emergencia</span><span>$750.00</span></h5>... </div>
+    <div class="bloque-categoria"><h5><span>Cuenta de ahorro</span><span>$600.00</span></h5>... </div>
+  </div>
+</body>
   <script>
   function cambiarCategoria(id, boton) {
     document.querySelectorAll('.categoria').forEach(el => el.classList.remove('activa'));
