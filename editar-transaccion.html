@@ -414,7 +414,7 @@ montoInput.addEventListener('keydown', function () {
     if (value === '') value = '0';
 
     const number = parseFloat(value) / 100;
-    montoInput.value = `$${number.toLocaleString('en-US', {
+    montoInput.value = `$${number.toFixed(2)}`; {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })}`;
