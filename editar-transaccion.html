@@ -411,7 +411,8 @@ const montoInput = document.getElementById('monto');
 let rawValue = '0';
 
 function actualizarMonto() {
-  const number = parseFloat(rawValue) / 100;
+  const numeric = rawValue === '' ? 0 : parseFloat(rawValue);
+  const number = numeric / 100;
   montoInput.value = `$${number.toFixed(2)}`;
 }
 
