@@ -65,8 +65,9 @@
   background: transparent;
   border: none;
   outline: none;
-  max-width: 100%;
+  max-width: 180%;
   display: block;
+  caret-color: transparent; /* 🔒 evita que se vea el cursor falso */
 }
     .acciones {
       display: flex;
@@ -210,6 +211,7 @@
   id="monto"
   inputmode="numeric"
   placeholder="$0.00"
+  autocomplete="off"
 />
     <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="abrirModalCategorias()">
 
@@ -407,19 +409,44 @@
       contenido.style.display = abierto ? 'none' : 'block';
     }
 const montoInput = document.getElementById('monto');
+let rawValue = ''; // valor sin formatear como string
 
-montoInput.addEventListener('keydown', function () {
+function actualizarMonto() {
+  const number = parseFloat(rawValue || '0') / 100;
+  montoInput.value = `$${number.toFixed(2)}`;
+}
+
+// Maneja las teclas presionadas
+montoInput.addEventListener('keydown', function (e) {
+  // Retroceso
+  if (e.key === 'Backspace') {
+    rawValue = rawValue.slice(0, -1);
+    actualizarMonto();
+    e.preventDefault();
+    return;
+  }
+
+  // Solo acepta dígitos
+  if (/^[0-9]$/.test(e.key)) {
+    rawValue += e.key;
+    actualizarMonto();
+    e.preventDefault();
+    return;
+  }
+
+  // Bloquea cualquier otra tecla
+  e.preventDefault();
+});
+
+// Siempre enfoca al final
+montoInput.addEventListener('focus', function () {
   setTimeout(() => {
-    let value = montoInput.value.replace(/\D/g, '');
-    if (value === '') value = '0';
-
-    const number = parseFloat(value) / 100;
-    montoInput.value = `$${number.toFixed(2)}`; {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    })}`;
+    montoInput.selectionStart = montoInput.selectionEnd = montoInput.value.length;
   }, 0);
 });
+
+// Valor inicial
+actualizarMonto();
   </script>
 </body>
 </html>
