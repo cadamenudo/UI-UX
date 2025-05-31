@@ -408,44 +408,22 @@
       contenido.style.display = abierto ? 'none' : 'block';
     }
 const montoInput = document.getElementById('monto');
-let rawValue = ''; // valor sin formatear como string
 
-function actualizarMonto() {
-  const number = parseFloat(rawValue || '0') / 100;
-  montoInput.value = `$${number.toFixed(2)}`;
-}
+montoInput.addEventListener('keydown', function () {
+  setTimeout(() => {
+    let value = montoInput.value.replace(/\D/g, '');
+    if (value === '') value = '0';
 
-// Maneja las teclas presionadas
-montoInput.addEventListener('keydown', function (e) {
-  // Retroceso
-  if (e.key === 'Backspace') {
-    rawValue = rawValue.slice(0, -1);
-    actualizarMonto();
-    e.preventDefault();
-    return;
-  }
-
-  // Solo acepta dígitos
-  if (/^[0-9]$/.test(e.key)) {
-    rawValue += e.key;
-    actualizarMonto();
-    e.preventDefault();
-    return;
-  }
-
-  // Bloquea cualquier otra tecla
-  e.preventDefault();
+    const number = parseFloat(value) / 100;
+    montoInput.value = `$${number.toFixed(2)}`;
+  }, 0);
 });
 
-// Siempre enfoca al final
 montoInput.addEventListener('focus', function () {
   setTimeout(() => {
     montoInput.selectionStart = montoInput.selectionEnd = montoInput.value.length;
   }, 0);
 });
-
-// Valor inicial
-actualizarMonto();
   </script>
 </body>
 </html>
