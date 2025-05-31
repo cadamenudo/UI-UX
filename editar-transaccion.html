@@ -67,7 +67,7 @@
   outline: none;
   max-width: 180%;
   display: block;
-  caret-color: transparent; /* 🔒 evita que se vea el cursor falso */
+  caret-color: auto; /* 🔒 evita que se vea el cursor falso */
 }
     .acciones {
       display: flex;
@@ -408,15 +408,30 @@
       contenido.style.display = abierto ? 'none' : 'block';
     }
 const montoInput = document.getElementById('monto');
+let rawValue = '0';
 
-montoInput.addEventListener('keydown', function () {
-  setTimeout(() => {
-    let value = montoInput.value.replace(/\D/g, '');
-    if (value === '') value = '0';
+function actualizarMonto() {
+  const number = parseFloat(rawValue) / 100;
+  montoInput.value = `$${number.toFixed(2)}`;
+}
 
-    const number = parseFloat(value) / 100;
-    montoInput.value = `$${number.toFixed(2)}`;
-  }, 0);
+montoInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Backspace') {
+    rawValue = rawValue.slice(0, -1);
+    actualizarMonto();
+    e.preventDefault();
+    return;
+  }
+
+  if (/^[0-9]$/.test(e.key)) {
+    rawValue += e.key;
+    actualizarMonto();
+    e.preventDefault();
+    return;
+  }
+
+  // Evita que se borre al escribir símbolos o mover el cursor
+  e.preventDefault();
 });
 
 montoInput.addEventListener('focus', function () {
@@ -424,6 +439,10 @@ montoInput.addEventListener('focus', function () {
     montoInput.selectionStart = montoInput.selectionEnd = montoInput.value.length;
   }, 0);
 });
+
+// Inicializa
+actualizarMonto();
+
   </script>
 </body>
 </html>
