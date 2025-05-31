@@ -541,16 +541,38 @@ new Chart(ctxDona, {
   },
   plugins: [centerTextPlugin] // ✅ AQUI es donde estaba faltando
 });
+// 🎯 Plugin para mostrar el total en el centro
+const centerTextPluginGastos = {
+  id: 'centerTextGastos',
+  beforeDraw(chart) {
+    const { width, height } = chart;
+    const ctx = chart.ctx;
+    const total = chart.config.data.datasets[0].data.reduce((a, b) => a + b, 0);
 
+    ctx.save();
+    ctx.font = 'bold 14px Greycliff CF, sans-serif';
+    ctx.fillStyle = '#64748B';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Total', width / 2, height / 2 - 12);
 
-// Gráfico de gastos totales (dona)
+    ctx.font = 'bold 20px Greycliff CF, sans-serif';
+    ctx.fillStyle = '#000';
+    ctx.fillText(`$${total.toLocaleString()}`, width / 2, height / 2 + 12);
+    ctx.restore();
+  }
+};
+
+// 🎨 Paleta de colores
 const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
 
+// 📊 Datos de categorías de gasto
 const categoriasGasto = {
   labels: ['Alimentación', 'Casa', 'Cuidado Personal', 'Deuda', 'Entretenimiento', 'Impuestos'],
   data: [1200, 900, 400, 600, 350, 450]
 };
 
+// 📊 Datos de subcategorías
 const subcategorias = {
   alimentacion: { labels: ['Supermercado', 'Comidas fuera', 'Café'], data: [800, 300, 100] },
   casa: { labels: ['Hipoteca', 'Servicios', 'Mantenimiento'], data: [500, 250, 150] },
@@ -566,6 +588,7 @@ const subcategorias = {
   transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
 };
 
+// ✅ Gráfico de gastos totales
 const ctxGastos = document.getElementById('graficoDonaGastos').getContext('2d');
 new Chart(ctxGastos, {
   type: 'doughnut',
@@ -594,9 +617,11 @@ new Chart(ctxGastos, {
         }
       }
     }
-  }
+  },
+  plugins: [centerTextPluginGastos]
 });
 
+// ✅ Gráfico de subcategorías
 const ctxSub = document.getElementById('graficoSubcategoria').getContext('2d');
 let chartSub = new Chart(ctxSub, {
   type: 'doughnut',
@@ -625,12 +650,13 @@ let chartSub = new Chart(ctxSub, {
         }
       }
     }
-  }
+  },
+  plugins: [centerTextPluginGastos]
 });
 
-// Selector dinámico
+// 🔄 Selector dinámico de subcategorías
 const selector = document.getElementById('selectorCategoria');
-selector.addEventListener('change', function() {
+selector.addEventListener('change', function () {
   const seleccion = this.value;
   if (subcategorias[seleccion]) {
     const nuevaData = subcategorias[seleccion];
@@ -639,6 +665,7 @@ selector.addEventListener('change', function() {
     chartSub.update();
   }
 });
+
 </script>
 
 </body>
