@@ -166,16 +166,16 @@
       </div>
     </div>
   </div>
-
 <div id="gastos" class="categoria">
-  <div class="bloque-categoria abierto">
-    <h5 onclick="this.parentElement.classList.toggle('abierto')">
-    <span>Cuidado Personal</span><span>$135.00</span></h5>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$45.00</span><span class="subcategoria">Peluquería</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Efectivo</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Spa</span></div><div class="col-2"><span class="fecha">07 mayo 2025</span><span class="fuente">Tarjeta</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
-    <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$40.00</span><span class="subcategoria">Productos</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">Amazon</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+  <div class="bloque-categoria">
+    <h5><span>Cuidado Personal</span><span>$135.00</span></h5>
+    <div class="contenido-transacciones">
+      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$45.00</span><span class="subcategoria">Peluquería</span></div><div class="col-2"><span class="fecha">03 mayo 2025</span><span class="fuente">Efectivo</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Spa</span></div><div class="col-2"><span class="fecha">07 mayo 2025</span><span class="fuente">Tarjeta</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+      <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$40.00</span><span class="subcategoria">Productos</span></div><div class="col-2"><span class="fecha">10 mayo 2025</span><span class="fuente">Amazon</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
+    </div>
   </div>
-
+</div>
   <div class="bloque-categoria">
     <h5><span>Alimentación</span><span>$130.00</span></h5>
     <div class="tarjeta-transaccion"><div class="col-1"><span class="monto">$50.00</span><span class="subcategoria">Supermercado</span></div><div class="col-2"><span class="fecha">05 mayo 2025</span><span class="fuente">Walmart</span></div><div class="col-3"><span class="editar">Editar</span></div></div>
@@ -286,19 +286,21 @@
       detalles.style.display = 'block';
     }
   }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.categoria').forEach(categoria => {
-      const bloques = categoria.querySelectorAll('.bloque-categoria');
-      bloques.forEach(bloque => {
-        const header = bloque.querySelector('h5');
-        header.addEventListener('click', () => {
-          bloques.forEach(b => b.classList.remove('abierto'));
-          bloque.classList.add('abierto');
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.categoria').forEach(categoria => {
+    const bloques = categoria.querySelectorAll('.bloque-categoria');
+    bloques.forEach(bloque => {
+      const header = bloque.querySelector('h5');
+      header.addEventListener('click', () => {
+        bloques.forEach(b => {
+          if (b !== bloque) b.classList.remove('abierto');
         });
+        bloque.classList.toggle('abierto'); // ahora alterna (abre/cierra)
       });
     });
   });
+});
+
   </script>
 </body>
 </html>
