@@ -406,18 +406,20 @@
       document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
       contenido.style.display = abierto ? 'none' : 'block';
     }
-      const montoInput = document.getElementById('monto');
+const montoInput = document.getElementById('monto');
 
-  montoInput.addEventListener('input', function () {
+montoInput.addEventListener('keydown', function () {
+  setTimeout(() => {
     let value = montoInput.value.replace(/\D/g, '');
     if (value === '') value = '0';
 
     const number = parseFloat(value) / 100;
-    montoInput.value = number.toLocaleString('en-US', {
+    montoInput.value = `$${number.toLocaleString('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    });
-  });
+    })}`;
+  }, 0);
+});
   </script>
 </body>
 </html>
