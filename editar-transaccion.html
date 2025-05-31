@@ -58,13 +58,14 @@
 }
 .monto {
   font-size: 2.5rem;
-  text-align: center;
+  text-align: right;
   color: #64748B;
-  margin-bottom: 1rem;
+  margin: 1rem auto;
+  background: transparent;
   border: none;
   outline: none;
-  background: transparent;
-  width: 100%;
+  max-width: 160px;
+  display: block;
 }
     .acciones {
       display: flex;
@@ -199,13 +200,12 @@
 <body>
   <div class="formulario">
     <h2>Editar Transacción</h2>
-    <input
-  type="number"
+<input
+  type="text"
   class="monto"
   id="monto"
-  value="$120.00"
-  step="0.01"
-  min="0"
+  inputmode="numeric"
+  placeholder="0.00"
 />
     <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="abrirModalCategorias()">
 
@@ -403,6 +403,18 @@
       document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
       contenido.style.display = abierto ? 'none' : 'block';
     }
+      const montoInput = document.getElementById('monto');
+
+  montoInput.addEventListener('input', function () {
+    let value = montoInput.value.replace(/\D/g, '');
+    if (value === '') value = '0';
+
+    const number = parseFloat(value) / 100;
+    montoInput.value = number.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  });
   </script>
 </body>
 </html>
