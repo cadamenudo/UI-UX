@@ -199,6 +199,22 @@
   line-height: 1;
   z-index: 10;
 }
+    .cerrar-categorias {
+  position: sticky;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+  color: #64748B;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  display: block;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  line-height: 1;
+}
+
   </style>
 </head>
 <body>
@@ -239,6 +255,7 @@
 <!-- MODAL CATEGORÍAS -->
 <div id="modalCategorias" class="modal-categorias">
   <div class="modal-contenido">
+    <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
     <h3>Selecciona una subcategoría</h3>
 
     <!-- INGRESOS -->
@@ -386,7 +403,7 @@
         </ul>
       </div>
     </div>
-      <button class="btn-cerrar" onclick="cerrarModalCategorias()">Cerrar</button>
+      <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
     </div>
   </div>
 
