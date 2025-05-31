@@ -482,7 +482,29 @@ new Chart(ctxLineal, {
     }
   }
 });
- // Gráfico de ingresos totales (dona)
+// Gráfico de ingresos totales (dona)
+
+const centerTextPlugin = {
+  id: 'centerText',
+  beforeDraw(chart) {
+    const { width, height } = chart;
+    const ctx = chart.ctx;
+    const total = chart.config.data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+    ctx.save();
+    ctx.font = 'bold 14px Greycliff CF, sans-serif';
+    ctx.fillStyle = '#64748B';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Total', width / 2, height / 2 - 12);
+
+    ctx.font = 'bold 20px Greycliff CF, sans-serif';
+    ctx.fillStyle = '#000';
+    ctx.fillText(`$${total.toLocaleString()}`, width / 2, height / 2 + 12);
+    ctx.restore();
+  }
+};
+
 const ctxDona = document.getElementById('graficoDonaIngresos').getContext('2d');
 new Chart(ctxDona, {
   type: 'doughnut',
@@ -516,8 +538,10 @@ new Chart(ctxDona, {
         display: false
       }
     }
-  }
+  },
+  plugins: [centerTextPlugin] // ✅ AQUI es donde estaba faltando
 });
+
 
 // Gráfico de gastos totales (dona)
 const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
