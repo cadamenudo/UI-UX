@@ -248,23 +248,56 @@
       });
     }
 
-    function agregarMeta() {
-      const lista = document.getElementById("listaMetas");
-      const nuevaMeta = document.createElement("div");
-      nuevaMeta.className = "meta-item";
-      nuevaMeta.innerHTML = `
-        <span class="numero">#</span>
-        <span class="drag">≡</span>
-        <input type="text" class="descripcion" value="Nueva meta" />
-        <input type="text" class="monto" value="$0" />
-        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
-      `;
-      lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
-      nuevaMeta.querySelector(".monto").addEventListener("input", calcular);
-      actualizarNumeros();
-      calcular();
-    }
+function agregarMeta() {
+  const lista = document.getElementById("listaMetas");
+  const nuevaMeta = document.createElement("div");
+  nuevaMeta.className = "meta-item";
+  nuevaMeta.innerHTML = `
+    <span class="numero">0</span>
+    <span class="drag">≡</span>
+    <input type="text" class="descripcion" value="Nueva meta" />
+    <input type="text" class="monto" value="$0" />
+    <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
+  `;
+  lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
+  nuevaMeta.querySelector(".monto").addEventListener("input", calcular);
+  actualizarNumeros();
+  calcular();
+  prepararInputsMeta(); // <-- importante
+}
+    
+function prepararInputsMeta() {
+  const descripciones = document.querySelectorAll('.descripcion');
+  descripciones.forEach(input => {
+    input.addEventListener('focus', () => {
+      input.dataset.original = input.value;
+      input.value = '';
+    });
+    input.addEventListener('blur', () => {
+      if (input.value.trim() === '') {
+        input.value = input.dataset.original || '';
+      }
+    });
+  });
 
+  const montos = document.querySelectorAll('.monto');
+  montos.forEach(input => {
+    input.addEventListener('focus', () => {
+      input.dataset.original = input.value;
+      input.value = '';
+    });
+
+    input.addEventListener('blur', () => {
+      const valor = limpiarNumero(input.value);
+      input.value = formatoMoneda(valor);
+      calcular();
+    });
+
+    input.addEventListener('keypress', (e) => {
+      if (!/[0-9.]/.test(e.key)) e.preventDefault();
+    });
+  });
+}
     function eliminarMeta(elemento) {
       const meta = elemento.closest(".meta-item");
       meta.remove();
