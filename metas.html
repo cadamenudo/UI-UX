@@ -151,6 +151,23 @@
       width: 100%;
       cursor: pointer;
     }
+    .bloque-resumen {
+  background: #F3F4F6;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.fila-resumen {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  color: #4B5563;
+}
+
+.fila-resumen strong {
+  color: #111827;
+}
   </style>
 </head>
 <body>
@@ -176,10 +193,19 @@
     <div class="progreso-numero" id="porcentajeTexto">0%</div>
 
     <h3>Resultado</h3>
-    <div class="resumen">
-      <div><span>Meta total para el año</span><strong id="metaTotal">$0</strong></div>
-      <div><span>Ahorro en lo que va de año</span><strong id="ahorroActual">$5,000</strong></div>
-      <div><span>Faltan</span><strong id="faltan">$0</strong></div>
+    <div class="bloque-resumen">
+      <div class="fila-resumen">
+        <span>Meta total para el año</span>
+        <strong id="metaTotal">$0</strong>
+      </div>
+      <div class="fila-resumen">
+        <span>Ahorro en lo que va de año</span>
+        <strong id="ahorroActual">$5,000</strong>
+      </div>
+      <div class="fila-resumen">
+        <span>Faltan</span>
+        <strong id="faltan">$0</strong>
+      </div>
     </div>
 
     <button class="btn-registrar">Registrar</button>
