@@ -41,20 +41,32 @@
 
 .meta-item {
   display: flex;
-  flex-wrap: wrap;            /* ✅ Permite que los elementos bajen en pantallas pequeñas */
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
-    .meta-item input.descripcion {
-  flex: 1 1 100%;             /* ✅ Ocupa todo el ancho si necesita */
+.meta-item input.descripcion {
+  flex: 1 1 160px;
   min-width: 0;
 }
 
 .meta-item input.monto {
-  width: 100%;
-  max-width: 140px;           /* ✅ Controla que no crezca demasiado */
+  flex: 0 0 120px;
+  min-width: 100px;
   text-align: right;
+}
+    @media (max-width: 400px) {
+  .meta-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .meta-item input.descripcion,
+  .meta-item input.monto {
+    width: 100%;
+    max-width: 100%;
+  }
 }
     .numero {
       background: #3B82F6;
