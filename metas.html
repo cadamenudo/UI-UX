@@ -58,18 +58,22 @@
   text-align: right;
 }
 
-    @media (max-width: 400px) {
+@media (max-width: 500px) {
   .meta-item {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .meta-item input.descripcion,
-  .meta-item input.monto {
+  .meta-item input.descripcion {
     width: 100%;
-    max-width: 100%;
+  }
+
+  .meta-item input.monto {
+    width: 60%;         /* ✅ menos espacio en móvil */
+    align-self: flex-end;
   }
 }
+
     .numero {
       background: #3B82F6;
       color: white;
