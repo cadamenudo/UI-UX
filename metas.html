@@ -219,6 +219,12 @@
 .fila-resumen strong {
   color: #111827;
 }
+    .input-registrado {
+  border: none !important;
+  background: transparent !important;
+  pointer-events: none;
+  color: #111827;
+}
   </style>
 </head>
 <body>
@@ -308,13 +314,30 @@ function agregarMeta() {
     <input type="text" class="monto" value="$0" />
     <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
   `;
+
   lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
-  nuevaMeta.querySelector(".monto").addEventListener("input", calcular);
+
+  const inputDescripcion = nuevaMeta.querySelector(".descripcion");
+  const inputMonto = nuevaMeta.querySelector(".monto");
+
+  // Aplicar efectos visuales de "registro"
+  [inputDescripcion, inputMonto].forEach(input => {
+    input.addEventListener("blur", () => {
+      if (input.value.trim() !== "") {
+        input.classList.add("input-registrado");
+      }
+    });
+    input.addEventListener("focus", () => {
+      input.classList.remove("input-registrado");
+    });
+  });
+
+  inputMonto.addEventListener("input", calcular);
   actualizarNumeros();
   calcular();
-  prepararInputsMeta(); // <-- importante
+  prepararInputsMeta(); // <-- mantener
 }
-    
+   
 function prepararInputsMeta() {
   const descripciones = document.querySelectorAll('.descripcion');
   descripciones.forEach(input => {
