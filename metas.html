@@ -39,13 +39,14 @@
     margin-top: 1.5rem;
   }
 
-  .meta-item {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    align-items: center;
-  }
+.meta-item {
+  display: flex;
+  flex-wrap: nowrap;       /* ✅ No permite salto de línea */
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;        /* ✅ Previene rompimiento visual si se excede el ancho */
+  margin-bottom: 1rem;
+}
 
   .meta-item input.descripcion {
     flex: 1.2 1 0%;
@@ -221,12 +222,16 @@
       align-items: stretch;
     }
 
-    .meta-item input.descripcion,
-    .meta-item input.monto {
-      width: 100%;
-      max-width: 100%;
-    }
-  }
+.meta-item input.descripcion {
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
+.meta-item input.monto {
+  flex: 0 0 90px;
+  max-width: 90px;
+}
+
 </style>
 
 </head>
