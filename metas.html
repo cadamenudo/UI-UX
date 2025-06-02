@@ -34,191 +34,191 @@
     color: #374151;
     margin-top: 0.5rem;
   }
+.lista-metas {
+  margin-top: 1.5rem;
+}
 
-  .lista-metas {
-    margin-top: 1.5rem;
-  }
+.meta-item {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
 
+.numero {
+  background: #3B82F6;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  font-size: 12px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.drag {
+  color: #9CA3AF;
+  cursor: grab;
+  font-size: 1.25rem;
+}
+
+.meta-item input.descripcion {
+  flex: 2 1 200px;
+  min-width: 0;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 15px;
+}
+
+.meta-item input.monto {
+  flex: 0 0 auto;
+  width: 100px;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 6px 12px;
+  text-align: right;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.eliminar {
+  font-size: 18px;
+  color: #9CA3AF;
+  cursor: pointer;
+  margin-left: auto;
+  user-select: none;
+}
+
+.eliminar:hover {
+  color: #EF4444;
+}
+
+.agregar-meta {
+  color: #9CA3AF;
+  font-size: 14px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+h3 {
+  margin-top: 2rem;
+  font-weight: bold;
+}
+
+.barra-progreso {
+  background: #E5E7EB;
+  border-radius: 10px;
+  height: 10px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.relleno {
+  background: #3B82F6;
+  height: 100%;
+  width: 0%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.progreso-numero {
+  text-align: right;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.bloque-resumen {
+  background: #F3F4F6;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.fila-resumen {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  color: #4B5563;
+}
+
+.fila-resumen strong {
+  color: #111827;
+}
+
+.botones-finales {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-cancelar {
+  background: transparent;
+  color: #3B82F6;
+  border: 2px solid #3B82F6;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  width: 50%;
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  background: #EFF6FF;
+}
+
+.btn-registrar {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  width: 50%;
+  cursor: pointer;
+}
+
+/* ✅ Responsive ajustes móviles */
+@media (max-width: 500px) {
   .meta-item {
-    background: #F9FAFB;
-    border: 1px solid #E5E7EB;
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .meta-item input.descripcion {
-    flex: 2 1 0%;
-    min-width: 0;
-    border: 1px solid #E5E7EB;
-    border-radius: 10px;
-    padding: 6px 10px;
-    font-size: 15px;
+    width: 100%;
+    margin-bottom: 0.5rem;
   }
 
   .meta-item input.monto {
-    flex: 1 1 100px;
-    max-width: 140px;
-    border: 1px solid #E5E7EB;
-    border-radius: 10px;
-    padding: 6px 12px;
+    width: 100%;
+    max-width: 100%;
     text-align: right;
-    font-weight: bold;
-    font-size: 16px;
   }
 
-  .numero {
-    background: #3B82F6;
-    color: white;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    text-align: center;
-    line-height: 24px;
-    font-size: 12px;
-    display: inline-block;
-    flex-shrink: 0;
-  }
-
-  .drag {
-    color: #9CA3AF;
-    cursor: grab;
-    font-size: 1.25rem;
-  }
-
-  .eliminar {
-    font-size: 18px;
-    color: #9CA3AF;
-    cursor: pointer;
-    margin-left: 6px;
-    user-select: none;
-  }
-
-  .eliminar:hover {
-    color: #EF4444;
-  }
-
-  .agregar-meta {
-    color: #9CA3AF;
-    font-size: 14px;
+  .meta-item .eliminar {
+    align-self: flex-end;
     margin-top: 0.5rem;
-    cursor: pointer;
-  }
-
-  h3 {
-    margin-top: 2rem;
-    font-weight: bold;
-  }
-
-  .barra-progreso {
-    background: #E5E7EB;
-    border-radius: 10px;
-    height: 10px;
-    margin-top: 8px;
-    overflow: hidden;
-  }
-
-  .relleno {
-    background: #3B82F6;
-    height: 100%;
-    width: 0%;
-    border-radius: 10px;
-    transition: width 0.3s ease;
-  }
-
-  .progreso-numero {
-    text-align: right;
-    margin-top: 4px;
-    font-weight: 600;
-  }
-
-  .bloque-resumen {
-    background: #F3F4F6;
-    padding: 1rem;
-    border-radius: 12px;
-    margin-top: 1rem;
-  }
-
-  .fila-resumen {
-    display: flex;
-    justify-content: space-between;
-    margin: 12px 0;
-    color: #4B5563;
-  }
-
-  .fila-resumen strong {
-    color: #111827;
   }
 
   .botones-finales {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 2rem;
+    flex-direction: column;
   }
 
-  .btn-cancelar {
-    background: transparent;
-    color: #3B82F6;
-    border: 2px solid #3B82F6;
-    border-radius: 12px;
-    padding: 0.75rem 1.5rem;
-    font-size: 16px;
-    width: 50%;
-    cursor: pointer;
+  .botones-finales button {
+    width: 100%;
   }
+}
 
-  .btn-cancelar:hover {
-    background: #EFF6FF;
-  }
-
-  .btn-registrar {
-    background: #3B82F6;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 0.75rem 1.5rem;
-    font-size: 16px;
-    width: 50%;
-    cursor: pointer;
-  }
-
-  /* Responsive ajustes móviles */
-  @media (max-width: 500px) {
-    .meta-item {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .meta-item input.descripcion {
-      width: 100%;
-      margin-bottom: 0.5rem;
-    }
-
-    .meta-item input.monto {
-      width: 100%;
-      max-width: 100%;
-      text-align: right;
-    }
-
-    .meta-item .eliminar {
-      align-self: flex-end;
-      margin-top: 0.5rem;
-    }
-
-    .botones-finales {
-      flex-direction: column;
-    }
-
-    .botones-finales button {
-      width: 100%;
-    }
-  }
 </style>
 
 </head>
