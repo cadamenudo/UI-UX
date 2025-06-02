@@ -143,17 +143,39 @@
       color: #111827;
     }
 
-    .btn-registrar {
-      background: #3B82F6;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 0.75rem 1.5rem;
-      font-size: 16px;
-      margin-top: 2rem;
-      width: 100%;
-      cursor: pointer;
-    }
+.botones-finales {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-cancelar {
+  background: transparent;
+  color: #3B82F6;
+  border: 2px solid #3B82F6;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  width: 50%;
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  background: #EFF6FF;
+}
+
+.btn-registrar {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  width: 50%;
+  cursor: pointer;
+}
+
     .bloque-resumen {
   background: #F3F4F6;
   padding: 1rem;
@@ -209,11 +231,10 @@
         <span>Faltan</span>
         <strong id="faltan">$0</strong>
       </div>
-    </div>
-
-    <button class="btn-registrar">Registrar</button>
-  </div>
-
+      <div class="botones-finales">
+        <button class="btn-cancelar" onclick="cancelarCambios()">Cancelar</button>
+        <button class="btn-registrar">Registrar</button>
+      </div>
   <script>
     function limpiarNumero(str) {
       return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
@@ -321,6 +342,11 @@ function prepararInputsMeta() {
     calcular();
   }
 });
+    function cancelarCambios() {
+  if (confirm("¿Estás seguro que deseas descartar los cambios?")) {
+    location.reload(); // recarga la página desde cero
+  }
+}
   </script>
 </body>
 </html>
