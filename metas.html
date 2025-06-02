@@ -7,22 +7,22 @@
   <title>Página de Metas</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: 'greycliff cf', sans-serif;
       background: #F9FAFB;
       margin: 0;
-      padding: 2rem;
+      padding: 0;
       color: #111827;
+      overflow-x: hidden
     }
 
 .pagina-metas {
-  background: #fff;
+  width: 100%;
   padding: 1.5rem;
-  margin: auto;
-  max-width: 440px;
-  width: calc(100% - 2rem); /* ✅ evita desbordes laterales */
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-  box-sizing: border-box;   /* ✅ muy importante para evitar que padding sume al ancho */
+  box-sizing: border-box;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 0;
+  min-height: 100vh; /* opcional si quieres cuerpo completo */
 }
 
     h2 {
@@ -41,20 +41,34 @@
 
 .meta-item {
   display: flex;
-  flex-wrap: wrap;            /* ✅ Permite que los elementos bajen en pantallas pequeñas */
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
 }
-    .meta-item input.descripcion {
-  flex: 1 1 100%;             /* ✅ Ocupa todo el ancho si necesita */
+
+.meta-item input.descripcion {
+  flex: 2 1 0%;       /* ✅ el campo de texto ocupa el doble */
   min-width: 0;
 }
 
 .meta-item input.monto {
-  width: 100%;
-  max-width: 140px;           /* ✅ Controla que no crezca demasiado */
+  flex: 1 1 100px;     /* ✅ el monto ocupa menos */
+  max-width: 140px;
   text-align: right;
+}
+
+    @media (max-width: 400px) {
+  .meta-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .meta-item input.descripcion,
+  .meta-item input.monto {
+    width: 100%;
+    max-width: 100%;
+  }
 }
     .numero {
       background: #3B82F6;
@@ -209,8 +223,8 @@
 </head>
 <body>
   <div class="pagina-metas">
-    <h2>Página de metas</h2>
-    <p class="subtitulo">Arrastra para reordenar tus prioridades</p>
+    <h2>Metas de Ahorro</h2>
+    <p class="subtitulo">Establace y ordenalas de acuerdo a tus prioridades</p>
 
     <div class="lista-metas" id="listaMetas">
       <div class="meta-item">
