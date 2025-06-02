@@ -441,7 +441,39 @@ montoInput.addEventListener('focus', function () {
 
 // Inicializa
 actualizarMonto();
-
   </script>
+  <script>
+  document.querySelector('.btn-registrar').addEventListener('click', function () {
+    const montoTexto = document.getElementById('monto').value.replace(/[^0-9.]/g, '');
+    const monto = parseFloat(montoTexto) || 0;
+    const categoria = document.getElementById('categoria').value;
+    const fecha = document.getElementById('fecha').value;
+    const comercio = document.querySelector('input[placeholder="Comercio"]').value;
+    const comentario = document.querySelector('textarea').value;
+    
+    // 🔒 Validación antes de registrar
+    if (!monto || categoria.trim() === '') {
+      alert("Por favor, ingresa un monto y selecciona una categoría.");
+      return;
+    }
+    const transaccion = {
+      monto,
+      categoria,
+      fecha,
+      comercio,
+      comentario
+    };
+
+    console.log('📌 Transacción registrada:', transaccion);
+    alert('✅ Transacción registrada correctamente.');
+
+    // Aquí puedes enviar a tu backend:
+    // fetch('/api/guardar-transaccion', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(transaccion)
+    // });
+  });
+</script>
 </body>
 </html>
