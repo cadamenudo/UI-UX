@@ -14,15 +14,16 @@
       color: #111827;
     }
 
-    .pagina-metas {
-      background: #fff;
-      padding: 2rem;
-      max-width: 440px;
-      width: 100%; 
-      margin: auto;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-    }
+.pagina-metas {
+  background: #fff;
+  padding: 1.5rem;
+  margin: auto;
+  max-width: 440px;
+  width: calc(100% - 2rem); /* ✅ evita desbordes laterales */
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;   /* ✅ muy importante para evitar que padding sume al ancho */
+}
 
     h2 {
       font-size: 24px;
