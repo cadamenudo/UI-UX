@@ -5,242 +5,230 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <title>Página de Metas</title>
-  <style>
-    body {
-      font-family: 'greycliff cf', sans-serif;
-      background: #F9FAFB;
-      margin: 0;
-      padding: 0;
-      color: #111827;
-      overflow-x: hidden
-    }
-
-.pagina-metas {
-  width: 100%;
-  padding: 1.5rem;
-  box-sizing: border-box;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 0;
-  min-height: 100vh; /* opcional si quieres cuerpo completo */
-}
-
-    h2 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .subtitulo {
-      color: #374151;
-      margin-top: 0.5rem;
-    }
-
-    .lista-metas {
-      margin-top: 1.5rem;
-    }
-
-.meta-item {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  align-items: center;
-}
-
-.meta-item input.descripcion {
-  flex: 1.2 1 0%;       /* ✅ el campo de texto ocupa el doble */
-  min-width: 0;
-}
-
-.meta-item input.monto {
-  flex: 0 0 80px;     /* ✅ el monto ocupa menos */
-  max-width: 80px;
-  text-align: right;
-}
-
-    @media (max-width: 400px) {
-  .meta-item {
-    flex-direction: column;
-    align-items: stretch;
+<style>
+  body {
+    font-family: 'greycliff cf', sans-serif;
+    background: #F9FAFB;
+    margin: 0;
+    padding: 0;
+    color: #111827;
+    overflow-x: hidden;
   }
 
-  .meta-item input.descripcion,
-  .meta-item input.monto {
+  .pagina-metas {
     width: 100%;
-    max-width: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 0;
+    min-height: 100vh;
   }
-}
-    .numero {
-      background: #3B82F6;
-      color: white;
-      font-weight: bold;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      text-align: center;
-      line-height: 24px;
-      font-size: 12px;
-      display: inline-block;
-      flex-shrink: 0; 
+
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .subtitulo {
+    color: #374151;
+    margin-top: 0.5rem;
+  }
+
+  .lista-metas {
+    margin-top: 1.5rem;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    align-items: center;
+  }
+
+  .meta-item input.descripcion {
+    flex: 1.2 1 0%;
+    min-width: 0;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 15px;
+  }
+
+  .meta-item input.monto {
+    flex: 0 0 80px;
+    max-width: 80px;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 6px 12px;
+    text-align: right;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .numero {
+    background: #3B82F6;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .drag {
+    color: #9CA3AF;
+    cursor: grab;
+    font-size: 1.25rem;
+  }
+
+  .eliminar {
+    font-size: 18px;
+    color: #9CA3AF;
+    cursor: pointer;
+    margin-left: 6px;
+    user-select: none;
+  }
+
+  .eliminar:hover {
+    color: #EF4444;
+  }
+
+  .agregar-meta {
+    color: #9CA3AF;
+    font-size: 14px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    font-weight: bold;
+  }
+
+  .barra-progreso {
+    background: #E5E7EB;
+    border-radius: 10px;
+    height: 10px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .relleno {
+    background: #3B82F6;
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+  }
+
+  .progreso-numero {
+    text-align: right;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  .resumen {
+    margin-top: 1rem;
+  }
+
+  .resumen div {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+    color: #4B5563;
+  }
+
+  .resumen strong {
+    color: #111827;
+  }
+
+  .botones-finales {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn-cancelar {
+    background: transparent;
+    color: #3B82F6;
+    border: 2px solid #3B82F6;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-size: 16px;
+    width: 50%;
+    cursor: pointer;
+  }
+
+  .btn-cancelar:hover {
+    background: #EFF6FF;
+  }
+
+  .btn-registrar {
+    background: #3B82F6;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-size: 16px;
+    width: 50%;
+    cursor: pointer;
+  }
+
+  .bloque-resumen {
+    background: #F3F4F6;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+  }
+
+  .fila-resumen {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+    color: #4B5563;
+  }
+
+  .fila-resumen strong {
+    color: #111827;
+  }
+
+  /* Estados de inputs */
+  .input-activo {
+    background: #fff !important;
+    border: 2px solid #3B82F6 !important;
+    box-shadow: 0 0 0 2px #DBEAFE;
+    pointer-events: auto;
+  }
+
+  .input-registrado {
+    border: none !important;
+    background: transparent !important;
+    pointer-events: none;
+    color: #111827;
+  }
+
+  /* Responsive ajustes móviles */
+  @media (max-width: 400px) {
+    .meta-item {
+      flex-direction: column;
+      align-items: stretch;
     }
 
-    .drag {
-      color: #9CA3AF;
-      cursor: grab;
-      font-size: 1.25rem;
-    }
-
-    .meta-item input.descripcion {
-      flex: 1;
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
-      padding: 6px 10px;
-      font-size: 15px;
-    }
-
+    .meta-item input.descripcion,
     .meta-item input.monto {
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
-      padding: 6px 12px;
-      width: 100px;
-      text-align: right;
-      font-weight: bold;
-      font-size: 16px;
+      width: 100%;
+      max-width: 100%;
     }
+  }
+</style>
 
-    .eliminar {
-      font-size: 18px;
-      color: #9CA3AF;
-      cursor: pointer;
-      margin-left: 6px;
-      user-select: none;
-    }
-
-    .eliminar:hover {
-      color: #EF4444;
-    }
-
-    .agregar-meta {
-      color: #9CA3AF;
-      font-size: 14px;
-      margin-top: 0.5rem;
-      cursor: pointer;
-    }
-
-    h3 {
-      margin-top: 2rem;
-      font-weight: bold;
-    }
-
-    .barra-progreso {
-      background: #E5E7EB;
-      border-radius: 10px;
-      height: 10px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .relleno {
-      background: #3B82F6;
-      height: 100%;
-      width: 0%;
-      border-radius: 10px;
-      transition: width 0.3s ease;
-    }
-
-    .progreso-numero {
-      text-align: right;
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .resumen {
-      margin-top: 1rem;
-    }
-
-    .resumen div {
-      display: flex;
-      justify-content: space-between;
-      margin: 6px 0;
-      color: #4B5563;
-    }
-
-    .resumen strong {
-      color: #111827;
-    }
-
-.botones-finales {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.btn-cancelar {
-  background: transparent;
-  color: #3B82F6;
-  border: 2px solid #3B82F6;
-  border-radius: 12px;
-  padding: 0.75rem 1.5rem;
-  font-size: 16px;
-  width: 50%;
-  cursor: pointer;
-}
-
-.btn-cancelar:hover {
-  background: #EFF6FF;
-}
-
-.btn-registrar {
-  background: #3B82F6;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 0.75rem 1.5rem;
-  font-size: 16px;
-  width: 50%;
-  cursor: pointer;
-}
-
-    .bloque-resumen {
-  background: #F3F4F6;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-top: 1rem;
-}
-
-.fila-resumen {
-  display: flex;
-  justify-content: space-between;
-  margin: 12px 0;
-  color: #4B5563;
-}
-
-.fila-resumen strong {
-  color: #111827;
-}
-    .input-registrado {
-  border: none !important;
-  background: transparent !important;
-  pointer-events: none;
-  color: #111827;
-}
-    /* Cuando el input está activo (en foco) */
-.input-activo {
-  background: #fff !important;
-  border: 2px solid #3B82F6 !important;
-  box-shadow: 0 0 0 2px #DBEAFE;
-  pointer-events: auto;
-}
-
-/* Cuando el input está "registrado" (inactivo visualmente) */
-.input-registrado {
-  border: none !important;
-  background: transparent !important;
-  pointer-events: none;
-  color: #111827;
-}
-  </style>
 </head>
 <body>
   <div class="pagina-metas">
