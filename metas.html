@@ -225,6 +225,21 @@
   pointer-events: none;
   color: #111827;
 }
+    /* Cuando el input está activo (en foco) */
+.input-activo {
+  background: #fff !important;
+  border: 2px solid #3B82F6 !important;
+  box-shadow: 0 0 0 2px #DBEAFE;
+  pointer-events: auto;
+}
+
+/* Cuando el input está "registrado" (inactivo visualmente) */
+.input-registrado {
+  border: none !important;
+  background: transparent !important;
+  pointer-events: none;
+  color: #111827;
+}
   </style>
 </head>
 <body>
@@ -321,16 +336,19 @@ function agregarMeta() {
   const inputMonto = nuevaMeta.querySelector(".monto");
 
   // Aplicar efectos visuales de "registro"
-  [inputDescripcion, inputMonto].forEach(input => {
-    input.addEventListener("blur", () => {
-      if (input.value.trim() !== "") {
-        input.classList.add("input-registrado");
-      }
-    });
-    input.addEventListener("focus", () => {
-      input.classList.remove("input-registrado");
-    });
+[inputDescripcion, inputMonto].forEach(input => {
+  input.addEventListener("focus", () => {
+    input.classList.remove("input-registrado");
+    input.classList.add("input-activo");
   });
+
+  input.addEventListener("blur", () => {
+    input.classList.remove("input-activo");
+    if (input.value.trim() !== "") {
+      input.classList.add("input-registrado");
+    }
+  });
+});
 
   inputMonto.addEventListener("input", calcular);
   actualizarNumeros();
