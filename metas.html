@@ -16,7 +16,7 @@
     .pagina-metas {
       background: #fff;
       padding: 2rem;
-      max-width: 420px;
+      max-width: 440px;
       margin: auto;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
@@ -39,7 +39,6 @@
     .meta-item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       margin-bottom: 0.75rem;
       gap: 0.5rem;
     }
@@ -78,6 +77,18 @@
       text-align: right;
       font-weight: bold;
       font-size: 16px;
+    }
+
+    .eliminar {
+      font-size: 18px;
+      color: #9CA3AF;
+      cursor: pointer;
+      margin-left: 6px;
+      user-select: none;
+    }
+
+    .eliminar:hover {
+      color: #EF4444;
     }
 
     .agregar-meta {
@@ -144,27 +155,30 @@
 </head>
 <body>
   <div class="pagina-metas">
-    <h2>Metas de Ahorro</h2>
+    <h2>Página de metas</h2>
     <p class="subtitulo">Arrastra para reordenar tus prioridades</p>
 
-    <div class="lista-metas">
+    <div class="lista-metas" id="listaMetas">
       <div class="meta-item">
         <span class="numero">1</span>
         <span class="drag">≡</span>
         <input type="text" class="descripcion" value="Reserva de emergencia" />
         <input type="text" class="monto" value="$12,000" />
+        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
       </div>
       <div class="meta-item">
         <span class="numero">2</span>
         <span class="drag">≡</span>
         <input type="text" class="descripcion" value="Bajar deudas" />
         <input type="text" class="monto" value="$12,000" />
+        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
       </div>
       <div class="meta-item">
         <span class="numero">3</span>
         <span class="drag">≡</span>
         <input type="text" class="descripcion" value="Pronto para un auto" />
         <input type="text" class="monto" value="$12,000" />
+        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
       </div>
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir otra meta</p>
     </div>
@@ -201,7 +215,7 @@
         total += limpiarNumero(input.value);
       });
 
-      const ahorro = 5000; // valor fijo para este ejemplo
+      const ahorro = 5000; // valor fijo
       const faltan = Math.max(0, total - ahorro);
       const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
 
@@ -212,28 +226,43 @@
       document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
     }
 
+    function actualizarNumeros() {
+      const items = document.querySelectorAll(".meta-item");
+      items.forEach((item, index) => {
+        item.querySelector(".numero").innerText = index + 1;
+      });
+    }
+
     function agregarMeta() {
-      const lista = document.querySelector(".lista-metas");
-      const index = document.querySelectorAll(".meta-item").length + 1;
+      const lista = document.getElementById("listaMetas");
       const nuevaMeta = document.createElement("div");
       nuevaMeta.className = "meta-item";
       nuevaMeta.innerHTML = `
-        <span class="numero">${index}</span>
+        <span class="numero">#</span>
         <span class="drag">≡</span>
         <input type="text" class="descripcion" value="Nueva meta" />
         <input type="text" class="monto" value="$0" />
+        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
       `;
-      lista.insertBefore(nuevaMeta, document.querySelector(".agregar-meta"));
+      lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
       nuevaMeta.querySelector(".monto").addEventListener("input", calcular);
+      actualizarNumeros();
+      calcular();
     }
 
-    // Ejecutar al cargar
-    calcular();
+    function eliminarMeta(elemento) {
+      const meta = elemento.closest(".meta-item");
+      meta.remove();
+      actualizarNumeros();
+      calcular();
+    }
 
-    // Escuchar cambios en montos
+    // Inicial
     document.querySelectorAll(".monto").forEach(input => {
       input.addEventListener("input", calcular);
     });
+
+    calcular();
   </script>
 </body>
 </html>
