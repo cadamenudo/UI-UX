@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pantalla de Buscador</title>
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background: #F9FAFB;
+      margin: 0;
+      padding: 2rem;
+      color: #111;
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.2rem;
+    }
+    p {
+      color: #64748B;
+      margin-bottom: 2rem;
+    }
+    .grid-menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1.5rem;
+    }
+    .item-menu {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.2rem 0.5rem;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+    .item-menu:hover {
+      transform: translateY(-4px);
+    }
+    .item-menu img {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 0.5rem;
+    }
+    .item-menu span {
+      display: block;
+      font-size: 0.95rem;
+      color: #111;
+    }
+    .item-menu.destacada {
+      background: #eef3ff;
+      border: 2px solid #3956E8;
+    }
+    .item-menu.destacada span {
+      color: #3956E8;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Bienvenido, Frank!</h2>
+  <p>¿A dónde quieres ir hoy?</p>
+
+  <section class="grid-menu">
+    <div class="item-menu" onclick="location.href='tablero.html'">
+      <img src="icons/tablero.svg" alt="Tablero">
+      <span>Tablero</span>
+    </div>
+    <div class="item-menu" onclick="location.href='transacciones.html'">
+      <img src="icons/transacciones.svg" alt="Transacciones">
+      <span>Transacciones</span>
+    </div>
+    <div class="item-menu" onclick="location.href='videos.html'">
+      <img src="icons/videos.svg" alt="Videos">
+      <span>Videos</span>
+    </div>
+    <div class="item-menu" onclick="location.href='metas.html'">
+      <img src="icons/metas.svg" alt="Metas">
+      <span>Metas</span>
+    </div>
+    <div class="item-menu" onclick="location.href='categorias.html'">
+      <img src="icons/categorias.svg" alt="Categorías">
+      <span>Categorías</span>
+    </div>
+    <div class="item-menu" onclick="location.href='usuarios.html'">
+      <img src="icons/usuarios.svg" alt="Usuarios">
+      <span>Usuarios</span>
+    </div>
+    <div class="item-menu destacada" onclick="location.href='nueva-transaccion.html'">
+      <img src="icons/nueva-transaccion.svg" alt="Nueva Transacción">
+      <span>Nueva Transacción</span>
+    </div>
+  </section>
+
+</body>
+</html>
