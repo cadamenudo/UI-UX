@@ -131,7 +131,12 @@
       margin-top: 2rem;
       font-weight: bold;
     }
-
+    .bloque-progreso-anual {
+      background: #F3F4F6; /* gris claro */
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+    }
     .barra-progreso {
       background: #E5E7EB;
       border-radius: 10px;
@@ -141,7 +146,7 @@
     }
 
     .relleno {
-      background: #3B82F6;
+      background: #00AC4F;
       height: 100%;
       width: 0%;
       border-radius: 10px;
@@ -152,6 +157,7 @@
       text-align: right;
       margin-top: 4px;
       font-weight: 600;
+      color: #00AC4F; /* verde */
     }
 
     .resumen {
@@ -237,11 +243,13 @@
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
     </div>
 
-    <h3>Progreso del año</h3>
-    <div class="barra-progreso">
-      <div class="relleno" id="barraRelleno"></div>
-    </div>
-    <div class="progreso-numero" id="porcentajeTexto">0%</div>
+<div class="bloque-progreso-anual">
+  <h3>Progreso del año</h3>
+  <div class="barra-progreso">
+    <div class="relleno" id="barraRelleno"></div>
+  </div>
+  <div class="progreso-numero" id="porcentajeTexto">0%</div>
+</div>
 
     <h3>Resultado</h3>
     <div class="bloque-resumen">
