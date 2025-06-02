@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Editar Transacción</title>
   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
+   <style>
     body {
       font-family: 'Greycliff CF', sans-serif;
       background: #F9FAFB;
@@ -14,7 +14,7 @@
       color: #111;
     }
     .formulario {
-      position: relative;           /* 🔸 OBLIGATORIO para que .cerrar-modal funcione bien */
+      position: relative;
       max-width: 400px;
       margin: auto;
       background: #fff;
@@ -39,10 +39,8 @@
     .campo-con-icono {
       position: relative;
     }
-     .campo-con-icono input {
+    .campo-con-icono input {
       padding-right: 3rem;
-      width: 100%;
-      box-sizing: border-box;
     }
     .icono-fecha {
       position: absolute;
@@ -54,159 +52,62 @@
       color: #64748B;
     }
     input[type="date"] {
-  width: 100%;
-  box-sizing: border-box;
-}
-.monto {
-  font-size: 3rem;          /* 🔸 Más grande */
-  text-align: center;       /* 🔸 Centrado horizontalmente */
-  color: #64748B;
-  margin: 1.5rem auto;
-  background: transparent;
-  border: none;
-  outline: none;
-  max-width: 180%;
-  display: block;
-  caret-color: auto; /* 🔒 evita que se vea el cursor falso */
-}
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .monto {
+      font-size: 3rem;
+      text-align: center;
+      color: #64748B;
+      margin: 1.5rem auto;
+      background: transparent;
+      border: none;
+      outline: none;
+      max-width: 180%;
+      display: block;
+      caret-color: auto;
+    }
     .acciones {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 1.5rem;
     }
-    .acciones button {
-      padding: 0.6rem 1.2rem;
+    .acciones .btn-registrar {
+      background: #3956E8;
+      color: #fff;
+      padding: 0.6rem 1.4rem;
       border: none;
       border-radius: 10px;
       font-weight: bold;
-      cursor: pointer;
       font-size: 0.85rem;
+      cursor: pointer;
     }
-    .btn-cancelar { background: transparent; color: #64748B; }
-    .btn-guardar, .btn-eliminar { background: #3956E8; color: #fff; }
-
-    .imagen-adjunta {
-      background: #F1F5F9;
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .imagen-adjunta img {
-      max-width: 100%;
-      border-radius: 12px;
-      margin-bottom: 0.5rem;
-    }
-    .imagen-adjunta button {
-      margin: 0 0.5rem;
-      font-size: 0.75rem;
-      background: none;
+    .acciones .subir-foto {
       color: #3956E8;
-      border: none;
-      cursor: pointer;
-    }
-
-    /* Modal de Categorías */
-.modal-categorias {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 1rem;
-}
-
-.modal-contenido {
-  background: #fff;
-  width: 100%;
-  max-width: 350px;
-  max-height: 80vh;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-}
-
-    .grupo {
-      margin-bottom: 1rem;
-    }
-    .grupo-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-      padding: 0.5rem;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #F3F4F6;
-      margin-top: 0.5rem;
-    }
-    .circle {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-right: 0.5rem;
-    }
-    .contenido {
-      display: none;
-      margin-left: 1rem;
-      margin-top: 0.5rem;
-    }
-    .subtitulo {
       font-size: 0.9rem;
-      font-weight: bold;
-      margin-top: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
     }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0.3rem 0;
+    .acciones .subir-foto::before {
+      content: "\1F4CE"; /* paperclip */
+      font-size: 1.1rem;
+      color: #3956E8;
     }
-    li {
-      padding: 0.4rem 0.6rem;
-      border-radius: 8px;
-      background: #F9FAFB;
-      margin-bottom: 0.3rem;
+    .cerrar-modal {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 2rem;
+      color: #64748B;
       cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+      z-index: 10;
     }
-    li:hover {
-      background: #E5E7EB;
-    }
-    .formulario {
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.cerrar-modal {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 2rem;
-  color: #64748B;
-  cursor: pointer;
-  background: none;
-  border: none;
-  line-height: 1;
-  z-index: 10;
-}
-    .cerrar-categorias {
-  position: sticky;
-  top: 0;
-  right: 0;
-  font-size: 2rem;
-  color: #64748B;
-  background: #fff;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-  display: block;
-  margin-left: auto;
-  padding: 0.5rem 1rem;
-  line-height: 1;
-}
-
   </style>
 </head>
 <body>
@@ -223,25 +124,16 @@
     <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="abrirModalCategorias()">
 
     <div class="campo-con-icono">
-      <input type="date" id="fecha" value="2025-05-22">
+      <input type="date" id="fecha" value="2025-06-02">
       <span class="icono-fecha"></span>
     </div>
 
     <input type="text" placeholder="Comercio">
     <textarea rows="3" placeholder="Comentario opcional"></textarea>
 
-    <div class="imagen-adjunta">
-      <img src="https://via.placeholder.com/300x150.png?text=recibo.jpg" alt="Adjunto">
-      <div>
-        <button onclick="alert('Cambiar imagen')">🔄 Reemplazar</button>
-        <button onclick="alert('Eliminar imagen')">🗑️ Eliminar</button>
-      </div>
-    </div>
-
     <div class="acciones">
-      <button class="btn-eliminar">Eliminar</button>
-      <button class="btn-guardar">Guardar</button>
-    </div>
+      <span class="subir-foto">Subir foto</span>
+      <button class="btn-registrar">Registrar</button>
   </div>
 
 <!-- MODAL CATEGORÍAS -->
