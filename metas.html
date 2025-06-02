@@ -62,7 +62,15 @@
       font-size: 1.25rem;
     }
 
-    .meta-item input {
+    .meta-item input.descripcion {
+      flex: 1;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 15px;
+    }
+
+    .meta-item input.monto {
       border: 1px solid #E5E7EB;
       border-radius: 10px;
       padding: 6px 12px;
@@ -76,6 +84,7 @@
       color: #9CA3AF;
       font-size: 14px;
       margin-top: 0.5rem;
+      cursor: pointer;
     }
 
     h3 {
@@ -135,29 +144,29 @@
 </head>
 <body>
   <div class="pagina-metas">
-    <h2>Página de metas</h2>
+    <h2>Metas de Ahorro</h2>
     <p class="subtitulo">Arrastra para reordenar tus prioridades</p>
 
     <div class="lista-metas">
       <div class="meta-item">
         <span class="numero">1</span>
         <span class="drag">≡</span>
-        <span>Reserva de emergencia</span>
+        <input type="text" class="descripcion" value="Reserva de emergencia" />
         <input type="text" class="monto" value="$12,000" />
       </div>
       <div class="meta-item">
         <span class="numero">2</span>
         <span class="drag">≡</span>
-        <span>Bajar deudas</span>
+        <input type="text" class="descripcion" value="Bajar deudas" />
         <input type="text" class="monto" value="$12,000" />
       </div>
       <div class="meta-item">
         <span class="numero">3</span>
         <span class="drag">≡</span>
-        <span>Pronto para un auto</span>
+        <input type="text" class="descripcion" value="Pronto para un auto" />
         <input type="text" class="monto" value="$12,000" />
       </div>
-      <p class="agregar-meta">+ añadir otra meta</p>
+      <p class="agregar-meta" onclick="agregarMeta()">+ añadir otra meta</p>
     </div>
 
     <h3>Progreso del año</h3>
@@ -203,10 +212,25 @@
       document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
     }
 
+    function agregarMeta() {
+      const lista = document.querySelector(".lista-metas");
+      const index = document.querySelectorAll(".meta-item").length + 1;
+      const nuevaMeta = document.createElement("div");
+      nuevaMeta.className = "meta-item";
+      nuevaMeta.innerHTML = `
+        <span class="numero">${index}</span>
+        <span class="drag">≡</span>
+        <input type="text" class="descripcion" value="Nueva meta" />
+        <input type="text" class="monto" value="$0" />
+      `;
+      lista.insertBefore(nuevaMeta, document.querySelector(".agregar-meta"));
+      nuevaMeta.querySelector(".monto").addEventListener("input", calcular);
+    }
+
     // Ejecutar al cargar
     calcular();
 
-    // Escuchar cambios en inputs
+    // Escuchar cambios en montos
     document.querySelectorAll(".monto").forEach(input => {
       input.addEventListener("input", calcular);
     });
