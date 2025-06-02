@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editar Transacción</title>
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background: #F9FAFB;
+      margin: 0;
+      padding: 2rem;
+      color: #111;
+    }
+    .formulario {
+      position: relative;           /* 🔸 OBLIGATORIO para que .cerrar-modal funcione bien */
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-sizing: border-box;
+    }
+    h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+    }
+    .campo-con-icono {
+      position: relative;
+    }
+     .campo-con-icono input {
+      padding-right: 3rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .icono-fecha {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 1.1rem;
+      color: #64748B;
+    }
+    input[type="date"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.monto {
+  font-size: 3rem;          /* 🔸 Más grande */
+  text-align: center;       /* 🔸 Centrado horizontalmente */
+  color: #64748B;
+  margin: 1.5rem auto;
+  background: transparent;
+  border: none;
+  outline: none;
+  max-width: 180%;
+  display: block;
+  caret-color: auto; /* 🔒 evita que se vea el cursor falso */
+}
+    .acciones {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+    .acciones button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .btn-cancelar { background: transparent; color: #64748B; }
+    .btn-guardar, .btn-eliminar { background: #3956E8; color: #fff; }
+
+    .imagen-adjunta {
+      background: #F1F5F9;
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .imagen-adjunta img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+    }
+    .imagen-adjunta button {
+      margin: 0 0.5rem;
+      font-size: 0.75rem;
+      background: none;
+      color: #3956E8;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Modal de Categorías */
+.modal-categorias {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-contenido {
+  background: #fff;
+  width: 100%;
+  max-width: 350px;
+  max-height: 80vh;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+    .grupo {
+      margin-bottom: 1rem;
+    }
+    .grupo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #F3F4F6;
+      margin-top: 0.5rem;
+    }
+    .circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .contenido {
+      display: none;
+      margin-left: 1rem;
+      margin-top: 0.5rem;
+    }
+    .subtitulo {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-top: 0.8rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.3rem 0;
+    }
+    li {
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      background: #F9FAFB;
+      margin-bottom: 0.3rem;
+      cursor: pointer;
+    }
+    li:hover {
+      background: #E5E7EB;
+    }
+    .formulario {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.cerrar-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 2rem;
+  color: #64748B;
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+  z-index: 10;
+}
+    .cerrar-categorias {
+  position: sticky;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+  color: #64748B;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  display: block;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  line-height: 1;
+}
+
+  </style>
+</head>
+<body>
+  <div class="formulario">
+    <button class="cerrar-modal" onclick="cerrarModal()">x</button>
+    <h2>Nueva Transacción</h2>
+<input
+  type="text"
+  class="monto"
+  id="monto"
+  inputmode="numeric"
+  placeholder="$0.00"
+/>
+    <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="abrirModalCategorias()">
+
+    <div class="campo-con-icono">
+      <input type="date" id="fecha" value="2025-05-22">
+      <span class="icono-fecha"></span>
+    </div>
+
+    <input type="text" placeholder="Comercio">
+    <textarea rows="3" placeholder="Comentario opcional"></textarea>
+
+    <div class="imagen-adjunta">
+      <img src="https://via.placeholder.com/300x150.png?text=recibo.jpg" alt="Adjunto">
+      <div>
+        <button onclick="alert('Cambiar imagen')">🔄 Reemplazar</button>
+        <button onclick="alert('Eliminar imagen')">🗑️ Eliminar</button>
+      </div>
+    </div>
+
+    <div class="acciones">
+      <button class="btn-eliminar">Eliminar</button>
+      <button class="btn-guardar">Guardar</button>
+    </div>
+  </div>
+
+<!-- MODAL CATEGORÍAS -->
+<div id="modalCategorias" class="modal-categorias">
+  <div class="modal-contenido">
+    <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
+    <h3>Selecciona una subcategoría</h3>
+
+    <!-- INGRESOS -->
+    <div class="grupo">
+      <div class="grupo-header" onclick="toggleGrupo(this)">
+        <div style="display:flex;align-items:center;">
+          <div class="circle" style="background:#3956E8;"></div>
+          Ingresos
+        </div>
+        <span>⌄</span>
+      </div>
+      <div class="contenido">
+        <div class="subtitulo">Pago por trabajo</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Bono')">Bono</li>
+          <li onclick="seleccionarSubcategoria('Comisión')">Comisión</li>
+          <li onclick="seleccionarSubcategoria('Ganancia empleado cuenta propia')">Ganancia empleado cuenta propia</li>
+          <li onclick="seleccionarSubcategoria('Pago por hora')">Pago por hora</li>
+          <li onclick="seleccionarSubcategoria('Propina')">Propina</li>
+          <li onclick="seleccionarSubcategoria('Salario')">Salario</li>
+        </ul>
+        <div class="subtitulo">Ganancia de capital</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Acciones')">Acciones</li>
+          <li onclick="seleccionarSubcategoria('Auto')">Auto</li>
+          <li onclick="seleccionarSubcategoria('Bonos o renta fija')">Bonos o renta fija</li>
+          <li onclick="seleccionarSubcategoria('Casa/Apartamento/Tierra')">Casa/Apartamento/Tierra</li>
+          <li onclick="seleccionarSubcategoria('ETF, fondo mutuo, etc.')">ETF, fondo mutuo, etc.</li>
+        </ul>
+        <div class="subtitulo">Ingreso pasivo</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Anualidad')">Anualidad</li>
+          <li onclick="seleccionarSubcategoria('Dividendos e Intereses')">Dividendos e Intereses</li>
+          <li onclick="seleccionarSubcategoria('Pensión')">Pensión</li>
+          <li onclick="seleccionarSubcategoria('Renta inmueble')">Renta inmueble</li>
+          <li onclick="seleccionarSubcategoria('Seguro Social')">Seguro Social</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- GASTOS -->
+    <div class="grupo">
+      <div class="grupo-header" onclick="toggleGrupo(this)">
+        <div style="display:flex;align-items:center;">
+          <div class="circle" style="background:#6B7280;"></div>
+          Gastos
+        </div>
+        <span>⌄</span>
+      </div>
+      <div class="contenido">
+        <div class="subtitulo">Alimentación</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Supermercado')">Supermercado</li>
+          <li onclick="seleccionarSubcategoria('Comidas fuera')">Comidas fuera</li>
+          <li onclick="seleccionarSubcategoria('Pedido a domicilio')">Pedido a domicilio</li>
+        </ul>
+        <div class="subtitulo">Casa</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Hipoteca / Alquiler')">Hipoteca / Alquiler</li>
+          <li onclick="seleccionarSubcategoria('Servicios básicos')">Servicios básicos</li>
+          <li onclick="seleccionarSubcategoria('Mantenimiento')">Mantenimiento</li>
+        </ul>
+        <div class="subtitulo">Impuestos</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Seguro social')">Seguro social</li>
+          <li onclick="seleccionarSubcategoria('Propiedad')">Propiedad</li>
+          <li onclick="seleccionarSubcategoria('Venta')">Venta</li>
+          <li onclick="seleccionarSubcategoria('Estatales')">Estatales</li>
+          <li onclick="seleccionarSubcategoria('Federales')">Federales</li>
+          <li onclick="seleccionarSubcategoria('Municipales')">Municipales</li>
+        </ul>
+        <div class="subtitulo">Transportación</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Gasolina')">Gasolina</li>
+          <li onclick="seleccionarSubcategoria('Mantenimiento')">Mantenimiento</li>
+          <li onclick="seleccionarSubcategoria('Transporte público / Uber')">Transporte público / Uber</li>
+        </ul>
+        <div class="subtitulo">Seguros</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Salud')">Salud</li>
+          <li onclick="seleccionarSubcategoria('Auto')">Auto</li>
+          <li onclick="seleccionarSubcategoria('Vida')">Vida</li>
+        </ul>
+        <div class="subtitulo">Regalos y donaciones</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Familia')">Familia</li>
+          <li onclick="seleccionarSubcategoria('Amigos')">Amigos</li>
+          <li onclick="seleccionarSubcategoria('Instituciones')">Instituciones</li>
+        </ul>
+        <div class="subtitulo">Gastos Médicos</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Consultas')">Consultas</li>
+          <li onclick="seleccionarSubcategoria('Medicamentos')">Medicamentos</li>
+          <li onclick="seleccionarSubcategoria('Procedimientos')">Procedimientos</li>
+        </ul>
+        <div class="subtitulo">Cuidado Personal</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Peluquería')">Peluquería</li>
+          <li onclick="seleccionarSubcategoria('Cosméticos')">Cosméticos</li>
+          <li onclick="seleccionarSubcategoria('Spa / Barbería')">Spa / Barbería</li>
+        </ul>
+        <div class="subtitulo">Dependientes</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Cuidado de niños')">Cuidado de niños</li>
+          <li onclick="seleccionarSubcategoria('Cuidado de mayores')">Cuidado de mayores</li>
+          <li onclick="seleccionarSubcategoria('Educación')">Educación</li>
+        </ul>
+        <div class="subtitulo">Deuda</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Tarjetas de crédito')">Tarjetas de crédito</li>
+          <li onclick="seleccionarSubcategoria('Préstamos estudiantiles')">Préstamos estudiantiles</li>
+          <li onclick="seleccionarSubcategoria('Otros préstamos')">Otros préstamos</li>
+        </ul>
+        <div class="subtitulo">Entretenimiento</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Cine')">Cine</li>
+          <li onclick="seleccionarSubcategoria('Conciertos')">Conciertos</li>
+          <li onclick="seleccionarSubcategoria('Streaming')">Streaming</li>
+        </ul>
+        <div class="subtitulo">Telecomunicaciones</div>
+        <ul>
+          <li onclick="seleccionarSubcategoria('Teléfono')">Teléfono</li>
+          <li onclick="seleccionarSubcategoria('Internet')">Internet</li>
+          <li onclick="seleccionarSubcategoria('TV')">TV</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AHORRO -->
+    <div class="grupo">
+      <div class="grupo-header" onclick="toggleGrupo(this)">
+        <div style="display:flex;align-items:center;">
+          <div class="circle" style="background:#E8C239;"></div>
+          Ahorro
+        </div>
+        <span>⌄</span>
+      </div>
+      <div class="contenido">
+        <ul>
+          <li onclick="seleccionarSubcategoria('Contribución al retiro')">Contribución al retiro</li>
+          <li onclick="seleccionarSubcategoria('Cuenta hijo(a)')">Cuenta hijo(a)</li>
+          <li onclick="seleccionarSubcategoria('Reserva emergencia')">Reserva emergencia</li>
+          <li onclick="seleccionarSubcategoria('Cuenta de ahorro')">Cuenta de ahorro</li>
+          <li onclick="seleccionarSubcategoria('Contribución del empleador')">Contribución del empleador</li>
+        </ul>
+      </div>
+  </div>
+
+  <script>
+    function abrirModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'flex';
+    }
+    function cerrarModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'none';
+    }
+    function seleccionarSubcategoria(nombre) {
+      document.getElementById('categoria').value = nombre;
+      cerrarModalCategorias();
+    }
+    function toggleGrupo(header) {
+      const contenido = header.nextElementSibling;
+      const abierto = contenido.style.display === 'block';
+      document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
+      contenido.style.display = abierto ? 'none' : 'block';
+    }
+const montoInput = document.getElementById('monto');
+let rawValue = '0';
+
+function actualizarMonto() {
+  const numeric = rawValue === '' ? 0 : parseFloat(rawValue);
+  const number = numeric / 100;
+  montoInput.value = `$${number.toFixed(2)}`;
+}
+
+montoInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Backspace') {
+    rawValue = rawValue.slice(0, -1);
+    actualizarMonto();
+    e.preventDefault();
+    return;
+  }
+
+  if (/^[0-9]$/.test(e.key)) {
+    rawValue += e.key;
+    actualizarMonto();
+    e.preventDefault();
+    return;
+  }
+
+  // Evita que se borre al escribir símbolos o mover el cursor
+  e.preventDefault();
+});
+
+montoInput.addEventListener('focus', function () {
+  setTimeout(() => {
+    montoInput.selectionStart = montoInput.selectionEnd = montoInput.value.length;
+  }, 0);
+});
+
+// Inicializa
+actualizarMonto();
+
+  </script>
+</body>
+</html>
