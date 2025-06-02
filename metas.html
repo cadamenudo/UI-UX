@@ -5,153 +5,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <title>Página de Metas</title>
-<style>
-  body {
-    font-family: 'greycliff cf', sans-serif;
-    background: #F9FAFB;
-    margin: 0;
-    padding: 0;
-    color: #111827;
-    overflow-x: hidden;
-  }
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #F9FAFB;
+      margin: 0;
+      padding: 2rem;
+      color: #111827;
+    }
 
-  .pagina-metas {
-    width: 100%;
-    padding: 1.5rem;
-    box-sizing: border-box;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 0;
-    min-height: 100vh;
-  }
-
-  h2 {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  .subtitulo {
-    color: #374151;
-    margin-top: 0.5rem;
-  }
-.lista-metas {
-  margin-top: 1.5rem;
+.pagina-metas {
+  background: #fff;
+  padding: 1.5rem;
+  margin: auto;
+  max-width: 440px;
+  width: calc(100% - 2rem); /* ✅ evita desbordes laterales */
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;   /* ✅ muy importante para evitar que padding sume al ancho */
 }
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .subtitulo {
+      color: #374151;
+      margin-top: 0.5rem;
+    }
+
+    .lista-metas {
+      margin-top: 1.5rem;
+    }
 
 .meta-item {
   display: flex;
+  flex-wrap: wrap;            /* ✅ Permite que los elementos bajen en pantallas pequeñas */
   align-items: center;
   gap: 0.5rem;
-  background: #F9FAFB;
-  border: 1px solid #E5E7EB;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  flex-wrap: nowrap; /* ✅ NO permite saltos de línea */
-  overflow-x: auto;   /* ✅ evita desborde visual */
+  margin-bottom: 0.75rem;
 }
-
-.numero {
-  background: #3B82F6;
-  color: white;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  text-align: center;
-  line-height: 24px;
-  font-size: 12px;
-  flex-shrink: 0;
-}
-
-.drag {
-  color: #9CA3AF;
-  font-size: 1.25rem;
-  cursor: grab;
-  flex-shrink: 0;
-}
-
-.meta-item input.descripcion {
-  flex: 1 1 auto;
+    .meta-item input.descripcion {
+  flex: 1 1 100%;             /* ✅ Ocupa todo el ancho si necesita */
   min-width: 0;
-  border: 1px solid #E5E7EB;
-  border-radius: 10px;
-  padding: 6px 10px;
-  font-size: 15px;
 }
 
 .meta-item input.monto {
-  flex: 0 0 100px; /* ✅ tamaño fijo para monto */
-  border: 1px solid #E5E7EB;
-  border-radius: 10px;
-  padding: 6px 10px;
-  font-size: 16px;
+  width: 100%;
+  max-width: 140px;           /* ✅ Controla que no crezca demasiado */
   text-align: right;
-  font-weight: bold;
 }
+    .numero {
+      background: #3B82F6;
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 12px;
+      display: inline-block;
+      flex-shrink: 0; 
+    }
 
-.eliminar {
-  font-size: 18px;
-  color: #9CA3AF;
-  cursor: pointer;
-  flex-shrink: 0;
-}
+    .drag {
+      color: #9CA3AF;
+      cursor: grab;
+      font-size: 1.25rem;
+    }
 
-.eliminar:hover {
-  color: #EF4444;
-}
+    .meta-item input.descripcion {
+      flex: 1;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 15px;
+    }
 
-.agregar-meta {
-  color: #9CA3AF;
-  font-size: 14px;
-  margin-top: 0.5rem;
-  cursor: pointer;
-}
+    .meta-item input.monto {
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 12px;
+      width: 100px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-h3 {
-  margin-top: 2rem;
-  font-weight: bold;
-}
+    .eliminar {
+      font-size: 18px;
+      color: #9CA3AF;
+      cursor: pointer;
+      margin-left: 6px;
+      user-select: none;
+    }
 
-.barra-progreso {
-  background: #E5E7EB;
-  border-radius: 10px;
-  height: 10px;
-  margin-top: 8px;
-  overflow: hidden;
-}
+    .eliminar:hover {
+      color: #EF4444;
+    }
 
-.relleno {
-  background: #3B82F6;
-  height: 100%;
-  width: 0%;
-  border-radius: 10px;
-  transition: width 0.3s ease;
-}
+    .agregar-meta {
+      color: #9CA3AF;
+      font-size: 14px;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
 
-.progreso-numero {
-  text-align: right;
-  margin-top: 4px;
-  font-weight: 600;
-}
+    h3 {
+      margin-top: 2rem;
+      font-weight: bold;
+    }
 
-.bloque-resumen {
-  background: #F3F4F6;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-top: 1rem;
-}
+    .barra-progreso {
+      background: #E5E7EB;
+      border-radius: 10px;
+      height: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
 
-.fila-resumen {
-  display: flex;
-  justify-content: space-between;
-  margin: 12px 0;
-  color: #4B5563;
-}
+    .relleno {
+      background: #3B82F6;
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
 
-.fila-resumen strong {
-  color: #111827;
-}
+    .progreso-numero {
+      text-align: right;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .resumen {
+      margin-top: 1rem;
+    }
+
+    .resumen div {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+      color: #4B5563;
+    }
+
+    .resumen strong {
+      color: #111827;
+    }
 
 .botones-finales {
   display: flex;
@@ -186,45 +188,29 @@ h3 {
   cursor: pointer;
 }
 
-/* ✅ Responsive ajustes móviles */
-@media (max-width: 500px) {
-  .meta-item {
-    flex-direction: column;
-    align-items: stretch;
-    flex-wrap: nowrap;
-  }
-
-  .meta-item input.descripcion,
-  .meta-item input.monto {
-    width: 100%;
-  }
-
-  .meta-item input.monto {
-    margin-top: 0.25rem;
-  }
-
-  .meta-item .eliminar {
-    align-self: flex-end;
-    margin-top: 0.5rem;
-  }
+    .bloque-resumen {
+  background: #F3F4F6;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
 }
 
-  .botones-finales {
-    flex-direction: column;
-  }
-
-  .botones-finales button {
-    width: 100%;
-  }
+.fila-resumen {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  color: #4B5563;
 }
 
-</style>
-
+.fila-resumen strong {
+  color: #111827;
+}
+  </style>
 </head>
 <body>
   <div class="pagina-metas">
-    <h2>Metas de Ahorro</h2>
-    <p class="subtitulo">Establace y ordenalas de acuerdo a tus prioridades</p>
+    <h2>Página de metas</h2>
+    <p class="subtitulo">Arrastra para reordenar tus prioridades</p>
 
     <div class="lista-metas" id="listaMetas">
       <div class="meta-item">
