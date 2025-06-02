@@ -5,240 +5,226 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <title>Página de Metas</title>
-<style>
-  body {
-    font-family: 'greycliff cf', sans-serif;
-    background: #F9FAFB;
-    margin: 0;
-    padding: 0;
-    color: #111827;
-    overflow-x: hidden;
-  }
+  <style>
+    body {
+      font-family: 'greycliff cf', sans-serif;
+      background: #F9FAFB;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+      overflow-x: hidden
+    }
 
-  .pagina-metas {
-    width: 100%;
-    padding: 1.5rem;
-    box-sizing: border-box;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 0;
-    min-height: 100vh;
-  }
+.pagina-metas {
+  width: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 0;
+  min-height: 100vh; /* opcional si quieres cuerpo completo */
+}
 
-  h2 {
-    font-size: 24px;
-    font-weight: bold;
-  }
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-  .subtitulo {
-    color: #374151;
-    margin-top: 0.5rem;
-  }
+    .subtitulo {
+      color: #374151;
+      margin-top: 0.5rem;
+    }
 
-  .lista-metas {
-    margin-top: 1.5rem;
-  }
+    .lista-metas {
+      margin-top: 1.5rem;
+    }
 
 .meta-item {
   display: flex;
-  flex-wrap: nowrap;       /* ✅ No permite salto de línea */
-  align-items: center;
-  gap: 0.5rem;
-  overflow-x: auto;        /* ✅ Previene rompimiento visual si se excede el ancho */
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-bottom: 1rem;
+  align-items: center;
 }
 
-  .meta-item input.descripcion {
-    flex: 1.2 1 0%;
-    min-width: 0;
-    border: 1px solid #E5E7EB;
-    border-radius: 10px;
-    padding: 6px 10px;
-    font-size: 15px;
-  }
-
-  .meta-item input.monto {
-    flex: 0 0 80px;
-    max-width: 80px;
-    border: 1px solid #E5E7EB;
-    border-radius: 10px;
-    padding: 6px 12px;
-    text-align: right;
-    font-weight: bold;
-    font-size: 16px;
-  }
-
-  .numero {
-    background: #3B82F6;
-    color: white;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    text-align: center;
-    line-height: 24px;
-    font-size: 12px;
-    display: inline-block;
-    flex-shrink: 0;
-  }
-
-  .drag {
-    color: #9CA3AF;
-    cursor: grab;
-    font-size: 1.25rem;
-  }
-
-  .eliminar {
-    font-size: 18px;
-    color: #9CA3AF;
-    cursor: pointer;
-    margin-left: 6px;
-    user-select: none;
-  }
-
-  .eliminar:hover {
-    color: #EF4444;
-  }
-
-  .agregar-meta {
-    color: #9CA3AF;
-    font-size: 14px;
-    margin-top: 0.5rem;
-    cursor: pointer;
-  }
-
-  h3 {
-    margin-top: 2rem;
-    font-weight: bold;
-  }
-
-  .barra-progreso {
-    background: #E5E7EB;
-    border-radius: 10px;
-    height: 10px;
-    margin-top: 8px;
-    overflow: hidden;
-  }
-
-  .relleno {
-    background: #3B82F6;
-    height: 100%;
-    width: 0%;
-    border-radius: 10px;
-    transition: width 0.3s ease;
-  }
-
-  .progreso-numero {
-    text-align: right;
-    margin-top: 4px;
-    font-weight: 600;
-  }
-
-  .resumen {
-    margin-top: 1rem;
-  }
-
-  .resumen div {
-    display: flex;
-    justify-content: space-between;
-    margin: 6px 0;
-    color: #4B5563;
-  }
-
-  .resumen strong {
-    color: #111827;
-  }
-
-  .botones-finales {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .btn-cancelar {
-    background: transparent;
-    color: #3B82F6;
-    border: 2px solid #3B82F6;
-    border-radius: 12px;
-    padding: 0.75rem 1.5rem;
-    font-size: 16px;
-    width: 50%;
-    cursor: pointer;
-  }
-
-  .btn-cancelar:hover {
-    background: #EFF6FF;
-  }
-
-  .btn-registrar {
-    background: #3B82F6;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 0.75rem 1.5rem;
-    font-size: 16px;
-    width: 50%;
-    cursor: pointer;
-  }
-
-  .bloque-resumen {
-    background: #F3F4F6;
-    padding: 1rem;
-    border-radius: 12px;
-    margin-top: 1rem;
-  }
-
-  .fila-resumen {
-    display: flex;
-    justify-content: space-between;
-    margin: 12px 0;
-    color: #4B5563;
-  }
-
-  .fila-resumen strong {
-    color: #111827;
-  }
-
-  /* Estados de inputs */
-  .input-activo {
-    background: #fff !important;
-    border: 2px solid #3B82F6 !important;
-    box-shadow: 0 0 0 2px #DBEAFE;
-    pointer-events: auto;
-  }
-
-  .input-registrado {
-    border: none !important;
-    background: transparent !important;
-    pointer-events: none;
-    color: #111827;
-  }
-
-  /* Responsive ajustes móviles */
-  @media (max-width: 400px) {
-    .meta-item {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
 .meta-item input.descripcion {
-  flex: 1 1 auto;
-  min-width: 120px;
+  flex: 2 1 0%;       /* ✅ el campo de texto ocupa el doble */
+  min-width: 0;
 }
 
 .meta-item input.monto {
-  flex: 0 0 90px;
-  max-width: 90px;
+  flex: 1 1 100px;     /* ✅ el monto ocupa menos */
+  max-width: 140px;
+  text-align: right;
 }
 
-</style>
+    @media (max-width: 400px) {
+  .meta-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
+  .meta-item input.descripcion,
+  .meta-item input.monto {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+    .numero {
+      background: #3B82F6;
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 12px;
+      display: inline-block;
+      flex-shrink: 0; 
+    }
+
+    .drag {
+      color: #9CA3AF;
+      cursor: grab;
+      font-size: 1.25rem;
+    }
+
+    .meta-item input.descripcion {
+      flex: 1;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 15px;
+    }
+
+    .meta-item input.monto {
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 12px;
+      width: 100px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .eliminar {
+      font-size: 18px;
+      color: #9CA3AF;
+      cursor: pointer;
+      margin-left: 6px;
+      user-select: none;
+    }
+
+    .eliminar:hover {
+      color: #EF4444;
+    }
+
+    .agregar-meta {
+      color: #9CA3AF;
+      font-size: 14px;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
+
+    h3 {
+      margin-top: 2rem;
+      font-weight: bold;
+    }
+
+    .barra-progreso {
+      background: #E5E7EB;
+      border-radius: 10px;
+      height: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .relleno {
+      background: #3B82F6;
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .progreso-numero {
+      text-align: right;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .resumen {
+      margin-top: 1rem;
+    }
+
+    .resumen div {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+      color: #4B5563;
+    }
+
+    .resumen strong {
+      color: #111827;
+    }
+
+.botones-finales {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-cancelar {
+  background: transparent;
+  color: #3B82F6;
+  border: 2px solid #3B82F6;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  width: 50%;
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  background: #EFF6FF;
+}
+
+.btn-registrar {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  width: 50%;
+  cursor: pointer;
+}
+
+    .bloque-resumen {
+  background: #F3F4F6;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.fila-resumen {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  color: #4B5563;
+}
+
+.fila-resumen strong {
+  color: #111827;
+}
+  </style>
 </head>
 <body>
   <div class="pagina-metas">
     <h2>Metas de Ahorro</h2>
-    <p class="subtitulo">Establace y ordénalas de acuerdo a tus prioridades</p>
+    <p class="subtitulo">Establace y ordenalas de acuerdo a tus prioridades</p>
 
     <div class="lista-metas" id="listaMetas">
       <div class="meta-item">
@@ -322,99 +308,39 @@ function agregarMeta() {
     <input type="text" class="monto" value="$0" />
     <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
   `;
-
   lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
-
-  const inputDescripcion = nuevaMeta.querySelector(".descripcion");
-  const inputMonto = nuevaMeta.querySelector(".monto");
-
-  // Aplicar efectos visuales de "registro"
-[inputDescripcion, inputMonto].forEach(input => {
-  input.addEventListener("focus", () => {
-    input.classList.remove("input-registrado");
-    input.classList.add("input-activo");
-  });
-
-  input.addEventListener("blur", () => {
-    input.classList.remove("input-activo");
-    if (input.value.trim() !== "") {
-      input.classList.add("input-registrado");
-    }
-  });
-});
-
-  inputMonto.addEventListener("input", calcular);
+  nuevaMeta.querySelector(".monto").addEventListener("input", calcular);
   actualizarNumeros();
   calcular();
-  prepararInputsMeta(); // <-- mantener
+  prepararInputsMeta(); // <-- importante
 }
-   
+    
 function prepararInputsMeta() {
   const descripciones = document.querySelectorAll('.descripcion');
   descripciones.forEach(input => {
-    // Registrar visualmente si ya tiene valor
-    if (input.value.trim() !== '') {
-      input.classList.add("input-registrado");
-    }
-
-    input.addEventListener('click', () => {
-      if (input.classList.contains("input-registrado")) {
-        input.classList.remove("input-registrado");
-        input.classList.add("input-activo");
-        input.focus();
-      }
-    });
-
     input.addEventListener('focus', () => {
       input.dataset.original = input.value;
       input.value = '';
-      input.classList.add("input-activo");
-      input.classList.remove("input-registrado");
     });
-
-input.addEventListener('blur', () => {
-  if (input.value.trim() === '') {
-    input.value = input.dataset.original || '';
-  } else {
-    input.dataset.original = input.value; // ✅ actualiza el valor original si fue modificado
-  }
-  input.classList.remove("input-activo");
-  input.classList.add("input-registrado");
-});
-
+    input.addEventListener('blur', () => {
+      if (input.value.trim() === '') {
+        input.value = input.dataset.original || '';
+      }
+    });
   });
 
   const montos = document.querySelectorAll('.monto');
   montos.forEach(input => {
-    // Registrar visualmente si ya tiene valor
-    if (input.value.trim() !== '') {
-      input.classList.add("input-registrado");
-    }
-
-    input.addEventListener('click', () => {
-      if (input.classList.contains("input-registrado")) {
-        input.classList.remove("input-registrado");
-        input.classList.add("input-activo");
-        input.focus();
-      }
-    });
-
     input.addEventListener('focus', () => {
       input.dataset.original = input.value;
       input.value = '';
-      input.classList.add("input-activo");
-      input.classList.remove("input-registrado");
     });
 
-input.addEventListener('blur', () => {
-  const valor = limpiarNumero(input.value);
-  input.value = formatoMoneda(valor);
-  input.dataset.original = input.value;  // ✅ actualiza valor registrado
-  input.classList.remove("input-activo");
-  input.classList.add("input-registrado");
-  calcular();
-});
-
+    input.addEventListener('blur', () => {
+      const valor = limpiarNumero(input.value);
+      input.value = formatoMoneda(valor);
+      calcular();
+    });
 
     input.addEventListener('keypress', (e) => {
       if (!/[0-9.]/.test(e.key)) e.preventDefault();
