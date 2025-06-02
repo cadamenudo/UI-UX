@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página de Metas</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #F9FAFB;
+      margin: 0;
+      padding: 2rem;
+      color: #111827;
+    }
+
+    .pagina-metas {
+      background: #fff;
+      padding: 2rem;
+      max-width: 420px;
+      margin: auto;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .subtitulo {
+      color: #374151;
+      margin-top: 0.5rem;
+    }
+
+    .lista-metas {
+      margin-top: 1.5rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .numero {
+      background: #3B82F6;
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 12px;
+    }
+
+    .drag {
+      color: #9CA3AF;
+      cursor: grab;
+      font-size: 1.25rem;
+    }
+
+    .meta-item input {
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 12px;
+      width: 100px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .agregar-meta {
+      color: #9CA3AF;
+      font-size: 14px;
+      margin-top: 0.5rem;
+    }
+
+    h3 {
+      margin-top: 2rem;
+      font-weight: bold;
+    }
+
+    .barra-progreso {
+      background: #E5E7EB;
+      border-radius: 10px;
+      height: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .relleno {
+      background: #3B82F6;
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .progreso-numero {
+      text-align: right;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .resumen {
+      margin-top: 1rem;
+    }
+
+    .resumen div {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+      color: #4B5563;
+    }
+
+    .resumen strong {
+      color: #111827;
+    }
+
+    .btn-registrar {
+      background: #3B82F6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      font-size: 16px;
+      margin-top: 2rem;
+      width: 100%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="pagina-metas">
+    <h2>Página de metas</h2>
+    <p class="subtitulo">Arrastra para reordenar tus prioridades</p>
+
+    <div class="lista-metas">
+      <div class="meta-item">
+        <span class="numero">1</span>
+        <span class="drag">≡</span>
+        <span>Reserva de emergencia</span>
+        <input type="text" class="monto" value="$12,000" />
+      </div>
+      <div class="meta-item">
+        <span class="numero">2</span>
+        <span class="drag">≡</span>
+        <span>Bajar deudas</span>
+        <input type="text" class="monto" value="$12,000" />
+      </div>
+      <div class="meta-item">
+        <span class="numero">3</span>
+        <span class="drag">≡</span>
+        <span>Pronto para un auto</span>
+        <input type="text" class="monto" value="$12,000" />
+      </div>
+      <p class="agregar-meta">+ añadir otra meta</p>
+    </div>
+
+    <h3>Progreso del año</h3>
+    <div class="barra-progreso">
+      <div class="relleno" id="barraRelleno"></div>
+    </div>
+    <div class="progreso-numero" id="porcentajeTexto">0%</div>
+
+    <h3>Resultado</h3>
+    <div class="resumen">
+      <div><span>Meta total para el año</span><strong id="metaTotal">$0</strong></div>
+      <div><span>Ahorro en lo que va de año</span><strong id="ahorroActual">$5,000</strong></div>
+      <div><span>Faltan</span><strong id="faltan">$0</strong></div>
+    </div>
+
+    <button class="btn-registrar">Registrar</button>
+  </div>
+
+  <script>
+    function limpiarNumero(str) {
+      return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
+    }
+
+    function formatoMoneda(num) {
+      return "$" + num.toLocaleString("en-US");
+    }
+
+    function calcular() {
+      const inputs = document.querySelectorAll(".monto");
+      let total = 0;
+      inputs.forEach(input => {
+        total += limpiarNumero(input.value);
+      });
+
+      const ahorro = 5000; // valor fijo para este ejemplo
+      const faltan = Math.max(0, total - ahorro);
+      const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
+
+      document.getElementById("metaTotal").innerText = formatoMoneda(total);
+      document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
+      document.getElementById("faltan").innerText = formatoMoneda(faltan);
+      document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
+      document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
+    }
+
+    // Ejecutar al cargar
+    calcular();
+
+    // Escuchar cambios en inputs
+    document.querySelectorAll(".monto").forEach(input => {
+      input.addEventListener("input", calcular);
+    });
+  </script>
+</body>
+</html>
