@@ -82,30 +82,29 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 0.85rem;
-    }
-    .btn-cancelar { background: transparent; color: #64748B; }
-    .btn-guardar, .btn-eliminar { background: #3956E8; color: #fff; }
 
-    .imagen-adjunta {
-      background: #F1F5F9;
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .imagen-adjunta img {
-      max-width: 100%;
-      border-radius: 12px;
-      margin-bottom: 0.5rem;
-    }
-    .imagen-adjunta button {
-      margin: 0 0.5rem;
-      font-size: 0.75rem;
-      background: none;
-      color: #3956E8;
+    .acciones .btn-registrar {
+      background: #3956E8;
+      color: #fff;
+      padding: 0.6rem 1.4rem;
       border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.85rem;
       cursor: pointer;
     }
+    .acciones .subir-foto {
+      color: #3956E8;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .acciones .subir-foto::before {
+      content: "\1F4CE"; /* paperclip */
+      font-size: 1.1rem;
+      color: #3956E8;
 
     /* Modal de Categorías */
 .modal-categorias {
@@ -230,17 +229,9 @@
     <input type="text" placeholder="Comercio">
     <textarea rows="3" placeholder="Comentario opcional"></textarea>
 
-    <div class="imagen-adjunta">
-      <img src="https://via.placeholder.com/300x150.png?text=recibo.jpg" alt="Adjunto">
-      <div>
-        <button onclick="alert('Cambiar imagen')">🔄 Reemplazar</button>
-        <button onclick="alert('Eliminar imagen')">🗑️ Eliminar</button>
-      </div>
-    </div>
-
     <div class="acciones">
-      <button class="btn-eliminar">Eliminar</button>
-      <button class="btn-guardar">Guardar</button>
+      <span class="subir-foto">Subir foto</span>
+      <button class="btn-registrar">Registrar</button>
     </div>
   </div>
 
