@@ -372,13 +372,16 @@ function prepararInputsMeta() {
       input.classList.remove("input-registrado");
     });
 
-    input.addEventListener('blur', () => {
-      if (input.value.trim() === '') {
-        input.value = input.dataset.original || '';
-      }
-      input.classList.remove("input-activo");
-      input.classList.add("input-registrado");
-    });
+input.addEventListener('blur', () => {
+  if (input.value.trim() === '') {
+    input.value = input.dataset.original || '';
+  } else {
+    input.dataset.original = input.value; // ✅ actualiza el valor original si fue modificado
+  }
+  input.classList.remove("input-activo");
+  input.classList.add("input-registrado");
+});
+
   });
 
   const montos = document.querySelectorAll('.monto');
@@ -403,13 +406,15 @@ function prepararInputsMeta() {
       input.classList.remove("input-registrado");
     });
 
-    input.addEventListener('blur', () => {
-      const valor = limpiarNumero(input.value);
-      input.value = formatoMoneda(valor);
-      input.classList.remove("input-activo");
-      input.classList.add("input-registrado");
-      calcular();
-    });
+input.addEventListener('blur', () => {
+  const valor = limpiarNumero(input.value);
+  input.value = formatoMoneda(valor);
+  input.dataset.original = input.value;  // ✅ actualiza valor registrado
+  input.classList.remove("input-activo");
+  input.classList.add("input-registrado");
+  calcular();
+});
+
 
     input.addEventListener('keypress', (e) => {
       if (!/[0-9.]/.test(e.key)) e.preventDefault();
