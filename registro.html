@@ -49,17 +49,20 @@
     }
     .input-password {
       position: relative;
+      width: 100%;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 1rem;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      pointer-events: auto;
     }
 
-.toggle-password {
-  position: absolute;
-  right: 1rem;
-  inset-block: 0; /* reemplaza top: 50% */
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  height: 100%;
-}
 
 .checkbox {
   display: flex;
@@ -214,8 +217,9 @@ button[type="submit"] {
 .input-group.error .error-msg {
   display: block;
 }
-    .input-password input {
-  padding-right: 2.5rem; /* espacio para el ícono */
+.input-password input {
+  padding-right: 2.5rem;
+  box-sizing: border-box;
 }
   </style>
 </head>
