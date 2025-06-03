@@ -205,6 +205,19 @@
 .input-group.error .error-msg {
   display: block;
 }
+    .input-group label {
+  display: none; /* Oculto por defecto */
+}
+
+.input-group.focused label {
+  display: block;
+  color: #3956E8; /* Azul al hacer focus */
+}
+
+.input-group.error label {
+  display: block;
+  color: #DC2626; /* Rojo si hay error */
+}
 
   </style>
 </head>
