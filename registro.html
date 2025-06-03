@@ -311,12 +311,10 @@ button[type="submit"] {
 </div>
   <script>
 function abrirModal(idModal, archivo) {
-  fetch(archivo)
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById(`contenido${idModal.charAt(0).toUpperCase() + idModal.slice(1)}`).innerHTML = data;
-      document.getElementById(idModal).style.display = 'block';
-    });
+  const modal = document.getElementById(idModal);
+  const iframe = modal.querySelector('iframe');
+  if (iframe) iframe.src = archivo;
+  modal.style.display = 'block';
 }
 
 function cerrarModal(idModal) {
