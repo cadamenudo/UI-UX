@@ -251,10 +251,10 @@
         <input type="checkbox" required />
          <span class="texto-checkbox">
         He leído y acepto los 
-        <a onclick="abrirModal('modalTerminos')">Términos y Condiciones</a> y la 
-        <a onclick="abrirModal('modalPrivacidad')">Política de Privacidad</a>
-        </span>
-      </label>
+        <a href="#" onclick="abrirModal('modalTerminos', 'terminos.html')">Términos y Condiciones</a> y la 
+        <a href="#" onclick="abrirModal('modalPrivacidad', 'privacidad.html')">Política de Privacidad</a>
+            </span>
+          </label>
 
       <button type="submit">REGISTRARSE</button>
     </form>
@@ -262,25 +262,27 @@
     <p class="login-link">¿Ya tienes una cuenta? <a href="/login.html">Inicia sesión</a></p>
   </div>
 
-  <!-- Modal Términos -->
-  <div id="modalTerminos" class="modal">
-    <div class="modal-content">
-      <button class="close" onclick="cerrarModal('modalTerminos')">×</button>
-      <h3>Términos y Condiciones</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod eu lorem et ultricies. In porta lorem at dui semper porttitor...</p>
-      <button onclick="cerrarModal('modalTerminos')">Aceptar</button>
+<!-- Modal Términos -->
+<div id="modalTerminos" class="modal">
+  <div class="modal-content">
+    <button class="close" onclick="cerrarModal('modalTerminos')">×</button>
+    <div id="contenidoModalTerminos">
+      <p>Cargando términos y condiciones...</p>
     </div>
+    <button onclick="cerrarModal('modalTerminos')">Aceptar</button>
   </div>
+</div>
 
-  <!-- Modal Privacidad -->
-  <div id="modalPrivacidad" class="modal">
-    <div class="modal-content">
-      <button class="close" onclick="cerrarModal('modalPrivacidad')">×</button>
-      <h3>Política de Privacidad</h3>
-      <p>Tu privacidad es importante para nosotros. Esta política explica cómo recopilamos, usamos y protegemos tu información personal...</p>
-      <button onclick="cerrarModal('modalPrivacidad')">Aceptar</button>
+<!-- Modal Privacidad -->
+<div id="modalPrivacidad" class="modal">
+  <div class="modal-content">
+    <button class="close" onclick="cerrarModal('modalPrivacidad')">×</button>
+    <div id="contenidoModalPrivacidad">
+      <p>Cargando política de privacidad...</p>
     </div>
+    <button onclick="cerrarModal('modalPrivacidad')">Aceptar</button>
   </div>
+</div>
 
   <script>
     function abrirModal(id) {
@@ -325,7 +327,18 @@
     }
   });
 });
+function abrirModal(idModal, archivo) {
+  fetch(archivo)
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById(`contenido${idModal.charAt(0).toUpperCase() + idModal.slice(1)}`).innerHTML = data;
+      document.getElementById(idModal).style.display = 'block';
+    });
+}
 
+function cerrarModal(idModal) {
+  document.getElementById(idModal).style.display = 'none';
+}
   </script>
 </body>
 </html>
