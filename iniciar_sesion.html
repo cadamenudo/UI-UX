@@ -16,7 +16,7 @@
       justify-content: center;
     }
 
-    .registro-container {
+    .login-container {
       max-width: 400px;
       width: 100%;
       background: #fff;
@@ -28,9 +28,13 @@
     }
 
     .logo {
-      width: 280px;
-      margin-bottom: 0.5rem;
-      margin-top: 0;
+      width: 300px;
+      margin-bottom: 0.25rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
     }
 
     form {
@@ -47,13 +51,6 @@
       width: 100%;
     }
 
-    .input-group label {
-      font-size: 0.85rem;
-      color: #374151;
-      margin-bottom: 0.25rem;
-      display: none;
-    }
-
     .input-group input {
       padding: 0.75rem 1rem;
       border: 1px solid #D1D5DB;
@@ -61,44 +58,11 @@
       font-size: 1rem;
       width: 100%;
       outline: none;
-    }
-
-    .input-group input:focus {
-      border-color: #3956E8;
-    }
-
-    .input-group.focused label {
-      display: block;
-      color: #3956E8;
-    }
-
-    .input-group.error input {
-      border-color: #DC2626;
-    }
-
-    .input-group.error label {
-      color: #DC2626;
-      display: block;
-    }
-
-    .input-group .error-msg {
-      color: #DC2626;
-      font-size: 0.8rem;
-      margin-top: 4px;
-      display: none;
-    }
-
-    .input-group.error .error-msg {
-      display: block;
-    }
-
-    .input-password input {
-      height: 48px;
-      padding: 0.75rem 2.5rem 0.75rem 1rem;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 1px solid #D1D5DB;
       box-sizing: border-box;
+    }
+
+    .input-password {
+      position: relative;
     }
 
     .toggle-password {
@@ -113,6 +77,10 @@
       pointer-events: auto;
     }
 
+    .input-password input {
+      padding-right: 2.5rem;
+    }
+
     button[type="submit"] {
       background-color: #3956E8;
       color: white;
@@ -121,143 +89,55 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      margin-top: 0.5rem;
     }
 
-    .texto-legales {
-      font-size: 0.75rem;
-      color: #374151;
+    .registro-link {
       margin-top: 1rem;
+      font-size: 0.9rem;
     }
 
-    .texto-legales a {
+    .registro-link a {
       color: #3956E8;
       text-decoration: none;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 99;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 1.25rem;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      max-height: 70vh;
-      overflow-y: auto;
-      position: relative;
-      box-sizing: border-box;
-    }
-
-    .modal-content h3 {
-      margin-top: 0;
-      font-size: 1.25rem;
-    }
-
-    .modal-content button {
-      background-color: #3956E8;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      margin-top: 1rem;
-      cursor: pointer;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .close {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      font-size: 1.5rem;
-      color: #999;
-      cursor: pointer;
-      background: none;
-      border: none;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="registro-container">
-    <img src="logo.png" alt="Cada Menudo" class="logo" />
-    <h2>Inicia sesión</h2>
+  <div class="login-container">
+    <img src="logo.png" alt="Logo Cada Menudo" class="logo" />
+    <h2>Iniciar Sesión</h2>
     <form>
       <div class="input-group">
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" placeholder="Correo electrónico" required />
-        <div class="error-msg">Este campo es obligatorio</div>
+        <input type="email" placeholder="Correo electrónico" required />
       </div>
       <div class="input-group input-password">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" placeholder="Contraseña" required />
+        <input type="password" placeholder="Contraseña" required />
         <span class="toggle-password" onclick="togglePassword()">
           <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#64748B" viewBox="0 0 24 24">
             <path d="M12 5C7 5 2.7 8.1 1 12c1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
             <circle cx="12" cy="12" r="2.5"/>
           </svg>
         </span>
-        <div class="error-msg">Este campo es obligatorio</div>
       </div>
-      <button type="submit">Entrar</button>
+      <button type="submit">ENTRAR</button>
     </form>
-
-    <div class="texto-legales">
-      Al continuar, aceptas nuestros <a href="#" onclick="abrirModal('modalTerminos')">Términos y Condiciones</a> y nuestra <a href="#" onclick="abrirModal('modalPrivacidad')">Política de Privacidad</a>.
-    </div>
-  </div>
-
-  <!-- Modal Términos -->
-  <div id="modalTerminos" class="modal">
-    <div class="modal-content">
-      <button class="close" onclick="cerrarModal('modalTerminos')">×</button>
-      <h3>Términos y Condiciones</h3>
-      <p>Contenido completo del documento términos.html aquí...</p>
-      <button onclick="cerrarModal('modalTerminos')">Aceptar</button>
-    </div>
-  </div>
-
-  <!-- Modal Privacidad -->
-  <div id="modalPrivacidad" class="modal">
-    <div class="modal-content">
-      <button class="close" onclick="cerrarModal('modalPrivacidad')">×</button>
-      <h3>Política de Privacidad</h3>
-      <p>Contenido completo del documento privacidad.html aquí...</p>
-      <button onclick="cerrarModal('modalPrivacidad')">Aceptar</button>
+    <div class="registro-link">
+      ¿No tienes cuenta? <a href="#">Regístrate</a>
     </div>
   </div>
 
   <script>
     function togglePassword() {
-      const input = document.getElementById("password");
-      const icon = document.getElementById("eyeIcon");
-      if (input.type === "password") {
-        input.type = "text";
-        icon.innerHTML = '<path d="M12 5C7 5 2.7 8.1 1 12c1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><line x1="4" y1="4" x2="20" y2="20" stroke="#64748B" stroke-width="2"/>';
+      const input = document.querySelector('input[type="password"]');
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.style.fill = '#3956E8';
       } else {
-        input.type = "password";
-        icon.innerHTML = '<path d="M12 5C7 5 2.7 8.1 1 12c1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><circle cx="12" cy="12" r="2.5"/>';
+        input.type = 'password';
+        icon.style.fill = '#64748B';
       }
-    }
-
-    function abrirModal(id) {
-      document.getElementById(id).style.display = "block";
-    }
-
-    function cerrarModal(id) {
-      document.getElementById(id).style.display = "none";
     }
   </script>
 </body>
