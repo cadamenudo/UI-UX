@@ -351,9 +351,11 @@ function cerrarModal(idModal) {
       ? '<path d="M12 5C7 5 2.7 8.1 1 12c1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><line x1="4" y1="4" x2="20" y2="20" stroke="#64748B" stroke-width="2"/>'
       : '<path d="M12 5C7 5 2.7 8.1 1 12c1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><circle cx="12" cy="12" r="2.5"/>';
   }
-    document.querySelectorAll('.input-group input').forEach(input => {
-  const group = input.closest('.input-group');
+    const inputs = document.querySelectorAll(".input-group input");
 
+inputs.forEach(input => {
+  const group = input.closest(".input-group");
+  
   input.addEventListener('focus', () => {
     group.classList.add('focused');
     group.classList.remove('error');
