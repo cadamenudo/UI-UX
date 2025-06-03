@@ -54,14 +54,11 @@
 .toggle-password {
   position: absolute;
   right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
+  inset-block: 0; /* reemplaza top: 50% */
   display: flex;
   align-items: center;
-  justify-content: center;
+  cursor: pointer;
 }
-
 
 .checkbox {
   display: flex;
