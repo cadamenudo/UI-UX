@@ -136,34 +136,44 @@ button[type="submit"] {
         overflow-y: auto;
         position: relative;
         box-sizing: border-box;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       }
 
-    .modal-content h3 {
-      margin-top: 0;
-      font-size: 1.25rem;
-    }
+       .modal-content h3 {
+        margin-top: 0;
+        font-size: 1.25rem;
+        color: #111827;
+        text-align: center;
+      }
 
-    .modal-content button {
-      background-color: #3956E8;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1.25rem;
-      border-radius: 8px;
-      margin: 1rem auto 0 auto; /* centrado */
-      cursor: pointer;
-      font-size: 1rem;
-      display: block;
-    }
+          .modal-content iframe {
+        width: 100%;
+        height: 300px;
+        border: none;
+        margin-top: 1rem;
+        border-radius: 10px;
+      }
+
+      .modal-content button {
+        background-color: #3956E8;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+        cursor: pointer;
+        font-size: 1rem;
+      }
 
     .close {
       position: absolute;
       top: 12px;
       right: 16px;
       font-size: 1.5rem;
-      color: #999;
-      cursor: pointer;
+      color: #64748B;
       background: none;
       border: none;
+      cursor: pointer;
     }
     .input-group {
   display: flex;
@@ -296,20 +306,38 @@ button[type="submit"] {
 </div>
 
   <script>
-    function abrirModal(id) {
-      document.getElementById(id).style.display = "block";
-    }
+  function abrirModal(modalId, url) {
+    const modal = document.getElementById(modalId);
+    const iframe = modal.querySelector('iframe');
+    iframe.src = url;
+    modal.style.display = 'block';
+  }
 
-    function cerrarModal(id) {
-      document.getElementById(id).style.display = "none";
-    }
+  function cerrarModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.style.display = 'none';
+  }
+      document.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    // Ocultar modal al hacer clic fuera del contenido
-    window.onclick = function(event) {
-      if (event.target.classList.contains('modal')) {
-        event.target.style.display = "none";
+    const campos = document.querySelectorAll(".input-group");
+    let valido = true;
+
+    campos.forEach(grupo => {
+      const input = grupo.querySelector("input");
+      if (!input.value.trim()) {
+        grupo.classList.add("error");
+        valido = false;
+      } else {
+        grupo.classList.remove("error");
       }
+    });
+
+    if (valido) {
+      // Aquí va la lógica si el formulario está correcto
+      alert("Formulario válido. Puedes continuar.");
     }
+  });
       function togglePassword() {
     const passwordInput = document.getElementById('password');
     const icon = document.getElementById('eyeIcon');
