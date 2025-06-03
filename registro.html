@@ -310,17 +310,18 @@ button[type="submit"] {
   </div>
 </div>
   <script>
-  function abrirModal(modalId, url) {
-    const modal = document.getElementById(modalId);
-    const iframe = modal.querySelector('iframe');
-    iframe.src = url;
-    modal.style.display = 'block';
-  }
+function abrirModal(idModal, archivo) {
+  fetch(archivo)
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById(`contenido${idModal.charAt(0).toUpperCase() + idModal.slice(1)}`).innerHTML = data;
+      document.getElementById(idModal).style.display = 'block';
+    });
+}
 
-  function cerrarModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.style.display = 'none';
-  }
+function cerrarModal(idModal) {
+  document.getElementById(idModal).style.display = 'none';
+}
       document.querySelector("form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -370,18 +371,6 @@ button[type="submit"] {
     }
   });
 });
-function abrirModal(idModal, archivo) {
-  fetch(archivo)
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById(`contenido${idModal.charAt(0).toUpperCase() + idModal.slice(1)}`).innerHTML = data;
-      document.getElementById(idModal).style.display = 'block';
-    });
-}
-
-function cerrarModal(idModal) {
-  document.getElementById(idModal).style.display = 'none';
-}
   </script>
 </body>
 </html>
