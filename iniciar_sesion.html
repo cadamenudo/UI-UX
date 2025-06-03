@@ -332,6 +332,27 @@
       alert("Formulario válido. Puedes continuar.");
     }
   });
+    const inputs = document.querySelectorAll(".input-group input");
+
+inputs.forEach(input => {
+  const group = input.closest(".input-group");
+
+  input.addEventListener("focus", () => {
+    group.classList.add("focused");
+    group.classList.remove("error");
+  });
+
+  input.addEventListener("blur", () => {
+    if (!input.value.trim()) {
+      group.classList.remove("focused");
+      group.classList.add("error");
+    } else {
+      group.classList.add("focused");
+      group.classList.remove("error");
+    }
+  });
+});
+
   </script>
 </body>
 </html>
