@@ -53,16 +53,16 @@
     }
     .toggle-password {
       position: absolute;
+      top: 50%;
       right: 1rem;
-      top: 0;
-      bottom: 0;
+      transform: translateY(-50%);
+      height: 20px; /* igual al svg */
+      width: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      pointer-events: auto;
-      /* ❌ no uses height: 100% si ya tienes top + bottom */
+      cursor: pointer;
     }
-
 .checkbox {
   display: flex;
   align-items: flex-start;
@@ -147,11 +147,12 @@ button[type="submit"] {
       background-color: #3956E8;
       color: #fff;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1.25rem;
       border-radius: 8px;
-      margin: 1.5rem auto 0 auto; /* 🟢 auto left & right = centrado */
-      margin-top: 1rem;
+      margin: 1rem auto 0 auto; /* centrado */
       cursor: pointer;
+      font-size: 1rem;
+      display: block;
     }
 
     .close {
