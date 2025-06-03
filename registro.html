@@ -5,28 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registro - Cada Menudo</title>
   <style>
-    body {
-      font-family: 'Greycliff CF', sans-serif;
-      background: #FFFFFF; /* antes: #F9FAFC */
-      margin: 0;
-      padding: 2rem;
-      color: #111827;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    
-    .registro-container {
-      max-width: 400px;
-      width: 100%;
-      background: #fff;
-      border-radius: 16px;
-      padding: 2rem;
-      /* box-shadow eliminado */
-      /* box-shadow: 0 0 0 1px #E5E7EB; */
-      text-align: center;
-    }
+      body {
+        font-family: 'Greycliff CF', sans-serif;
+        background: #FFFFFF;
+        margin: 0;
+        padding: 0; /* Quitamos padding global */
+        color: #111827;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .registro-container {
+        max-width: 400px;
+        width: 100%;
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-top: 5vh; /* Más arriba al abrir */
+        text-align: center;
+      }
     
     .logo {
       width: 140px;
