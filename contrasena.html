@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restablecer Contraseña</title>
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background: #FFFFFF;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+      display: flex;
+      justify-content: center;
+    }
+
+    .registro-container {
+      max-width: 400px;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      padding: 3vh 1.5rem;
+      margin-top: 5vh;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .logo {
+      width: 300px;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      color: #4B5563;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      width: 100%;
+    }
+
+    .input-group label {
+      display: none;
+      font-size: 0.85rem;
+      color: #374151;
+      margin-bottom: 0.25rem;
+    }
+
+    .input-group input {
+      padding: 0.75rem 1rem;
+      border: 1px solid #D1D5DB;
+      border-radius: 10px;
+      font-size: 1rem;
+      width: 100%;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .input-group input:focus {
+      border-color: #3956E8;
+    }
+
+    .input-group.focused label {
+      display: block;
+      color: #3956E8;
+    }
+
+    .input-group.error input {
+      border-color: #DC2626;
+    }
+
+    .input-group.error label {
+      display: block;
+      color: #DC2626;
+    }
+
+    .error-msg {
+      color: #DC2626;
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .input-group.error .error-msg {
+      display: block;
+    }
+
+    button[type="submit"] {
+      background-color: #3956E8;
+      color: white;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .login-link {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .login-link a {
+      color: #3956E8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="registro-container">
+    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Logo Cada Menudo" class="logo" />
+    <h2>Restablecer contraseña</h2>
+
+    <form>
+      <div class="input-group" id="grupo-email">
+        <label for="email">Correo</label>
+        <input type="email" id="email" placeholder="Correo" required />
+        <div class="error-msg">Este campo es obligatorio</div>
+      </div>
+
+      <button type="submit">RESTABLECER LA CONTRASEÑA</button>
+    </form>
+
+    <div class="login-link">
+      ¿Ya tienes una cuenta? <a href="#">Inicia sesión</a>
+    </div>
+  </div>
+
+  <script>
+    const emailInput = document.getElementById("email");
+    const emailGroup = document.getElementById("grupo-email");
+
+    emailInput.addEventListener("focus", () => {
+      emailGroup.classList.add("focused");
+      emailGroup.classList.remove("error");
+    });
+
+    emailInput.addEventListener("blur", () => {
+      if (!emailInput.value.trim()) {
+        emailGroup.classList.remove("focused");
+        emailGroup.classList.add("error");
+      } else {
+        emailGroup.classList.add("focused");
+        emailGroup.classList.remove("error");
+      }
+    });
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!emailInput.value.trim()) {
+        emailGroup.classList.add("error");
+      } else {
+        alert("Enlace para restablecer la contraseña enviado (simulado).");
+      }
+    });
+  </script>
+</body>
+</html>
