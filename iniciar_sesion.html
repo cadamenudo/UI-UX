@@ -185,8 +185,21 @@
   <div class="login-container">
     <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Logo Cada Menudo" class="logo" />
     <h2>Iniciar Sesión</h2>
-    
-    <form>
+
+    <form id="registroForm" novalidate>
+          <div class="input-group" id="grupo-nombre">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" placeholder="Nombre" />
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+          
+         
+    <div class="input-group" id="grupo-correo">
+      <label for="correo">Correo</label>
+      <input type="email" id="correo" placeholder="Correo" />
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+      
     <div class="input-group input-password" id="grupo-pass">
       <label for="password">Contraseña</label>
       <input type="password" id="password" placeholder="Contraseña" />
@@ -200,7 +213,7 @@
           </div>
       
       <button type="submit">ENTRAR</button>
-    
+
     <div class="registro-link">
       ¿No tienes cuenta? <a href="#">Regístrate</a>
     </div>
@@ -213,9 +226,9 @@
       <a href="#" onclick="abrirModal('modalPrivacidad', 'privacidad.html')">Política de Privacidad</a>.
     </p>
   </div>
+</form>
 </div> <!
   </div> <!-- cierre del login-container -->
-</form>
   
 <!-- Modal Términos -->
 <div id="modalTerminos" class="modal">
