@@ -270,6 +270,14 @@
     // Cierra todos los bloques al iniciar
     document.querySelectorAll('.bloque-sector').forEach(b => b.classList.remove('abierto'));
 
+      function toggleBloque(encabezado) {
+    const parent = encabezado.closest('.bloque-sector');
+    document.querySelectorAll('.bloque-sector').forEach(b => {
+      if (b !== parent) b.classList.remove('abierto');
+    });
+    parent.classList.toggle('abierto');
+  }
+
     // Añade evento a todos los encabezados
     document.querySelectorAll('.encabezado').forEach(header => {
       header.addEventListener('click', () => toggleBloque(header));
@@ -280,14 +288,6 @@
       agregarCategoria(categoria, subcategorias, false);
     });
   });
-
-  function toggleBloque(encabezado) {
-    const parent = encabezado.closest('.bloque-sector');
-    document.querySelectorAll('.bloque-sector').forEach(b => {
-      if (b !== parent) b.classList.remove('abierto');
-    });
-    parent.classList.toggle('abierto');
-  }
 
   function toggleSubcategorias(element) {
     const all = document.querySelectorAll('.subcategorias');
