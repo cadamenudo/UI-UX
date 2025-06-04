@@ -217,6 +217,23 @@
   </div>
 
   <script>
+// Función: abrir/cerrar bloques principales asegurando que solo uno esté abierto
+function toggleBloque(elemento) {
+  const todos = document.querySelectorAll('.bloque-sector');
+  todos.forEach(bloque => {
+    if (bloque !== elemento) bloque.classList.remove('abierto');
+  });
+  elemento.classList.toggle('abierto');
+}
+
+// Aplica el toggle a los headers de cada bloque
+const headers = document.querySelectorAll('.bloque-sector h4');
+headers.forEach(header => {
+  header.addEventListener('click', () => {
+    const parent = header.closest('.bloque-sector');
+    toggleBloque(parent);
+  });
+});
     function toggleSubcategorias(element) {
       const all = document.querySelectorAll('.subcategorias');
       all.forEach(sc => {
