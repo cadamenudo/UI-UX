@@ -375,6 +375,65 @@ function anadirCategoria() {
   contenedor.appendChild(input);
   input.focus();
 }
+// Función: Añadir nueva subcategoría editable, con opción de eliminar (✖ izquierda) y switch a la derecha
+function anadirSubcategoria(categoria, boton) {
+  const contenedor = boton.closest('.subcategorias');
+  if (contenedor.querySelector('input.editable-input')) return;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Nueva subcategoría';
+  input.className = 'editable-input';
+
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') {
+      const nombre = input.value.trim();
+      if (nombre) {
+        const fila = document.createElement('div');
+        fila.className = 'fila-subcategoria';
+
+        const contenedorIzquierda = document.createElement('div');
+        contenedorIzquierda.style.display = 'flex';
+        contenedorIzquierda.style.alignItems = 'center';
+        contenedorIzquierda.style.gap = '0.5rem';
+
+        const borrarBtn = document.createElement('button');
+        borrarBtn.textContent = '✖';
+        borrarBtn.style.background = 'none';
+        borrarBtn.style.border = 'none';
+        borrarBtn.style.fontSize = '1rem';
+        borrarBtn.style.cursor = 'pointer';
+        borrarBtn.onclick = function(e) {
+          e.stopPropagation();
+          fila.remove();
+        };
+
+        const span = document.createElement('span');
+        span.textContent = nombre;
+
+        contenedorIzquierda.appendChild(borrarBtn);
+        contenedorIzquierda.appendChild(span);
+
+        const switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+        switchLabel.innerHTML = `
+          <input type="checkbox" checked>
+          <span class="slider"></span>`;
+
+        fila.appendChild(contenedorIzquierda);
+        fila.appendChild(switchLabel);
+
+        contenedor.insertBefore(fila, boton.parentNode);
+        input.remove();
+      }
+    } else if (e.key === 'Escape') {
+      input.remove();
+    }
+  };
+
+  contenedor.insertBefore(input, boton.parentNode);
+  input.focus();
+}
   </script>
 </body>
 </html>
