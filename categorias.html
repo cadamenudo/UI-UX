@@ -130,6 +130,16 @@
       cursor: pointer;
       margin-left: 0.5rem;
     }
+    .editable-span {
+      cursor: pointer;
+    }
+    .editable-input {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 2px 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -200,7 +210,6 @@
       <span>Gastos</span>
     </div>
 
-    <!-- Lista de categorías de gastos -->
     <div id="contenedorGastos"></div>
     <div class="acciones">
       <button onclick="anadirCategoria()">+ Categoría</button>
@@ -216,16 +225,33 @@
       element.nextElementSibling.classList.toggle('activo');
     }
 
-    function editarSubcategoria(nombre) {
-      alert('Editar subcategoría: ' + nombre);
-    }
-
     function anadirSubcategoria(categoria) {
       alert('Añadir subcategoría a: ' + categoria);
     }
 
     function anadirCategoria() {
       alert('Añadir nueva categoría');
+    }
+
+    function activarEdicion(span) {
+      const texto = span.textContent;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = texto;
+      input.className = 'editable-input';
+
+      input.onblur = input.onkeydown = function (e) {
+        if (e.type === 'blur' || e.key === 'Enter') {
+          const nuevoTexto = input.value.trim();
+          span.textContent = nuevoTexto || texto;
+          span.style.display = 'inline';
+          input.remove();
+        }
+      };
+
+      span.parentNode.insertBefore(input, span);
+      input.focus();
+      span.style.display = 'none';
     }
 
     const categoriasGastos = {
@@ -259,14 +285,11 @@
         <div class="subcategorias">
           ${subcategorias.map(sub => `
             <div class="fila">
-              <span>${sub}</span>
-              <div>
-                <label class="switch">
-                  <input type="checkbox" checked>
-                  <span class="slider"></span>
-                </label>
-                <button onclick="editarSubcategoria('${sub}')">Editar</button>
-              </div>
+              <span class="editable-span" onclick="activarEdicion(this)">${sub}</span>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
             </div>
           `).join('')}
           <div class="acciones">
