@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorías - Ingresos</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #F9FAFB;
+      margin: 0;
+      padding: 2rem;
+      color: #111827;
+    }
+    .bloque-categoria {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1rem;
+    }
+    .titulo-categoria {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .subcategorias {
+      margin-top: 0.75rem;
+      padding-left: 1rem;
+      display: none;
+    }
+    .subcategorias.activo {
+      display: block;
+    }
+    .fila {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #4F46E5;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Ingresos</h2>
+
+  <div class="bloque-categoria">
+    <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+      <span>Pago por trabajo</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="subcategorias">
+      <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="fila"><span>Ganancia empleado cuenta propia</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+    </div>
+  </div>
+
+  <div class="bloque-categoria">
+    <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+      <span>Ganancia de capital</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="subcategorias">
+      <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+    </div>
+  </div>
+
+  <div class="bloque-categoria">
+    <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+      <span>Ingreso pasivo</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="subcategorias">
+      <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSubcategorias(element) {
+      const subcategorias = element.nextElementSibling;
+      subcategorias.classList.toggle('activo');
+    }
+  </script>
+
+</body>
+</html>
