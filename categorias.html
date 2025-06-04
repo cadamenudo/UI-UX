@@ -299,7 +299,7 @@
       `;
       contenedor.appendChild(div);
     });
-// Función: Añadir nueva categoría funcional, con estilo, switch y opción de eliminar (🗑️ al lado del switch)
+// Función: Añadir nueva categoría funcional, con estilo, botón de eliminar (✖ izquierda), y switch a la derecha
 function anadirCategoria() {
   const contenedor = document.getElementById('contenedorGastos');
   if (contenedor.querySelector('input.editable-input')) return;
@@ -320,13 +320,27 @@ function anadirCategoria() {
         titulo.className = 'titulo-categoria';
         titulo.setAttribute('onclick', 'toggleSubcategorias(this)');
 
+        const contenedorIzquierda = document.createElement('div');
+        contenedorIzquierda.style.display = 'flex';
+        contenedorIzquierda.style.alignItems = 'center';
+        contenedorIzquierda.style.gap = '0.5rem';
+
+        const borrarBtn = document.createElement('button');
+        borrarBtn.textContent = '✖';
+        borrarBtn.style.background = 'none';
+        borrarBtn.style.border = 'none';
+        borrarBtn.style.fontSize = '1rem';
+        borrarBtn.style.cursor = 'pointer';
+        borrarBtn.onclick = function(e) {
+          e.stopPropagation();
+          div.remove();
+        };
+
         const span = document.createElement('span');
         span.textContent = nombre;
 
-        const contenedorSwitch = document.createElement('div');
-        contenedorSwitch.style.display = 'flex';
-        contenedorSwitch.style.gap = '0.5rem';
-        contenedorSwitch.style.alignItems = 'center';
+        contenedorIzquierda.appendChild(borrarBtn);
+        contenedorIzquierda.appendChild(span);
 
         const switchLabel = document.createElement('label');
         switchLabel.className = 'switch';
@@ -334,19 +348,8 @@ function anadirCategoria() {
           <input type="checkbox" checked>
           <span class="slider"></span>`;
 
-        const borrarBtn = document.createElement('button');
-        borrarBtn.textContent = '✖';
-        borrarBtn.className = 'btn-borrar';
-        borrarBtn.onclick = function(e) {
-          e.stopPropagation();
-          div.remove();
-        };
-
-        contenedorSwitch.appendChild(switchLabel);
-        contenedorSwitch.appendChild(borrarBtn);
-
-        titulo.appendChild(span);
-        titulo.appendChild(contenedorSwitch);
+        titulo.appendChild(contenedorIzquierda);
+        titulo.appendChild(switchLabel);
 
         const subcategorias = document.createElement('div');
         subcategorias.className = 'subcategorias';
