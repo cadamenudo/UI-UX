@@ -140,6 +140,13 @@
       border: 1px solid #ccc;
       border-radius: 6px;
     }
+    .bloque-sector .contenido-bloque {
+  display: none;
+}
+
+.bloque-sector.abierto .contenido-bloque {
+  display: block;
+}
   </style>
 </head>
 <body>
@@ -218,17 +225,19 @@
 
   <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Establece el estado inicial de todos los bloques como cerrados
+  // Cierra todos los bloques al iniciar
   document.querySelectorAll('.bloque-sector').forEach(bloque => {
     bloque.classList.remove('abierto');
   });
 
-  // Aplica el toggle a los headers de cada bloque
-  const headers = document.querySelectorAll('.bloque-sector h4');
-  headers.forEach(header => {
+  // Listener para cada título de bloque
+  document.querySelectorAll('.bloque-sector h4').forEach(header => {
     header.addEventListener('click', () => {
       const parent = header.closest('.bloque-sector');
-      toggleBloque(parent);
+      document.querySelectorAll('.bloque-sector').forEach(b => {
+        if (b !== parent) b.classList.remove('abierto');
+      });
+      parent.classList.toggle('abierto');
     });
   });
 });
