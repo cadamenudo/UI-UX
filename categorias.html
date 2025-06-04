@@ -299,7 +299,7 @@
       `;
       contenedor.appendChild(div);
     });
-// Función: Añadir nueva categoría funcional, con estilo y opción de eliminar
+// Función: Añadir nueva categoría funcional, con estilo, switch y opción de eliminar (🗑️ al lado del switch)
 function anadirCategoria() {
   const contenedor = document.getElementById('contenedorGastos');
   if (contenedor.querySelector('input.editable-input')) return;
@@ -323,6 +323,11 @@ function anadirCategoria() {
         const span = document.createElement('span');
         span.textContent = nombre;
 
+        const contenedorSwitch = document.createElement('div');
+        contenedorSwitch.style.display = 'flex';
+        contenedorSwitch.style.gap = '0.5rem';
+        contenedorSwitch.style.alignItems = 'center';
+
         const switchLabel = document.createElement('label');
         switchLabel.className = 'switch';
         switchLabel.innerHTML = `
@@ -330,16 +335,18 @@ function anadirCategoria() {
           <span class="slider"></span>`;
 
         const borrarBtn = document.createElement('button');
-        borrarBtn.textContent = '🗑️';
+        borrarBtn.textContent = '✖';
         borrarBtn.className = 'btn-borrar';
         borrarBtn.onclick = function(e) {
           e.stopPropagation();
           div.remove();
         };
 
+        contenedorSwitch.appendChild(switchLabel);
+        contenedorSwitch.appendChild(borrarBtn);
+
         titulo.appendChild(span);
-        titulo.appendChild(switchLabel);
-        titulo.appendChild(borrarBtn);
+        titulo.appendChild(contenedorSwitch);
 
         const subcategorias = document.createElement('div');
         subcategorias.className = 'subcategorias';
