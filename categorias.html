@@ -299,43 +299,10 @@
       `;
       contenedor.appendChild(div);
     });
-// Función corregida para añadir subcategoría correctamente
-function anadirSubcategoria(categoria, boton) {
-  const contenedor = boton.closest('.subcategorias');
-  if (contenedor.querySelector('input.editable-input')) return;
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.placeholder = 'Nueva subcategoría';
-  input.className = 'editable-input';
-
-  input.onkeydown = function (e) {
-    if (e.key === 'Enter') {
-      const valor = input.value.trim();
-      if (valor) {
-        const fila = document.createElement('div');
-        fila.className = 'fila';
-        fila.innerHTML = `
-          <span class="editable-span" onclick="activarEdicion(this)">${valor}</span>
-          <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
-          </label>`;
-        contenedor.insertBefore(fila, boton.parentNode);
-        input.remove();
-      }
-    } else if (e.key === 'Escape') {
-      input.remove();
-    }
-  };
-
-  contenedor.insertBefore(input, boton.parentNode);
-  input.focus();
-}
-
-// Función corregida para añadir categoría con lógica intacta
+// Función: Añadir nueva categoría funcional, con estilo y opción de eliminar
 function anadirCategoria() {
-  if (document.querySelector('#contenedorGastos > input.editable-input')) return;
+  const contenedor = document.getElementById('contenedorGastos');
+  if (contenedor.querySelector('input.editable-input')) return;
 
   const input = document.createElement('input');
   input.type = 'text';
@@ -352,12 +319,27 @@ function anadirCategoria() {
         const titulo = document.createElement('div');
         titulo.className = 'titulo-categoria';
         titulo.setAttribute('onclick', 'toggleSubcategorias(this)');
-        titulo.innerHTML = `
-          <span>${nombre}</span>
-          <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
-          </label>`;
+
+        const span = document.createElement('span');
+        span.textContent = nombre;
+
+        const switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+        switchLabel.innerHTML = `
+          <input type="checkbox" checked>
+          <span class="slider"></span>`;
+
+        const borrarBtn = document.createElement('button');
+        borrarBtn.textContent = '🗑️';
+        borrarBtn.className = 'btn-borrar';
+        borrarBtn.onclick = function(e) {
+          e.stopPropagation();
+          div.remove();
+        };
+
+        titulo.appendChild(span);
+        titulo.appendChild(switchLabel);
+        titulo.appendChild(borrarBtn);
 
         const subcategorias = document.createElement('div');
         subcategorias.className = 'subcategorias';
