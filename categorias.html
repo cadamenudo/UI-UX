@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Categorías - Ingresos</title>
-   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
+  <title>Categorías - Gastos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Greycliff CF', sans-serif;
@@ -13,7 +13,7 @@
       padding: 2rem;
       color: #111827;
     }
-    .bloque-ingresos {
+    .bloque-gastos {
       background: #ffffff;
       border-radius: 20px;
       padding: 2rem;
@@ -95,76 +95,76 @@
       font-weight: bold;
       margin-bottom: 1.5rem;
     }
-    .icono-ingresos {
-      width: 32px;
-      height: 32px;
+    .icono-gastos {
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
-      background-color: #F4F2FF;
-      background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
+      background-color: #F3F4F6;
+      background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/gasto.png');
       background-size: 32px;
       background-repeat: no-repeat;
       background-position: center;
     }
+    .acciones {
+      margin-top: 1rem;
+      text-align: right;
+    }
+    .acciones button {
+      background: #7459D9;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
   </style>
 </head>
 <body>
-
-  <div class="bloque-ingresos">
+  <div class="bloque-gastos">
     <div class="encabezado">
-      <div class="icono-ingresos"></div>
-      <span>Ingresos</span>
+      <div class="icono-gastos"></div>
+      <span>Gastos</span>
     </div>
 
     <div class="bloque-categoria">
       <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Pago por trabajo</span>
+        <span>Alimentación</span>
         <label class="switch">
           <input type="checkbox" checked>
           <span class="slider"></span>
         </label>
       </div>
       <div class="subcategorias">
-        <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Ganancia empleado cuenta propia</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila">
+          <span>Supermercado</span>
+          <div>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+            <button onclick="editarSubcategoria('Supermercado')">Editar</button>
+          </div>
+        </div>
+        <div class="fila">
+          <span>Comidas fuera</span>
+          <div>
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+            <button onclick="editarSubcategoria('Comidas fuera')">Editar</button>
+          </div>
+        </div>
+        <div class="acciones">
+          <button onclick="anadirSubcategoria('Alimentación')">+ Subcategoría</button>
+        </div>
       </div>
     </div>
 
-    <div class="bloque-categoria">
-      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Ganancia de capital</span>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="subcategorias">
-        <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      </div>
-    </div>
-
-    <div class="bloque-categoria">
-      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Ingreso pasivo</span>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="subcategorias">
-        <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      </div>
+    <div class="acciones">
+      <button onclick="anadirCategoria()">+ Categoría</button>
     </div>
   </div>
 
@@ -176,7 +176,18 @@
       });
       element.nextElementSibling.classList.toggle('activo');
     }
-  </script>
 
+    function editarSubcategoria(nombre) {
+      alert('Editar subcategoría: ' + nombre);
+    }
+
+    function anadirSubcategoria(categoria) {
+      alert('Añadir subcategoría a: ' + categoria);
+    }
+
+    function anadirCategoria() {
+      alert('Añadir nueva categoría');
+    }
+  </script>
 </body>
 </html>
