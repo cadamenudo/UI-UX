@@ -1,189 +1,282 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Categorías - Ingresos</title>
-   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Greycliff CF', sans-serif;
-      background: #F9FAFB;
-      margin: 0;
-      padding: 2rem;
-      color: #111827;
-    }
-    .bloque-ingresos {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 1.25rem 2rem;
-      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-    }
-    .bloque-categoria {
-      background: #fff;
-      border-radius: 16px;
-      padding: 1.25rem;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-      margin-bottom: 1rem;
-    }
-    .titulo-categoria {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-    .subcategorias {
-      margin-top: 0.75rem;
-      padding-left: 1rem;
-      display: none;
-    }
-    .subcategorias.activo {
-      display: block;
-    }
-    .fila {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 40px;
-      height: 20px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 34px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 14px;
-      width: 14px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: #4F46E5;
-    }
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-    .encabezado {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 0.75rem;
-      padding: 1rem 1rem;
-    }
-    .icono-ingresos {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: #F4F2FF;
-      background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
-      background-size: 32px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Categorías - Gastos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Greycliff CF', sans-serif;
+    background: #F9FAFB;
+    margin: 0;
+    padding: 2rem;
+    color: #111827;
+  }
 
-    .contenido-bloque {
-  display: none;
-}
+  .bloque-sector {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    margin: 0 auto 3rem;
+    max-width: 700px;
+  }
 
-.bloque-sector.abierto .contenido-bloque {
-  display: block;
-}
-  </style>
+  .encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 1.25rem 1rem;
+  }
+
+  .icono-ingresos,
+  .icono-gastos {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-size: 32px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .icono-ingresos {
+    background-color: #F4F2FF;
+    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
+  }
+
+  .icono-gastos {
+    background-color: #F3F4F6;
+    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/gasto.png');
+  }
+
+  .contenido-bloque {
+    display: none;
+    padding: 1rem 2rem;
+  }
+
+  .bloque-sector.abierto .contenido-bloque {
+    display: block;
+  }
+
+  .bloque-categoria {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+  }
+
+  .titulo-categoria {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .subcategorias {
+    margin-top: 0.75rem;
+    padding-left: 1rem;
+    display: none;
+  }
+
+  .subcategorias.activo {
+    display: block;
+  }
+
+  .fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: #4F46E5;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+
+  .acciones {
+    margin-top: 1rem;
+    text-align: right;
+  }
+
+  .acciones button {
+    background: #7459D9;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+
+  .editable-span {
+    cursor: pointer;
+  }
+
+  .editable-input {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 2px 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .titulo-categoria button,
+  .fila-subcategoria button {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+  }
+</style>
 </head>
 <body>
 
-<div class="bloque-sector">
-  <div class="bloque-ingresos">
-    <div class="encabezado" onclick="toggleBloque(this)">
-      <div class="icono-ingresos"></div>
-      <span>Ingresos</span>
-    </div>
+  <!-- INGRESOS -->
+  <div class="bloque-sector">
+    <div class="bloque-ingresos">
+      <div class="encabezado" onclick="toggleBloque(this)">
+        <div class="icono-ingresos"></div>
+        <span>Ingresos</span>
+      </div>
 
-  <div class="contenido-bloque">
-    <div class="bloque-categoria">
-      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Pago por trabajo</span>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="subcategorias">
-        <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Negocio propio</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      </div>
-    </div>
+      <div class="contenido-bloque">
+        <div class="bloque-categoria">
+          <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+            <span>Pago por trabajo</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="subcategorias">
+            <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="fila"><span>Negocio propio</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          </div>
+        </div>
 
-    <div class="bloque-categoria">
-      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Ganancia de capital</span>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="subcategorias">
-        <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      </div>
-    </div>
+        <div class="bloque-categoria">
+          <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+            <span>Ganancia de capital</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="subcategorias">
+            <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          </div>
+        </div>
 
-    <div class="bloque-categoria">
-      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Ingreso pasivo</span>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="subcategorias">
-        <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="bloque-categoria">
+          <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+            <span>Ingreso pasivo</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="subcategorias">
+            <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-  <script>
-      document.addEventListener('DOMContentLoaded', () => {
+
+  <!-- GASTOS -->
+  <div class="bloque-sector">
+    <div class="bloque-gastos">
+      <div class="encabezado" onclick="toggleBloque(this)">
+        <div class="icono-gastos"></div>
+        <span>Gastos</span>
+      </div>
+      <div class="contenido-bloque">
+        <div id="contenedorGastos"></div>
+        <div class="acciones">
+          <button onclick="anadirCategoria()">+ Categoría</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Cierra todos los bloques al iniciar
     document.querySelectorAll('.bloque-sector').forEach(b => b.classList.remove('abierto'));
+
+    // Añade evento a todos los encabezados
+    document.querySelectorAll('.encabezado').forEach(header => {
+      header.addEventListener('click', () => toggleBloque(header));
+    });
+
+    // Carga categorías de gastos predefinidas
+    Object.entries(categoriasGastos).forEach(([categoria, subcategorias]) => {
+      agregarCategoria(categoria, subcategorias, false);
+    });
   });
-    function toggleBloque(encabezado) {
+
+  function toggleBloque(encabezado) {
     const parent = encabezado.closest('.bloque-sector');
     document.querySelectorAll('.bloque-sector').forEach(b => {
       if (b !== parent) b.classList.remove('abierto');
@@ -191,18 +284,189 @@
     parent.classList.toggle('abierto');
   }
 
-  // Cierra todos los bloques al cargar
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.bloque-sector').forEach(b => b.classList.remove('abierto'));
-  });
-    function toggleSubcategorias(element) {
-      const all = document.querySelectorAll('.subcategorias');
-      all.forEach(sc => {
-        if (sc !== element.nextElementSibling) sc.classList.remove('activo');
-      });
-      element.nextElementSibling.classList.toggle('activo');
-    }
-  </script>
+  function toggleSubcategorias(element) {
+    const all = document.querySelectorAll('.subcategorias');
+    all.forEach(sc => {
+      if (sc !== element.nextElementSibling) sc.classList.remove('activo');
+    });
+    element.nextElementSibling.classList.toggle('activo');
+  }
 
+  function activarEdicion(span) {
+    const texto = span.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = texto;
+    input.className = 'editable-input';
+    input.onblur = input.onkeydown = function (e) {
+      if (e.type === 'blur' || e.key === 'Enter') {
+        const nuevoTexto = input.value.trim();
+        span.textContent = nuevoTexto || texto;
+        span.style.display = 'inline';
+        input.remove();
+      }
+    };
+    span.parentNode.insertBefore(input, span);
+    input.focus();
+    span.style.display = 'none';
+  }
+
+  // Categorías y subcategorías predefinidas de GASTOS
+  const categoriasGastos = {
+    'Alimentación': ['Supermercado', 'Comidas fuera', 'Pedido a domicilio'],
+    'Casa': ['Hipoteca / Alquiler', 'Servicios básicos', 'Mantenimiento'],
+    'Impuestos': ['Seguro social', 'Propiedad', 'Venta', 'Estatales', 'Federales', 'Municipales'],
+    'Transportación': ['Gasolina', 'Mantenimiento', 'Transporte público / Uber'],
+    'Seguros': ['Salud', 'Auto', 'Vida'],
+    'Regalos y donaciones': ['Familia', 'Amigos', 'Instituciones'],
+    'Gastos Médicos': ['Consultas', 'Medicamentos', 'Procedimientos'],
+    'Cuidado Personal': ['Peluquería', 'Cosméticos', 'Spa / Barbería'],
+    'Dependientes': ['Cuidado de niños', 'Cuidado de mayores', 'Educación'],
+    'Deuda': ['Tarjetas de crédito', 'Préstamos estudiantiles', 'Otros préstamos'],
+    'Entretenimiento': ['Cine', 'Conciertos', 'Streaming'],
+    'Telecomunicaciones': ['Teléfono', 'Internet', 'TV']
+  };
+
+  const contenedor = document.getElementById('contenedorGastos');
+
+  function agregarCategoria(nombre, subcategorias = [], editable = false) {
+    const div = document.createElement('div');
+    div.className = 'bloque-categoria';
+
+    const titulo = document.createElement('div');
+    titulo.className = 'titulo-categoria';
+    titulo.onclick = () => toggleSubcategorias(titulo);
+
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
+
+    if (editable) {
+      const borrar = document.createElement('button');
+      borrar.textContent = '✖';
+      borrar.onclick = e => {
+        e.stopPropagation();
+        div.remove();
+      };
+      contenedorIzq.appendChild(borrar);
+    }
+
+    const nombreSpan = document.createElement('span');
+    nombreSpan.textContent = nombre;
+    contenedorIzq.appendChild(nombreSpan);
+
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+    titulo.appendChild(contenedorIzq);
+    titulo.appendChild(switchLabel);
+
+    const subDiv = document.createElement('div');
+    subDiv.className = 'subcategorias';
+
+    subcategorias.forEach(sub => {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
+      fila.innerHTML = `
+        <span class="editable-span" onclick="activarEdicion(this)">${sub}</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>`;
+      subDiv.appendChild(fila);
+    });
+
+    const acciones = document.createElement('div');
+    acciones.className = 'acciones';
+    const btn = document.createElement('button');
+    btn.textContent = '+ Subcategoría';
+    btn.onclick = () => anadirSubcategoria(titulo, subDiv);
+    acciones.appendChild(btn);
+    subDiv.appendChild(acciones);
+
+    div.appendChild(titulo);
+    div.appendChild(subDiv);
+    contenedor.appendChild(div);
+  }
+
+  function anadirCategoria() {
+    const input = document.createElement('input');
+    input.className = 'editable-input';
+    input.placeholder = 'Nueva categoría';
+
+    input.onkeydown = function (e) {
+      if (e.key === 'Enter') {
+        const nombre = input.value.trim();
+        if (nombre) {
+          agregarCategoria(nombre, [], true);
+          input.remove();
+        }
+      } else if (e.key === 'Escape') {
+        input.remove();
+      }
+    };
+
+    contenedor.appendChild(input);
+    input.focus();
+  }
+
+  function anadirSubcategoria(tituloCategoria, subDiv) {
+    const input = document.createElement('input');
+    input.className = 'editable-input';
+    input.placeholder = 'Nueva subcategoría';
+
+    input.onkeydown = function (e) {
+      if (e.key === 'Enter') {
+        const nombre = input.value.trim();
+        if (nombre) {
+          const fila = document.createElement('div');
+          fila.className = 'fila';
+
+          const contenedorIzq = document.createElement('div');
+          contenedorIzq.style.display = 'flex';
+          contenedorIzq.style.alignItems = 'center';
+          contenedorIzq.style.gap = '0.5rem';
+
+          const esEditable = tituloCategoria.querySelector('button') !== null;
+
+          if (esEditable) {
+            const borrarBtn = document.createElement('button');
+            borrarBtn.textContent = '✖';
+            borrarBtn.onclick = e => {
+              e.stopPropagation();
+              fila.remove();
+            };
+            contenedorIzq.appendChild(borrarBtn);
+          }
+
+          const span = document.createElement('span');
+          span.textContent = nombre;
+          span.className = 'editable-span';
+          span.onclick = () => activarEdicion(span);
+
+          contenedorIzq.appendChild(span);
+
+          const switchLabel = document.createElement('label');
+          switchLabel.className = 'switch';
+          switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+          fila.appendChild(contenedorIzq);
+          fila.appendChild(switchLabel);
+
+          subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
+          input.remove();
+        }
+      } else if (e.key === 'Escape') {
+        input.remove();
+      }
+    };
+
+    subDiv.insertBefore(input, subDiv.querySelector('.acciones'));
+    input.focus();
+  }
+</script>
 </body>
 </html>
+
