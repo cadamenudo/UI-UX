@@ -169,8 +169,11 @@
 
   <script>
     function toggleSubcategorias(element) {
-      const subcategorias = element.nextElementSibling;
-      subcategorias.classList.toggle('activo');
+      const all = document.querySelectorAll('.subcategorias');
+      all.forEach(sc => {
+        if (sc !== element.nextElementSibling) sc.classList.remove('activo');
+      });
+      element.nextElementSibling.classList.toggle('activo');
     }
   </script>
 
