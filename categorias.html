@@ -12,6 +12,12 @@
       padding: 2rem;
       color: #111827;
     }
+    .bloque-ingresos {
+      background: #EDE7F6;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    }
     .bloque-categoria {
       background: #fff;
       border-radius: 16px;
@@ -80,61 +86,85 @@
     input:checked + .slider:before {
       transform: translateX(20px);
     }
+    .encabezado {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+    }
+    .icono-ingresos {
+      background: #C3B5E7;
+      color: #4F46E5;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Ingresos</h2>
+  <div class="bloque-ingresos">
+    <div class="encabezado">
+      <div class="icono-ingresos">💼</div>
+      <span>Ingresos</span>
+    </div>
 
-  <div class="bloque-categoria">
-    <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-      <span>Pago por trabajo</span>
-      <label class="switch">
-        <input type="checkbox" checked>
-        <span class="slider"></span>
-      </label>
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Pago por trabajo</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+        <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Ganancia empleado cuenta propia</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      </div>
     </div>
-    <div class="subcategorias">
-      <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      <div class="fila"><span>Ganancia empleado cuenta propia</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-    </div>
-  </div>
 
-  <div class="bloque-categoria">
-    <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-      <span>Ganancia de capital</span>
-      <label class="switch">
-        <input type="checkbox" checked>
-        <span class="slider"></span>
-      </label>
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Ganancia de capital</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+        <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      </div>
     </div>
-    <div class="subcategorias">
-      <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-    </div>
-  </div>
 
-  <div class="bloque-categoria">
-    <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-      <span>Ingreso pasivo</span>
-      <label class="switch">
-        <input type="checkbox" checked>
-        <span class="slider"></span>
-      </label>
-    </div>
-    <div class="subcategorias">
-      <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-      <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-      <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Ingreso pasivo</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+        <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      </div>
     </div>
   </div>
 
