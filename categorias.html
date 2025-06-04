@@ -177,6 +177,9 @@
   </div>
 
   <script>
+      document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.bloque-sector').forEach(b => b.classList.remove('abierto'));
+  });
     function toggleBloque(encabezado) {
     const parent = encabezado.closest('.bloque-sector');
     document.querySelectorAll('.bloque-sector').forEach(b => {
