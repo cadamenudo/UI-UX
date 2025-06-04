@@ -217,10 +217,19 @@
   </div>
 
   <script>
-// Establece el estado inicial de todos los bloques como cerrados
 document.addEventListener('DOMContentLoaded', () => {
+  // Establece el estado inicial de todos los bloques como cerrados
   document.querySelectorAll('.bloque-sector').forEach(bloque => {
     bloque.classList.remove('abierto');
+  });
+
+  // Aplica el toggle a los headers de cada bloque
+  const headers = document.querySelectorAll('.bloque-sector h4');
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const parent = header.closest('.bloque-sector');
+      toggleBloque(parent);
+    });
   });
 });
 
