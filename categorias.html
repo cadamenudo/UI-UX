@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Categorías - Gastos</title>
+  <title>Categorías - Ingresos y Gastos</title>
   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -13,11 +13,12 @@
       padding: 2rem;
       color: #111827;
     }
-    .bloque-gastos {
+    .bloque {
       background: #ffffff;
       border-radius: 20px;
       padding: 2rem;
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+      margin-bottom: 3rem;
     }
     .bloque-categoria {
       background: #fff;
@@ -95,6 +96,16 @@
       font-weight: bold;
       margin-bottom: 1.5rem;
     }
+    .icono-ingresos {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #F4F2FF;
+      background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
+      background-size: 32px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
     .icono-gastos {
       width: 56px;
       height: 56px;
@@ -122,47 +133,75 @@
   </style>
 </head>
 <body>
-  <div class="bloque-gastos">
+  <!-- Ingresos -->
+  <div class="bloque">
     <div class="encabezado">
-      <div class="icono-gastos"></div>
-      <span>Gastos</span>
+      <div class="icono-ingresos"></div>
+      <span>Ingresos</span>
     </div>
-
     <div class="bloque-categoria">
       <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Alimentación</span>
+        <span>Pago por trabajo</span>
         <label class="switch">
           <input type="checkbox" checked>
           <span class="slider"></span>
         </label>
       </div>
       <div class="subcategorias">
-        <div class="fila">
-          <span>Supermercado</span>
-          <div>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
-            <button onclick="editarSubcategoria('Supermercado')">Editar</button>
-          </div>
-        </div>
-        <div class="fila">
-          <span>Comidas fuera</span>
-          <div>
-            <label class="switch">
-              <input type="checkbox">
-              <span class="slider"></span>
-            </label>
-            <button onclick="editarSubcategoria('Comidas fuera')">Editar</button>
-          </div>
-        </div>
-        <div class="acciones">
-          <button onclick="anadirSubcategoria('Alimentación')">+ Subcategoría</button>
-        </div>
+        <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Ganancia empleado cuenta propia</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
       </div>
     </div>
 
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Ganancia de capital</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+        <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      </div>
+    </div>
+
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Ingreso pasivo</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+        <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Gastos -->
+  <div class="bloque">
+    <div class="encabezado">
+      <div class="icono-gastos"></div>
+      <span>Gastos</span>
+    </div>
+
+    <!-- Lista de categorías de gastos -->
+    <div id="contenedorGastos"></div>
     <div class="acciones">
       <button onclick="anadirCategoria()">+ Categoría</button>
     </div>
@@ -188,6 +227,55 @@
     function anadirCategoria() {
       alert('Añadir nueva categoría');
     }
+
+    const categoriasGastos = {
+      'Alimentación': ['Supermercado', 'Comidas fuera', 'Pedido a domicilio'],
+      'Casa': ['Hipoteca / Alquiler', 'Servicios básicos', 'Mantenimiento'],
+      'Impuestos': ['Seguro social', 'Propiedad', 'Venta', 'Estatales', 'Federales', 'Municipales'],
+      'Transportación': ['Gasolina', 'Mantenimiento', 'Transporte público / Uber'],
+      'Seguros': ['Salud', 'Auto', 'Vida'],
+      'Regalos y donaciones': ['Familia', 'Amigos', 'Instituciones'],
+      'Gastos Médicos': ['Consultas', 'Medicamentos', 'Procedimientos'],
+      'Cuidado Personal': ['Peluquería', 'Cosméticos', 'Spa / Barbería'],
+      'Dependientes': ['Cuidado de niños', 'Cuidado de mayores', 'Educación'],
+      'Deuda': ['Tarjetas de crédito', 'Préstamos estudiantiles', 'Otros préstamos'],
+      'Entretenimiento': ['Cine', 'Conciertos', 'Streaming'],
+      'Telecomunicaciones': ['Teléfono', 'Internet', 'TV']
+    };
+
+    const contenedor = document.getElementById('contenedorGastos');
+
+    Object.entries(categoriasGastos).forEach(([categoria, subcategorias]) => {
+      const div = document.createElement('div');
+      div.className = 'bloque-categoria';
+      div.innerHTML = `
+        <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+          <span>${categoria}</span>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="subcategorias">
+          ${subcategorias.map(sub => `
+            <div class="fila">
+              <span>${sub}</span>
+              <div>
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="slider"></span>
+                </label>
+                <button onclick="editarSubcategoria('${sub}')">Editar</button>
+              </div>
+            </div>
+          `).join('')}
+          <div class="acciones">
+            <button onclick="anadirSubcategoria('${categoria}')">+ Subcategoría</button>
+          </div>
+        </div>
+      `;
+      contenedor.appendChild(div);
+    });
   </script>
 </body>
 </html>
