@@ -217,6 +217,13 @@
   </div>
 
   <script>
+// Establece el estado inicial de todos los bloques como cerrados
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.bloque-sector').forEach(bloque => {
+    bloque.classList.remove('abierto');
+  });
+});
+
 // Función: abrir/cerrar bloques principales asegurando que solo uno esté abierto
 function toggleBloque(elemento) {
   const todos = document.querySelectorAll('.bloque-sector');
