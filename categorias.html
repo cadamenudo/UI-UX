@@ -299,6 +299,115 @@
       `;
       contenedor.appendChild(div);
     });
+    function abrirBloque(header) {
+  document.querySelectorAll('.bloque').forEach(b => b.classList.remove('activo'));
+  header.parentElement.classList.add('activo');
+}
+
+function activarEdicion(span) {
+  const texto = span.textContent;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = texto;
+  input.className = 'editable-input';
+  input.onblur = input.onkeydown = function (e) {
+    if (e.type === 'blur' || e.key === 'Enter') {
+      const nuevoTexto = input.value.trim();
+      span.textContent = nuevoTexto || texto;
+      span.style.display = 'inline';
+      input.remove();
+    }
+  };
+  span.parentNode.insertBefore(input, span);
+  input.focus();
+  span.style.display = 'none';
+}
+
+function anadirSubcategoria(categoria, boton) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Nueva subcategoría';
+  input.className = 'editable-input';
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') {
+      const nuevo = input.value.trim();
+      if (nuevo) {
+        const fila = document.createElement('div');
+        fila.className = 'fila';
+        fila.innerHTML = `<span class="editable-span" onclick="activarEdicion(this)">${nuevo}</span>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>`;
+        boton.parentNode.parentNode.insertBefore(fila, boton.parentNode);
+        input.remove();
+      }
+    }
+  };
+  boton.parentNode.insertBefore(input, boton);
+  input.focus();
+}
+
+function anadirCategoria() {
+  const div = document.createElement('div');
+  div.className = 'bloque-categoria';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Nombre de categoría';
+  input.className = 'editable-input';
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') {
+      const nombre = input.value.trim();
+      if (nombre) {
+        div.innerHTML = `
+          <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+            <span>${nombre}</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="subcategorias">
+            <div class="acciones">
+              <button onclick="anadirSubcategoria('${nombre}', this)">+ Subcategoría</button>
+            </div>
+          </div>`;
+        contenedor.appendChild(div);
+      }
+      input.remove();
+    }
+  };
+
+  contenedor.appendChild(input);
+  input.focus();
+}
+
+// Carga inicial de categorías
+Object.entries(categoriasGastos).forEach(([categoria, subcategorias]) => {
+  const div = document.createElement('div');
+  div.className = 'bloque-categoria';
+  div.innerHTML = `
+    <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+      <span>${categoria}</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="subcategorias">
+      ${subcategorias.map(sub => `
+        <div class="fila">
+          <span class="editable-span" onclick="activarEdicion(this)">${sub}</span>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>`).join('')}
+      <div class="acciones">
+        <button onclick="anadirSubcategoria('${categoria}', this)">+ Subcategoría</button>
+      </div>
+    </div>
+  `;
+  contenedor.appendChild(div);
+});
   </script>
 </body>
 </html>
