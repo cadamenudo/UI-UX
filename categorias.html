@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Categorías - Ingresos y Gastos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
+  <title>Categorías - Ingresos</title>
+   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Greycliff CF', sans-serif;
@@ -13,12 +13,11 @@
       padding: 2rem;
       color: #111827;
     }
-    .bloque {
+    .bloque-ingresos {
       background: #ffffff;
       border-radius: 20px;
       padding: 2rem;
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-      margin-bottom: 3rem;
     }
     .bloque-categoria {
       background: #fff;
@@ -97,8 +96,8 @@
       margin-bottom: 1.5rem;
     }
     .icono-ingresos {
-      width: 56px;
-      height: 56px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background-color: #F4F2FF;
       background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
@@ -106,41 +105,7 @@
       background-repeat: no-repeat;
       background-position: center;
     }
-    .icono-gastos {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background-color: #F3F4F6;
-      background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/gasto.png');
-      background-size: 32px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    .acciones {
-      margin-top: 1rem;
-      text-align: right;
-    }
-    .acciones button {
-      background: #7459D9;
-      color: white;
-      border: none;
-      padding: 0.4rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      margin-left: 0.5rem;
-    }
-    .editable-span {
-      cursor: pointer;
-    }
-    .editable-input {
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 2px 4px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .bloque-sector .contenido-bloque {
+    .contenido-bloque {
   display: none;
 }
 
@@ -150,14 +115,14 @@
   </style>
 </head>
 <body>
-  <!-- Ingresos -->
+
 <div class="bloque-sector">
-  <div class="bloque">
+  <div class="bloque-ingresos">
     <div class="encabezado" onclick="toggleBloque(this)">
       <div class="icono-ingresos"></div>
       <span>Ingresos</span>
     </div>
-    <div class="contenido-bloque">
+
     <div class="bloque-categoria">
       <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
         <span>Pago por trabajo</span>
@@ -210,64 +175,20 @@
       </div>
     </div>
   </div>
-  </div>
-
-  <!-- Gastos -->
-  <div class="bloque">
-    <div class="encabezado">
-      <div class="icono-gastos"></div>
-      <span>Gastos</span>
-    </div>
-
-    <div id="contenedorGastos"></div>
-    <div class="acciones">
-      <button onclick="anadirCategoria()">+ Categoría</button>
-    </div>
-  </div>
 
   <script>
-      function toggleBloque(encabezado) {
+    function toggleBloque(encabezado) {
     const parent = encabezado.closest('.bloque-sector');
     document.querySelectorAll('.bloque-sector').forEach(b => {
       if (b !== parent) b.classList.remove('abierto');
     });
     parent.classList.toggle('abierto');
   }
-document.addEventListener('DOMContentLoaded', () => {
-  // Cierra todos los bloques al iniciar
-  document.querySelectorAll('.bloque-sector').forEach(bloque => {
-    bloque.classList.remove('abierto');
-  });
 
-  // Listener para cada título de bloque
-  document.querySelectorAll('.bloque-sector h4').forEach(header => {
-    header.addEventListener('click', () => {
-      const parent = header.closest('.bloque-sector');
-      document.querySelectorAll('.bloque-sector').forEach(b => {
-        if (b !== parent) b.classList.remove('abierto');
-      });
-      parent.classList.toggle('abierto');
-    });
+  // Cierra todos los bloques al cargar
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.bloque-sector').forEach(b => b.classList.remove('abierto'));
   });
-});
-
-// Función: abrir/cerrar bloques principales asegurando que solo uno esté abierto
-function toggleBloque(elemento) {
-  const todos = document.querySelectorAll('.bloque-sector');
-  todos.forEach(bloque => {
-    if (bloque !== elemento) bloque.classList.remove('abierto');
-  });
-  elemento.classList.toggle('abierto');
-}
-
-// Aplica el toggle a los headers de cada bloque
-const headers = document.querySelectorAll('.bloque-sector h4');
-headers.forEach(header => {
-  header.addEventListener('click', () => {
-    const parent = header.closest('.bloque-sector');
-    toggleBloque(parent);
-  });
-});
     function toggleSubcategorias(element) {
       const all = document.querySelectorAll('.subcategorias');
       all.forEach(sc => {
@@ -275,216 +196,7 @@ headers.forEach(header => {
       });
       element.nextElementSibling.classList.toggle('activo');
     }
-
-    function anadirSubcategoria(categoria) {
-      alert('Añadir subcategoría a: ' + categoria);
-    }
-
-    function anadirCategoria() {
-      alert('Añadir nueva categoría');
-    }
-
-    function activarEdicion(span) {
-      const texto = span.textContent;
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = texto;
-      input.className = 'editable-input';
-
-      input.onblur = input.onkeydown = function (e) {
-        if (e.type === 'blur' || e.key === 'Enter') {
-          const nuevoTexto = input.value.trim();
-          span.textContent = nuevoTexto || texto;
-          span.style.display = 'inline';
-          input.remove();
-        }
-      };
-
-      span.parentNode.insertBefore(input, span);
-      input.focus();
-      span.style.display = 'none';
-    }
-
-    const categoriasGastos = {
-      'Alimentación': ['Supermercado', 'Comidas fuera', 'Pedido a domicilio'],
-      'Casa': ['Hipoteca / Alquiler', 'Servicios básicos', 'Mantenimiento'],
-      'Impuestos': ['Seguro social', 'Propiedad', 'Venta', 'Estatales', 'Federales', 'Municipales'],
-      'Transportación': ['Gasolina', 'Mantenimiento', 'Transporte público / Uber'],
-      'Seguros': ['Salud', 'Auto', 'Vida'],
-      'Regalos y donaciones': ['Familia', 'Amigos', 'Instituciones'],
-      'Gastos Médicos': ['Consultas', 'Medicamentos', 'Procedimientos'],
-      'Cuidado Personal': ['Peluquería', 'Cosméticos', 'Spa / Barbería'],
-      'Dependientes': ['Cuidado de niños', 'Cuidado de mayores', 'Educación'],
-      'Deuda': ['Tarjetas de crédito', 'Préstamos estudiantiles', 'Otros préstamos'],
-      'Entretenimiento': ['Cine', 'Conciertos', 'Streaming'],
-      'Telecomunicaciones': ['Teléfono', 'Internet', 'TV']
-    };
-
-    const contenedor = document.getElementById('contenedorGastos');
-
-    Object.entries(categoriasGastos).forEach(([categoria, subcategorias]) => {
-      const div = document.createElement('div');
-      div.className = 'bloque-categoria';
-      div.innerHTML = `
-        <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-          <span>${categoria}</span>
-          <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="subcategorias">
-          ${subcategorias.map(sub => `
-            <div class="fila">
-              <span class="editable-span" onclick="activarEdicion(this)">${sub}</span>
-              <label class="switch">
-                <input type="checkbox" checked>
-                <span class="slider"></span>
-              </label>
-            </div>
-          `).join('')}
-          <div class="acciones">
-            <button onclick="anadirSubcategoria('${categoria}')">+ Subcategoría</button>
-          </div>
-        </div>
-      `;
-      contenedor.appendChild(div);
-    });
-// Función: Añadir nueva categoría funcional, con estilo, botón de eliminar (✖ izquierda), y switch a la derecha
-function anadirCategoria() {
-  const contenedor = document.getElementById('contenedorGastos');
-  if (contenedor.querySelector('input.editable-input')) return;
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.placeholder = 'Nombre de categoría';
-  input.className = 'editable-input';
-
-  input.onkeydown = function (e) {
-    if (e.key === 'Enter') {
-      const nombre = input.value.trim();
-      if (nombre) {
-        const div = document.createElement('div');
-        div.className = 'bloque-categoria';
-
-        const titulo = document.createElement('div');
-        titulo.className = 'titulo-categoria';
-        titulo.setAttribute('onclick', 'toggleSubcategorias(this)');
-
-        const contenedorIzquierda = document.createElement('div');
-        contenedorIzquierda.style.display = 'flex';
-        contenedorIzquierda.style.alignItems = 'center';
-        contenedorIzquierda.style.gap = '0.5rem';
-
-        const borrarBtn = document.createElement('button');
-        borrarBtn.textContent = '✖';
-        borrarBtn.style.background = 'none';
-        borrarBtn.style.border = 'none';
-        borrarBtn.style.fontSize = '1rem';
-        borrarBtn.style.cursor = 'pointer';
-        borrarBtn.onclick = function(e) {
-          e.stopPropagation();
-          div.remove();
-        };
-
-        const span = document.createElement('span');
-        span.textContent = nombre;
-
-        contenedorIzquierda.appendChild(borrarBtn);
-        contenedorIzquierda.appendChild(span);
-
-        const switchLabel = document.createElement('label');
-        switchLabel.className = 'switch';
-        switchLabel.innerHTML = `
-          <input type="checkbox" checked>
-          <span class="slider"></span>`;
-
-        titulo.appendChild(contenedorIzquierda);
-        titulo.appendChild(switchLabel);
-
-        const subcategorias = document.createElement('div');
-        subcategorias.className = 'subcategorias';
-        const acciones = document.createElement('div');
-        acciones.className = 'acciones';
-
-        const boton = document.createElement('button');
-        boton.textContent = '+ Subcategoría';
-        boton.setAttribute('onclick', `anadirSubcategoria('${nombre}', this)`);
-        acciones.appendChild(boton);
-        subcategorias.appendChild(acciones);
-
-        div.appendChild(titulo);
-        div.appendChild(subcategorias);
-        contenedor.appendChild(div);
-        input.remove();
-      }
-    } else if (e.key === 'Escape') {
-      input.remove();
-    }
-  };
-
-  contenedor.appendChild(input);
-  input.focus();
-}
-// Función: Añadir nueva subcategoría editable, con opción de eliminar (✖ izquierda) y switch a la derecha
-function anadirSubcategoria(categoria, boton) {
-  const contenedor = boton.closest('.subcategorias');
-  if (contenedor.querySelector('input.editable-input')) return;
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.placeholder = 'Nueva subcategoría';
-  input.className = 'editable-input';
-
-  input.onkeydown = function (e) {
-    if (e.key === 'Enter') {
-      const nombre = input.value.trim();
-      if (nombre) {
-        const fila = document.createElement('div');
-        fila.className = 'fila-subcategoria';
-
-        const contenedorIzquierda = document.createElement('div');
-        contenedorIzquierda.style.display = 'flex';
-        contenedorIzquierda.style.alignItems = 'center';
-        contenedorIzquierda.style.gap = '0.5rem';
-
-        const borrarBtn = document.createElement('button');
-        borrarBtn.textContent = '✖';
-        borrarBtn.style.background = 'none';
-        borrarBtn.style.border = 'none';
-        borrarBtn.style.fontSize = '1rem';
-        borrarBtn.style.cursor = 'pointer';
-        borrarBtn.onclick = function(e) {
-          e.stopPropagation();
-          fila.remove();
-        };
-
-        const span = document.createElement('span');
-        span.textContent = nombre;
-
-        contenedorIzquierda.appendChild(borrarBtn);
-        contenedorIzquierda.appendChild(span);
-
-        const switchLabel = document.createElement('label');
-        switchLabel.className = 'switch';
-        switchLabel.innerHTML = `
-          <input type="checkbox" checked>
-          <span class="slider"></span>`;
-
-        fila.appendChild(contenedorIzquierda);
-        fila.appendChild(switchLabel);
-
-        contenedor.insertBefore(fila, boton.parentNode);
-        input.remove();
-      }
-    } else if (e.key === 'Escape') {
-      input.remove();
-    }
-  };
-
-  contenedor.insertBefore(input, boton.parentNode);
-  input.focus();
-}
   </script>
+
 </body>
 </html>
