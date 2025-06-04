@@ -226,6 +226,13 @@
   </div>
 
   <script>
+      function toggleBloque(encabezado) {
+    const parent = encabezado.closest('.bloque-sector');
+    document.querySelectorAll('.bloque-sector').forEach(b => {
+      if (b !== parent) b.classList.remove('abierto');
+    });
+    parent.classList.toggle('abierto');
+  }
 document.addEventListener('DOMContentLoaded', () => {
   // Cierra todos los bloques al iniciar
   document.querySelectorAll('.bloque-sector').forEach(bloque => {
