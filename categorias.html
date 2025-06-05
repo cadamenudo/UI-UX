@@ -429,10 +429,9 @@
     input.placeholder = 'Nueva categoría';
 
     input.onkeydown = function (e) {
-            if (e.key === 'Enter') {
+                  if (e.key === 'Enter') {
         const nombre = input.value.trim();
         if (nombre) {
-          // agrega subcategoría
           const fila = document.createElement('div');
           fila.className = 'fila';
       
@@ -441,6 +440,7 @@
           contenedorIzq.style.alignItems = 'center';
           contenedorIzq.style.gap = '0.5rem';
       
+          // ✅ Detecta si esta categoría es editable (tiene botón ✖ en el encabezado)
           const esEditable = tituloCategoria.querySelector('button') !== null;
       
           if (esEditable) {
@@ -457,7 +457,6 @@
           span.textContent = nombre;
           span.className = 'editable-span';
           span.onclick = () => activarEdicion(span);
-      
           contenedorIzq.appendChild(span);
       
           const switchLabel = document.createElement('label');
@@ -466,10 +465,9 @@
       
           fila.appendChild(contenedorIzq);
           fila.appendChild(switchLabel);
-      
           subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
+          input.remove();
         }
-        input.remove(); // siempre eliminar input, incluso si estaba vacío
       } else if (e.key === 'Escape') {
         input.remove();
       }
