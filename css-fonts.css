@@ -1,0 +1,63 @@
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-thin-iF66bc596961620.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-extralight-iF66bc596927bce.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-light-iF66bc59693a343.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-regular-iF66bc59694f6c3.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-medium-iF66bc596943638.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-demibold-iF66bc596910dcd.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-bold-iF66bc596905c6c.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-extrabold-iF66bc59691c67d.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Greycliff CF';
+  src: url('https://cadamenudo.github.io/UI-UX/fonts/Fontspring-DEMO-greycliffcf-heavy-iF66bc596930e38.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
