@@ -72,27 +72,26 @@
 
 .footer-legales {
   position: fixed;
-  bottom: 64px; /* ⬅️ justo encima del footer */
+  bottom: 64px; /* justo encima del footer pero con más claridad */
   width: 100%;
   text-align: center;
   font-size: 0.7rem;
   color: #94A3B8;
-  z-index: 30;
-  background: #FAFBFF;
+  z-index: 9;
+  background: #FAFBFF; /* para que no se mezcle visualmente con el fondo del footer */
+  padding-bottom: 2px;
 }
-
 .footer-legales a,
 .footer-legales button {
   color: #94A3B8;
+  text-decoration: none;
+  margin: 0 4px;
   background: none;
   border: none;
-  font-size: 0.7rem;
-  font-family: 'Greycliff CF', sans-serif;
-  margin: 0 6px;
+  font-family: Arial, sans-serif; /* ✅ evita el error de símbolos */
+  font-size: 12px;
   cursor: pointer;
-  text-decoration: none;
 }
-
 
     .modal {
       display: none;
