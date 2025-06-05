@@ -495,6 +495,64 @@ function anadirCategoria() {
   contenedor.appendChild(input);
   input.focus();
 }
+
+  function anadirSubcategoria(tituloCategoria, subDiv) {
+  const input = document.createElement('input');
+  input.className = 'editable-input';
+  input.placeholder = 'Nueva subcategoría';
+
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') {
+      const nombre = input.value.trim();
+      if (nombre) {
+        const fila = document.createElement('div');
+        fila.className = 'fila';
+
+        const contenedorIzq = document.createElement('div');
+        contenedorIzq.style.display = 'flex';
+        contenedorIzq.style.alignItems = 'center';
+        contenedorIzq.style.gap = '0.5rem';
+
+        const esEditable = tituloCategoria.querySelector('button') !== null;
+
+        if (esEditable) {
+          const borrarBtn = document.createElement('button');
+          borrarBtn.textContent = '✖';
+          borrarBtn.onclick = e => {
+            e.stopPropagation();
+            fila.remove();
+          };
+          contenedorIzq.appendChild(borrarBtn);
+        }
+
+        const span = document.createElement('span');
+        span.textContent = nombre;
+        span.className = 'editable-span';
+        span.onclick = () => activarEdicion(span);
+
+        contenedorIzq.appendChild(span);
+
+        const switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+        switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+        fila.appendChild(contenedorIzq);
+        fila.appendChild(switchLabel);
+
+        subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
+        input.remove();
+      } else {
+        input.remove(); // Si está vacío, lo borra
+      }
+    } else if (e.key === 'Escape') {
+      input.remove();
+    }
+  };
+
+  subDiv.insertBefore(input, subDiv.querySelector('.acciones'));
+  input.focus();
+}
+  
 const categoriasAhorro = {
   'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
   'Meta específica': ['Vacaciones', 'Auto', 'Casa', 'Boda', 'Educación de hijos'],
