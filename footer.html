@@ -72,27 +72,27 @@
 
 .footer-legales {
   position: fixed;
-  bottom: 60px; /* justo encima del footer */
+  bottom: 64px; /* ⬅️ justo encima del footer */
   width: 100%;
   text-align: center;
   font-size: 0.7rem;
   color: #94A3B8;
-  z-index: 10;
-}
-.footer-legales a {
-  color: #94A3B8;
-  text-decoration: none;
-  margin: 0 4px;
+  z-index: 30;
+  background: #FAFBFF;
 }
 
-    .footer-legales button {
-      background: none;
-      border: none;
-      color: #64748B;
-      cursor: pointer;
-      font-family: 'Greycliff CF', sans-serif;
-      font-size: 12px;
-    }
+.footer-legales a,
+.footer-legales button {
+  color: #94A3B8;
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  font-family: 'Greycliff CF', sans-serif;
+  margin: 0 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
 
     .modal {
       display: none;
@@ -134,6 +134,12 @@
 </head>
 <body>
 
+   <div class="footer-legales">
+    <button onclick="abrirModal('modalTerminos', 'terminos.html')">Términos</button> /
+    <button onclick="abrirModal('modalPrivacidad', 'privacidad.html')">Política de Privacidad</button> /
+    <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
+  </div>
+  
   <footer class="navbar">
     <div class="nav-item">
       <img src="assets/icons/home.png" alt="Inicio" />
@@ -156,12 +162,6 @@
       <span>Buscar</span>
     </div>
   </footer>
-  
- <div class="footer-legales">
-    <button onclick="abrirModal('modalTerminos', 'terminos.html')">Términos</button> /
-    <button onclick="abrirModal('modalPrivacidad', 'privacidad.html')">Política de Privacidad</button> /
-    <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
-  </div>
 
   <!-- Modal Términos -->
   <div id="modalTerminos" class="modal">
