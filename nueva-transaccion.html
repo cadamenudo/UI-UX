@@ -210,6 +210,9 @@
   </style>
 </head>
 <body>
+    <!-- Contenedor para el header -->
+  <div id="header-placeholder"></div>
+  
   <div class="formulario">
     <button class="cerrar-modal" onclick="cerrarModal()">x</button>
     <h2>Nueva Transacción</h2>
@@ -388,6 +391,10 @@
       </div>
   </div>
 </div> <!-- ⬅️ cierre final de .formulario -->
+
+    <!-- Contenedor para el footer -->
+  <div id="footer-placeholder"></div>
+  
   <script>
     function abrirModalCategorias() {
       document.getElementById('modalCategorias').style.display = 'flex';
@@ -474,6 +481,24 @@ actualizarMonto();
     //   body: JSON.stringify(transaccion)
     // });
   });
+      <!-- Script para cargar el header y footer -->
+     // Función para incluir archivos HTML
+    function includeHTML(id, url) {
+      fetch(url)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar el archivo:', url, error);
+        });
+    }
+
+    // Cargar el header y el footer después de que el DOM esté listo
+    document.addEventListener("DOMContentLoaded", () => {
+      includeHTML("header-placeholder", "header.html");
+      includeHTML("footer-placeholder", "footer.html");
+    });
 </script>
 </body>
 </html>
