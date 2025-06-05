@@ -32,22 +32,25 @@
       z-index: 20;
     }
 
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 0.65rem;
-      color: #64748B;
-      flex: 1; /* 👈 Esta línea asegura que todos los botones se distribuyan iguales */
-      text-align: center;
-      height: 72px;
-    }
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  font-size: 0.65rem;
+  color: #64748B;
+  flex: 1;
+  height: 72px;
+  padding-top: 6px;
+}
 
-    .nav-item img {
-      width: 26px;
-      height: 20px;
-      margin-bottom: 4px;
-    }
+.nav-item img {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 4px;
+  object-fit: contain;
+}
     .nav-item-nuevo {
   transform: translateY(-10px);
 }
