@@ -18,23 +18,23 @@
       font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
       color: #000000;
-      padding-top: 100px; /* ✅ espacio para header fijo de 100px */
+      padding-top: 130px; /* ✅ espacio para header fijo de 100px */
     }
 
     header {
       background-color: #594AE2;
       color: #fff;
       display: flex;
-      align-items: center;
+      align-items: center;             /* ✅ centra verticalmente */
       justify-content: space-between;
-      padding: 1rem 1.5rem 3.5rem; /* 👈 le damos altura extra al fondo morado */
+      height: 130px;                   /* ✅ altura visual total */
+      padding: 0 1.5rem;               /* ✅ solo padding horizontal */
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;         /* ✅ evita que se desborde */
+      width: 100%;
       z-index: 10;
     }
-
     .logo {
       height: 28px;
     }
