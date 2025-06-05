@@ -60,7 +60,7 @@
       justify-content: space-between;
       background: #fff;
       width: 90%;
-      margin: -2rem auto 1rem;
+      margin: -2rem auto 1rem; /* sube sin invadir el header */
       padding: 1rem;
       border-radius: 24px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
@@ -82,10 +82,11 @@
     .resumen-item {
       flex: 1;
       display: flex;
-      align-items: center;          /* ✅ centra verticalmente */
-      justify-content: flex-start; /* ✅ ícono a la izquierda */
-      gap: 0.75rem;                 /* ✅ espacio entre ícono y texto */
-      min-width: 0;                 /* ✅ evita saltos por texto largo */
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      text-align: left;
     }
         
     .resumen-item img {
@@ -96,9 +97,8 @@
     .resumen-item .texto {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      min-width: 0;
     }
+
     .resumen-item .texto strong {
       font-size: 0.85rem;
     }
