@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Header + Resumen | CadaMenudo</title>
+  <title>Header fijo + Resumen | CadaMenudo</title>
   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     @font-face {
@@ -18,15 +18,21 @@
       font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
       color: #000000;
+      padding-top: 110px; /* ✅ espacio para header fijo */
     }
-    
+
     header {
       background-color: #594AE2;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 1.5rem 3.5rem; /* 👈 le damos altura extra al fondo morado */
+      padding: 1rem 1.5rem 3.5rem;
+      position: fixed;  /* ✅ header fijo */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
     }
 
     .logo {
@@ -52,16 +58,15 @@
       white-space: nowrap;
     }
 
-    /* Resumen debajo del header */
     .resumen {
       display: flex;
       justify-content: space-between;
       background: #fff;
       width: 90%;
-      margin: -2rem auto 1.5rem;
+      margin: 0 auto 1.5rem;
       padding: 1rem;
       border-radius: 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
       gap: 0.5rem;
       max-width: 700px;
     }
@@ -92,6 +97,7 @@
   </style>
 </head>
 <body>
+
   <header>
     <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
     <div class="usuario">
@@ -123,5 +129,6 @@
       </div>
     </div>
   </section>
+
 </body>
 </html>
