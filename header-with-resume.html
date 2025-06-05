@@ -82,13 +82,13 @@
     .resumen-item {
       flex: 1;
       display: flex;
+      flex-direction: row;       /* ✅ asegura alineación horizontal */
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;  /* ✅ íconos a la izquierda del texto */
       gap: 0.5rem;
       font-size: 0.8rem;
       text-align: left;
     }
-
     .resumen-item img {
       width: 30px;
       height: 30px;
