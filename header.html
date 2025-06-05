@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Header | CadaMenudo</title>
+  <title>Header fijo compacto | CadaMenudo</title>
   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     @font-face {
@@ -12,22 +12,30 @@
       font-weight: 400;
       font-style: normal;
     }
+
     body {
       margin: 0;
       font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
       color: #000000;
+      padding-top: 100px; /* ✅ espacio para header fijo de 100px */
     }
 
     header {
       background-color: #594AE2;
       color: #fff;
       padding: 0 1.5rem;
-      height: 100px; /* mantiene la altura del header */
+      height: 100px; /* ✅ altura total del header */
       display: flex;
       justify-content: space-between;
-      align-items: center; /* centra verticalmente logo y usuario */
+      align-items: center;
+      position: fixed;   /* ✅ hace que quede fijo */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
     }
+
     .logo {
       height: 28px;
     }
@@ -54,6 +62,7 @@
   </style>
 </head>
 <body>
+
   <header>
     <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
     <div class="usuario">
@@ -61,5 +70,11 @@
       <span>Hola xavier</span>
     </div>
   </header>
+
+  <!-- Aquí puedes poner contenido -->
+  <div style="padding: 2rem;">
+    <p>Contenido de prueba debajo del header fijo.</p>
+  </div>
+
 </body>
 </html>
