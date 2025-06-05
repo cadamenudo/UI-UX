@@ -477,7 +477,7 @@ function anadirCategoria() {
         acciones.className = 'acciones';
         const boton = document.createElement('button');
         boton.textContent = '+ Subcategoría';
-        boton.setAttribute('onclick', `anadirSubcategoria(titulo, subDiv)`);
+        boton.onclick = () => anadirSubcategoria(titulo, subDiv);
         acciones.appendChild(boton);
 
         subDiv.appendChild(acciones);
