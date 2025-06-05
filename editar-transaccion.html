@@ -13,6 +13,11 @@
       padding: 2rem;
       color: #111;
     }
+     input,
+  textarea,
+  select {
+    font-family: 'Greycliff CF', sans-serif;
+  }
     .formulario {
       position: relative;           /* 🔸 OBLIGATORIO para que .cerrar-modal funcione bien */
       max-width: 400px;
@@ -22,6 +27,8 @@
       border-radius: 16px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       box-sizing: border-box;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     h2 {
       margin-bottom: 1.5rem;
@@ -58,6 +65,7 @@
   box-sizing: border-box;
 }
 .monto {
+  font-family: Arial, sans-serif; /* ✅ solo para monto */
   font-size: 3rem;          /* 🔸 Más grande */
   text-align: center;       /* 🔸 Centrado horizontalmente */
   color: #64748B;
@@ -175,10 +183,6 @@
     li:hover {
       background: #E5E7EB;
     }
-    .formulario {
-  max-height: 90vh;
-  overflow-y: auto;
-}
 .cerrar-modal {
   position: absolute;
   top: 12px;
