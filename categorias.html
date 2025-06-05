@@ -422,61 +422,79 @@
     div.appendChild(subDiv);
     contenedor.appendChild(div);
   }
+function anadirCategoria() {
+  const contenedor = document.getElementById('contenedorGastos');
 
-  function anadirCategoria() {
-    const input = document.createElement('input');
-    input.className = 'editable-input';
-    input.placeholder = 'Nueva categoría';
+  // evitar múltiples inputs abiertos
+  if (contenedor.querySelector('input.editable-input')) return;
 
-    input.onkeydown = function (e) {
-                  if (e.key === 'Enter') {
-        const nombre = input.value.trim();
-        if (nombre) {
-          const fila = document.createElement('div');
-          fila.className = 'fila';
-      
-          const contenedorIzq = document.createElement('div');
-          contenedorIzq.style.display = 'flex';
-          contenedorIzq.style.alignItems = 'center';
-          contenedorIzq.style.gap = '0.5rem';
-      
-          // ✅ Detecta si esta categoría es editable (tiene botón ✖ en el encabezado)
-          const esEditable = tituloCategoria.querySelector('button') !== null;
-      
-          if (esEditable) {
-            const borrarBtn = document.createElement('button');
-            borrarBtn.textContent = '✖';
-            borrarBtn.onclick = e => {
-              e.stopPropagation();
-              fila.remove();
-            };
-            contenedorIzq.appendChild(borrarBtn);
-          }
-      
-          const span = document.createElement('span');
-          span.textContent = nombre;
-          span.className = 'editable-span';
-          span.onclick = () => activarEdicion(span);
-          contenedorIzq.appendChild(span);
-      
-          const switchLabel = document.createElement('label');
-          switchLabel.className = 'switch';
-          switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
-      
-          fila.appendChild(contenedorIzq);
-          fila.appendChild(switchLabel);
-          subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
-          input.remove();
-        }
-      } else if (e.key === 'Escape') {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Nombre de categoría';
+  input.className = 'editable-input';
+
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') {
+      const nombre = input.value.trim();
+      if (nombre) {
+        const div = document.createElement('div');
+        div.className = 'bloque-categoria';
+
+        const titulo = document.createElement('div');
+        titulo.className = 'titulo-categoria';
+        titulo.setAttribute('onclick', 'toggleSubcategorias(this)');
+
+        const contenedorIzq = document.createElement('div');
+        contenedorIzq.style.display = 'flex';
+        contenedorIzq.style.alignItems = 'center';
+        contenedorIzq.style.gap = '0.5rem';
+
+        const borrarBtn = document.createElement('button');
+        borrarBtn.textContent = '✖';
+        borrarBtn.onclick = function(e) {
+          e.stopPropagation();
+          div.remove();
+        };
+
+        const span = document.createElement('span');
+        span.textContent = nombre;
+
+        contenedorIzq.appendChild(borrarBtn);
+        contenedorIzq.appendChild(span);
+
+        const switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+        switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+        titulo.appendChild(contenedorIzq);
+        titulo.appendChild(switchLabel);
+
+        // ✅ aquí creamos subDiv que antes estaba dando error
+        const subDiv = document.createElement('div');
+        subDiv.className = 'subcategorias';
+
+        const acciones = document.createElement('div');
+        acciones.className = 'acciones';
+        const boton = document.createElement('button');
+        boton.textContent = '+ Subcategoría';
+        boton.setAttribute('onclick', `anadirSubcategoria(titulo, subDiv)`);
+        acciones.appendChild(boton);
+
+        subDiv.appendChild(acciones);
+        div.appendChild(titulo);
+        div.appendChild(subDiv);
+        contenedor.appendChild(div);
+
         input.remove();
       }
-    };
+    } else if (e.key === 'Escape') {
+      input.remove();
+    }
+  };
 
-    subDiv.insertBefore(input, subDiv.querySelector('.acciones'));
-    input.focus();
-  }
-  
+  contenedor.appendChild(input);
+  input.focus();
+}
 const categoriasAhorro = {
   'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
   'Meta específica': ['Vacaciones', 'Auto', 'Casa', 'Boda', 'Educación de hijos'],
