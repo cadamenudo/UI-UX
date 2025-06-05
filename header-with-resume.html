@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard | CadaMenudo</title>
+  <title>Header + Resumen fijo</title>
   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
       color: #000000;
-      padding-top: 130px; /* espacio para header fijo con padding-bottom */
+      padding-top: 210px; /* espacio para header + resumen fijo */
     }
 
     header {
@@ -25,7 +29,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      z-index: 10;
+      z-index: 20;
     }
 
     .logo {
@@ -37,6 +41,8 @@
       align-items: center;
       gap: 0.5rem;
       text-align: right;
+      max-width: 50%;
+      overflow: hidden;
     }
 
     .usuario img {
@@ -49,6 +55,9 @@
       font-size: 0.85rem;
       font-weight: bold;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
     }
 
     .resumen {
@@ -56,12 +65,17 @@
       justify-content: space-between;
       background: #fff;
       width: 90%;
-      margin: 0 auto 1.5rem;
       padding: 1rem;
       border-radius: 24px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
       gap: 0.5rem;
       max-width: 700px;
+      margin: 0 auto;
+      position: fixed;
+      top: 100px; /* justo debajo del header */
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
     }
 
     .resumen-item {
@@ -123,6 +137,11 @@
       </div>
     </div>
   </section>
+
+  <div style="padding: 2rem;">
+    <p>Contenido de prueba visible debajo de header y resumen.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+  </div>
 
 </body>
 </html>
