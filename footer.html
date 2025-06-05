@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resumen + Footer fijo | CadaMenudo</title>
+  <title>Footer fijo | CadaMenudo</title>
   <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
   <style>
     * {
@@ -72,7 +72,7 @@
     
 .footer-legales {
   position: fixed;
-  bottom: 90px; /* más arriba del footer visualmente */
+  bottom: 80px; /* más arriba del footer visualmente */
   width: 100%;
   text-align: center;
   font-size: 0.7rem;
@@ -134,8 +134,8 @@
 <body>
 
    <div class="footer-legales">
-    <button onclick="abrirModal('modalTerminos', 'terminos.html')">Términos | </button> /
-    <button onclick="abrirModal('modalPrivacidad', 'privacidad.html')">Política de Privacidad | </button> /
+    <button onclick="abrirModal('modalTerminos', 'terminos.html')">Términos</button><span> | </span>
+    <button onclick="abrirModal('modalPrivacidad', 'privacidad.html')">Política de Privacidad</button><span> | </span>
     <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
   </div>
   
