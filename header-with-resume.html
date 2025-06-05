@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Header + Resumen | CadaMenudo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: 'Greycliff CF';
+      src: url('fonts/GreycliffCF-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Greycliff CF', sans-serif;
+      background: #FAFBFF;
+      color: #000000;
+    }
+
+    header {
+      background-color: #594AE2;
+      color: #fff;
+      padding: 0 1.5rem;
+      height: 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      height: 28px;
+    }
+
+    .usuario {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: right;
+    }
+
+    .usuario img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
+
+    .usuario span {
+      font-size: 0.85rem;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    /* Resumen debajo del header */
+    .resumen {
+      display: flex;
+      justify-content: space-between;
+      background: #fff;
+      width: 90%;
+      margin: -2rem auto 1.5rem;
+      padding: 1rem;
+      border-radius: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      gap: 0.5rem;
+      max-width: 700px;
+    }
+
+    .resumen-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      text-align: left;
+    }
+
+    .resumen-item img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .resumen-item .texto {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .resumen-item .texto strong {
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
+    <div class="usuario">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
+      <span>Hola xavier</span>
+    </div>
+  </header>
+
+  <section class="resumen">
+    <div class="resumen-item">
+      <img src="assets/icons/ingreso.png" alt="Ingresos" />
+      <div class="texto">
+        <span>Ingresos</span>
+        <strong>$6,000.00</strong>
+      </div>
+    </div>
+    <div class="resumen-item">
+      <img src="assets/icons/gastos.png" alt="Gastos" />
+      <div class="texto">
+        <span>Gastos</span>
+        <strong>$3,531.23</strong>
+      </div>
+    </div>
+    <div class="resumen-item">
+      <img src="assets/icons/ahorro.png" alt="Ahorros" />
+      <div class="texto">
+        <span>Ahorros</span>
+        <strong>$600.00</strong>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
