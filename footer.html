@@ -39,15 +39,32 @@
       font-size: 0.65rem;
       color: #64748B;
       flex: 1; /* 👈 Esta línea asegura que todos los botones se distribuyan iguales */
+      text-align: center;
+      height: 72px;
     }
 
     .nav-item img {
       width: 26px;
       height: 20px;
+      margin-bottom: 4px;
     }
+    .nav-item-nuevo {
+  transform: translateY(-10px);
+}
+
+.nav-item-nuevo .boton-registrar {
+  background: #fff;
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
     .nav-item-nuevo img {
       width: 36px;
       height: 36px;  /* 👈 igual que el ancho */
+      margin-bottom: 4px;
     }
   </style>
 </head>
