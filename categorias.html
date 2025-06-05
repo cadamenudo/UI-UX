@@ -429,40 +429,20 @@
     input.placeholder = 'Nueva categoría';
 
     input.onkeydown = function (e) {
-      if (e.key === 'Enter') {
+            if (e.key === 'Enter') {
         const nombre = input.value.trim();
         if (nombre) {
-          agregarCategoria(nombre, [], true);
-          input.remove();
-        }
-      } else if (e.key === 'Escape') {
-        input.remove();
-      }
-    };
-
-    contenedor.appendChild(input);
-    input.focus();
-  }
-
-  function anadirSubcategoria(tituloCategoria, subDiv) {
-    const input = document.createElement('input');
-    input.className = 'editable-input';
-    input.placeholder = 'Nueva subcategoría';
-
-    input.onkeydown = function (e) {
-      if (e.key === 'Enter') {
-        const nombre = input.value.trim();
-        if (nombre) {
+          // agrega subcategoría
           const fila = document.createElement('div');
           fila.className = 'fila';
-
+      
           const contenedorIzq = document.createElement('div');
           contenedorIzq.style.display = 'flex';
           contenedorIzq.style.alignItems = 'center';
           contenedorIzq.style.gap = '0.5rem';
-
+      
           const esEditable = tituloCategoria.querySelector('button') !== null;
-
+      
           if (esEditable) {
             const borrarBtn = document.createElement('button');
             borrarBtn.textContent = '✖';
@@ -472,24 +452,24 @@
             };
             contenedorIzq.appendChild(borrarBtn);
           }
-
+      
           const span = document.createElement('span');
           span.textContent = nombre;
           span.className = 'editable-span';
           span.onclick = () => activarEdicion(span);
-
+      
           contenedorIzq.appendChild(span);
-
+      
           const switchLabel = document.createElement('label');
           switchLabel.className = 'switch';
           switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
-
+      
           fila.appendChild(contenedorIzq);
           fila.appendChild(switchLabel);
-
+      
           subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
-          input.remove();
         }
+        input.remove(); // siempre eliminar input, incluso si estaba vacío
       } else if (e.key === 'Escape') {
         input.remove();
       }
