@@ -2,23 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Header fijo + Resumen | CadaMenudo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | CadaMenudo</title>
   <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    @font-face {
-      font-family: 'Greycliff CF';
-      src: url('fonts/GreycliffCF-Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-    }
-
     body {
       margin: 0;
       font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
       color: #000000;
-      padding-top: 110px; /* ✅ espacio para header fijo */
+      padding-top: 130px; /* espacio para header fijo con padding-bottom */
     }
 
     header {
@@ -28,7 +21,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 1.5rem 3.5rem;
-      position: fixed;  /* ✅ header fijo */
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -93,6 +86,7 @@
 
     .resumen-item .texto strong {
       font-size: 0.85rem;
+      color: #000;
     }
   </style>
 </head>
