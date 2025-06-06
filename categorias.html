@@ -885,6 +885,7 @@ document.addEventListener('click', function (e) {
       span.setAttribute('data-recurrencia', data.recurrencia);
       span.setAttribute('data-monto', data.monto || '');
       span.setAttribute('data-descripcion', data.descripcion);
+      span.setAttribute('data-nombre', newData.nombre); // ✅ importante
     }, {
       recurrencia: span.getAttribute('data-recurrencia'),
       monto: span.getAttribute('data-monto'),
