@@ -660,7 +660,19 @@ function anadirCategoria() {
   input.focus();
 }
 
-function anadirSubcategoria(tituloCategoria, subDiv) {
+function anadirSubcategoria(arg1, arg2) {
+  let tituloCategoria, subDiv;
+
+  // Si recibe solo un argumento (como en ingresos)
+  if (!arg2 && arg1.closest) {
+    subDiv = arg1.closest('.subcategorias');
+    tituloCategoria = subDiv?.previousElementSibling;
+  } else {
+    // Si recibe dos (como en gastos y ahorro)
+    tituloCategoria = arg1;
+    subDiv = arg2;
+  }
+
   abrirModalSubcategoria('', (data) => {
     if (!data.nombre) return;
 
@@ -672,7 +684,7 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
     contenedorIzq.style.alignItems = 'center';
     contenedorIzq.style.gap = '0.5rem';
 
-    const esEditable = tituloCategoria.querySelector('button') !== null;
+    const esEditable = tituloCategoria?.querySelector('button') !== null;
 
     if (esEditable) {
       const borrarBtn = document.createElement('button');
@@ -686,8 +698,6 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
 
     const span = document.createElement('span');
     span.className = 'editable-span';
-
-    // Mostrar nombre + pildora si hay recurrencia
     span.innerHTML = data.recurrencia
       ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
       : data.nombre;
@@ -696,25 +706,23 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
     span.setAttribute('data-monto', data.monto || '');
     span.setAttribute('data-descripcion', data.descripcion);
 
-span.onclick = () => abrirModalSubcategoria(
-  span.textContent.trim(), // nombre actual visible
-  (newData) => {
-    if (!newData.nombre) return;
-
-    span.innerHTML = newData.recurrencia
-      ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
-      : newData.nombre;
-
-    span.setAttribute('data-recurrencia', newData.recurrencia);
-    span.setAttribute('data-monto', newData.monto || '');
-    span.setAttribute('data-descripcion', newData.descripcion);
-  },
-  {
-    recurrencia: span.getAttribute('data-recurrencia'),
-    monto: span.getAttribute('data-monto'),
-    descripcion: span.getAttribute('data-descripcion'),
-  }
-);
+    span.onclick = () => abrirModalSubcategoria(
+      data.nombre,
+      (newData) => {
+        if (!newData.nombre) return;
+        span.innerHTML = newData.recurrencia
+          ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
+          : newData.nombre;
+        span.setAttribute('data-recurrencia', newData.recurrencia);
+        span.setAttribute('data-monto', newData.monto || '');
+        span.setAttribute('data-descripcion', newData.descripcion);
+      },
+      {
+        recurrencia: span.getAttribute('data-recurrencia'),
+        monto: span.getAttribute('data-monto'),
+        descripcion: span.getAttribute('data-descripcion'),
+      }
+    );
 
     contenedorIzq.appendChild(span);
 
@@ -724,10 +732,10 @@ span.onclick = () => abrirModalSubcategoria(
 
     fila.appendChild(contenedorIzq);
     fila.appendChild(switchLabel);
-
     subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
   });
 }
+
 
 const categoriasAhorro = {
   'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
