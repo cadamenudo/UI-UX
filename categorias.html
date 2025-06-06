@@ -695,6 +695,7 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
     span.setAttribute('data-recurrencia', data.recurrencia);
     span.setAttribute('data-monto', data.monto || '');
     span.setAttribute('data-descripcion', data.descripcion);
+    span.setAttribute('data-nombre', data.nombre); ✅
 
 span.onclick = () => abrirModalSubcategoria(
   span.textContent.trim(), // nombre actual visible
@@ -708,6 +709,7 @@ span.onclick = () => abrirModalSubcategoria(
     span.setAttribute('data-recurrencia', newData.recurrencia);
     span.setAttribute('data-monto', newData.monto || '');
     span.setAttribute('data-descripcion', newData.descripcion);
+    span.setAttribute('data-nombre', data.nombre); ✅
   },
   {
     recurrencia: span.getAttribute('data-recurrencia'),
