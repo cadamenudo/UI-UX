@@ -414,7 +414,7 @@
     <label for="nombreSub">Nombre</label>
     <input type="text" id="nombreSub" placeholder="Ej. Comisión extra" />
 
-    <label for="recurrencia">Recurrencia</label>
+    <label for="inputRecurrencia">Recurrencia</label>
     <select id="inputRecurrencia">
       <option value="">-- Opcional --</option>
       <option value="diario">Diario</option>
@@ -888,18 +888,21 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleMonto();
   selectRecurrencia.addEventListener('change', toggleMonto);
 });
-document.getElementById('inputRecurrencia').addEventListener('change', function () {
-  const grupoMonto = document.getElementById('grupoMonto');
-  const montoInput = document.getElementById('montoRecurrencia');
-  const seleccion = this.value;
+document.addEventListener('change', function (e) {
+  if (e.target && e.target.id === 'inputRecurrencia') {
+    const grupoMonto = document.getElementById('grupoMonto');
+    const montoInput = document.getElementById('montoRecurrencia');
+    const seleccion = e.target.value;
 
-  if (!seleccion || seleccion === 'ninguna') {
-    grupoMonto.style.display = 'none';
-    montoInput.value = ''; // 🧽 Limpia el monto si no hay recurrencia
-  } else {
-    grupoMonto.style.display = 'block';
+    if (!seleccion || seleccion.toLowerCase() === 'ninguna') {
+      grupoMonto.style.display = 'none';
+      montoInput.value = '';
+    } else {
+      grupoMonto.style.display = 'block';
+    }
   }
 });
+
 
 </script>
 </body>
