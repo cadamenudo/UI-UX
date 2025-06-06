@@ -8,17 +8,20 @@
     body {
       margin: 0;
       background: #FFFFFF;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
     }
 
     .logo-top {
-      width: 100%;
-      text-align: center;
-      margin-top: 40px;
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
     }
 
     .logo-top img {
