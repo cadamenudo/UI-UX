@@ -684,17 +684,25 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
     span.setAttribute('data-monto', data.monto || '');
     span.setAttribute('data-descripcion', data.descripcion);
 
-    span.onclick = () => abrirModalSubcategoria(data.nombre, (newData) => {
-      if (!newData.nombre) return;
+span.onclick = () => abrirModalSubcategoria(
+  data.nombre,
+  (newData) => {
+    if (!newData.nombre) return;
 
-      span.innerHTML = newData.recurrencia
-        ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
-        : newData.nombre;
+    span.innerHTML = newData.recurrencia
+      ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
+      : newData.nombre;
 
-      span.setAttribute('data-recurrencia', newData.recurrencia);
-      span.setAttribute('data-monto', newData.monto || '');
-      span.setAttribute('data-descripcion', newData.descripcion);
-    });
+    span.setAttribute('data-recurrencia', newData.recurrencia);
+    span.setAttribute('data-monto', newData.monto || '');
+    span.setAttribute('data-descripcion', newData.descripcion);
+  },
+  {
+    recurrencia: span.getAttribute('data-recurrencia'),
+    monto: span.getAttribute('data-monto'),
+    descripcion: span.getAttribute('data-descripcion'),
+  }
+);
 
     contenedorIzq.appendChild(span);
 
