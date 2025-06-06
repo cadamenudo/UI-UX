@@ -879,7 +879,7 @@ document.addEventListener('change', function (e) {
     const montoInput = document.getElementById('montoRecurrencia');
     const seleccion = e.target.value;
 
-    if (!seleccion || seleccion.toLowerCase() === 'ninguna') {
+    if (!seleccion) {
       grupoMonto.style.display = 'none';
       montoInput.value = '';
     } else {
@@ -887,7 +887,6 @@ document.addEventListener('change', function (e) {
     }
   }
 });
-
 
 </script>
 </body>
