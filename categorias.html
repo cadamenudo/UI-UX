@@ -827,12 +827,17 @@ modal.innerHTML = `
 `;
 document.body.appendChild(modal);
 
+// Asume que ya existe una variable global `modal` referenciando el modal
+const modal = document.getElementById('modalSubcategoria');
+
 // Función para abrir el modal
 function abrirModalSubcategoria(textoInicial = '', callbackAceptar) {
-  document.getElementById('inputNombre').value = textoInicial;
+  document.getElementById('nombreSub').value = textoInicial;
   document.getElementById('inputRecurrencia').value = '';
-  document.getElementById('inputMonto').value = '';
-  document.getElementById('inputDescripcion').value = '';
+  document.getElementById('montoRecurrencia').value = '';
+  document.getElementById('descripcion').value = '';
+  document.getElementById('grupoMonto').style.display = 'none'; // Oculta monto al abrir
+
   modal.style.display = 'flex';
 
   const aceptar = modal.querySelector('.guardar');
@@ -845,10 +850,10 @@ function abrirModalSubcategoria(textoInicial = '', callbackAceptar) {
   };
 
   aceptar.onclick = () => {
-    const nombre = document.getElementById('inputNombre').value.trim();
+    const nombre = document.getElementById('nombreSub').value.trim();
     const recurrencia = document.getElementById('inputRecurrencia').value;
-    const monto = parseFloat(document.getElementById('inputMonto').value) || null;
-    const descripcion = document.getElementById('inputDescripcion').value.trim();
+    const monto = parseFloat(document.getElementById('montoRecurrencia').value) || null;
+    const descripcion = document.getElementById('descripcion').value.trim();
     callbackAceptar({ nombre, recurrencia, monto, descripcion });
     cerrar();
   };
@@ -856,14 +861,12 @@ function abrirModalSubcategoria(textoInicial = '', callbackAceptar) {
   cancelar.onclick = cerrar;
 }
 
-
-// Actualizar comportamiento al hacer clic en una subcategoría existente
+// Al hacer clic en subcategoría editable
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('editable-span')) {
     const span = e.target;
     abrirModalSubcategoria(span.textContent, (data) => {
       if (data.nombre) span.textContent = data.nombre;
-      // Aquí puedes almacenar los demás datos si deseas
       span.setAttribute('data-recurrencia', data.recurrencia);
       span.setAttribute('data-monto', data.monto || '');
       span.setAttribute('data-descripcion', data.descripcion);
@@ -873,6 +876,8 @@ document.addEventListener('click', function (e) {
     });
   }
 });
+
+// Mostrar/ocultar monto según selección
 document.addEventListener('change', function (e) {
   if (e.target && e.target.id === 'inputRecurrencia') {
     const grupoMonto = document.getElementById('grupoMonto');
@@ -887,6 +892,7 @@ document.addEventListener('change', function (e) {
     }
   }
 });
+
 
 </script>
 </body>
