@@ -307,9 +307,9 @@
     color: white !important;
   }
 .pildora-recurrencia {
-  background: #ECFDF3;         
-  color: #00AC4F;             
-  font-size: 0.75rem;
+ background: #ECFDF3;         
+ color: #00AC4F;  
+ font-size: 0.75rem;
   font-weight: 500;
   border-radius: 999px;
   padding: 0.15rem 0.5rem;
@@ -565,12 +565,12 @@
     subcategorias.forEach(sub => {
       const fila = document.createElement('div');
       fila.className = 'fila';
-    fila.innerHTML = `
-      <span class="editable-span" data-recurrencia="" data-monto="" data-descripcion="">${sub}</span>
-      <label class="switch">
-        <input type="checkbox" checked>
-        <span class="slider"></span>
-      </label>`;
+      fila.innerHTML = `
+        <span class="editable-span" onclick="activarEdicion(this)">${sub}</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>`;
       subDiv.appendChild(fila);
     });
 
@@ -695,10 +695,9 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
     span.setAttribute('data-recurrencia', data.recurrencia);
     span.setAttribute('data-monto', data.monto || '');
     span.setAttribute('data-descripcion', data.descripcion);
-    span.setAttribute('data-nombre', data.nombre); ✅
 
 span.onclick = () => abrirModalSubcategoria(
-  span.getAttribute('data-nombre') || span.textContent.replace(/↻.*$/, '').trim(),
+  span.textContent.trim(), // nombre actual visible
   (newData) => {
     if (!newData.nombre) return;
 
@@ -709,7 +708,6 @@ span.onclick = () => abrirModalSubcategoria(
     span.setAttribute('data-recurrencia', newData.recurrencia);
     span.setAttribute('data-monto', newData.monto || '');
     span.setAttribute('data-descripcion', newData.descripcion);
-    span.setAttribute('data-nombre', data.nombre); ✅
   },
   {
     recurrencia: span.getAttribute('data-recurrencia'),
@@ -885,7 +883,6 @@ document.addEventListener('click', function (e) {
       span.setAttribute('data-recurrencia', data.recurrencia);
       span.setAttribute('data-monto', data.monto || '');
       span.setAttribute('data-descripcion', data.descripcion);
-      span.setAttribute('data-nombre', newData.nombre); // ✅ importante
     }, {
       recurrencia: span.getAttribute('data-recurrencia'),
       monto: span.getAttribute('data-monto'),
@@ -912,4 +909,3 @@ document.addEventListener('change', function (e) {
 </script>
 </body>
 </html>
-
