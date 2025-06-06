@@ -422,22 +422,151 @@
     });
 
     // Carga categorías de ingresos predefinidas
-
-document.addEventListener('DOMContentLoaded', () => {
-  const contenedorIngresos = document.getElementById('contenedorIngresos');
-
-  crearBloqueCategoria('Ganancia de capital', [
-    'Acciones', 'Auto', 'Bonos o renta fija', 'Casa/Apartamento/Tierra', 'ETF, fondo mutuo, etc.'
-  ], contenedorIngresos);
-
-  crearBloqueCategoria('Ingreso pasivo', [
-    'Anualidad', 'Dividendos e Intereses', 'Pensión', 'Renta inmueble', 'Seguro Social'
-  ], contenedorIngresos);
-
-  crearBloqueCategoria('Trabajo activo', [
-    'Bono', 'Comisión', 'Negocio propio', 'Pago por hora', 'Propina', 'Salario'
-  ], contenedorIngresos);
+Object.entries(categoriasIngresos).forEach(([categoria, subcategorias]) => {
+  agregarCategoriaIngresos(categoria, subcategorias, false);
 });
+});
+    function toggleSubcategorias(element) {
+    const all = document.querySelectorAll('.subcategorias');
+    all.forEach(sc => {
+      if (sc !== element.nextElementSibling) sc.classList.remove('activo');
+    });
+    element.nextElementSibling.classList.toggle('activo');
+  }
+
+  function activarEdicion(span) {
+    const texto = span.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = texto;
+    input.className = 'editable-input';
+    input.onblur = input.onkeydown = function (e) {
+      if (e.type === 'blur' || e.key === 'Enter') {
+        const nuevoTexto = input.value.trim();
+        span.textContent = nuevoTexto || texto;
+        span.style.display = 'inline';
+        input.remove();
+      }
+    };
+    span.parentNode.insertBefore(input, span);
+    input.focus();
+    span.style.display = 'none';
+  }
+
+   // Categorías y subcategorías predefinidas de GASTOS
+
+  const categoriasIngresos = {
+  'Pago por trabajo': ['Bono', 'Comisión', 'Negocio propio', 'Pago por hora', 'Propina', 'Salario'],
+  'Ganancia de capital': ['Acciones', 'Auto', 'Bonos o renta fija', 'Casa/Apartamento/Tierra', 'ETF, fondo mutuo, etc.'],
+  'Ingreso pasivo': ['Anualidad', 'Dividendos e Intereses', 'Pensión', 'Renta inmueble', 'Seguro Social']
+};
+
+    const contenedor = document.getElementById('contenedorIngresos');
+
+  function agregarCategoria(nombre, subcategorias = [], editable = false) {
+    const div = document.createElement('div');
+    div.className = 'bloque-categoria';
+
+    const titulo = document.createElement('div');
+    titulo.className = 'titulo-categoria';
+    titulo.onclick = () => toggleSubcategorias(titulo);
+
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
+
+    if (editable) {
+      const borrar = document.createElement('button');
+      borrar.textContent = '✖';
+      borrar.onclick = e => {
+        e.stopPropagation();
+        div.remove();
+      };
+      contenedorIzq.appendChild(borrar);
+    }
+
+    const nombreSpan = document.createElement('span');
+    nombreSpan.textContent = nombre;
+    contenedorIzq.appendChild(nombreSpan);
+
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+    titulo.appendChild(contenedorIzq);
+    titulo.appendChild(switchLabel);
+
+    const subDiv = document.createElement('div');
+    subDiv.className = 'subcategorias';
+
+     subcategorias.forEach(sub => {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
+
+      const contenedorIzq = document.createElement('div');
+      contenedorIzq.style.display = 'flex';
+      contenedorIzq.style.alignItems = 'center';
+      contenedorIzq.style.gap = '0.5rem';
+
+      const span = document.createElement('span');
+      span.className = 'editable-span';
+      span.innerHTML = sub;
+      span.setAttribute('data-nombre', sub);
+      span.setAttribute('data-recurrencia', '');
+      span.setAttribute('data-monto', '');
+      span.setAttribute('data-descripcion', '');
+
+      span.onclick = (e) => {
+        e.stopPropagation();
+        abrirModalSubcategoria(
+          span.getAttribute('data-nombre') || '',
+          (data) => {
+            if (!data.nombre) return;
+
+            span.innerHTML = data.recurrencia
+              ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+              : data.nombre;
+
+            span.setAttribute('data-nombre', data.nombre);
+            span.setAttribute('data-recurrencia', data.recurrencia || '');
+            span.setAttribute('data-monto', data.monto || '');
+            span.setAttribute('data-descripcion', data.descripcion || '');
+          },
+          {
+            nombre: span.getAttribute('data-nombre') || '',
+            recurrencia: span.getAttribute('data-recurrencia') || '',
+            monto: span.getAttribute('data-monto') || '',
+            descripcion: span.getAttribute('data-descripcion') || ''
+          }
+        );
+      };
+
+      contenedorIzq.appendChild(span);
+      fila.appendChild(contenedorIzq);
+
+      const switchLabel = document.createElement('label');
+      switchLabel.className = 'switch';
+      switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+      fila.appendChild(switchLabel);
+
+      subDiv.appendChild(fila);
+    });
+
+
+    const acciones = document.createElement('div');
+    acciones.className = 'acciones';
+    const btn = document.createElement('button');
+    btn.textContent = '+ Subcategoría';
+    btn.onclick = () => anadirSubcategoria(titulo, subDiv);
+    acciones.appendChild(btn);
+    subDiv.appendChild(acciones);
+
+    div.appendChild(titulo);
+    div.appendChild(subDiv);
+    contenedor.appendChild(div);
+  }
+
 // Carga categorías de gastos predefinidas
     Object.entries(categoriasGastos).forEach(([categoria, subcategorias]) => {
       agregarCategoria(categoria, subcategorias, false);
