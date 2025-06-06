@@ -814,9 +814,9 @@ modal.innerHTML = `
     </label>
     <label>Monto (si aplica)<input type="number" id="inputMonto" /></label>
     <label>Descripción<input type="text" id="inputDescripcion" /></label>
-    <div class="botones-modal">
-      <button id="btnCancelarModal">Cancelar</button>
-      <button id="btnGuardarModal">Aceptar</button>
+    <div class="modal-botones">
+      <button class="cancelar" onclick="cerrarModalSubcategoria()">Cancelar</button>
+      <button class="guardar" onclick="guardarSubcategoria()">Aceptar</button>
     </div>
   </div>
 `;
@@ -830,8 +830,8 @@ function abrirModalSubcategoria(textoInicial = '', callbackAceptar) {
   document.getElementById('inputDescripcion').value = '';
   modal.style.display = 'flex';
 
-  const aceptar = document.getElementById('btnGuardarModal');
-  const cancelar = document.getElementById('btnCancelarModal');
+  const aceptar = modal.querySelector('.guardar');
+  const cancelar = modal.querySelector('.cancelar');
 
   const cerrar = () => {
     modal.style.display = 'none';
@@ -850,6 +850,7 @@ function abrirModalSubcategoria(textoInicial = '', callbackAceptar) {
 
   cancelar.onclick = cerrar;
 }
+
 
 // Actualizar comportamiento al hacer clic en una subcategoría existente
 document.addEventListener('click', function (e) {
