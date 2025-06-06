@@ -147,10 +147,10 @@
   top: 50%;
   right: 1rem;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.7;
 }
     .modal {
   display: none;
@@ -206,6 +206,7 @@
     input {
   height: 48px;
   padding: 0.75rem;
+   padding-right: 2.5rem; /* <-- AGREGAR ESTO */
 }
 
   </style>
@@ -279,7 +280,7 @@
     <button class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
     <button class="btn-guardar" onclick="cambiarContrasena()">Cambiar</button>
   </div>
-
+</div>
     <!-- MODAL PARA EDITAR FOTO DE PERFIL -->
 <div id="modalFoto" class="modal">
   <div class="modal-content">
@@ -288,7 +289,6 @@
     <button class="borrar" onclick="eliminarFoto()">🗑️ Eliminar foto actual</button>
     <button class="cancelar" onclick="cerrarModalFoto()">❌ Cancelar</button>
   </div>
-</div>
 </div>
 
   <script>
