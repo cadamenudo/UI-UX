@@ -884,22 +884,28 @@ function abrirModalSubcategoria(textoInicial = '', callbackAceptar, datosPrevios
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('editable-span')) {
     const span = e.target;
-abrirModalSubcategoria(span.getAttribute('data-nombre') || '', (data) => {
-  if (!data.nombre) return;
 
-      span.innerHTML = data.recurrencia
-        ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
-        : data.nombre;
+    abrirModalSubcategoria(
+      span.getAttribute('data-nombre') || '', // nombre limpio
+      (data) => {
+        if (!data.nombre) return;
 
-      span.setAttribute('data-nombre', data.nombre);
-span.setAttribute('data-recurrencia', data.recurrencia || '');
-span.setAttribute('data-monto', data.monto || '');
-span.setAttribute('data-descripcion', data.descripcion || '');
-    }, {
-      recurrencia: span.getAttribute('data-recurrencia'),
-      monto: span.getAttribute('data-monto'),
-      descripcion: span.getAttribute('data-descripcion'),
-    });
+        span.innerHTML = data.recurrencia
+          ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+          : data.nombre;
+
+        span.setAttribute('data-nombre', data.nombre);
+        span.setAttribute('data-recurrencia', data.recurrencia || '');
+        span.setAttribute('data-monto', data.monto || '');
+        span.setAttribute('data-descripcion', data.descripcion || '');
+      },
+      {
+        nombre: span.getAttribute('data-nombre') || '', // ✅ Agregado
+        recurrencia: span.getAttribute('data-recurrencia') || '',
+        monto: span.getAttribute('data-monto') || '',
+        descripcion: span.getAttribute('data-descripcion') || ''
+      }
+    );
   }
 });
 
