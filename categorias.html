@@ -873,21 +873,6 @@ document.addEventListener('click', function (e) {
     });
   }
 });
-document.addEventListener('DOMContentLoaded', () => {
-  const selectRecurrencia = document.getElementById('recurrencia');
-  const montoLabel = document.querySelector('label[for="montoRecurrencia"]');
-  const inputMonto = document.getElementById('montoRecurrencia');
-
-  function toggleMonto() {
-    const visible = selectRecurrencia.value !== 'Ninguna';
-    inputMonto.style.display = visible ? 'block' : 'none';
-    montoLabel.style.display = visible ? 'block' : 'none';
-    if (!visible) inputMonto.value = '';
-  }
-
-  toggleMonto();
-  selectRecurrencia.addEventListener('change', toggleMonto);
-});
 document.addEventListener('change', function (e) {
   if (e.target && e.target.id === 'inputRecurrencia') {
     const grupoMonto = document.getElementById('grupoMonto');
