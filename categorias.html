@@ -395,7 +395,7 @@
 
     <div class="bloque-categoria">
       <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
-        <span>Ingreso pasivo</span>
+        <span>Ganancia de capital</span>
         <button style="display:none;"></button> <!-- botón oculto -->
         <label class="switch">
           <input type="checkbox" checked>
@@ -403,11 +403,47 @@
         </label>
       </div>
       <div class="subcategorias">
-        <div class="fila"><span class="editable-span">Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span class="editable-span">Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span class="editable-span">Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span class="editable-span">Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span class="editable-span">ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Acciones"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Acciones</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Auto"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Auto</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Bonos o renta fija"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Bonos o renta fija</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Casa/Apartamento/Tierra"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Casa/Apartamento/Tierra</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="ETF, fondo mutuo, etc."
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">ETF, fondo mutuo, etc.</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+
         <div class="acciones">
           <button onclick="anadirSubcategoria(this)">+ Subcategoría</button>
         </div>
