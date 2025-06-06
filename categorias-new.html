@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Categorías - Gastos</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+<style>
+  body {
+    font-family: 'Greycliff CF', sans-serif;
+    background: #F9FAFB;
+    margin: 0;
+    padding: 2rem;
+    color: #111827;
+  }
+
+  .bloque-sector {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    margin: 0 auto 1.5rem;
+    max-width: 700px;
+  }
+
+  .encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 1.25rem 1rem;
+  }
+
+  .icono-ingresos,
+  .icono-gastos,
+  .icono-ahorro {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-size: 32px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .icono-ingresos {
+    background-color: #F4F2FF;
+    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
+  }
+
+  .icono-gastos {
+    background-color: #F3F4F6;
+    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/gastos.png');
+  }
+
+   .icono-ahorro {
+    background-color: #FCFAEA;
+    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ahorro.png');
+  }
+  .contenido-bloque {
+    display: none;
+    padding: 1rem 2rem;
+  }
+
+  .bloque-sector.abierto .contenido-bloque {
+    display: block;
+  }
+
+  .bloque-categoria {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+  }
+
+  .titulo-categoria {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .subcategorias {
+    margin-top: 0.75rem;
+    padding-left: 1rem;
+    display: none;
+  }
+
+  .subcategorias.activo {
+    display: block;
+  }
+
+  .fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: #4F46E5;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+
+  .acciones {
+    margin-top: 1rem;
+    text-align: right;
+  }
+
+  .acciones button {
+    background: #7459D9;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+
+  .editable-span {
+    cursor: pointer;
+  }
+
+  .editable-input {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 2px 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .titulo-categoria button,
+  .fila-subcategoria button {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+  }
+      .contenido-bloque {
+      display: none;
+      padding: 1rem 2rem;
+    }
+    .bloque-sector.abierto .contenido-bloque {
+      display: block;
+    }
+  .titulo-categorias {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 1rem 0 2rem 0;
+  padding-left: 1rem;
+}
+.modal-subcategoria {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  display: none;
+}
+
+.modal-subcategoria.abierto {
+  display: flex;
+}
+
+.modal-contenido {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-contenido h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  color: #111827;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.modal-contenido label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  margin-top: 1rem;
+  color: #111827;
+}
+
+.modal-contenido input,
+.modal-contenido select,
+.modal-contenido textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 0.5rem;
+}
+
+.modal-contenido textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: center; /* Centra ambos botones */
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.modal-botones .cancelar {
+  background: #F8F6FF !important;
+  color: #4B0082 !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+}
+
+.modal-botones .guardar {
+  background: #3956E8 !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  color: #64748B;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+    button.cancelar {
+    background: #E8C7FF !important;
+    color: #4B0082 !important;
+  }
+  button.guardar {
+    background: #3956E8 !important;
+    color: white !important;
+  }
+.pildora-recurrencia {
+ background: #ECFDF3;         
+ color: #00AC4F;  
+ font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  margin-left: 0.4rem;
+  display: inline-block;
+}
+</style>
+</head>
+<body>
+<section class="seccion-categorias">
+  <h3 class="titulo-categorias">Lista de Categorías</h3>
+
+<!-- INGRESOS -->
+
+  <div class="bloque-sector">
+    <div class="bloque-ingresos">
+      <div class="encabezado" onclick="toggleBloque(this)">
+        <div class="icono-gastos"></div>
+        <span>Ingresos</span>
+      </div>
+      <div class="contenido-bloque">
+        <div id="contenedorIngresos"></div>
+        <div class="acciones">
+          <button onclick="anadirCategoria()">+ Categoría</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GASTOS -->
+  <div class="bloque-sector">
+    <div class="bloque-gastos">
+      <div class="encabezado" onclick="toggleBloque(this)">
+        <div class="icono-gastos"></div>
+        <span>Gastos</span>
+      </div>
+      <div class="contenido-bloque">
+        <div id="contenedorGastos"></div>
+        <div class="acciones">
+          <button onclick="anadirCategoria()">+ Categoría</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- AHORRO -->
+  <div class="bloque-sector">
+  <div class="bloque-ahorro">
+    <div class="encabezado" onclick="toggleBloque(this)">
+      <div class="icono-ahorro"></div>
+      <span>Ahorro</span>
+    </div>
+    <div class="contenido-bloque">
+      <div id="contenedorAhorro"></div>
+      <div class="acciones">
+        <button onclick="anadirCategoriaAhorro()">+ Categoría</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- MODAL SUBCATEGORIAS -->
+  <div id="modalSubcategoria" class="modal-subcategoria">
+  <div class="modal-contenido">
+  <h3>Subcategoría</h3>
+
+    <label for="nombreSub">Nombre</label>
+    <input type="text" id="nombreSub" placeholder="Ej. Comisión extra" />
+
+    <label for="inputRecurrencia">Recurrencia</label>
+    <select id="inputRecurrencia">
+      <option value="">Ninguna</option>
+      <option value="diario">Diario</option>
+      <option value="semanal">Semanal</option>
+      <option value="quincenal">Quincenal</option>
+      <option value="mensual">Mensual</option>
+      <option value="anual">Anual</option>
+    </select>
+
+<div id="grupoMonto" style="display: none;">
+  <label for="montoRecurrencia">Monto</label>
+  <input type="number" id="montoRecurrencia" placeholder="$0.00" />
+</div>
+
+    <label for="descripcion">Descripción (opcional)</label>
+    <textarea id="descripcion" placeholder="Descripción breve..."></textarea>
+
+    <div class="modal-botones">
+      <button class="cancelar" onclick="cerrarModalSubcategoria()">Cancelar</button>
+      <button class="guardar" onclick="guardarSubcategoria()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Cierra todos los bloques al iniciar
+    document.querySelectorAll('.bloque-sector').forEach(b => b.classList.remove('abierto'));
+
+      function toggleBloque(encabezado) {
+    const parent = encabezado.closest('.bloque-sector');
+    document.querySelectorAll('.bloque-sector').forEach(b => {
+      if (b !== parent) b.classList.remove('abierto');
+    });
+    parent.classList.toggle('abierto');
+  }
+
+    // Añade evento a todos los encabezados
+    document.querySelectorAll('.encabezado').forEach(header => {
+      header.addEventListener('click', () => toggleBloque(header));
+    });
+
+    // Carga categorías de ingresos predefinidas
+
+document.addEventListener('DOMContentLoaded', () => {
+  const contenedorIngresos = document.getElementById('contenedorIngresos');
+
+  crearBloqueCategoria('Ganancia de capital', [
+    'Acciones', 'Auto', 'Bonos o renta fija', 'Casa/Apartamento/Tierra', 'ETF, fondo mutuo, etc.'
+  ], contenedorIngresos);
+
+  crearBloqueCategoria('Ingreso pasivo', [
+    'Anualidad', 'Dividendos e Intereses', 'Pensión', 'Renta inmueble', 'Seguro Social'
+  ], contenedorIngresos);
+
+  crearBloqueCategoria('Trabajo activo', [
+    'Bono', 'Comisión', 'Negocio propio', 'Pago por hora', 'Propina', 'Salario'
+  ], contenedorIngresos);
+});
+// Carga categorías de gastos predefinidas
+    Object.entries(categoriasGastos).forEach(([categoria, subcategorias]) => {
+      agregarCategoria(categoria, subcategorias, false);
+    });
+  });
+
+  function toggleSubcategorias(element) {
+    const all = document.querySelectorAll('.subcategorias');
+    all.forEach(sc => {
+      if (sc !== element.nextElementSibling) sc.classList.remove('activo');
+    });
+    element.nextElementSibling.classList.toggle('activo');
+  }
+
+  function activarEdicion(span) {
+    const texto = span.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = texto;
+    input.className = 'editable-input';
+    input.onblur = input.onkeydown = function (e) {
+      if (e.type === 'blur' || e.key === 'Enter') {
+        const nuevoTexto = input.value.trim();
+        span.textContent = nuevoTexto || texto;
+        span.style.display = 'inline';
+        input.remove();
+      }
+    };
+    span.parentNode.insertBefore(input, span);
+    input.focus();
+    span.style.display = 'none';
+  }
+
+  // Categorías y subcategorías predefinidas de GASTOS
+  const categoriasGastos = {
+    'Alimentación': ['Supermercado', 'Comidas fuera', 'Pedido a domicilio'],
+    'Casa': ['Hipoteca / Alquiler', 'Servicios básicos', 'Mantenimiento'],
+    'Impuestos': ['Seguro social', 'Propiedad', 'Venta', 'Estatales', 'Federales', 'Municipales'],
+    'Transportación': ['Gasolina', 'Mantenimiento', 'Transporte público / Uber'],
+    'Seguros': ['Salud', 'Auto', 'Vida'],
+    'Regalos y donaciones': ['Familia', 'Amigos', 'Instituciones'],
+    'Gastos Médicos': ['Consultas', 'Medicamentos', 'Procedimientos'],
+    'Cuidado Personal': ['Peluquería', 'Cosméticos', 'Spa / Barbería'],
+    'Dependientes': ['Cuidado de niños', 'Cuidado de mayores', 'Educación'],
+    'Deuda': ['Tarjetas de crédito', 'Préstamos estudiantiles', 'Otros préstamos'],
+    'Entretenimiento': ['Cine', 'Conciertos', 'Streaming'],
+    'Telecomunicaciones': ['Teléfono', 'Internet', 'TV']
+  };
+
+  const contenedor = document.getElementById('contenedorGastos');
+
+  function agregarCategoria(nombre, subcategorias = [], editable = false) {
+    const div = document.createElement('div');
+    div.className = 'bloque-categoria';
+
+    const titulo = document.createElement('div');
+    titulo.className = 'titulo-categoria';
+    titulo.onclick = () => toggleSubcategorias(titulo);
+
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
+
+    if (editable) {
+      const borrar = document.createElement('button');
+      borrar.textContent = '✖';
+      borrar.onclick = e => {
+        e.stopPropagation();
+        div.remove();
+      };
+      contenedorIzq.appendChild(borrar);
+    }
+
+    const nombreSpan = document.createElement('span');
+    nombreSpan.textContent = nombre;
+    contenedorIzq.appendChild(nombreSpan);
+
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+    titulo.appendChild(contenedorIzq);
+    titulo.appendChild(switchLabel);
+
+    const subDiv = document.createElement('div');
+    subDiv.className = 'subcategorias';
+
+     subcategorias.forEach(sub => {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
+
+      const contenedorIzq = document.createElement('div');
+      contenedorIzq.style.display = 'flex';
+      contenedorIzq.style.alignItems = 'center';
+      contenedorIzq.style.gap = '0.5rem';
+
+      const span = document.createElement('span');
+      span.className = 'editable-span';
+      span.innerHTML = sub;
+      span.setAttribute('data-nombre', sub);
+      span.setAttribute('data-recurrencia', '');
+      span.setAttribute('data-monto', '');
+      span.setAttribute('data-descripcion', '');
+
+      span.onclick = (e) => {
+        e.stopPropagation();
+        abrirModalSubcategoria(
+          span.getAttribute('data-nombre') || '',
+          (data) => {
+            if (!data.nombre) return;
+
+            span.innerHTML = data.recurrencia
+              ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+              : data.nombre;
+
+            span.setAttribute('data-nombre', data.nombre);
+            span.setAttribute('data-recurrencia', data.recurrencia || '');
+            span.setAttribute('data-monto', data.monto || '');
+            span.setAttribute('data-descripcion', data.descripcion || '');
+          },
+          {
+            nombre: span.getAttribute('data-nombre') || '',
+            recurrencia: span.getAttribute('data-recurrencia') || '',
+            monto: span.getAttribute('data-monto') || '',
+            descripcion: span.getAttribute('data-descripcion') || ''
+          }
+        );
+      };
+
+      contenedorIzq.appendChild(span);
+      fila.appendChild(contenedorIzq);
+
+      const switchLabel = document.createElement('label');
+      switchLabel.className = 'switch';
+      switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+      fila.appendChild(switchLabel);
+
+      subDiv.appendChild(fila);
+    });
+
+
+    const acciones = document.createElement('div');
+    acciones.className = 'acciones';
+    const btn = document.createElement('button');
+    btn.textContent = '+ Subcategoría';
+    btn.onclick = () => anadirSubcategoria(titulo, subDiv);
+    acciones.appendChild(btn);
+    subDiv.appendChild(acciones);
+
+    div.appendChild(titulo);
+    div.appendChild(subDiv);
+    contenedor.appendChild(div);
+  }
+function anadirCategoria() {
+  const contenedor = document.getElementById('contenedorGastos');
+
+  // evitar múltiples inputs abiertos
+  if (contenedor.querySelector('input.editable-input')) return;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Nombre de categoría';
+  input.className = 'editable-input';
+
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') {
+      const nombre = input.value.trim();
+      if (nombre) {
+        const div = document.createElement('div');
+        div.className = 'bloque-categoria';
+
+        const titulo = document.createElement('div');
+        titulo.className = 'titulo-categoria';
+        titulo.setAttribute('onclick', 'toggleSubcategorias(this)');
+
+        const contenedorIzq = document.createElement('div');
+        contenedorIzq.style.display = 'flex';
+        contenedorIzq.style.alignItems = 'center';
+        contenedorIzq.style.gap = '0.5rem';
+
+        const borrarBtn = document.createElement('button');
+        borrarBtn.textContent = '✖';
+        borrarBtn.onclick = function(e) {
+          e.stopPropagation();
+          div.remove();
+        };
+
+        const span = document.createElement('span');
+        span.textContent = nombre;
+
+        contenedorIzq.appendChild(borrarBtn);
+        contenedorIzq.appendChild(span);
+
+        const switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+        switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+        titulo.appendChild(contenedorIzq);
+        titulo.appendChild(switchLabel);
+
+        // ✅ aquí creamos subDiv que antes estaba dando error
+        const subDiv = document.createElement('div');
+        subDiv.className = 'subcategorias';
+
+        const acciones = document.createElement('div');
+        acciones.className = 'acciones';
+        const boton = document.createElement('button');
+        boton.textContent = '+ Subcategoría';
+        boton.onclick = () => anadirSubcategoria(titulo, subDiv);
+        acciones.appendChild(boton);
+
+        subDiv.appendChild(acciones);
+        div.appendChild(titulo);
+        div.appendChild(subDiv);
+        contenedor.appendChild(div);
+
+        input.remove();
+      }
+    } else if (e.key === 'Escape') {
+      input.remove();
+    }
+  };
+
+  contenedor.appendChild(input);
+  input.focus();
+}
+
+function anadirSubcategoria(tituloCategoria, subDiv) {
+  abrirModalSubcategoria('', (data) => {
+    if (!data.nombre) return;
+
+    const fila = document.createElement('div');
+    fila.className = 'fila';
+
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
+
+    const esEditable = tituloCategoria.querySelector('button') !== null;
+
+    if (esEditable) {
+      const borrarBtn = document.createElement('button');
+      borrarBtn.textContent = '✖';
+      borrarBtn.onclick = e => {
+        e.stopPropagation();
+        fila.remove();
+      };
+      contenedorIzq.appendChild(borrarBtn);
+    }
+
+    const span = document.createElement('span');
+    span.className = 'editable-span';
+
+// Mostrar nombre + pildora si hay recurrencia
+span.innerHTML = data.recurrencia
+  ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+  : data.nombre;
+
+// Asegura que los atributos estén bien definidos desde el inicio
+span.setAttribute('data-nombre', data.nombre);
+span.setAttribute('data-recurrencia', data.recurrencia || '');
+span.setAttribute('data-monto', data.monto || '');
+span.setAttribute('data-descripcion', data.descripcion || '');
+
+// ✅ Evita que la pildora contamine el nombre
+span.onclick = (e) => {
+  e.stopPropagation(); // evitar conflictos si está dentro de algo clickeable
+
+  abrirModalSubcategoria(
+    span.getAttribute('data-nombre') || '', // ✅ lee solo el nombre limpio
+    (newData) => {
+      if (!newData.nombre) return;
+
+      span.innerHTML = newData.recurrencia
+        ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
+        : newData.nombre;
+
+      // Reasignar los atributos correctamente
+      span.setAttribute('data-nombre', newData.nombre);
+      span.setAttribute('data-recurrencia', newData.recurrencia || '');
+      span.setAttribute('data-monto', newData.monto || '');
+      span.setAttribute('data-descripcion', newData.descripcion || '');
+    },
+    {
+      nombre: span.getAttribute('data-nombre') || '',
+      recurrencia: span.getAttribute('data-recurrencia') || '',
+      monto: span.getAttribute('data-monto') || '',
+      descripcion: span.getAttribute('data-descripcion') || ''
+    }
+  );
+};
+
+
+    contenedorIzq.appendChild(span);
+
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+    fila.appendChild(contenedorIzq);
+    fila.appendChild(switchLabel);
+
+    subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
+  });
+}
+
+const categoriasAhorro = {
+  'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
+  'Meta específica': ['Vacaciones', 'Auto', 'Casa', 'Boda', 'Educación de hijos'],
+  'Inversión': ['Cuenta brokerage', 'Fondo indexado', 'Cripto', 'Crowdfunding'],
+  'Retiro': ['IRA / Roth IRA', '401(k)', 'Pensión privada'],
+  'Ahorro personal': ['Ahorro mensual', 'Ahorro en efectivo', 'Cuenta de ahorro tradicional'],
+  'Ahorro para hijos': ['Educación', 'Regalos futuros', 'Fondo universitario'],
+  'Otros': ['Donaciones planificadas', 'Proyectos personales', 'Fondo de libertad financiera']
+};
+
+  const contenedorAhorro = document.getElementById('contenedorAhorro');
+
+  Object.entries(categoriasAhorro).forEach(([categoria, subcategorias]) => {
+    agregarCategoriaAhorro(categoria, subcategorias, false);
+  });
+
+  function agregarCategoriaAhorro(nombre, subcategorias = [], editable = false) {
+    const div = document.createElement('div');
+    div.className = 'bloque-categoria';
+
+    const titulo = document.createElement('div');
+    titulo.className = 'titulo-categoria';
+    titulo.onclick = () => toggleSubcategorias(titulo);
+
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
+
+    if (editable) {
+      const borrar = document.createElement('button');
+      borrar.textContent = '✖';
+      borrar.onclick = e => {
+        e.stopPropagation();
+        div.remove();
+      };
+      contenedorIzq.appendChild(borrar);
+    }
+
+    const nombreSpan = document.createElement('span');
+    nombreSpan.textContent = nombre;
+    contenedorIzq.appendChild(nombreSpan);
+
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+    titulo.appendChild(contenedorIzq);
+    titulo.appendChild(switchLabel);
+
+    const subDiv = document.createElement('div');
+    subDiv.className = 'subcategorias';
+
+subcategorias.forEach(sub => {
+  const fila = document.createElement('div');
+  fila.className = 'fila';
+
+  const contenedorIzq = document.createElement('div');
+  contenedorIzq.style.display = 'flex';
+  contenedorIzq.style.alignItems = 'center';
+  contenedorIzq.style.gap = '0.5rem';
+
+  const span = document.createElement('span');
+  span.className = 'editable-span';
+  span.innerHTML = sub;
+  span.setAttribute('data-nombre', sub);
+  span.setAttribute('data-recurrencia', '');
+  span.setAttribute('data-monto', '');
+  span.setAttribute('data-descripcion', '');
+
+  span.onclick = (e) => {
+    e.stopPropagation();
+    abrirModalSubcategoria(
+      span.getAttribute('data-nombre') || '',
+      (data) => {
+        if (!data.nombre) return;
+
+        span.innerHTML = data.recurrencia
+          ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+          : data.nombre;
+
+        span.setAttribute('data-nombre', data.nombre);
+        span.setAttribute('data-recurrencia', data.recurrencia || '');
+        span.setAttribute('data-monto', data.monto || '');
+        span.setAttribute('data-descripcion', data.descripcion || '');
+      },
+      {
+        nombre: span.getAttribute('data-nombre') || '',
+        recurrencia: span.getAttribute('data-recurrencia') || '',
+        monto: span.getAttribute('data-monto') || '',
+        descripcion: span.getAttribute('data-descripcion') || ''
+      }
+    );
+  };
+
+  contenedorIzq.appendChild(span);
+  fila.appendChild(contenedorIzq);
+
+  const switchLabel = document.createElement('label');
+  switchLabel.className = 'switch';
+  switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+  fila.appendChild(switchLabel);
+
+  subDiv.appendChild(fila);
+});
+
+
+    const acciones = document.createElement('div');
+    acciones.className = 'acciones';
+    const btn = document.createElement('button');
+    btn.textContent = '+ Subcategoría';
+    btn.onclick = () => anadirSubcategoria(titulo, subDiv);
+    acciones.appendChild(btn);
+    subDiv.appendChild(acciones);
+
+    div.appendChild(titulo);
+    div.appendChild(subDiv);
+    contenedorAhorro.appendChild(div);
+  }
+
+  function anadirCategoriaAhorro() {
+    const input = document.createElement('input');
+    input.className = 'editable-input';
+    input.placeholder = 'Nueva categoría';
+
+    input.onkeydown = function (e) {
+      if (e.key === 'Enter') {
+        const nombre = input.value.trim();
+        if (nombre) {
+          agregarCategoriaAhorro(nombre, [], true);
+          input.remove();
+        }
+      } else if (e.key === 'Escape') {
+        input.remove();
+      }
+    };
+
+    contenedorAhorro.appendChild(input);
+    input.focus();
+  }
+
+// Asume que ya existe una variable global `modal` referenciando el modal
+const modal = document.getElementById('modalSubcategoria');
+
+// Función para abrir el modal
+function abrirModalSubcategoria(textoInicial = '', callbackAceptar, datosPrevios = {}) {
+  document.getElementById('nombreSub').value = textoInicial;
+  document.getElementById('inputRecurrencia').value = datosPrevios.recurrencia || '';
+  document.getElementById('montoRecurrencia').value = datosPrevios.monto || '';
+  document.getElementById('descripcion').value = datosPrevios.descripcion || '';
+
+  // Mostrar u ocultar grupoMonto según valor
+  const grupoMonto = document.getElementById('grupoMonto');
+  if (datosPrevios.recurrencia) {
+    grupoMonto.style.display = 'block';
+  } else {
+    grupoMonto.style.display = 'none';
+  }
+
+  modal.style.display = 'flex';
+
+  const aceptar = modal.querySelector('.guardar');
+  const cancelar = modal.querySelector('.cancelar');
+
+  const cerrar = () => {
+    modal.style.display = 'none';
+    aceptar.onclick = null;
+    cancelar.onclick = null;
+  };
+
+  aceptar.onclick = () => {
+    const nombre = document.getElementById('nombreSub').value.trim();
+    const recurrencia = document.getElementById('inputRecurrencia').value;
+    const monto = parseFloat(document.getElementById('montoRecurrencia').value) || null;
+    const descripcion = document.getElementById('descripcion').value.trim();
+    callbackAceptar({ nombre, recurrencia, monto, descripcion });
+    cerrar();
+  };
+
+  cancelar.onclick = cerrar;
+}
+
+// Al hacer clic en subcategoría editable
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('editable-span')) {
+    const span = e.target;
+
+    abrirModalSubcategoria(
+      span.getAttribute('data-nombre') || '', // nombre limpio
+      (data) => {
+        if (!data.nombre) return;
+
+        span.innerHTML = data.recurrencia
+          ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+          : data.nombre;
+
+        span.setAttribute('data-nombre', data.nombre);
+        span.setAttribute('data-recurrencia', data.recurrencia || '');
+        span.setAttribute('data-monto', data.monto || '');
+        span.setAttribute('data-descripcion', data.descripcion || '');
+      },
+      {
+        nombre: span.getAttribute('data-nombre') || '', // ✅ Agregado
+        recurrencia: span.getAttribute('data-recurrencia') || '',
+        monto: span.getAttribute('data-monto') || '',
+        descripcion: span.getAttribute('data-descripcion') || ''
+      }
+    );
+  }
+});
+
+// Mostrar/ocultar monto según selección
+document.addEventListener('change', function (e) {
+  if (e.target && e.target.id === 'inputRecurrencia') {
+    const grupoMonto = document.getElementById('grupoMonto');
+    const montoInput = document.getElementById('montoRecurrencia');
+    const seleccion = e.target.value;
+
+    if (!seleccion) {
+      grupoMonto.style.display = 'none';
+      montoInput.value = '';
+    } else {
+      grupoMonto.style.display = 'block';
+    }
+  }
+});
+</script>
+</body>
+</html>
