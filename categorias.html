@@ -196,6 +196,102 @@
   margin: 1rem 0 2rem 0;
   padding-left: 1rem;
 }
+.modal-subcategoria {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  display: none;
+}
+
+.modal-subcategoria.abierto {
+  display: flex;
+}
+
+.modal-contenido {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-contenido h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  color: #111827;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.modal-contenido label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  margin-top: 1rem;
+}
+
+.modal-contenido input,
+.modal-contenido select,
+.modal-contenido textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.modal-contenido textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-botones button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.modal-botones .cancelar {
+  background: #E5E7EB;
+  color: #374151;
+}
+
+.modal-botones .guardar {
+  background: #3956E8;
+  color: #fff;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  color: #64748B;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
 
 </style>
 </head>
@@ -292,6 +388,38 @@
     </div>
   </div>
   </div>
+  <!-- MODAL SUBCATEGORIAS -->
+  <div id="modalSubcategoria" class="modal-subcategoria">
+  <div class="modal-contenido">
+    <button class="cerrar-modal" onclick="cerrarModalSubcategoria()">×</button>
+    <h3>Subcategoría</h3>
+
+    <label for="nombreSub">Nombre</label>
+    <input type="text" id="nombreSub" placeholder="Ej. Comisión extra" />
+
+    <label for="recurrencia">Recurrencia</label>
+    <select id="recurrencia">
+      <option value="">-- Opcional --</option>
+      <option value="diario">Diario</option>
+      <option value="semanal">Semanal</option>
+      <option value="quincenal">Quincenal</option>
+      <option value="mensual">Mensual</option>
+      <option value="anual">Anual</option>
+    </select>
+
+    <label for="montoRecurrencia">Monto (si aplica)</label>
+    <input type="number" id="montoRecurrencia" placeholder="$0.00" />
+
+    <label for="descripcion">Descripción (opcional)</label>
+    <textarea id="descripcion" placeholder="Descripción breve..."></textarea>
+
+    <div class="modal-botones">
+      <button class="cancelar" onclick="cerrarModalSubcategoria()">Cancelar</button>
+      <button class="guardar" onclick="guardarSubcategoria()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     // Cierra todos los bloques al iniciar
@@ -496,62 +624,63 @@ function anadirCategoria() {
   input.focus();
 }
 
-  function anadirSubcategoria(tituloCategoria, subDiv) {
-  const input = document.createElement('input');
-  input.className = 'editable-input';
-  input.placeholder = 'Nueva subcategoría';
+function anadirSubcategoria(tituloCategoria, subDiv) {
+  abrirModalSubcategoria('', (data) => {
+    if (!data.nombre) return;
 
-  input.onkeydown = function (e) {
-    if (e.key === 'Enter') {
-      const nombre = input.value.trim();
-      if (nombre) {
-        const fila = document.createElement('div');
-        fila.className = 'fila';
+    const fila = document.createElement('div');
+    fila.className = 'fila';
 
-        const contenedorIzq = document.createElement('div');
-        contenedorIzq.style.display = 'flex';
-        contenedorIzq.style.alignItems = 'center';
-        contenedorIzq.style.gap = '0.5rem';
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
 
-        const esEditable = tituloCategoria.querySelector('button') !== null;
+    const esEditable = tituloCategoria.querySelector('button') !== null;
 
-        if (esEditable) {
-          const borrarBtn = document.createElement('button');
-          borrarBtn.textContent = '✖';
-          borrarBtn.onclick = e => {
-            e.stopPropagation();
-            fila.remove();
-          };
-          contenedorIzq.appendChild(borrarBtn);
-        }
-
-        const span = document.createElement('span');
-        span.textContent = nombre;
-        span.className = 'editable-span';
-        span.onclick = () => activarEdicion(span);
-
-        contenedorIzq.appendChild(span);
-
-        const switchLabel = document.createElement('label');
-        switchLabel.className = 'switch';
-        switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
-
-        fila.appendChild(contenedorIzq);
-        fila.appendChild(switchLabel);
-
-        subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
-        input.remove();
-      } else {
-        input.remove(); // Si está vacío, lo borra
-      }
-    } else if (e.key === 'Escape') {
-      input.remove();
+    if (esEditable) {
+      const borrarBtn = document.createElement('button');
+      borrarBtn.textContent = '✖';
+      borrarBtn.onclick = e => {
+        e.stopPropagation();
+        fila.remove();
+      };
+      contenedorIzq.appendChild(borrarBtn);
     }
-  };
 
-  subDiv.insertBefore(input, subDiv.querySelector('.acciones'));
-  input.focus();
+    const span = document.createElement('span');
+    span.className = 'editable-span';
+    span.textContent = data.nombre;
+    span.setAttribute('data-recurrencia', data.recurrencia);
+    span.setAttribute('data-monto', data.monto || '');
+    span.setAttribute('data-descripcion', data.descripcion);
+    span.onclick = () => abrirModalSubcategoria(span.textContent, (newData) => {
+      if (newData.nombre) span.textContent = newData.nombre;
+      span.setAttribute('data-recurrencia', newData.recurrencia);
+      span.setAttribute('data-monto', newData.monto || '');
+      span.setAttribute('data-descripcion', newData.descripcion);
+      if (newData.recurrencia) {
+        span.innerHTML = `${newData.nombre} <span class="recurrencia-indicador">*</span>`;
+      }
+    });
+
+    if (data.recurrencia) {
+      span.innerHTML = `${data.nombre} <span class="recurrencia-indicador">*</span>`;
+    }
+
+    contenedorIzq.appendChild(span);
+
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+    fila.appendChild(contenedorIzq);
+    fila.appendChild(switchLabel);
+
+    subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
+  });
 }
+
   
 const categoriasAhorro = {
   'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
@@ -651,6 +780,80 @@ const categoriasAhorro = {
     contenedorAhorro.appendChild(input);
     input.focus();
   }
+  // Modal
+const modal = document.createElement('div');
+modal.id = 'modalSubcategoria';
+modal.className = 'modal-subcategoria';
+modal.innerHTML = `
+  <div class="modal-contenido">
+    <h3>Editar subcategoría</h3>
+    <label>Nombre<input type="text" id="inputNombre" /></label>
+    <label>Recurrencia
+      <select id="inputRecurrencia">
+        <option value="">Ninguna</option>
+        <option value="diaria">Diaria</option>
+        <option value="semanal">Semanal</option>
+        <option value="quincenal">Quincenal</option>
+        <option value="mensual">Mensual</option>
+        <option value="anual">Anual</option>
+      </select>
+    </label>
+    <label>Monto (si aplica)<input type="number" id="inputMonto" /></label>
+    <label>Descripción<input type="text" id="inputDescripcion" /></label>
+    <div class="botones-modal">
+      <button id="btnCancelarModal">Cancelar</button>
+      <button id="btnGuardarModal">Aceptar</button>
+    </div>
+  </div>
+`;
+document.body.appendChild(modal);
+
+// Función para abrir el modal
+function abrirModalSubcategoria(textoInicial = '', callbackAceptar) {
+  document.getElementById('inputNombre').value = textoInicial;
+  document.getElementById('inputRecurrencia').value = '';
+  document.getElementById('inputMonto').value = '';
+  document.getElementById('inputDescripcion').value = '';
+  modal.style.display = 'flex';
+
+  const aceptar = document.getElementById('btnGuardarModal');
+  const cancelar = document.getElementById('btnCancelarModal');
+
+  const cerrar = () => {
+    modal.style.display = 'none';
+    aceptar.onclick = null;
+    cancelar.onclick = null;
+  };
+
+  aceptar.onclick = () => {
+    const nombre = document.getElementById('inputNombre').value.trim();
+    const recurrencia = document.getElementById('inputRecurrencia').value;
+    const monto = parseFloat(document.getElementById('inputMonto').value) || null;
+    const descripcion = document.getElementById('inputDescripcion').value.trim();
+    callbackAceptar({ nombre, recurrencia, monto, descripcion });
+    cerrar();
+  };
+
+  cancelar.onclick = cerrar;
+}
+
+// Actualizar comportamiento al hacer clic en una subcategoría existente
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('editable-span')) {
+    const span = e.target;
+    abrirModalSubcategoria(span.textContent, (data) => {
+      if (data.nombre) span.textContent = data.nombre;
+      // Aquí puedes almacenar los demás datos si deseas
+      span.setAttribute('data-recurrencia', data.recurrencia);
+      span.setAttribute('data-monto', data.monto || '');
+      span.setAttribute('data-descripcion', data.descripcion);
+      if (data.recurrencia) {
+        span.innerHTML = `${data.nombre} <span class="recurrencia-indicador">*</span>`;
+      }
+    });
+  }
+});
+
 </script>
 </body>
 </html>
