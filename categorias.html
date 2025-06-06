@@ -321,7 +321,7 @@
 <body>
 <section class="seccion-categorias">
   <h3 class="titulo-categorias">Lista de Categorías</h3>
-  <!-- INGRESOS -->
+<!-- INGRESOS -->
 <div class="bloque-sector">
   <div class="encabezado" onclick="toggleBloque(this)">
     <div class="icono-ingresos"></div>
@@ -337,12 +337,15 @@
         </label>
       </div>
       <div class="subcategorias">
-        <div class="fila"><span>Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Negocio propio</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Bono</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Comisión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Negocio propio</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Pago por hora</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Propina</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Salario</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="acciones">
+          <button onclick="anadirSubcategoria(this.closest('.titulo-categoria'), this.closest('.subcategorias'))">+ Subcategoría</button>
+        </div>
       </div>
     </div>
 
@@ -355,11 +358,14 @@
         </label>
       </div>
       <div class="subcategorias">
-        <div class="fila"><span>Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Acciones</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Auto</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Bonos o renta fija</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Casa/Apartamento/Tierra</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">ETF, fondo mutuo, etc.</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="acciones">
+          <button onclick="anadirSubcategoria(this.closest('.titulo-categoria'), this.closest('.subcategorias'))">+ Subcategoría</button>
+        </div>
       </div>
     </div>
 
@@ -372,11 +378,14 @@
         </label>
       </div>
       <div class="subcategorias">
-        <div class="fila"><span>Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="fila"><span>Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="fila"><span>Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Anualidad</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Dividendos e Intereses</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Pensión</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Renta inmueble</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="fila"><span class="editable-span">Seguro Social</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="acciones">
+          <button onclick="anadirSubcategoria(this.closest('.titulo-categoria'), this.closest('.subcategorias'))">+ Subcategoría</button>
+        </div>
       </div>
     </div>
   </div>
