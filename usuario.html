@@ -160,6 +160,9 @@
   justify-content: center;
   align-items: center;
 }
+    .modal.show {
+  display: flex;
+}
 
 .modal-content {
   background: white;
@@ -318,11 +321,13 @@
   input.type = input.type === 'password' ? 'text' : 'password';
 }
 function abrirModalFoto() {
-  document.getElementById("modalFoto").style.display = "flex";
+  const modal = document.getElementById("modalFoto");
+  if (modal) modal.classList.add("show");
 }
 
 function cerrarModalFoto() {
-  document.getElementById("modalFoto").style.display = "none";
+  const modal = document.getElementById("modalFoto");
+  if (modal) modal.classList.remove("show");
 }
 
 function subirFoto() {
