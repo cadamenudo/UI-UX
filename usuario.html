@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil de Usuario</title>
+  <link href="https://fonts.googleapis.com/css2?family=Greycliff+CF&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background: #FAFBFF;
+      margin: 0;
+      padding: 1.5rem;
+      color: #111827;
+    }
+
+    .perfil-container {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #E5E7EB;
+      margin-bottom: 1rem;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 0.75rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .tab-button.active {
+      border-color: #3956E8;
+      font-weight: bold;
+      color: #3956E8;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .avatar {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .avatar img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .avatar button {
+      background: none;
+      border: none;
+      color: #3956E8;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .botones {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+
+    .botones button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn-cancelar {
+      background: #E5E7EB;
+      color: #374151;
+      margin-right: 0.5rem;
+    }
+
+    .btn-guardar {
+      background: #3956E8;
+      color: #fff;
+      margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="perfil-container">
+    <div class="tabs">
+      <button class="tab-button active" onclick="openTab(event, 'datos')">Datos Generales</button>
+      <button class="tab-button" onclick="openTab(event, 'contrasena')">Cambiar Contraseña</button>
+    </div>
+
+    <div id="datos" class="tab-content active">
+      <div class="avatar">
+        <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Avatar" />
+        <button onclick="alert('Función para cambiar foto')">Cambiar</button>
+      </div>
+
+      <div class="form-group">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" value="Juan Perez" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" value="juan@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" value="+1 234 567 8901" />
+      </div>
+
+      <div class="botones">
+        <button class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
+        <button class="btn-guardar" onclick="guardarPerfil()">Guardar</button>
+      </div>
+    </div>
+
+    <div id="contrasena" class="tab-content">
+      <div class="form-group">
+        <label for="contrasena-actual">Contraseña actual</label>
+        <input type="password" id="contrasena-actual" />
+      </div>
+
+      <div class="form-group">
+        <label for="nueva-contrasena">Nueva contraseña</label>
+        <input type="password" id="nueva-contrasena" />
+      </div>
+
+      <div class="form-group">
+        <label for="confirmar-contrasena">Confirmar nueva contraseña</label>
+        <input type="password" id="confirmar-contrasena" />
+      </div>
+
+      <div class="botones">
+        <button class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
+        <button class="btn-guardar" onclick="cambiarContrasena()">Cambiar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      var i, tabcontent, tabbuttons;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+      tabbuttons = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabbuttons.length; i++) {
+        tabbuttons[i].classList.remove("active");
+      }
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    function guardarPerfil() {
+      const nombre = document.getElementById('nombre').value;
+      const email = document.getElementById('email').value;
+      const telefono = document.getElementById('telefono').value;
+
+      if (!nombre || !email || !telefono) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+
+      console.log("Datos guardados:", { nombre, email, telefono });
+      alert("Cambios guardados exitosamente.");
+    }
+
+    function cambiarContrasena() {
+      const actual = document.getElementById('contrasena-actual').value;
+      const nueva = document.getElementById('nueva-contrasena').value;
+      const confirmar = document.getElementById('confirmar-contrasena').value;
+
+      if (!actual || !nueva || !confirmar) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+
+      if (nueva !== confirmar) {
+        alert("Las nuevas contraseñas no coinciden.");
+        return;
+      }
+
+      console.log("Contraseña cambiada:", { actual, nueva });
+      alert("Contraseña cambiada exitosamente.");
+    }
+  </script>
+</body>
+</html>
