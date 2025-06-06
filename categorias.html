@@ -873,14 +873,20 @@ function abrirModalSubcategoria(textoInicial = '', callbackAceptar, datosPrevios
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('editable-span')) {
     const span = e.target;
-    abrirModalSubcategoria(span.textContent, (data) => {
-      if (data.nombre) span.textContent = data.nombre;
+    abrirModalSubcategoria(span.textContent.trim(), (data) => {
+      if (!data.nombre) return;
+
+      span.innerHTML = data.recurrencia
+        ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+        : data.nombre;
+
       span.setAttribute('data-recurrencia', data.recurrencia);
       span.setAttribute('data-monto', data.monto || '');
       span.setAttribute('data-descripcion', data.descripcion);
-      if (data.recurrencia) {
-        span.innerHTML = `${data.nombre} <span class="recurrencia-indicador">*</span>`;
-      }
+    }, {
+      recurrencia: span.getAttribute('data-recurrencia'),
+      monto: span.getAttribute('data-monto'),
+      descripcion: span.getAttribute('data-descripcion'),
     });
   }
 });
