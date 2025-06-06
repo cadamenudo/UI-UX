@@ -23,13 +23,13 @@
     }
     .grid-menu {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 1.5rem;
     }
     .item-menu {
       background: #fff;
       border-radius: 16px;
-      padding: 1.2rem 0.5rem;
+      padding: 1rem;
       text-align: center;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
       transition: transform 0.2s ease;
@@ -39,22 +39,11 @@
       transform: translateY(-4px);
     }
     .item-menu img {
-      width: 32px;
-      height: 32px;
-      margin-bottom: 0.5rem;
-    }
-    .item-menu span {
+      width: 100%;
+      max-width: 140px;
+      height: auto;
       display: block;
-      font-size: 0.95rem;
-      color: #111;
-    }
-    .item-menu.destacada {
-      background: #eef3ff;
-      border: 2px solid #3956E8;
-    }
-    .item-menu.destacada span {
-      color: #3956E8;
-      font-weight: 600;
+      margin: auto;
     }
   </style>
 </head>
@@ -65,32 +54,25 @@
 
   <section class="grid-menu">
     <div class="item-menu" onclick="location.href='tablero.html'">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/icono_tablero.png" alt="Tablero">
-      <span>Tablero</span>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/botones/boton_tablero.png" alt="Tablero">
     </div>
     <div class="item-menu" onclick="location.href='transacciones.html'">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/icono_transacciones.png" alt="Transacciones">
-      <span>Transacciones</span>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/botones/boton_transacciones.png" alt="Transacciones">
     </div>
     <div class="item-menu" onclick="location.href='videos.html'">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/icono_videos.png" alt="Videos">
-      <span>Videos</span>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/botones/boton_videos.png" alt="Videos">
     </div>
     <div class="item-menu" onclick="location.href='metas.html'">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/icono_metas.png" alt="Metas">
-      <span>Metas</span>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/botones/boton_metas.png" alt="Metas">
     </div>
     <div class="item-menu" onclick="location.href='categorias.html'">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/icono_categorias.png" alt="Categorías">
-      <span>Categorías</span>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/botones/boton_categorias.png" alt="Categorías">
     </div>
-    <div class="item-menu" onclick="location.href='usuarios.html'">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/icono_usuarios.png" alt="Usuarios">
-      <span>Usuarios</span>
+    <div class="item-menu" onclick="location.href='usuario.html'">
+      <img src="https://cadamenudo.github.io/UI-UX/assets/botones/boton_usuario.png" alt="Usuario">
     </div>
-    <div class="item-menu destacada" onclick="location.href='nueva-transaccion.html'">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/icono_nueva_transaccion.png" alt="Nueva Transacción">
-      <span>Nueva Transacción</span>
+    <div class="item-menu" onclick="location.href='nueva-transaccion.html'">
+      <img src="https://cadamenudo.github.io/UI-UX/assets/botones/boton_nueva_transaccion.png" alt="Nueva Transacción">
     </div>
   </section>
 
