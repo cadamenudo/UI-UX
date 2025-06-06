@@ -148,6 +148,54 @@
   cursor: pointer;
   opacity: 0.6;
 }
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.modal-content button {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.modal-content .cancelar {
+  background: #F8F6FF;
+  color: #7459D9;
+}
+
+.modal-content .borrar {
+  background: #FEE2E2;
+  color: #B91C1C;
+}
+
 
   </style>
 </head>
@@ -155,9 +203,10 @@
   <div class="perfil-container">
     <div class="avatar">
       <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Avatar del usuario" />
-      <div class="icono-cambiar" onclick="alert('Función para cambiar foto')">
+      <div class="icono-cambiar" onclick="abrirModalFoto()">
         <img src="https://cdn-icons-png.flaticon.com/512/1827/1827933.png" alt="Editar" />
       </div>
+
     </div>
 
     <div class="tabs">
@@ -219,8 +268,17 @@
     <button class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
     <button class="btn-guardar" onclick="cambiarContrasena()">Cambiar</button>
   </div>
-</div>
 
+    <!-- MODAL PARA EDITAR FOTO DE PERFIL -->
+<div id="modalFoto" class="modal">
+  <div class="modal-content">
+    <h3>Editar foto de perfil</h3>
+    <button onclick="subirFoto()">📤 Subir nueva foto</button>
+    <button class="borrar" onclick="eliminarFoto()">🗑️ Eliminar foto actual</button>
+    <button class="cancelar" onclick="cerrarModalFoto()">❌ Cancelar</button>
+  </div>
+</div>
+</div>
 
   <script>
     function openTab(evt, tabName) {
@@ -258,6 +316,23 @@
     function togglePassword(id) {
   const input = document.getElementById(id);
   input.type = input.type === 'password' ? 'text' : 'password';
+}
+function abrirModalFoto() {
+  document.getElementById("modalFoto").style.display = "flex";
+}
+
+function cerrarModalFoto() {
+  document.getElementById("modalFoto").style.display = "none";
+}
+
+function subirFoto() {
+  alert("Funcionalidad para subir nueva foto (input file)");
+  cerrarModalFoto();
+}
+
+function eliminarFoto() {
+  alert("Foto eliminada");
+  cerrarModalFoto();
 }
 
   </script>
