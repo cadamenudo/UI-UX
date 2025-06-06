@@ -698,7 +698,7 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
     span.setAttribute('data-nombre', data.nombre); ✅
 
 span.onclick = () => abrirModalSubcategoria(
-  span.textContent.trim(), // nombre actual visible
+  span.getAttribute('data-nombre') || span.textContent.replace(/↻.*$/, '').trim(),
   (newData) => {
     if (!newData.nombre) return;
 
