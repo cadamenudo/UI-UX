@@ -835,17 +835,59 @@ const categoriasAhorro = {
     const subDiv = document.createElement('div');
     subDiv.className = 'subcategorias';
 
-    subcategorias.forEach(sub => {
-      const fila = document.createElement('div');
-      fila.className = 'fila';
-      fila.innerHTML = `
-        <span class="editable-span" onclick="activarEdicion(this)">${sub}</span>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>`;
-      subDiv.appendChild(fila);
-    });
+subcategorias.forEach(sub => {
+  const fila = document.createElement('div');
+  fila.className = 'fila';
+
+  const contenedorIzq = document.createElement('div');
+  contenedorIzq.style.display = 'flex';
+  contenedorIzq.style.alignItems = 'center';
+  contenedorIzq.style.gap = '0.5rem';
+
+  const span = document.createElement('span');
+  span.className = 'editable-span';
+  span.innerHTML = sub;
+  span.setAttribute('data-nombre', sub);
+  span.setAttribute('data-recurrencia', '');
+  span.setAttribute('data-monto', '');
+  span.setAttribute('data-descripcion', '');
+
+  span.onclick = (e) => {
+    e.stopPropagation();
+    abrirModalSubcategoria(
+      span.getAttribute('data-nombre') || '',
+      (data) => {
+        if (!data.nombre) return;
+
+        span.innerHTML = data.recurrencia
+          ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+          : data.nombre;
+
+        span.setAttribute('data-nombre', data.nombre);
+        span.setAttribute('data-recurrencia', data.recurrencia || '');
+        span.setAttribute('data-monto', data.monto || '');
+        span.setAttribute('data-descripcion', data.descripcion || '');
+      },
+      {
+        nombre: span.getAttribute('data-nombre') || '',
+        recurrencia: span.getAttribute('data-recurrencia') || '',
+        monto: span.getAttribute('data-monto') || '',
+        descripcion: span.getAttribute('data-descripcion') || ''
+      }
+    );
+  };
+
+  contenedorIzq.appendChild(span);
+  fila.appendChild(contenedorIzq);
+
+  const switchLabel = document.createElement('label');
+  switchLabel.className = 'switch';
+  switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+  fila.appendChild(switchLabel);
+
+  subDiv.appendChild(fila);
+});
+
 
     const acciones = document.createElement('div');
     acciones.className = 'acciones';
