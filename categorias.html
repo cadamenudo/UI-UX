@@ -812,12 +812,19 @@ const categoriasAhorro = {
 const modal = document.getElementById('modalSubcategoria');
 
 // Función para abrir el modal
-function abrirModalSubcategoria(textoInicial = '', callbackAceptar) {
+function abrirModalSubcategoria(textoInicial = '', callbackAceptar, datosPrevios = {}) {
   document.getElementById('nombreSub').value = textoInicial;
-  document.getElementById('inputRecurrencia').value = '';
-  document.getElementById('montoRecurrencia').value = '';
-  document.getElementById('descripcion').value = '';
-  document.getElementById('grupoMonto').style.display = 'none'; // Oculta monto al abrir
+  document.getElementById('inputRecurrencia').value = datosPrevios.recurrencia || '';
+  document.getElementById('montoRecurrencia').value = datosPrevios.monto || '';
+  document.getElementById('descripcion').value = datosPrevios.descripcion || '';
+
+  // Mostrar u ocultar grupoMonto según valor
+  const grupoMonto = document.getElementById('grupoMonto');
+  if (datosPrevios.recurrencia) {
+    grupoMonto.style.display = 'block';
+  } else {
+    grupoMonto.style.display = 'none';
+  }
 
   modal.style.display = 'flex';
 
