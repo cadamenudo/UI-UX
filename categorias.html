@@ -565,12 +565,12 @@
     subcategorias.forEach(sub => {
       const fila = document.createElement('div');
       fila.className = 'fila';
-      fila.innerHTML = `
-        <span class="editable-span" onclick="activarEdicion(this)">${sub}</span>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>`;
+    fila.innerHTML = `
+      <span class="editable-span" data-recurrencia="" data-monto="" data-descripcion="">${sub}</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>`;
       subDiv.appendChild(fila);
     });
 
