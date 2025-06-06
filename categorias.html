@@ -692,6 +692,7 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
       ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
       : data.nombre;
 
+    span.setAttribute('data-nombre', data.nombre);
     span.setAttribute('data-recurrencia', data.recurrencia);
     span.setAttribute('data-monto', data.monto || '');
     span.setAttribute('data-descripcion', data.descripcion);
