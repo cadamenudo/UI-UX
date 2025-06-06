@@ -292,6 +292,9 @@
   background: none;
   border: none;
 }
+  #montoRecurrencia {
+  display: none;
+}
 
 </style>
 </head>
@@ -407,7 +410,7 @@
       <option value="anual">Anual</option>
     </select>
 
-    <label for="montoRecurrencia">Monto (si aplica)</label>
+    <label for="montoRecurrencia">Monto</label>
     <input type="number" id="montoRecurrencia" placeholder="$0.00" />
 
     <label for="descripcion">Descripción (opcional)</label>
@@ -853,7 +856,23 @@ document.addEventListener('click', function (e) {
     });
   }
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const selectRecurrencia = document.getElementById('recurrencia');
+  const inputMonto = document.getElementById('montoRecurrencia');
 
+  function toggleMonto() {
+    if (selectRecurrencia.value !== 'Ninguna') {
+      inputMonto.style.display = 'block';
+    } else {
+      inputMonto.style.display = 'none';
+      inputMonto.value = ''; // limpia si se elige "Ninguna"
+    }
+  }
+
+  // Ejecutar al cargar y cuando cambia la selección
+  toggleMonto();
+  selectRecurrencia.addEventListener('change', toggleMonto);
+});
 </script>
 </body>
 </html>
