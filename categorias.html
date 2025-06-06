@@ -258,9 +258,9 @@
 
 .modal-botones {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center; /* Centra ambos botones */
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
 .modal-botones button {
@@ -273,13 +273,25 @@
 }
 
 .modal-botones .cancelar {
-  background: #7459D9;   /* ⬅️ lavanda según sistema */
-  color: #fff;
+  background: #E8C7FF;         /* Lavanda */
+  color: #4B0082;              /* Texto lavanda oscuro */
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .modal-botones .guardar {
-  background: #3956E8;
-  color: #fff;
+  background: #3956E8;         /* Azul primario */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .cerrar-modal {
@@ -858,21 +870,20 @@ document.addEventListener('click', function (e) {
 });
 document.addEventListener('DOMContentLoaded', () => {
   const selectRecurrencia = document.getElementById('recurrencia');
+  const montoLabel = document.querySelector('label[for="montoRecurrencia"]');
   const inputMonto = document.getElementById('montoRecurrencia');
 
   function toggleMonto() {
-    if (selectRecurrencia.value !== 'Ninguna') {
-      inputMonto.style.display = 'block';
-    } else {
-      inputMonto.style.display = 'none';
-      inputMonto.value = ''; // limpia si se elige "Ninguna"
-    }
+    const visible = selectRecurrencia.value !== 'Ninguna';
+    inputMonto.style.display = visible ? 'block' : 'none';
+    montoLabel.style.display = visible ? 'block' : 'none';
+    if (!visible) inputMonto.value = '';
   }
 
-  // Ejecutar al cargar y cuando cambia la selección
   toggleMonto();
   selectRecurrencia.addEventListener('change', toggleMonto);
 });
+
 </script>
 </body>
 </html>
