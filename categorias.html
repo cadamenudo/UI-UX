@@ -687,38 +687,45 @@ function anadirSubcategoria(tituloCategoria, subDiv) {
     const span = document.createElement('span');
     span.className = 'editable-span';
 
-    // Mostrar nombre + pildora si hay recurrencia
-    span.innerHTML = data.recurrencia
-      ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
-      : data.nombre;
+// Mostrar nombre + pildora si hay recurrencia
+span.innerHTML = data.recurrencia
+  ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+  : data.nombre;
 
-    span.setAttribute('data-nombre', data.nombre);
-    span.setAttribute('data-recurrencia', data.recurrencia);
-    span.setAttribute('data-monto', data.monto || '');
-    span.setAttribute('data-descripcion', data.descripcion);
+// Asegura que los atributos estén bien definidos desde el inicio
+span.setAttribute('data-nombre', data.nombre);
+span.setAttribute('data-recurrencia', data.recurrencia || '');
+span.setAttribute('data-monto', data.monto || '');
+span.setAttribute('data-descripcion', data.descripcion || '');
 
-span.onclick = () => abrirModalSubcategoria(
-  span.getAttribute('data-nombre') || '', // ✅ nombre limpio
-  (newData) => {
-    if (!newData.nombre) return;
+// ✅ Evita que la pildora contamine el nombre
+span.onclick = (e) => {
+  e.stopPropagation(); // evitar conflictos si está dentro de algo clickeable
 
-    span.innerHTML = newData.recurrencia
-      ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
-      : newData.nombre;
+  abrirModalSubcategoria(
+    span.getAttribute('data-nombre') || '', // ✅ lee solo el nombre limpio
+    (newData) => {
+      if (!newData.nombre) return;
 
-    // Actualiza atributos
-    span.setAttribute('data-nombre', newData.nombre);
-    span.setAttribute('data-recurrencia', newData.recurrencia || '');
-    span.setAttribute('data-monto', newData.monto || '');
-    span.setAttribute('data-descripcion', newData.descripcion || '');
-  },
-  {
-    nombre: span.getAttribute('data-nombre') || '',
-    recurrencia: span.getAttribute('data-recurrencia') || '',
-    monto: span.getAttribute('data-monto') || '',
-    descripcion: span.getAttribute('data-descripcion') || ''
-  }
-);
+      span.innerHTML = newData.recurrencia
+        ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
+        : newData.nombre;
+
+      // Reasignar los atributos correctamente
+      span.setAttribute('data-nombre', newData.nombre);
+      span.setAttribute('data-recurrencia', newData.recurrencia || '');
+      span.setAttribute('data-monto', newData.monto || '');
+      span.setAttribute('data-descripcion', newData.descripcion || '');
+    },
+    {
+      nombre: span.getAttribute('data-nombre') || '',
+      recurrencia: span.getAttribute('data-recurrencia') || '',
+      monto: span.getAttribute('data-monto') || '',
+      descripcion: span.getAttribute('data-descripcion') || ''
+    }
+  );
+};
+
 
     contenedorIzq.appendChild(span);
 
