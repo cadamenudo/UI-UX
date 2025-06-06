@@ -660,7 +660,10 @@ function anadirCategoria() {
   input.focus();
 }
 
-function anadirSubcategoria(tituloCategoria, subDiv) {
+function anadirSubcategoria(boton) {
+  const subDiv = boton.closest('.subcategorias');
+  const tituloCategoria = subDiv?.previousElementSibling;
+
   abrirModalSubcategoria('', (data) => {
     if (!data.nombre) return;
 
