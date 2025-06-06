@@ -23,6 +23,35 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
+    .avatar {
+      text-align: center;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .avatar img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .avatar .icono-cambiar {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: #fff;
+      border-radius: 50%;
+      padding: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .avatar .icono-cambiar img {
+      width: 24px;
+      height: 24px;
+    }
+
     .tabs {
       display: flex;
       border-bottom: 1px solid #E5E7EB;
@@ -52,27 +81,6 @@
 
     .tab-content.active {
       display: block;
-    }
-
-    .avatar {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .avatar img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .avatar button {
-      background: none;
-      border: none;
-      color: #3956E8;
-      font-size: 0.95rem;
-      margin-top: 0.5rem;
-      cursor: pointer;
     }
 
     .form-group {
@@ -111,8 +119,8 @@
     }
 
     .btn-cancelar {
-      background: #E5E7EB;
-      color: #374151;
+      background: #F8F6FF;
+      color: #7459D9;
       margin-right: 0.5rem;
     }
 
@@ -125,17 +133,19 @@
 </head>
 <body>
   <div class="perfil-container">
+    <div class="avatar">
+      <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Avatar" />
+      <div class="icono-cambiar" onclick="alert('Función para cambiar foto')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1827/1827933.png" alt="Cambiar Avatar" />
+      </div>
+    </div>
+
     <div class="tabs">
       <button class="tab-button active" onclick="openTab(event, 'datos')">Datos Generales</button>
       <button class="tab-button" onclick="openTab(event, 'contrasena')">Cambiar Contraseña</button>
     </div>
 
     <div id="datos" class="tab-content active">
-      <div class="avatar">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Avatar" />
-        <button onclick="alert('Función para cambiar foto')">Cambiar</button>
-      </div>
-
       <div class="form-group">
         <label for="nombre">Nombre completo</label>
         <input type="text" id="nombre" value="Juan Perez" />
