@@ -884,16 +884,17 @@ function abrirModalSubcategoria(textoInicial = '', callbackAceptar, datosPrevios
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('editable-span')) {
     const span = e.target;
-    abrirModalSubcategoria(span.textContent.trim(), (data) => {
-      if (!data.nombre) return;
+abrirModalSubcategoria(span.getAttribute('data-nombre') || '', (data) => {
+  if (!data.nombre) return;
 
       span.innerHTML = data.recurrencia
         ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
         : data.nombre;
 
-      span.setAttribute('data-recurrencia', data.recurrencia);
-      span.setAttribute('data-monto', data.monto || '');
-      span.setAttribute('data-descripcion', data.descripcion);
+      span.setAttribute('data-nombre', data.nombre);
+span.setAttribute('data-recurrencia', data.recurrencia || '');
+span.setAttribute('data-monto', data.monto || '');
+span.setAttribute('data-descripcion', data.descripcion || '');
     }, {
       recurrencia: span.getAttribute('data-recurrencia'),
       monto: span.getAttribute('data-monto'),
