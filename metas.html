@@ -91,23 +91,24 @@
       font-size: 1.25rem;
     }
 
-    .meta-item input.descripcion {
-      flex: 1;
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
-      padding: 6px 10px;
-      font-size: 15px;
-    }
+.meta-item input.descripcion {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1rem;
+  padding: 10px 12px;
+  min-height: 44px;
+}
 
-    .meta-item input.monto {
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
-      padding: 6px 12px;
-      width: 100px;
-      text-align: right;
-      font-weight: bold;
-      font-size: 16px;
-    }
+.meta-item input.monto {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1rem;
+  padding: 6px 10px; /* ⬅️ menos padding vertical */
+  min-height: 38px;   /* ⬅️ un poco menos que descripción */
+  text-align: right;
+  border-radius: 8px;
+}
+
 
 .meta-item input.confirmado {
   border: none;
