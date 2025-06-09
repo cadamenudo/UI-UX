@@ -284,140 +284,135 @@
         <button class="btn-cancelar" onclick="cancelarCambios()">Cancelar</button>
         <button class="btn-registrar">Registrar</button>
       </div>
-  <script>
-    function limpiarNumero(str) {
-      return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
-    }
+<script>
+  function limpiarNumero(str) {
+    return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
+  }
 
-    function formatoMoneda(num) {
-      return "$" + num.toLocaleString("en-US");
-    }
+  function formatoMoneda(num) {
+    return "$" + num.toLocaleString("en-US");
+  }
 
-    function calcular() {
-      const inputs = document.querySelectorAll(".monto");
-      let total = 0;
-      inputs.forEach(input => {
-        total += limpiarNumero(input.value);
-      });
-
-      const ahorro = 0; // valor fijo
-      const faltan = Math.max(0, total - ahorro);
-      const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
-
-      document.getElementById("metaTotal").innerText = formatoMoneda(total);
-      document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
-      document.getElementById("faltan").innerText = formatoMoneda(faltan);
-      document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
-      document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
-    }
-
-    function actualizarNumeros() {
-      const items = document.querySelectorAll(".meta-item");
-      items.forEach((item, index) => {
-        item.querySelector(".numero").innerText = index + 1;
-      });
-    }
-
-function agregarMeta() {
-  const lista = document.getElementById("listaMetas");
-  const nuevaMeta = document.createElement("div");
-  nuevaMeta.className = "meta-item";
-  nuevaMeta.innerHTML = `
-    <span class="numero">0</span>
-    <span class="drag">≡</span>
-    <input type="text" class="descripcion" value="Nueva meta" />
-    <input type="text" class="monto" value="$0" />
-    <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
-  `;
-  lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
-  nuevaMeta.querySelector(".monto").addEventListener("input", calcular);
-  actualizarNumeros();
-  calcular();
-  prepararInputsMeta(); // <-- importante
-}
-    
-    function eliminarMeta(elemento) {
-      const meta = elemento.closest(".meta-item");
-      meta.remove();
-      actualizarNumeros();
-      calcular();
-    }
-
-    function prepararInputsMeta() {
-  // Descripciones
-  const descripciones = document.querySelectorAll('.descripcion');
-  descripciones.forEach(input => {
-    input.addEventListener('focus', () => {
-      input.dataset.original = input.value;
-      input.value = '';
-      input.classList.remove('confirmado');
+  function calcular() {
+    const inputs = document.querySelectorAll(".monto");
+    let total = 0;
+    inputs.forEach(input => {
+      total += limpiarNumero(input.value);
     });
 
-    input.addEventListener('blur', () => {
-      if (input.value.trim() === '') {
-        input.value = input.dataset.original || '';
-      } else {
-        input.classList.add('confirmado');
-      }
+    const ahorro = 0; // valor fijo
+    const faltan = Math.max(0, total - ahorro);
+    const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
+
+    document.getElementById("metaTotal").innerText = formatoMoneda(total);
+    document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
+    document.getElementById("faltan").innerText = formatoMoneda(faltan);
+    document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
+    document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
+  }
+
+  function actualizarNumeros() {
+    const items = document.querySelectorAll(".meta-item");
+    items.forEach((item, index) => {
+      item.querySelector(".numero").innerText = index + 1;
     });
-  });
+  }
 
-      input.addEventListener('dblclick', () => {
-  input.classList.remove('confirmado');
-  input.focus();
-});
-
-  // Montos
-  const montos = document.querySelectorAll('.monto');
-  montos.forEach(input => {
-    input.addEventListener('focus', () => {
-      input.dataset.original = input.value;
-      input.value = '';
-      input.classList.remove('confirmado');
-    });
-
-    input.addEventListener('blur', () => {
-      const valor = limpiarNumero(input.value);
-      input.value = formatoMoneda(valor);
-      if (valor > 0) {
-        input.classList.add('confirmado');
-      }
-      calcular();
-    });
-
-    input.addEventListener('dblclick', () => {
-  input.classList.remove('confirmado');
-  input.focus();
-});
-
-    input.addEventListener('keypress', (e) => {
-      if (!/[0-9.]/.test(e.key)) e.preventDefault();
-    });
-  });
-}
-
-
-    // Inicial
-    document.querySelectorAll(".monto").forEach(input => {
-      input.addEventListener("input", calcular);
-    });
-
+  function agregarMeta() {
+    const lista = document.getElementById("listaMetas");
+    const nuevaMeta = document.createElement("div");
+    nuevaMeta.className = "meta-item";
+    nuevaMeta.innerHTML = `
+      <span class="numero">0</span>
+      <span class="drag">≡</span>
+      <input type="text" class="descripcion" value="Nueva meta" />
+      <input type="text" class="monto" value="$0" />
+      <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
+    `;
+    lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
+    actualizarNumeros();
+    prepararInputsMeta(); // aplica eventos a nuevos inputs
     calcular();
-    
-    new Sortable(document.getElementById('listaMetas'), {
-  animation: 150,
-  handle: '.drag',        // solo se puede arrastrar desde el ícono ≡
-  draggable: '.meta-item',
-  onEnd: () => {
+  }
+
+  function eliminarMeta(elemento) {
+    const meta = elemento.closest(".meta-item");
+    meta.remove();
     actualizarNumeros();
     calcular();
   }
-});
-    function cancelarCambios() {
-  if (confirm("¿Estás seguro que deseas descartar los cambios?")) {
-    location.reload(); // recarga la página desde cero
+
+  function prepararInputsMeta() {
+    const descripciones = document.querySelectorAll('.descripcion');
+    descripciones.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.dataset.original = input.value;
+        input.value = '';
+        input.classList.remove('confirmado');
+      });
+
+      input.addEventListener('blur', () => {
+        if (input.value.trim() === '') {
+          input.value = input.dataset.original || '';
+        } else {
+          input.classList.add('confirmado');
+        }
+      });
+
+      input.addEventListener('dblclick', () => {
+        input.classList.remove('confirmado');
+        input.focus();
+      });
+    });
+
+    const montos = document.querySelectorAll('.monto');
+    montos.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.dataset.original = input.value;
+        input.value = '';
+        input.classList.remove('confirmado');
+      });
+
+      input.addEventListener('blur', () => {
+        const valor = limpiarNumero(input.value);
+        input.value = formatoMoneda(valor);
+        if (valor > 0) {
+          input.classList.add('confirmado');
+        }
+        calcular();
+      });
+
+      input.addEventListener('dblclick', () => {
+        input.classList.remove('confirmado');
+        input.focus();
+      });
+
+      input.addEventListener('keypress', (e) => {
+        if (!/[0-9.]/.test(e.key)) e.preventDefault();
+      });
+    });
   }
-}
-  </script>
+
+  // Inicial
+  calcular();
+  prepararInputsMeta();
+
+  new Sortable(document.getElementById('listaMetas'), {
+    animation: 150,
+    handle: '.drag',
+    draggable: '.meta-item',
+    onEnd: () => {
+      actualizarNumeros();
+      calcular();
+    }
+  });
+
+  function cancelarCambios() {
+    if (confirm("¿Estás seguro que deseas descartar los cambios?")) {
+      location.reload();
+    }
+  }
+</script>
+
 </body>
 </html>
