@@ -222,7 +222,9 @@ input.error {
   color: #E53E3E;
   font-size: 0.8rem;
   margin-top: 4px;
+  display: block;
 }
+    
 #modalConfirmacion .modal-content {
   text-align: center;
 }
@@ -256,21 +258,24 @@ input.error {
       <button class="tab-button" onclick="openTab(event, 'contrasena')">Contraseña</button>
     </div>
 
-    <div id="datos" class="tab-content active">
-      <div class="form-group">
-        <label for="nombre">Nombre completo</label>
-        <input type="text" id="nombre" value="Juan Pérez" />
-      </div>
+<div id="datos" class="tab-content active">
+  <div class="form-group">
+    <label for="nombre">Nombre completo</label>
+    <input type="text" id="nombre" />
+    <span class="mensaje-error" id="error-nombre" style="display:none;">Este campo es obligatorio.</span>
+  </div>
 
-      <div class="form-group">
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" value="juan@example.com" />
-      </div>
+  <div class="form-group">
+    <label for="email">Correo electrónico</label>
+    <input type="email" id="email" />
+    <span class="mensaje-error" id="error-email" style="display:none;">Este campo es obligatorio.</span>
+  </div>
 
-      <div class="form-group">
-        <label for="telefono">Teléfono</label>
-        <input type="tel" id="telefono" value="+1 234 567 8901" />
-      </div>
+  <div class="form-group">
+    <label for="telefono">Teléfono</label>
+    <input type="tel" id="telefono" />
+    <span class="mensaje-error" id="error-telefono" style="display:none;">Este campo es obligatorio.</span>
+  </div>
 
       <div class="botones">
         <button class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
@@ -341,16 +346,40 @@ input.error {
       evt.currentTarget.classList.add("active");
     }
 
-    function guardarPerfil() {
-      const nombre = document.getElementById('nombre').value;
-      const email = document.getElementById('email').value;
-      const telefono = document.getElementById('telefono').value;
-      if (!nombre || !email || !telefono) {
-        alert("Por favor completa todos los campos.");
-        return;
-      }
-      alert("Cambios guardados exitosamente.");
-    }
+function guardarPerfil() {
+  const nombre = document.getElementById('nombre');
+  const email = document.getElementById('email');
+  const telefono = document.getElementById('telefono');
+
+  const errorNombre = document.getElementById('error-nombre');
+  const errorEmail = document.getElementById('error-email');
+  const errorTelefono = document.getElementById('error-telefono');
+
+  let error = false;
+
+  [nombre, email, telefono].forEach(input => input.classList.remove('error'));
+  [errorNombre, errorEmail, errorTelefono].forEach(span => span.style.display = 'none');
+
+  if (!nombre.value.trim()) {
+    nombre.classList.add('error');
+    errorNombre.style.display = 'block';
+    error = true;
+  }
+  if (!email.value.trim()) {
+    email.classList.add('error');
+    errorEmail.style.display = 'block';
+    error = true;
+  }
+  if (!telefono.value.trim()) {
+    telefono.classList.add('error');
+    errorTelefono.style.display = 'block';
+    error = true;
+  }
+
+  if (error) return;
+
+  mostrarModalConfirmacion(); // reemplaza alert
+}
 
     function cambiarContrasena() {
       const actual = document.getElementById('contrasena-actual').value;
