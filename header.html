@@ -101,6 +101,66 @@
   color: #594AE2;
   font-weight: 500;
 }
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.modal-content p {
+  margin: 1rem 0;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.modal-content .botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.modal-content .btn-cancelar {
+  background: #F8F6FF;
+  color: #7459D9;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+}
+
+.modal-content .btn-guardar {
+  background: #594AE2;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+}
 
   </style>
 </head>
@@ -126,6 +186,17 @@
   </div>
 </div>
 </div>
+  <!-- Modal para confirmar cerrar sesión -->
+<div id="modalCerrarSesion" class="modal">
+  <div class="modal-content">
+    <h3>🔒 ¿Deseas cerrar sesión?</h3>
+    <p>Tu sesión actual se cerrará y saldrás de la aplicación.</p>
+    <div class="botones">
+      <button class="btn-cancelar" onclick="cerrarModalCerrarSesion()">Cancelar</button>
+      <button class="btn-guardar" onclick="confirmarCerrarSesion()">Salir</button>
+    </div>
+  </div>
+</div>
 <script>
 function toggleMenuUsuario() {
   const menu = document.getElementById("menuUsuario");
@@ -133,20 +204,32 @@ function toggleMenuUsuario() {
 }
 
 function irAPerfil() {
-  window.location.href = "https://cadamenudo.github.io/UI-UX/usuario.html"; // 🔁 ajusta ruta real
+  cerrarMenuUsuario();
+  window.location.href = "https://cadamenudo.github.io/UI-UX/usuario.html";
 }
 
-function cerrarSesion() {
-  if (confirm("¿Deseas cerrar sesión?")) {
-    window.location.href = "https://cadamenudo.github.io/UI-UX/iniciar_sesion.html"; // 🔁 ajusta si usas logout server
-  }
+  function cerrarSesion() {
+  cerrarMenuUsuario(); // Cierra el dropdown del avatar
+  document.getElementById("modalCerrarSesion").classList.add("show");
 }
 
-// Cierra el menú si haces clic fuera del mismo
+function cerrarModalCerrarSesion() {
+  document.getElementById("modalCerrarSesion").classList.remove("show");
+}
+
+function confirmarCerrarSesion() {
+  window.location.href = "https://cadamenudo.github.io/UI-UX/iniciar_sesion.html"; // 🔁 ajusta si usas otra ruta
+}
+
+function cerrarMenuUsuario() {
+  const menu = document.getElementById("menuUsuario");
+  if (menu) menu.style.display = "none";
+}
+
+// Cierra el menú si haces clic fuera del avatar o del menú
 document.addEventListener("click", function (e) {
   const menu = document.getElementById("menuUsuario");
   const trigger = document.querySelector(".avatar-header");
-
   if (!menu.contains(e.target) && !trigger.contains(e.target)) {
     menu.style.display = "none";
   }
