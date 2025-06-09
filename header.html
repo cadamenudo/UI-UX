@@ -64,20 +64,90 @@
     * {
   box-sizing: border-box;
 }
+    .menu-usuario {
+  position: absolute;
+  top: 70px; /* ajusta según el alto del header */
+  right: 1rem;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  width: 150px;
+  display: none;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.menu-usuario .opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #111827;
+  font-family: 'Greycliff CF', sans-serif;
+}
+
+.menu-usuario .opcion:hover {
+  background-color: #F8F6FF;
+}
+
+.menu-usuario img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) saturate(100%) invert(29%) sepia(39%) saturate(749%) hue-rotate(218deg) brightness(94%) contrast(92%);
+}
 
   </style>
 </head>
 <body>
-
   <header>
     <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
-    <div class="usuario">
-      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
-      <span>Hola xavier</span>
-    </div>
+<div class="usuario avatar-header" onclick="toggleMenuUsuario()">
+  <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
+  <span>Hola xavier</span>
+</div>
   </header>
 <div style="padding: 2rem;">
 
+  <!-- Dropdown de usuario -->
+<div id="menuUsuario" class="menu-usuario">
+  <div class="opcion" onclick="irAPerfil()">
+    <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="Perfil" />
+    <span>Perfil</span>
+  </div>
+  <div class="opcion" onclick="cerrarSesion()">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png" alt="Salir" />
+    <span>Salir</span>
+  </div>
 </div>
+</div>
+<script>
+function toggleMenuUsuario() {
+  const menu = document.getElementById("menuUsuario");
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+function irAPerfil() {
+  window.location.href = "/perfil.html"; // 🔁 ajusta ruta real
+}
+
+function cerrarSesion() {
+  if (confirm("¿Deseas cerrar sesión?")) {
+    window.location.href = "/login.html"; // 🔁 ajusta si usas logout server
+  }
+}
+
+// Cierra el menú si haces clic fuera del mismo
+document.addEventListener("click", function (e) {
+  const menu = document.getElementById("menuUsuario");
+  const trigger = document.querySelector(".avatar-header");
+
+  if (!menu.contains(e.target) && !trigger.contains(e.target)) {
+    menu.style.display = "none";
+  }
+});
+</script>
 </body>
 </html>
