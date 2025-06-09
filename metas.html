@@ -58,64 +58,22 @@
   max-width: 140px;
   text-align: right;
 }
-
 @media (max-width: 375px) {
-  .meta-item {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas:
-      "numero descripcion eliminar"
-      ". monto .";
-    column-gap: 0.5rem;
-    row-gap: 0.4rem;
-    align-items: center;
-  }
-
-  .meta-item .numero {
-    grid-area: numero;
-    width: 24px;
-    height: 24px;
-    background: #594AE2;
-    color: white;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 24px;
-    font-size: 12px;
-    font-weight: bold;
-  }
-
-  .meta-item .descripcion-campo {
-    grid-area: descripcion;
-  }
-
-  .meta-item .monto-campo {
-    grid-area: monto;
-  }
-
-  .meta-item .eliminar {
-    grid-area: eliminar;
-  }
-
-  .descripcion,
-  .monto {
-    width: 100%;
+  .meta-item input.monto {
+    height: 40px !important;       /* ← esto manda */
+    line-height: 1;
     font-size: 1rem;
-    padding: 10px;
+    padding: 6px 10px;
     border: 1px solid #E5E7EB;
     border-radius: 10px;
+    font-weight: 500;
     box-sizing: border-box;
-  }
-
-  .monto {
     text-align: right;
-    font-weight: 500;
-  }
-
-  .descripcion {
-    font-weight: 500;
+    background: white;
+    font-family: 'Greycliff CF', sans-serif;
+    appearance: none;              /* ← Safari iOS fix */
   }
 }
-
     .numero {
       background: #594AE2;
       color: white;
