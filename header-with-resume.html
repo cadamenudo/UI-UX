@@ -104,6 +104,103 @@
   z-index: 20;
   background: transparent; /* no afecta el diseño visual */
 }
+    .menu-usuario {
+  position: absolute;
+  top: 90px;
+  right: 1rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem 0;
+  width: 160px; /* ✅ reducido desde 180px */
+  display: none;
+  z-index: 1000;
+}
+
+.menu-usuario .opcion {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menu-usuario .opcion:hover {
+  background: #F3F4F6;
+}
+
+.menu-usuario .opcion img {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.75rem;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(57%) saturate(4238%) hue-rotate(229deg) brightness(98%) contrast(94%); /* para #594AE2 */
+}
+
+.menu-usuario .opcion span {
+  font-size: 14px;
+  color: #594AE2;
+  font-weight: 500;
+}
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.modal-content p {
+  margin: 1rem 0;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.modal-content .botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.modal-content .btn-cancelar {
+  background: #F8F6FF;
+  color: #7459D9;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+}
+
+.modal-content .btn-guardar {
+  background: #594AE2;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -141,5 +238,66 @@
       </div>
     </section>
   </div>
+  
+  <!-- Dropdown de usuario -->
+<div id="menuUsuario" class="menu-usuario">
+  <div class="opcion" onclick="irAPerfil()">
+    <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="Perfil" />
+    <span>Perfil</span>
+  </div>
+  <div class="opcion" onclick="cerrarSesion()">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png" alt="Salir" />
+    <span>Salir</span>
+  </div>
+</div>
+</div>
+  <!-- Modal para confirmar cerrar sesión -->
+<div id="modalCerrarSesion" class="modal">
+  <div class="modal-content">
+    <h3>¿Deseas cerrar sesión?</h3>
+    <div class="botones">
+      <button class="btn-cancelar" onclick="cerrarModalCerrarSesion()">Cancelar</button>
+      <button class="btn-guardar" onclick="confirmarCerrarSesion()">Salir</button>
+    </div>
+  </div>
+</div>
+  <script>
+function toggleMenuUsuario() {
+  const menu = document.getElementById("menuUsuario");
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+function irAPerfil() {
+  cerrarMenuUsuario();
+  window.location.href = "https://cadamenudo.github.io/UI-UX/usuario.html";
+}
+
+  function cerrarSesion() {
+  cerrarMenuUsuario(); // Cierra el dropdown del avatar
+  document.getElementById("modalCerrarSesion").classList.add("show");
+}
+
+function cerrarModalCerrarSesion() {
+  document.getElementById("modalCerrarSesion").classList.remove("show");
+}
+
+function confirmarCerrarSesion() {
+  window.location.href = "https://cadamenudo.github.io/UI-UX/iniciar_sesion.html"; // 🔁 ajusta si usas otra ruta
+}
+
+function cerrarMenuUsuario() {
+  const menu = document.getElementById("menuUsuario");
+  if (menu) menu.style.display = "none";
+}
+
+// Cierra el menú si haces clic fuera del avatar o del menú
+document.addEventListener("click", function (e) {
+  const menu = document.getElementById("menuUsuario");
+  const trigger = document.querySelector(".avatar-header");
+  if (!menu.contains(e.target) && !trigger.contains(e.target)) {
+    menu.style.display = "none";
+  }
+});
+</script>
 </body>
 </html>
