@@ -60,9 +60,21 @@
 }
 
 @media (max-width: 375px) {
-  .meta-item {
-    flex-direction: column;
-    align-items: stretch;
+  .meta-item input.monto {
+    width: 100%;
+    max-width: 100%;
+    font-size: 1rem;
+    padding: 6px 10px;
+    min-height: 36px;
+    text-align: right;
+    border-radius: 8px;
+    box-sizing: border-box;
+    line-height: 1.1;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   }
 
   .meta-item .numero,
@@ -70,31 +82,6 @@
   .meta-item .eliminar {
     justify-self: start;
   }
-
-  .meta-item input.descripcion {
-    width: 100%;
-    max-width: 100%;
-    font-size: 1rem;
-    padding: 12px;
-    min-height: 48px;
-  }
-
-.meta-item input.monto {
-  width: 100%;
-  max-width: 100%;
-  font-size: 1rem;
-  padding: 6px 10px;
-  min-height: 38px;
-  text-align: right;
-  border-radius: 8px;
-  box-sizing: border-box;
-  line-height: 1.1;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 
   .meta-item input.confirmado {
     font-weight: 600;
