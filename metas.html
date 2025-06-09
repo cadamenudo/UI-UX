@@ -381,6 +381,14 @@ function agregarMeta() {
   input.focus();
 });
 
+            // Inicial
+document.querySelectorAll(".monto").forEach(input => {
+  input.addEventListener("input", calcular);
+});
+
+calcular();
+prepararInputsMeta();
+      
   // Montos
   const montos = document.querySelectorAll('.monto');
   montos.forEach(input => {
