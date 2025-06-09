@@ -333,13 +333,14 @@ input.error {
 
         <!-- MODAL PARA CONFIRMACION -->
     
-    <div id="modalConfirmacion" class="modal">
+<div id="modalConfirmacion" class="modal">
   <div class="modal-content">
-    <h3>✅ Contraseña actualizada</h3>
-    <p>Tu nueva contraseña ha sido guardada correctamente.</p>
+    <h3 id="modalConfirmacionTitulo">✅ Confirmación</h3>
+    <p id="modalConfirmacionTexto">La acción se ha realizado correctamente.</p>
     <button class="btn-guardar" onclick="cerrarModalConfirmacion()">Aceptar</button>
   </div>
 </div>
+
 
 
   <script>
@@ -382,7 +383,7 @@ function guardarPerfil() {
 
   if (error) return;
 
-  mostrarModalConfirmacion(); // reemplaza alert
+  mostrarModalConfirmacion('datos');  // ✅ nuevo
 }
 
     function cambiarContrasena() {
@@ -459,7 +460,7 @@ function cambiarContrasena() {
 
   if (error) return;
 
-  alert("Contraseña cambiada exitosamente.");
+  mostrarModalConfirmacion('contrasena');
 }
 ['contrasena-actual', 'nueva-contrasena', 'confirmar-contrasena'].forEach(id => {
   const input = document.getElementById(id);
@@ -468,15 +469,32 @@ function cambiarContrasena() {
     document.getElementById('error-match').style.display = 'none';
   });
 });
-    function mostrarModalConfirmacion() {
+function mostrarModalConfirmacion(origen = 'default') {
   const modal = document.getElementById("modalConfirmacion");
-  if (modal) modal.classList.add("show");
+  const titulo = document.getElementById("modalConfirmacionTitulo");
+  const mensaje = document.getElementById("modalConfirmacionTexto");
+
+  if (!modal) return;
+
+  if (origen === 'datos') {
+    titulo.textContent = "✅ Datos actualizados";
+    mensaje.textContent = "Tu información fue guardada correctamente.";
+  } else if (origen === 'contrasena') {
+    titulo.textContent = "✅ Contraseña actualizada";
+    mensaje.textContent = "Tu nueva contraseña ha sido guardada correctamente.";
+  } else {
+    titulo.textContent = "✅ Confirmación";
+    mensaje.textContent = "La acción se ha realizado correctamente.";
+  }
+
+  modal.classList.add("show");
 }
 
 function cerrarModalConfirmacion() {
   const modal = document.getElementById("modalConfirmacion");
   if (modal) modal.classList.remove("show");
 }
+
 
 
   </script>
