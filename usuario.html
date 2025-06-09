@@ -214,6 +214,16 @@
   padding: 0.75rem;
    padding-right: 2.5rem; /* <-- AGREGAR ESTO */
 }
+input.error {
+  border: 1px solid #E53E3E !important;
+  background-color: #FFF5F5;
+}
+
+.mensaje-error {
+  color: #E53E3E;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
 
   </style>
 </head>
@@ -280,6 +290,7 @@
          alt="Ver"
          class="toggle-password"
          onclick="togglePassword('confirmar-contrasena')" />
+    <span id="error-match" class="mensaje-error" style="display:none;">Las contraseñas no coinciden.</span>
   </div>
 
   <div class="botones">
@@ -353,6 +364,52 @@ function eliminarFoto() {
   alert("Foto eliminada");
   cerrarModalFoto();
 }
+function cambiarContrasena() {
+  let error = false;
+
+  // Campos
+  const actual = document.getElementById('contrasena-actual');
+  const nueva = document.getElementById('nueva-contrasena');
+  const confirmar = document.getElementById('confirmar-contrasena');
+  const errorMatch = document.getElementById('error-match');
+
+  // Reiniciar estilos
+  [actual, nueva, confirmar].forEach(input => input.classList.remove('error'));
+  errorMatch.style.display = 'none';
+
+  // Validar campos vacíos
+  if (!actual.value.trim()) {
+    actual.classList.add('error');
+    error = true;
+  }
+  if (!nueva.value.trim()) {
+    nueva.classList.add('error');
+    error = true;
+  }
+  if (!confirmar.value.trim()) {
+    confirmar.classList.add('error');
+    error = true;
+  }
+
+  // Validar coincidencia
+  if (nueva.value && confirmar.value && nueva.value !== confirmar.value) {
+    nueva.classList.add('error');
+    confirmar.classList.add('error');
+    errorMatch.style.display = 'block';
+    error = true;
+  }
+
+  if (error) return;
+
+  alert("Contraseña cambiada exitosamente.");
+}
+['contrasena-actual', 'nueva-contrasena', 'confirmar-contrasena'].forEach(id => {
+  const input = document.getElementById(id);
+  input.addEventListener('input', () => {
+    input.classList.remove('error');
+    document.getElementById('error-match').style.display = 'none';
+  });
+});
 
   </script>
 </body>
