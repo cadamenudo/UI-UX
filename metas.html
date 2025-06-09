@@ -75,31 +75,31 @@
     width: 100%;
     max-width: 100%;
     font-size: 1rem;
-    padding: 12px;
-    min-height: 48px;
+    padding: 6px 10px;          /* antes era más grande */
+    min-height: 38px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    line-height: 1.1;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-.meta-item input.monto {
-  width: 100%;
-  max-width: 100%;
-  font-size: 1rem;
-  padding: 6px 10px;
-  min-height: 38px;
-  text-align: right;
-  border-radius: 8px;
-  box-sizing: border-box;
-  line-height: 1.1;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
+  .meta-item input.monto {
+    width: 100%;
+    max-width: 100%;
+    font-size: 1rem;
+    padding: 12px;              /* antes era más pequeño */
+    min-height: 48px;
+    text-align: right;
+  }
 
   .meta-item input.confirmado {
     font-weight: 600;
   }
 }
+
 
     .numero {
       background: #594AE2;
