@@ -135,7 +135,7 @@
       margin-left: 0.5rem;
     }
 .password-container {
-  position: relative;
+  position: 1rem;
 }
 
 .password-container input {
@@ -149,6 +149,23 @@
   box-sizing: border-box;
 }
 
+    
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 0.75rem;
+  padding-right: 2.5rem;
+  height: 48px;
+  font-size: 1rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
 .toggle-password {
   position: absolute;
   top: 50%;
@@ -306,15 +323,16 @@ input.error {
          onclick="togglePassword('nueva-contrasena')" />
   </div>
 
-  <div class="form-group password-container">
-    <label for="confirmar-contrasena">Confirmar nueva contraseña</label>
-    <input type="password" id="confirmar-contrasena" />
+<div class="form-group password-container">
+  <label for="contrasena-actual">Contraseña actual</label>
+  <div class="input-wrapper">
+    <input type="password" id="contrasena-actual" />
     <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png"
          alt="Ver"
          class="toggle-password"
-         onclick="togglePassword('confirmar-contrasena')" />
-    <span id="error-match" class="mensaje-error" style="display:none;">Las contraseñas no coinciden.</span>
+         onclick="togglePassword('contrasena-actual')" />
   </div>
+</div>
 
   <div class="botones">
     <button class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
