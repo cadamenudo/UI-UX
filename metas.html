@@ -75,7 +75,7 @@
     width: 100%;
     max-width: 100%;
     font-size: 1rem;
-    padding: 6px 10px;          /* antes era más grande */
+    padding: 6px 10px;
     min-height: 38px;
     border-radius: 8px;
     box-sizing: border-box;
@@ -87,13 +87,26 @@
   }
 
   .meta-item input.monto {
+    all: unset; /* ✅ REEMPLAZA solo esta parte */
     width: 100%;
-    max-width: 100%;
+    display: block;
+    padding: 10px 12px;
     font-size: 1rem;
-    padding: 12px;              /* antes era más pequeño */
-    min-height: 48px;
+    min-height: 40px;
     text-align: right;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    font-weight: 500;
+    font-family: 'Greycliff CF', sans-serif;
+    box-sizing: border-box;
   }
+
+  .meta-item input.confirmado {
+    font-weight: 600;
+  }
+}
+
 
   .meta-item input.confirmado {
     font-weight: 600;
