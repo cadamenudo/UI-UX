@@ -59,44 +59,18 @@
   text-align: right;
 }
 
-@media (max-width: 375px) {
+    @media (max-width: 400px) {
   .meta-item {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "numero numero"
-      "descripcion descripcion"
-      "monto monto"
-      "acciones acciones";
-    row-gap: 0.5rem;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .meta-item .numero {
-    grid-area: numero;
-  }
-
-  .meta-item input.descripcion {
-    grid-area: descripcion;
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-  }
-
+  .meta-item input.descripcion,
   .meta-item input.monto {
-    grid-area: monto;
     width: 100%;
-    padding: 8px;
-    font-size: 1rem;
-    text-align: right;
-  }
-
-  .meta-item .eliminar,
-  .meta-item .drag {
-    grid-area: acciones;
+    max-width: 100%;
   }
 }
-
     .numero {
       background: #594AE2;
       color: white;
@@ -117,24 +91,23 @@
       font-size: 1.25rem;
     }
 
-.meta-item input.descripcion {
-  width: 100%;
-  max-width: 100%;
-  font-size: 1rem;
-  padding: 10px 12px;
-  min-height: 44px;
-}
+    .meta-item input.descripcion {
+      flex: 1;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 15px;
+    }
 
-.meta-item input.monto {
-  width: 100%;
-  max-width: 100%;
-  font-size: 1rem;
-  padding: 6px 10px; /* ⬅️ menos padding vertical */
-  min-height: 38px;   /* ⬅️ un poco menos que descripción */
-  text-align: right;
-  border-radius: 8px;
-}
-
+    .meta-item input.monto {
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 12px;
+      width: 100px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
 .meta-item input.confirmado {
   border: none;
@@ -273,14 +246,13 @@
     <h2>Metas de Ahorro</h2>
     <p class="subtitulo">Establace y ordénalas de acuerdo a tus prioridades</p>
     <div class="lista-metas" id="listaMetas">
-    <div class="lista-metas" id="listaMetas">
-        <div class="meta-item">
-          <span class="numero">1</span>
-          <span class="drag">≡</span>
-          <input type="text" class="descripcion" value="Meta 1" />
-          <input type="text" class="monto" value="$0" />
-          <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
-        </div>
+      <div class="meta-item">
+        <span class="numero">1</span>
+        <span class="drag">≡</span>
+        <input type="text" class="descripcion" value="Meta 1" />
+        <input type="text" class="monto" value="$0" />
+        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
+      </div>
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
     </div>
     
@@ -371,7 +343,7 @@ function agregarMeta() {
       calcular();
     }
 
-function prepararInputsMeta() {
+    function prepararInputsMeta() {
   // Descripciones
   const descripciones = document.querySelectorAll('.descripcion');
   descripciones.forEach(input => {
@@ -388,12 +360,12 @@ function prepararInputsMeta() {
         input.classList.add('confirmado');
       }
     });
-
-    input.addEventListener('dblclick', () => {
-      input.classList.remove('confirmado');
-      input.focus();
-    });
   });
+
+      input.addEventListener('dblclick', () => {
+  input.classList.remove('confirmado');
+  input.focus();
+});
 
   // Montos
   const montos = document.querySelectorAll('.monto');
@@ -414,9 +386,9 @@ function prepararInputsMeta() {
     });
 
     input.addEventListener('dblclick', () => {
-      input.classList.remove('confirmado');
-      input.focus();
-    });
+  input.classList.remove('confirmado');
+  input.focus();
+});
 
     input.addEventListener('keypress', (e) => {
       if (!/[0-9.]/.test(e.key)) e.preventDefault();
@@ -424,14 +396,13 @@ function prepararInputsMeta() {
   });
 }
 
+
     // Inicial
     document.querySelectorAll(".monto").forEach(input => {
       input.addEventListener("input", calcular);
     });
 
     calcular();
-
-    prepararInputsMeta();
     
     new Sortable(document.getElementById('listaMetas'), {
   animation: 150,
