@@ -109,12 +109,15 @@
       font-size: 16px;
     }
 
-    .meta-item input.confirmado {
-  border-color: #D1D5DB;
-  background: #F9FAFB;
+.meta-item input.confirmado {
+  border: none;
+  background: transparent;
   font-weight: 600;
   color: #111827;
+  box-shadow: none;
+  pointer-events: none; /* evita edición accidental */
 }
+
     .eliminar {
       font-size: 18px;
       color: #9CA3AF;
