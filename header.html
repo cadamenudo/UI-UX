@@ -64,39 +64,42 @@
     * {
   box-sizing: border-box;
 }
-    .menu-usuario {
+.menu-usuario {
   position: absolute;
-  top: 70px; /* ajusta según el alto del header */
+  top: 90px;
   right: 1rem;
-  background: #FFFFFF;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  width: 150px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 0.75rem 0;
+  width: 180px;
+  z-index: 50;
   display: none;
-  z-index: 1000;
-  overflow: hidden;
 }
 
 .menu-usuario .opcion {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   padding: 0.75rem 1rem;
-  font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.2s;
-  color: #111827;
-  font-family: 'Greycliff CF', sans-serif;
 }
 
 .menu-usuario .opcion:hover {
-  background-color: #F8F6FF;
+  background: #F3F4F6;
 }
 
-.menu-usuario img {
+.menu-usuario .opcion img {
   width: 20px;
   height: 20px;
-  filter: brightness(0) saturate(100%) invert(29%) sepia(39%) saturate(749%) hue-rotate(218deg) brightness(94%) contrast(92%);
+  margin-right: 0.75rem;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(57%) saturate(4238%) hue-rotate(229deg) brightness(98%) contrast(94%); /* para #594AE2 */
+}
+
+.menu-usuario .opcion span {
+  font-size: 14px;
+  color: #594AE2;
+  font-weight: 500;
 }
 
   </style>
