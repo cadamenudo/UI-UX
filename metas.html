@@ -58,20 +58,17 @@
   max-width: 140px;
   text-align: right;
 }
-@media (max-width: 375px) {
+
+    @media (max-width: 400px) {
+  .meta-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .meta-item input.descripcion,
   .meta-item input.monto {
-    height: 40px !important;       /* ← esto manda */
-    line-height: 1;
-    font-size: 1rem;
-    padding: 6px 10px;
-    border: 1px solid #E5E7EB;
-    border-radius: 10px;
-    font-weight: 500;
-    box-sizing: border-box;
-    text-align: right;
-    background: white;
-    font-family: 'Greycliff CF', sans-serif;
-    appearance: none;              /* ← Safari iOS fix */
+    width: 100%;
+    max-width: 100%;
   }
 }
     .numero {
@@ -249,17 +246,14 @@
     <h2>Metas de Ahorro</h2>
     <p class="subtitulo">Establace y ordénalas de acuerdo a tus prioridades</p>
     <div class="lista-metas" id="listaMetas">
-      <div class="meta-item">
-        <span class="numero">1</span>
-        <span class="drag">≡</span>
-        <div class="campo descripcion-campo">
+    <div class="lista-metas" id="listaMetas">
+        <div class="meta-item">
+          <span class="numero">1</span>
+          <span class="drag">≡</span>
           <input type="text" class="descripcion" value="Meta 1" />
-        </div>
-        <div class="campo monto-campo">
           <input type="text" class="monto" value="$0" />
+          <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
         </div>
-        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
-      </div>
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
     </div>
     
