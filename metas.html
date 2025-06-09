@@ -59,18 +59,44 @@
   text-align: right;
 }
 
-    @media (max-width: 400px) {
+@media (max-width: 375px) {
   .meta-item {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "numero numero"
+      "descripcion descripcion"
+      "monto monto"
+      "acciones acciones";
+    row-gap: 0.5rem;
+    align-items: center;
   }
 
-  .meta-item input.descripcion,
-  .meta-item input.monto {
+  .meta-item .numero {
+    grid-area: numero;
+  }
+
+  .meta-item input.descripcion {
+    grid-area: descripcion;
     width: 100%;
-    max-width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .meta-item input.monto {
+    grid-area: monto;
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    text-align: right;
+  }
+
+  .meta-item .eliminar,
+  .meta-item .drag {
+    grid-area: acciones;
   }
 }
+
     .numero {
       background: #594AE2;
       color: white;
