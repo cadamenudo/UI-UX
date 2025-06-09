@@ -59,16 +59,30 @@
   text-align: right;
 }
 
-    @media (max-width: 400px) {
+@media (max-width: 480px) {
   .meta-item {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .meta-item .numero,
+  .meta-item .drag,
+  .meta-item .eliminar {
+    justify-self: start;
   }
 
   .meta-item input.descripcion,
   .meta-item input.monto {
     width: 100%;
     max-width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .meta-item input.confirmado {
+    font-weight: 600;
   }
 }
     .numero {
@@ -362,6 +376,11 @@ function agregarMeta() {
     });
   });
 
+      input.addEventListener('dblclick', () => {
+  input.classList.remove('confirmado');
+  input.focus();
+});
+
   // Montos
   const montos = document.querySelectorAll('.monto');
   montos.forEach(input => {
@@ -379,6 +398,11 @@ function agregarMeta() {
       }
       calcular();
     });
+
+    input.addEventListener('dblclick', () => {
+  input.classList.remove('confirmado');
+  input.focus();
+});
 
     input.addEventListener('keypress', (e) => {
       if (!/[0-9.]/.test(e.key)) e.preventDefault();
