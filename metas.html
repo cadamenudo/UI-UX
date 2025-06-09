@@ -60,12 +60,10 @@
 }
 
 @media (max-width: 375px) {
-.meta-item .campo input {
-  padding: 10px;
-  font-size: 1rem;
-  min-height: 40px;
-  border-radius: 10px;
-}
+  .meta-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
   .meta-item .numero,
   .meta-item .drag,
@@ -73,34 +71,30 @@
     justify-self: start;
   }
 
+  .meta-item .campo {
+    width: 100%;
+    margin-bottom: 0.25rem; /* espacio entre descripción y monto */
+  }
+
   .meta-item input.descripcion {
     width: 100%;
-    max-width: 100%;
     font-size: 1rem;
-    padding: 6px 10px;
-    min-height: 38px;
+    padding: 8px 10px;
+    min-height: 42px;
     border-radius: 8px;
     box-sizing: border-box;
-    line-height: 1.1;
     font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .meta-item input.monto {
-    all: unset; /* ✅ REEMPLAZA solo esta parte */
     width: 100%;
-    display: block;
-    padding: 10px 12px;
     font-size: 1rem;
+    padding: 6px 10px;
     min-height: 40px;
+    border-radius: 8px;
     text-align: right;
     background: white;
-    border: 1px solid #E5E7EB;
-    border-radius: 10px;
     font-weight: 500;
-    font-family: 'Greycliff CF', sans-serif;
     box-sizing: border-box;
   }
 
