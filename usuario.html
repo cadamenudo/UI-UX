@@ -223,6 +223,21 @@ input.error {
   font-size: 0.8rem;
   margin-top: 4px;
 }
+#modalConfirmacion .modal-content {
+  text-align: center;
+}
+
+#modalConfirmacion .modal-content h3 {
+  color: #22C55E; /* verde confirmación */
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+#modalConfirmacion .modal-content p {
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 1rem;
+}
 
   </style>
 </head>
@@ -306,6 +321,17 @@ input.error {
     <button class="cancelar" onclick="cerrarModalFoto()">❌ Cancelar</button>
   </div>
 </div>
+
+        <!-- MODAL PARA CONFIRMACION -->
+    
+    <div id="modalConfirmacion" class="modal">
+  <div class="modal-content">
+    <h3>✅ Contraseña actualizada</h3>
+    <p>Tu nueva contraseña ha sido guardada correctamente.</p>
+    <button class="btn-guardar" onclick="cerrarModalConfirmacion()">Aceptar</button>
+  </div>
+</div>
+
 
   <script>
     function openTab(evt, tabName) {
@@ -409,6 +435,16 @@ function cambiarContrasena() {
     document.getElementById('error-match').style.display = 'none';
   });
 });
+    function mostrarModalConfirmacion() {
+  const modal = document.getElementById("modalConfirmacion");
+  if (modal) modal.classList.add("show");
+}
+
+function cerrarModalConfirmacion() {
+  const modal = document.getElementById("modalConfirmacion");
+  if (modal) modal.classList.remove("show");
+}
+
 
   </script>
 </body>
