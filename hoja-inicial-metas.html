@@ -110,6 +110,12 @@
         padding: 0.65rem;
       }
     }
+    .simbolo-moneda {
+  font-family: Arial, 'Segoe UI Symbol', 'Noto Sans Symbols', sans-serif;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
   </style>
 </head>
 <body>
@@ -119,10 +125,14 @@
 
     <img src="https://cadamenudo.github.io/UI-UX/assets/icons/piggy-purple-coin.png" alt="Meta de ahorro" class="cerdito" />
 
+
     <div id="listaMetas">
       <div class="meta-item">
         <input type="text" placeholder="Nombre de la meta" class="nombre-meta" />
-        <input type="number" placeholder="$0" class="monto-meta" />
+        <div class="campo-monto">
+          <span class="simbolo-moneda">$</span>
+          <input type="number" placeholder="0" class="monto-meta" />
+        </div>
       </div>
     </div>
 
@@ -131,7 +141,6 @@
     <button onclick="continuar()">Continuar</button>
   </main>
 
-  <script>
 <script>
   async function continuar() {
     const metas = [...document.querySelectorAll('.meta-item')].map(item => {
@@ -176,6 +185,11 @@
     `;
     lista.appendChild(nuevaMeta);
   }
+  const moneda = JSON.parse(localStorage.getItem("moneda")) || { simbolo: "$" };
+document.querySelectorAll(".simbolo-moneda").forEach(span => {
+  span.textContent = moneda.simbolo;
+});
+
 </script>
 
   </script>
