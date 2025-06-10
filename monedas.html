@@ -116,6 +116,27 @@
     button:hover {
       background-color: #4726c9;
     }
+    .checkmark {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background-color: white;
+  border: 2px solid #22C55E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #22C55E;
+  font-weight: bold;
+  display: none;
+}
+
+.opcion.seleccionada .checkmark {
+  display: flex;
+  background-color: #22C55E;
+  color: white;
+}
+
   </style>
 </head>
 <body>
@@ -126,13 +147,28 @@
   <input type="text" id="buscador" placeholder="Buscar moneda...">
 
   <div class="opciones-moneda" id="listaMonedas">
+        ("USD", "$", "Dólar estadounidense"),
+    ("EUR", "€", "Euro"),
+    ("MXN", "$", "Peso mexicano"),
+    ("COP", "$", "Peso colombiano"),
+    ("PEN", "S/", "Sol peruano"),
+    ("ARS", "$", "Peso argentino"),
+    ("CLP", "$", "Peso chileno"),
+    ("UYU", "$", "Peso uruguayo"),
+    ("BOB", "Bs", "Boliviano"),
+    ("DOP", "RD$", "Peso dominicano"),
+    ("GTQ", "Q", "Quetzal guatemalteco"),
+    ("HNL", "L", "Lempira hondureña"),
+    ("NIO", "C$", "Córdoba nicaragüense"),
+    ("CRC", "₡", "Colón costarricense"),
+    ("VES", "Bs", "Bolívar venezolano")
     <div class="opcion seleccionada" data-codigo="USD" data-nombre="Dólar estadounidense" data-simbolo="$">
       <div class="info-moneda">
         <span class="simbolo">$</span>
         <span class="codigo">USD</span>
         <span class="nombre">Dólar estadounidense</span>
       </div>
-      <span class="checkmark">✅</span>
+      <span class="checkmark">✔</span>
     </div>
 
     <div class="opcion" data-codigo="EUR" data-nombre="Euro" data-simbolo="€">
@@ -141,7 +177,7 @@
         <span class="codigo">EUR</span>
         <span class="nombre">Euro</span>
       </div>
-      <span class="checkmark">✅</span>
+      <span class="checkmark">✔</span>
     </div>
 
     <div class="opcion" data-codigo="MXN" data-nombre="Peso mexicano" data-simbolo="$">
@@ -150,7 +186,7 @@
         <span class="codigo">MXN</span>
         <span class="nombre">Peso mexicano</span>
       </div>
-      <span class="checkmark">✅</span>
+      <span class="checkmark">✔</span>
     </div>
 
     <div class="opcion" data-codigo="COP" data-nombre="Peso colombiano" data-simbolo="$">
@@ -159,7 +195,7 @@
         <span class="codigo">COP</span>
         <span class="nombre">Peso colombiano</span>
       </div>
-      <span class="checkmark">✅</span>
+      <span class="checkmark">✔</span>
     </div>
 
     <div class="opcion" data-codigo="PEN" data-nombre="Sol peruano" data-simbolo="S/">
@@ -168,7 +204,7 @@
         <span class="codigo">PEN</span>
         <span class="nombre">Sol peruano</span>
       </div>
-      <span class="checkmark">✅</span>
+      <span class="checkmark">✔</span>
     </div>
 
     <div class="opcion" data-codigo="ARS" data-nombre="Peso argentino" data-simbolo="$">
@@ -177,7 +213,7 @@
         <span class="codigo">ARS</span>
         <span class="nombre">Peso argentino</span>
       </div>
-      <span class="checkmark">✅</span>
+      <span class="checkmark">✔</span>
     </div>
   </div>
 
