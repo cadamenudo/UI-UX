@@ -140,13 +140,20 @@
   max-height: 320px; /* aprox. 4 tarjetas de 70–80px + espacio */
   overflow-y: auto;
 }
+    .logo {
+  display: block;
+  margin: 0 auto;
+  width: 300px;
+  margin-bottom: 0.25rem;
+}
 
   </style>
 </head>
 <body>
-
-  <h1>Seleccionar moneda</h1>
-  <p>¿Qué moneda usas?</p>
+  
+<img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Cada Menudo Logo" class="logo" />
+  
+  <h1>¿Qué moneda quieres usar?</h1>
 
   <input type="text" id="buscador" placeholder="Buscar moneda...">
 
@@ -273,7 +280,7 @@
       <span class="checkmark">✔</span>
     </div>
   </div>
-
+</div>
   <button onclick="continuar()">Continuar</button>
   
   <script>
