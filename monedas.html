@@ -142,11 +142,7 @@ main {
 <body>
  <main class="contenido">
 <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Cada Menudo Logo" class="logo" />
-  
   <h1>¿Qué moneda quieres usar?</h1>
-
-  <input type="text" id="buscador" placeholder="Buscar moneda...">
-
  <div class="scrollable">
   <div class="opciones-moneda" id="listaMonedas">
        <div class="opcion seleccionada" data-codigo="USD" data-nombre="Dólar estadounidense" data-simbolo="$">
@@ -383,26 +379,12 @@ main {
   
   <script>
     const opciones = document.querySelectorAll(".opcion");
-    const buscador = document.getElementById("buscador");
-
     opciones.forEach(opcion => {
       opcion.addEventListener("click", () => {
         opciones.forEach(o => o.classList.remove("seleccionada"));
         opcion.classList.add("seleccionada");
       });
     });
-
-    buscador.addEventListener("input", () => {
-      const filtro = buscador.value.toLowerCase();
-      opciones.forEach(opcion => {
-        const codigo = opcion.dataset.codigo.toLowerCase();
-        const nombre = opcion.dataset.nombre.toLowerCase();
-        const simbolo = opcion.dataset.simbolo.toLowerCase();
-        const visible = codigo.includes(filtro) || nombre.includes(filtro) || simbolo.includes(filtro);
-        opcion.style.display = visible ? "flex" : "none";
-      });
-    });
-
     function continuar() {
       const seleccion = document.querySelector(".opcion.seleccionada");
       const codigo = seleccion?.dataset.codigo || "USD";
