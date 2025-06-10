@@ -12,7 +12,7 @@
 
     body {
       font-family: 'Greycliff CF', sans-serif;
-      background: #FAFBFF;
+      background: #FFFFFF;
       margin: 0;
       padding: 2rem;
       color: #111827;
@@ -26,7 +26,16 @@
     p {
       font-size: 1rem;
       color: #6B7280;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #D1D5DB;
+      margin-bottom: 1.5rem;
     }
 
     .opciones-moneda {
@@ -37,12 +46,13 @@
 
     .opcion {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
       border: 2px solid #E5E7EB;
       border-radius: 12px;
       padding: 1rem;
       cursor: pointer;
-      transition: border-color 0.3s, background-color 0.3s;
+      transition: all 0.3s ease;
     }
 
     .opcion:hover {
@@ -50,24 +60,43 @@
     }
 
     .opcion.seleccionada {
+      background-color: #22C55E;
       border-color: #22C55E;
-      background-color: #ECFDF5;
+      color: white;
+    }
+
+    .info-moneda {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .simbolo {
       font-size: 1.5rem;
       font-family: 'Segoe UI Symbol', 'Arial', sans-serif;
-      font-weight: bold;
     }
 
     .codigo {
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     .nombre {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: #6B7280;
+    }
+
+    .opcion.seleccionada .nombre {
+      color: white;
+    }
+
+    .checkmark {
+      font-size: 1.25rem;
+      display: none;
+    }
+
+    .opcion.seleccionada .checkmark {
+      display: inline-block;
     }
 
     button {
@@ -91,52 +120,71 @@
 </head>
 <body>
 
-    <h1>Seleccionar moneda</h1>
-  <p>¿Qué moneda usas?</p>
-
-  <input type="text" id="buscador" placeholder="Buscar moneda..." style="width: 100%; padding: 0.75rem; margin-bottom: 1.5rem; font-size: 1rem; border-radius: 8px; border: 1px solid #D1D5DB;">
-
   <h1>Seleccionar moneda</h1>
   <p>¿Qué moneda usas?</p>
 
+  <input type="text" id="buscador" placeholder="Buscar moneda...">
+
   <div class="opciones-moneda" id="listaMonedas">
-    <!-- Monedas principales -->
-    <div class="opcion seleccionada" data-codigo="USD">
-      <span class="simbolo">$</span>
-      <span class="codigo">USD</span>
-      <span class="nombre">Dólar estadounidense</span>
+    <div class="opcion seleccionada" data-codigo="USD" data-nombre="Dólar estadounidense" data-simbolo="$">
+      <div class="info-moneda">
+        <span class="simbolo">$</span>
+        <span class="codigo">USD</span>
+        <span class="nombre">Dólar estadounidense</span>
+      </div>
+      <span class="checkmark">✅</span>
     </div>
-    <div class="opcion" data-codigo="EUR">
-      <span class="simbolo">€</span>
-      <span class="codigo">EUR</span>
-      <span class="nombre">Euro</span>
+
+    <div class="opcion" data-codigo="EUR" data-nombre="Euro" data-simbolo="€">
+      <div class="info-moneda">
+        <span class="simbolo">€</span>
+        <span class="codigo">EUR</span>
+        <span class="nombre">Euro</span>
+      </div>
+      <span class="checkmark">✅</span>
     </div>
-    <div class="opcion" data-codigo="MXN">
-      <span class="simbolo">$</span>
-      <span class="codigo">MXN</span>
-      <span class="nombre">Peso mexicano</span>
+
+    <div class="opcion" data-codigo="MXN" data-nombre="Peso mexicano" data-simbolo="$">
+      <div class="info-moneda">
+        <span class="simbolo">$</span>
+        <span class="codigo">MXN</span>
+        <span class="nombre">Peso mexicano</span>
+      </div>
+      <span class="checkmark">✅</span>
     </div>
-    <div class="opcion" data-codigo="COP">
-      <span class="simbolo">$</span>
-      <span class="codigo">COP</span>
-      <span class="nombre">Peso colombiano</span>
+
+    <div class="opcion" data-codigo="COP" data-nombre="Peso colombiano" data-simbolo="$">
+      <div class="info-moneda">
+        <span class="simbolo">$</span>
+        <span class="codigo">COP</span>
+        <span class="nombre">Peso colombiano</span>
+      </div>
+      <span class="checkmark">✅</span>
     </div>
-    <div class="opcion" data-codigo="PEN">
-      <span class="simbolo">S/</span>
-      <span class="codigo">PEN</span>
-      <span class="nombre">Sol peruano</span>
+
+    <div class="opcion" data-codigo="PEN" data-nombre="Sol peruano" data-simbolo="S/">
+      <div class="info-moneda">
+        <span class="simbolo">S/</span>
+        <span class="codigo">PEN</span>
+        <span class="nombre">Sol peruano</span>
+      </div>
+      <span class="checkmark">✅</span>
     </div>
-    <div class="opcion" data-codigo="ARS">
-      <span class="simbolo">$</span>
-      <span class="codigo">ARS</span>
-      <span class="nombre">Peso argentino</span>
+
+    <div class="opcion" data-codigo="ARS" data-nombre="Peso argentino" data-simbolo="$">
+      <div class="info-moneda">
+        <span class="simbolo">$</span>
+        <span class="codigo">ARS</span>
+        <span class="nombre">Peso argentino</span>
+      </div>
+      <span class="checkmark">✅</span>
     </div>
   </div>
 
   <button onclick="continuar()">Continuar</button>
 
   <script>
-const opciones = document.querySelectorAll(".opcion");
+    const opciones = document.querySelectorAll(".opcion");
     const buscador = document.getElementById("buscador");
 
     opciones.forEach(opcion => {
