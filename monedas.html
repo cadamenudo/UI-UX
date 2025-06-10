@@ -136,6 +136,10 @@
   background-color: #22C55E;
   color: white;
 }
+.scrollable {
+  max-height: 320px; /* aprox. 4 tarjetas de 70–80px + espacio */
+  overflow-y: auto;
+}
 
   </style>
 </head>
@@ -146,6 +150,7 @@
 
   <input type="text" id="buscador" placeholder="Buscar moneda...">
 
+ <div class="scrollable">
   <div class="opciones-moneda" id="listaMonedas">
        <div class="opcion seleccionada" data-codigo="USD" data-nombre="Dólar estadounidense" data-simbolo="$">
       <div class="info-moneda">
