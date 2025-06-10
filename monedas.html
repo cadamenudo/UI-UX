@@ -30,13 +30,13 @@
     }
 
     input[type="text"] {
+      margin-top: 1.5rem;      /* 👈 nuevo espacio entre <p> y el input */
+      margin-bottom: 2rem;     /* 👈 más separación visual antes del scroll */
       width: 100%;
       padding: 0.75rem;
       font-size: 1rem;
       border-radius: 10px;
       border: 1px solid #D1D5DB;
-      margin-top: 0.5rem;
-      margin-bottom: 1.5rem;
     }
 
     .opciones-moneda {
@@ -138,8 +138,10 @@
   color: white;
 }
 .scrollable {
-  max-height: 320px; /* aprox. 4 tarjetas de 70–80px + espacio */
+  max-height: 320px;
   overflow-y: auto;
+  margin-top: 0.5rem;      /* 👈 opcional si sientes que sigue muy pegado */
+  margin-bottom: 1.5rem;
 }
     .logo {
   display: block;
