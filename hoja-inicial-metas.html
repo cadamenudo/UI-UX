@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metas de Ahorro</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background: #FFFFFF;
+      margin: 0;
+      padding: 2rem 1.5rem;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .contenedor-metas {
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #6B7280;
+      margin: 0;
+    }
+
+    .cerdito {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto;
+    }
+
+    #listaMetas {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .meta-item input {
+      font-size: 1rem;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: 1px solid #D1D5DB;
+      width: 45%;
+      font-family: inherit;
+    }
+
+    .btn-add {
+      background-color: transparent;
+      color: #5932EA;
+      border: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    button {
+      background-color: #22C55E;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 100%;
+      max-width: 280px;
+      margin: 1rem auto 0 auto;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #16a34a;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      .cerdito {
+        width: 120px;
+        height: 120px;
+      }
+
+      .meta-item input {
+        padding: 0.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="contenedor-metas">
+    <h1>Establece tu meta de ahorro</h1>
+    <p>¿Cuáles son tus metas y cuánto quieres ahorrar?</p>
+
+    <img src="https://cadamenudo.github.io/UI-UX/assets/icons/piggy-purple.svg" alt="Meta de ahorro" class="cerdito" />
+
+    <div id="listaMetas">
+      <div class="meta-item">
+        <input type="text" placeholder="Nombre de la meta" class="nombre-meta" />
+        <input type="number" placeholder="$0" class="monto-meta" />
+      </div>
+    </div>
+
+    <button type="button" class="btn-add" onclick="anadirMeta()">+ Añadir meta</button>
+
+    <button onclick="continuar()">Continuar</button>
+  </main>
+
+  <script>
+    function anadirMeta() {
+      const lista = document.getElementById("listaMetas");
+      const nuevaMeta = document.createElement("div");
+      nuevaMeta.className = "meta-item";
+      nuevaMeta.innerHTML = `
+        <input type="text" placeholder="Nombre de la meta" class="nombre-meta" />
+        <input type="number" placeholder="$0" class="monto-meta" />
+      `;
+      lista.appendChild(nuevaMeta);
+    }
+
+    function continuar() {
+      const metas = [...document.querySelectorAll('.meta-item')].map(item => {
+        const nombre = item.querySelector('.nombre-meta')?.value;
+        const monto = item.querySelector('.monto-meta')?.value;
+        return { nombre, monto };
+      });
+      alert("Metas registradas:\n" + metas.map(m => `${m.nombre}: $${m.monto}`).join('\n'));
+    }
+  </script>
+</body>
+</html>
