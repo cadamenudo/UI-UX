@@ -343,7 +343,6 @@ function asignarEventos(input) {
     input.removeEventListener("focus", handleFocus);
   });
 }
-document.querySelectorAll("#listaMetas input").forEach(asignarEventos);
 
 function anadirMeta() {
   const div = document.createElement("div");
@@ -438,6 +437,8 @@ function numerarMetas() {
     }
   });
 }
+    document.querySelectorAll("#listaMetas input").forEach(asignarEventos);
+    
   new Sortable(document.getElementById("listaMetas"), {
     handle: ".drag-handle",
     animation: 150,
