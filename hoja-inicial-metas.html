@@ -92,28 +92,53 @@
     }
 
 @media (max-width: 480px) {
+  .meta-item {
+    display: flex;
+    flex-wrap: nowrap;         /* 🔹 evita que se rompa en dos líneas */
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0 0.25rem;
+  }
+
+  .numero-drag {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .numero {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+
+  .drag-handle {
+    font-size: 1rem;
+  }
+
   .nombre-meta {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-    max-width: 40%;
+    font-size: 0.85rem;
+    padding: 0.4rem;
+    max-width: 35vw;
+    flex: 1 1 auto;
   }
 
   .campo-monto {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.6rem;
-    max-width: 10%;
+    padding: 0.4rem 0.5rem;
+    max-width: 22vw;
   }
 
   .monto-meta {
-    width: 50px;
-    font-size: 0.9rem;
+    width: 45px;
+    font-size: 0.85rem;
   }
 
   .btn-delete {
     font-size: 1rem;
-    align-self: flex-start;
+    align-self: center;
   }
 }
+
 
     .simbolo-moneda {
       font-family: Arial, 'Segoe UI Symbol', sans-serif;
