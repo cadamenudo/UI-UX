@@ -192,14 +192,15 @@
 
 <div id="listaMetas">
   <div class="meta-item">
-    <div class="numero">1</div>
-    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+    <div class="numero-drag">
+      <div class="numero">1</div>
+      <div class="drag-handle">≡</div>
+    </div>
+    <input type="text" class="nombre-meta" placeholder="Meta" />
     <div class="campo-monto">
       <span class="simbolo-moneda">$</span>
-      <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
+      <input type="number" class="monto-meta" value="0" />
     </div>
-    <div class="mensaje-error">Por favor ingresa un monto válido mayor a cero</div>
-    <div class="drag-handle">≡</div>
     <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
   </div>
 </div>
