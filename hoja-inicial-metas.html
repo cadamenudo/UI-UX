@@ -357,10 +357,10 @@ function anadirMeta() {
       <div class="drag-handle">≡</div>
     </div>
     <div class="input-wrap">
-      <input type="text" class="nombre-meta" placeholder="Meta" />
+      <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
       <div class="campo-monto">
         <span class="simbolo-moneda">${simbolo}</span>
-        <input type="number" class="monto-meta" value="0" />
+        <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
       </div>
     </div>
     <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
@@ -380,7 +380,6 @@ function anadirMeta() {
   numerarMetas();
 }
 
-
 function handleEnter(event, input) {
   if (event.key === 'Enter') {
     event.preventDefault();
@@ -389,13 +388,15 @@ function handleEnter(event, input) {
     const monto = grupo.querySelector('.monto-meta');
 
     [nombre, monto].forEach(el => {
-    if (el.value.trim() !== '') {
-      el.classList.add('confirmado');
-    }
+      if (el.value.trim() !== '') {
+        el.classList.add('confirmado');
+        el.setAttribute('readonly', true);
+      }
+    });
+
     actualizarTotal();
   }
 }
-
 function actualizarTotal() {
   const montos = document.querySelectorAll(".monto-meta");
   let total = 0;
