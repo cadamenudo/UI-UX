@@ -118,6 +118,18 @@
       padding: 1rem;
       cursor: pointer;
     }
+    .input-error {
+  border: 2px solid #EF4444 !important; /* rojo */
+  background-color: #FEF2F2;
+}
+.mensaje-error {
+  color: #EF4444;
+  font-size: 0.85rem;
+  margin-left: 4px;
+  margin-top: 4px;
+  display: none;
+}
+
   </style>
 </head>
 <body>
@@ -170,20 +182,22 @@ function anadirMeta() {
   const div = document.createElement("div");
   div.className = "meta-item";
   div.innerHTML = `
-    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
-    <span class="simbolo-moneda">${simbolo}</span>
-    <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
-    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
+    <div style="flex: 1;">
+      <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+    </div>
+    <div style="display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: center;">
+        <span class="simbolo-moneda">${simbolo}</span>
+        <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
+        <button class="btn-delete" onclick="this.closest('.meta-item').remove(); actualizarTotal();">&times;</button>
+      </div>
+      <div class="mensaje-error">Este campo es obligatorio</div>
+    </div>
   `;
   div.querySelectorAll("input").forEach(input => {
     input.addEventListener("dblclick", habilitarEdicion);
     input.addEventListener("touchstart", habilitarEdicion);
-  // 🔹 Limpia el input al tocar por primera vez
-  input.addEventListener("focus", function handleFocus() {
-    this.value = "";
-    this.removeEventListener("focus", handleFocus);
   });
-});
   document.getElementById("listaMetas").appendChild(div);
 }
 
@@ -206,18 +220,48 @@ function actualizarTotal() {
   document.getElementById("totalAnual").textContent = total.toLocaleString();
 }
 
-document.addEventListener("input", actualizarTotal);
+  // ✅ ⬇ Aquí va este bloque nuevo
+  document.addEventListener("input", function (e) {
+    if (e.target.classList.contains("monto-meta")) {
+      const mensaje = e.target.closest(".meta-item").querySelector(".mensaje-error");
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val) && val > 0) {
+        e.target.classList.remove("input-error");
+        mensaje.style.display = "none";
+      }
+    }
+  });
 
 function continuar() {
   actualizarTotal();
-  const montos = document.querySelectorAll(".monto-meta");
+  const items = document.querySelectorAll(".meta-item");
   let total = 0;
-  montos.forEach(input => {
-    const val = parseFloat(input.value) || 0;
-    total += val;
+  let error = false;
+
+  items.forEach(item => {
+    const input = item.querySelector(".monto-meta");
+    const mensaje = item.querySelector(".mensaje-error");
+    const val = parseFloat(input.value);
+
+    if (isNaN(val) || val <= 0) {
+      input.classList.add("input-error");
+      mensaje.style.display = "block";
+      error = true;
+    } else {
+      input.classList.remove("input-error");
+      mensaje.style.display = "none";
+      total += val;
+    }
   });
+
+  if (error) {
+    alert("Por favor completa todos los montos de tus metas.");
+    return;
+  }
+
   alert("Total registrado: " + simbolo + total);
 }
+
 
 function habilitarEdicion(event) {
   const input = event.target;
