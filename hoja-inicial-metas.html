@@ -78,14 +78,16 @@
       border-radius: 10px;
     }
 
-.campo-monto {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  border: none;
-  background: transparent;
-}
+    .campo-monto {
+      display: flex;
+      align-items: center;
+      border: 1px solid #D1D5DB;
+      border-radius: 10px;
+      padding: 0.5rem 0.75rem;
+      background: white;
+      min-width: 100px;
+      justify-content: space-between;
+    }
 
     .monto-meta {
       border: none;
@@ -213,23 +215,14 @@
       border: 2px solid #EF4444 !important; /* rojo */
       background-color: #FEF2F2;
     }
-.input-dinero {
-  display: flex;
-  align-items: center;
-  border: 1px solid #D1D5DB;
-  border-radius: 10px;
-  padding: 0.5rem 0.75rem;
-  background: white;
-  min-width: 100px;
-  width: 100%;
-  box-sizing: border-box;
-}
-.mensaje-error {
-  color: #EF4444;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-  display: none;
-}
+
+    .mensaje-error {
+      color: #EF4444;
+      font-size: 0.85rem;
+      margin-left: 4px;
+      margin-top: 4px;
+      display: none;
+    }
 .readonly {
   border: none !important;
   background-color: transparent !important;
@@ -305,22 +298,20 @@ input.confirmado {
   <p class="descripcion">Para los próximos 12 meses</p>
 
 <div id="listaMetas">
-<div class="meta-item">
-  <div class="numero-drag">
-    <div class="numero">1</div>
-    <div class="drag-handle">≡</div>
+  <div class="meta-item">
+    <div class="numero-drag">
+      <div class="numero">1</div>
+      <div class="drag-handle">≡</div>
+    </div>
+    <div class="input-wrap">
+      <input type="text" class="nombre-meta" placeholder="Meta" />
+      <div class="campo-monto">
+        <span class="simbolo-moneda">$</span>
+        <input type="number" class="monto-meta" value="0" inputmode="decimal" pattern="[0-9]*" />
+      </div>
+    </div>
+    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
   </div>
-  <div class="input-wrap">
-    <input type="text" class="nombre-meta" placeholder="Meta" />
-<div class="campo-monto">
-  <div class="input-dinero">
-    <span class="simbolo-moneda">$</span>
-    <input type="number" class="monto-meta" value="0" inputmode="decimal" pattern="[0-9]*" />
-  </div>
-  <span class="mensaje-error">Ingresa un monto válido</span>
-</div>
-  <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
-</div>
 </div>
 
   <button class="btn-add" onclick="anadirMeta()">+ añadir meta</button>
@@ -366,13 +357,12 @@ function anadirMeta() {
       <div class="drag-handle">≡</div>
     </div>
     <div class="input-wrap">
-      <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+      <input type="text" class="nombre-meta" placeholder="Meta" />
       <div class="campo-monto">
         <span class="simbolo-moneda">${simbolo}</span>
-        <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
+        <input type="number" class="monto-meta" value="0" />
       </div>
     </div>
-    <span class="mensaje-error" style="display:none;">Ingresa un monto válido</span>
     <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
   `;
 
@@ -390,6 +380,7 @@ function anadirMeta() {
   numerarMetas();
 }
 
+
 function handleEnter(event, input) {
   if (event.key === 'Enter') {
     event.preventDefault();
@@ -398,15 +389,13 @@ function handleEnter(event, input) {
     const monto = grupo.querySelector('.monto-meta');
 
     [nombre, monto].forEach(el => {
-      if (el.value.trim() !== '') {
-        el.classList.add('confirmado');
-        el.setAttribute('readonly', true);
-      }
-    });
-
+    if (el.value.trim() !== '') {
+      el.classList.add('confirmado');
+    }
     actualizarTotal();
   }
 }
+
 function actualizarTotal() {
   const montos = document.querySelectorAll(".monto-meta");
   let total = 0;
@@ -441,19 +430,14 @@ function habilitarEdicion(event) {
 
 document.addEventListener("input", function (e) {
   if (e.target.classList.contains("monto-meta")) {
-    const input = e.target;
-    const mensaje = input.closest(".input-wrap").querySelector(".mensaje-error");
-    const val = parseFloat(input.value);
+    const mensaje = e.target.closest(".meta-item").querySelector(".mensaje-error");
+    const val = parseFloat(e.target.value);
     if (!isNaN(val) && val > 0) {
-      input.classList.remove("input-error");
+      e.target.classList.remove("input-error");
       if (mensaje) mensaje.style.display = "none";
-    } else {
-      input.classList.add("input-error");
-      if (mensaje) mensaje.style.display = "inline";
     }
   }
 });
-
     document.addEventListener("focusin", function (e) {
   if (e.target.classList.contains("monto-meta") && e.target.value === "0") {
     e.target.value = "";
@@ -478,25 +462,11 @@ function numerarMetas() {
   });
 function validarConfirmado(input) {
   const valor = input.value.trim();
-  const mensaje = input.closest('.meta-item').querySelector('.mensaje-error');
-
-  if (input.classList.contains('monto-meta')) {
-    const numero = parseFloat(valor);
-    if (isNaN(numero) || numero <= 0) {
-      input.classList.add('input-error');
-      if (mensaje) mensaje.style.display = "block";
-      return;
-    }
-  }
-
-  if (valor !== '') {
+  if (valor !== '' && parseFloat(valor) >= 0) {
     input.classList.add('confirmado');
     input.setAttribute('readonly', true);
-    if (mensaje) mensaje.style.display = "none";
-    input.classList.remove('input-error');
   }
 }
-
   </script>
 </body>
 </html>
