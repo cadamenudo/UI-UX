@@ -41,8 +41,8 @@
     }
 
 .meta-item {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
@@ -79,18 +79,17 @@
 
 @media (max-width: 480px) {
   .meta-item {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .numero-drag {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.5rem;
+    align-self: flex-start;
+    margin-bottom: 0.25rem;
   }
 
-  .campo-monto,
-  .nombre-meta {
+  .nombre-meta,
+  .campo-monto {
     width: 100%;
   }
 
@@ -180,7 +179,9 @@
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
+  min-width: 40px;
 }
+
 .numero {
   background: #5932EA;
   color: white;
