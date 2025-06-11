@@ -210,7 +210,7 @@ function anadirMeta() {
   // Permitir volver a editar con doble clic o toque
   div.querySelectorAll("input").forEach(input => {
     input.addEventListener("dblclick", habilitarEdicion);
-    input.addEventListener("touchstart", habilitarEdicion);
+    input.addEventListener("touchend", habilitarEdicion);
   });
 
   document.getElementById("listaMetas").appendChild(div);
