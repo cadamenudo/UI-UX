@@ -348,7 +348,6 @@ document.querySelectorAll("#listaMetas input").forEach(input => {
   });
 });
 
-
 function anadirMeta() {
   const div = document.createElement("div");
   div.className = "meta-item";
@@ -357,17 +356,24 @@ function anadirMeta() {
       <div class="numero"></div>
       <div class="drag-handle">≡</div>
     </div>
-    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" onblur="validarConfirmado(this)" />
-    <div class="campo-monto">
-      <span class="simbolo-moneda">${simbolo}</span>
-      <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" onblur="validarConfirmado(this)" />
+    <div class="input-wrap">
+      <input type="text" class="nombre-meta" placeholder="Meta" />
+      <div class="campo-monto">
+        <span class="simbolo-moneda">${simbolo}</span>
+        <input type="number" class="monto-meta" value="0" />
+      </div>
     </div>
     <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
   `;
 
   div.querySelectorAll("input").forEach(input => {
-    input.addEventListener("click", habilitarEdicion);
-    input.addEventListener("touchend", habilitarEdicion);
+    input.addEventListener("dblclick", habilitarEdicion);
+    input.addEventListener("touchstart", habilitarEdicion);
+    input.addEventListener("blur", () => validarConfirmado(input));
+    input.addEventListener("focus", function handleFocus() {
+      this.value = "";
+      this.removeEventListener("focus", handleFocus);
+    });
   });
 
   document.getElementById("listaMetas").appendChild(div);
