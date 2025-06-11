@@ -298,21 +298,21 @@ input.confirmado {
   <p class="descripcion">Para los próximos 12 meses</p>
 
 <div id="listaMetas">
-  <div class="meta-item">
-    <div class="numero-drag">
-      <div class="numero">1</div>
-      <div class="drag-handle">≡</div>
-    </div>
-    <div class="input-wrap">
-      <input type="text" class="nombre-meta" placeholder="Meta" />
-      <div class="campo-monto">
-        <span class="simbolo-moneda">$</span>
-        <input type="number" class="monto-meta" value="0" inputmode="decimal" pattern="[0-9]*" />
-      </div>
-    </div>
-    <span class="mensaje-error">Ingresa un monto válido</span> <!-- ✅ Añade esto -->
-    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
+<div class="meta-item">
+  <div class="numero-drag">
+    <div class="numero">1</div>
+    <div class="drag-handle">≡</div>
   </div>
+  <div class="input-wrap">
+    <input type="text" class="nombre-meta" placeholder="Meta" />
+    <div class="campo-monto">
+      <span class="simbolo-moneda">$</span>
+      <input type="number" class="monto-meta" value="0" inputmode="decimal" pattern="[0-9]*" />
+    </div>
+    <span class="mensaje-error" style="display:none;">Ingresa un monto válido</span>
+  </div>
+  <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
+</div>
 </div>
 
   <button class="btn-add" onclick="anadirMeta()">+ añadir meta</button>
@@ -433,14 +433,19 @@ function habilitarEdicion(event) {
 
 document.addEventListener("input", function (e) {
   if (e.target.classList.contains("monto-meta")) {
-    const mensaje = e.target.closest(".meta-item").querySelector(".mensaje-error");
-    const val = parseFloat(e.target.value);
+    const input = e.target;
+    const mensaje = input.closest(".input-wrap").querySelector(".mensaje-error");
+    const val = parseFloat(input.value);
     if (!isNaN(val) && val > 0) {
-      e.target.classList.remove("input-error");
+      input.classList.remove("input-error");
       if (mensaje) mensaje.style.display = "none";
+    } else {
+      input.classList.add("input-error");
+      if (mensaje) mensaje.style.display = "inline";
     }
   }
 });
+
     document.addEventListener("focusin", function (e) {
   if (e.target.classList.contains("monto-meta") && e.target.value === "0") {
     e.target.value = "";
