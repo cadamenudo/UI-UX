@@ -232,6 +232,8 @@ function handleEnter(event, input) {
     [nombre, monto].forEach(el => {
       el.classList.add('readonly');
       el.setAttribute('readonly', true);
+      el.style.border = 'none';
+      el.style.background = 'transparent';
     });
 
     actualizarTotal();
