@@ -265,6 +265,12 @@ document.addEventListener("input", function (e) {
     }
   }
 });
+    document.addEventListener("focusin", function (e) {
+  if (e.target.classList.contains("monto-meta") && e.target.value === "0") {
+    e.target.value = "";
+  }
+});
+
   </script>
 </body>
 </html>
