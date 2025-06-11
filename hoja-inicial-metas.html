@@ -465,11 +465,25 @@ function numerarMetas() {
   });
 function validarConfirmado(input) {
   const valor = input.value.trim();
-  if (valor !== '' && parseFloat(valor) >= 0) {
+  const mensaje = input.closest('.meta-item').querySelector('.mensaje-error');
+
+  if (input.classList.contains('monto-meta')) {
+    const numero = parseFloat(valor);
+    if (isNaN(numero) || numero <= 0) {
+      input.classList.add('input-error');
+      if (mensaje) mensaje.style.display = "block";
+      return;
+    }
+  }
+
+  if (valor !== '') {
     input.classList.add('confirmado');
     input.setAttribute('readonly', true);
+    if (mensaje) mensaje.style.display = "none";
+    input.classList.remove('input-error');
   }
 }
+
   </script>
 </body>
 </html>
