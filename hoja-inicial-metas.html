@@ -285,7 +285,6 @@ input.confirmado {
   font-weight: 600;
   color: #111827;
   box-shadow: none;
-  pointer-events: none;
 }
 
   </style>
@@ -384,12 +383,9 @@ function handleEnter(event, input) {
     const monto = grupo.querySelector('.monto-meta');
 
     [nombre, monto].forEach(el => {
-      el.classList.add('readonly');
-      el.setAttribute('readonly', true);
-      el.style.border = 'none';
-      el.style.background = 'transparent';
-    });
-
+    if (el.value.trim() !== '') {
+      el.classList.add('confirmado');
+    }
     actualizarTotal();
   }
 }
@@ -456,9 +452,9 @@ function numerarMetas() {
       actualizarTotal();
     }
   });
-    function validarConfirmado(input) {
+function validarConfirmado(input) {
   const valor = input.value.trim();
-  if (valor !== '') {
+  if (valor !== "" && parseFloat(valor) > 0) {
     input.classList.add('confirmado');
   }
 }
