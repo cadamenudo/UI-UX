@@ -44,7 +44,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
     }
 
     .meta-item input {
@@ -55,13 +55,31 @@
       font-family: inherit;
     }
 
-    .nombre-meta {
-      flex: 1;
-    }
-
-    .monto-meta {
-      width: 100px;
-    }
+.nombre-meta {
+  flex: 2;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+}
+.monto-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  padding: 0.5rem;
+  background: white;
+  width: 100px;
+  justify-content: space-between;
+}
+.monto-meta {
+  border: none;
+  width: 50px;
+  font-size: 1rem;
+  text-align: right;
+  outline: none;
+  background: transparent;
+}
 
     .simbolo-moneda {
       font-family: Arial, 'Segoe UI Symbol', sans-serif;
@@ -142,14 +160,16 @@
 
   <img src="https://cadamenudo.github.io/UI-UX/assets/icons/piggy-purple-coin.png" alt="Cerdito" class="cerdito" />
 
-  <div id="listaMetas">
-    <div class="meta-item">
-      <input type="text" class="nombre-meta" placeholder="Meta 1" />
+<div id="listaMetas">
+  <div class="meta-item">
+    <input type="text" class="nombre-meta" placeholder="Meta 1" />
+    <div class="monto-wrapper">
       <span class="simbolo-moneda">$</span>
       <input type="number" class="monto-meta" value="0" onkeydown="if(event.key==='Enter'){event.preventDefault();continuar();}" />
-      <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
     </div>
+    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
   </div>
+</div>
 
   <button class="btn-add" onclick="anadirMeta()">+ añadir meta</button>
 
