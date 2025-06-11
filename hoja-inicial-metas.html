@@ -417,13 +417,15 @@ function continuar() {
 }
 
 function habilitarEdicion(event) {
-  event.stopPropagation();
   const input = event.target;
 
-  input.removeAttribute('readonly');
-  input.classList.remove('readonly');
-  input.focus();
-  input.select(); // selecciona todo el contenido
+  // Solo actúa si el campo ya estaba confirmado
+  if (input.classList.contains('confirmado')) {
+    input.classList.remove('confirmado');
+    input.removeAttribute('readonly');
+    input.focus();
+    input.select();
+  }
 }
 
 document.addEventListener("input", function (e) {
@@ -460,8 +462,9 @@ function numerarMetas() {
   });
 function validarConfirmado(input) {
   const valor = input.value.trim();
-  if (valor !== "" && parseFloat(valor) > 0) {
+  if (valor !== '' && parseFloat(valor) >= 0) {
     input.classList.add('confirmado');
+    input.setAttribute('readonly', true);
   }
 }
   </script>
