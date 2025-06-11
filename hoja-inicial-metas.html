@@ -199,17 +199,12 @@ function anadirMeta() {
   const div = document.createElement("div");
   div.className = "meta-item";
   div.innerHTML = `
-    <div style="flex: 1;">
-      <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+    <div class="campo-monto">
+      <span class="simbolo-moneda">${simbolo}</span>
+      <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
     </div>
-    <div style="display: flex; flex-direction: column;">
-      <div style="display: flex; align-items: center;">
-        <span class="simbolo-moneda">${simbolo}</span>
-        <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
-        <button class="btn-delete" onclick="this.closest('.meta-item').remove(); actualizarTotal();">&times;</button>
-      </div>
-      <div class="mensaje-error">Este campo es obligatorio</div>
-    </div>
+    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
   `;
   div.querySelectorAll("input").forEach(input => {
     input.addEventListener("dblclick", habilitarEdicion);
@@ -217,6 +212,7 @@ function anadirMeta() {
   });
   document.getElementById("listaMetas").appendChild(div);
 }
+
 
 function handleEnter(event, input) {
   if (event.key === 'Enter') {
