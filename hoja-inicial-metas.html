@@ -248,12 +248,17 @@ function continuar() {
 }
 
 function habilitarEdicion(event) {
-  event.stopPropagation(); // ← evita que se dispare click en el botón
+  event.stopPropagation(); // evita propagación al padre
   const input = event.target;
-  input.removeAttribute('readonly');
-  input.classList.remove('readonly');
-  input.focus();
+
+  if (input.hasAttribute('readonly')) {
+    input.removeAttribute('readonly');
+    input.classList.remove('readonly');
+    input.focus();
+    input.select(); // selecciona todo al tocar
+  }
 }
+
 
 document.addEventListener("input", function (e) {
   if (e.target.classList.contains("monto-meta")) {
