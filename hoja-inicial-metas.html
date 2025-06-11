@@ -352,10 +352,10 @@ function anadirMeta() {
       <div class="numero"></div>
       <div class="drag-handle">≡</div>
     </div>
-    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" onblur="validarConfirmado(this)" />
     <div class="campo-monto">
       <span class="simbolo-moneda">${simbolo}</span>
-      <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
+      <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" onblur="validarConfirmado(this)" />
     </div>
     <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
   `;
@@ -450,6 +450,12 @@ function numerarMetas() {
       actualizarTotal();
     }
   });
+    function validarConfirmado(input) {
+  const valor = input.value.trim();
+  if (valor !== '') {
+    input.classList.add('confirmado');
+  }
+}
   </script>
 </body>
 </html>
