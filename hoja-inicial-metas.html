@@ -158,6 +158,12 @@ document.querySelectorAll(".simbolo-moneda").forEach(el => el.textContent = simb
 document.querySelectorAll("#listaMetas input").forEach(input => {
   input.addEventListener("dblclick", habilitarEdicion);
   input.addEventListener("touchstart", habilitarEdicion);
+
+    // 🔹 Limpia el input al tocar por primera vez
+  input.addEventListener("focus", function handleFocus() {
+    this.value = "";
+    this.removeEventListener("focus", handleFocus);
+  });
 });
 
 function anadirMeta() {
@@ -172,7 +178,12 @@ function anadirMeta() {
   div.querySelectorAll("input").forEach(input => {
     input.addEventListener("dblclick", habilitarEdicion);
     input.addEventListener("touchstart", habilitarEdicion);
+  // 🔹 Limpia el input al tocar por primera vez
+  input.addEventListener("focus", function handleFocus() {
+    this.value = "";
+    this.removeEventListener("focus", handleFocus);
   });
+});
   document.getElementById("listaMetas").appendChild(div);
 }
 
