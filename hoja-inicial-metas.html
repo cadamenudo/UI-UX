@@ -368,8 +368,6 @@ div.querySelectorAll("input").forEach(asignarEventos);
   document.getElementById("listaMetas").appendChild(div);
   numerarMetas();
 }
-
-
 function handleEnter(event, input) {
   if (event.key === 'Enter') {
     event.preventDefault();
@@ -378,13 +376,16 @@ function handleEnter(event, input) {
     const monto = grupo.querySelector('.monto-meta');
 
     [nombre, monto].forEach(el => {
-    if (el.value.trim() !== '') {
-      el.classList.add('confirmado');
-    }
+      if (el.value.trim() !== '') {
+        el.classList.add('confirmado');
+        el.setAttribute('readonly', true);
+      }
+    });
+
     actualizarTotal();
   }
 }
-}
+
 function actualizarTotal() {
   const montos = document.querySelectorAll(".monto-meta");
   let total = 0;
@@ -396,10 +397,6 @@ function actualizarTotal() {
 } 
 
 document.addEventListener("input", actualizarTotal);
-
-document.querySelectorAll(".monto-meta").forEach(input => {
-  input.addEventListener("change", actualizarTotal);
-});
 
 function continuar() {
   actualizarTotal();
