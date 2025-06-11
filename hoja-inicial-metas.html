@@ -258,6 +258,28 @@
   color: #9CA3AF;
   line-height: 1;
 }
+@supports (-webkit-touch-callout: none) {
+  html {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    min-height: 100%;
+    position: relative;
+    overscroll-behavior: contain; /* previene movimientos del layout */
+    touch-action: manipulation;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px !important; /* evita el zoom al enfocar en iOS */
+  }
+}
+
 
   </style>
 </head>
