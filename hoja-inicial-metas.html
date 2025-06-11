@@ -142,8 +142,8 @@
   <button class="btn-add" onclick="anadirMeta()">+ añadir meta</button>
 
 <div class="resultado">
-  <h2>Meta total para el año</h2>
   <div class="fila-total">
+    <span style="font-weight: bold;">Meta total</span>
     <span><span class="simbolo-moneda">$</span><span id="totalAnual">0</span></span>
   </div>
 </div>
@@ -151,43 +151,69 @@
   <button class="continuar" onclick="continuar()">Continuar</button>
 
   <script>
-    const simbolo = JSON.parse(localStorage.getItem("moneda"))?.simbolo || "$";
-    document.querySelectorAll(".simbolo-moneda").forEach(el => el.textContent = simbolo);
+const simbolo = JSON.parse(localStorage.getItem("moneda"))?.simbolo || "$";
 
-    function anadirMeta() {
-      const div = document.createElement("div");
-      div.className = "meta-item";
-      div.innerHTML = `
-        <input type="text" class="nombre-meta" placeholder="Meta" />
-        <span class="simbolo-moneda">${simbolo}</span>
-        <input type="number" class="monto-meta" value="0" onkeydown="if(event.key==='Enter'){event.preventDefault();continuar();}" />
-        <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
-      `;
-      document.getElementById("listaMetas").appendChild(div);
-    }
+document.querySelectorAll(".simbolo-moneda").forEach(el => el.textContent = simbolo);
 
-    function actualizarTotal() {
-      const montos = document.querySelectorAll(".monto-meta");
-      let total = 0;
-      montos.forEach(input => {
-        const val = parseFloat(input.value) || 0;
-        total += val;
-      });
-      document.getElementById("totalAnual").textContent = total.toLocaleString();
-    }
+document.querySelectorAll("#listaMetas input").forEach(input => {
+  input.addEventListener("dblclick", habilitarEdicion);
+  input.addEventListener("touchstart", habilitarEdicion);
+});
 
-    document.addEventListener("input", actualizarTotal);
+function anadirMeta() {
+  const div = document.createElement("div");
+  div.className = "meta-item";
+  div.innerHTML = `
+    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+    <span class="simbolo-moneda">${simbolo}</span>
+    <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
+    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
+  `;
+  div.querySelectorAll("input").forEach(input => {
+    input.addEventListener("dblclick", habilitarEdicion);
+    input.addEventListener("touchstart", habilitarEdicion);
+  });
+  document.getElementById("listaMetas").appendChild(div);
+}
 
-    function continuar() {
-      actualizarTotal();
-      const montos = document.querySelectorAll(".monto-meta");
-      let total = 0;
-      montos.forEach(input => {
-        const val = parseFloat(input.value) || 0;
-        total += val;
-      });
-      alert("Total registrado: " + simbolo + total);
-    }
+function handleEnter(event, input) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    input.classList.add('readonly');
+    input.setAttribute('readonly', true);
+    actualizarTotal();
+  }
+}
+
+function actualizarTotal() {
+  const montos = document.querySelectorAll(".monto-meta");
+  let total = 0;
+  montos.forEach(input => {
+    const val = parseFloat(input.value) || 0;
+    total += val;
+  });
+  document.getElementById("totalAnual").textContent = total.toLocaleString();
+}
+
+document.addEventListener("input", actualizarTotal);
+
+function continuar() {
+  actualizarTotal();
+  const montos = document.querySelectorAll(".monto-meta");
+  let total = 0;
+  montos.forEach(input => {
+    const val = parseFloat(input.value) || 0;
+    total += val;
+  });
+  alert("Total registrado: " + simbolo + total);
+}
+
+function habilitarEdicion(event) {
+  const input = event.target;
+  input.removeAttribute('readonly');
+  input.classList.remove('readonly');
+  input.focus();
+}
   </script>
 </body>
 </html>
