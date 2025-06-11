@@ -78,14 +78,30 @@
     }
 
 @media (max-width: 480px) {
-  .nombre-meta {
-    flex: 1 1 100%;
+  .meta-item {
+    flex-direction: column;
+    align-items: stretch;
   }
+
+  .numero-drag {
+    align-self: flex-start;
+    margin-bottom: 0.25rem;
+  }
+
+  .nombre-meta,
   .campo-monto {
-    flex: 1 1 100%;
-    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .campo-monto {
+    justify-content: space-between;
+  }
+
+  .btn-delete {
+    align-self: flex-end;
   }
 }
+
     .simbolo-moneda {
       font-family: Arial, 'Segoe UI Symbol', sans-serif;
       font-weight: bold;
