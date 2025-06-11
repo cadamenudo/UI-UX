@@ -79,6 +79,14 @@
       text-align: left;
     }
 
+    .btn-delete {
+      background: none;
+      border: none;
+      color: #9CA3AF;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
     .resultado {
       background: #F9FAFB;
       padding: 1rem;
@@ -126,7 +134,8 @@
     <div class="meta-item">
       <input type="text" class="nombre-meta" placeholder="Meta 1" />
       <span class="simbolo-moneda">$</span>
-      <input type="number" class="monto-meta" value="0" />
+      <input type="number" class="monto-meta" value="0" onkeydown="if(event.key==='Enter'){event.preventDefault();continuar();}" />
+      <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
     </div>
   </div>
 
@@ -152,12 +161,13 @@
       div.innerHTML = `
         <input type="text" class="nombre-meta" placeholder="Meta" />
         <span class="simbolo-moneda">${simbolo}</span>
-        <input type="number" class="monto-meta" value="0" />
+        <input type="number" class="monto-meta" value="0" onkeydown="if(event.key==='Enter'){event.preventDefault();continuar();}" />
+        <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
       `;
       document.getElementById("listaMetas").appendChild(div);
     }
 
-    function continuar() {
+    function actualizarTotal() {
       const montos = document.querySelectorAll(".monto-meta");
       let total = 0;
       montos.forEach(input => {
@@ -165,6 +175,18 @@
         total += val;
       });
       document.getElementById("totalAnual").textContent = total.toLocaleString();
+    }
+
+    document.addEventListener("input", actualizarTotal);
+
+    function continuar() {
+      actualizarTotal();
+      const montos = document.querySelectorAll(".monto-meta");
+      let total = 0;
+      montos.forEach(input => {
+        const val = parseFloat(input.value) || 0;
+        total += val;
+      });
       alert("Total registrado: " + simbolo + total);
     }
   </script>
