@@ -225,8 +225,15 @@ function anadirMeta() {
 function handleEnter(event, input) {
   if (event.key === 'Enter') {
     event.preventDefault();
-    input.classList.add('readonly');
-    input.setAttribute('readonly', true);
+    const grupo = input.closest('.meta-item');
+    const nombre = grupo.querySelector('.nombre-meta');
+    const monto = grupo.querySelector('.monto-meta');
+
+    [nombre, monto].forEach(el => {
+      el.classList.add('readonly');
+      el.setAttribute('readonly', true);
+    });
+
     actualizarTotal();
   }
 }
