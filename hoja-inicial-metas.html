@@ -144,7 +144,8 @@
       margin-top: 4px;
       display: none;
     }
-    input.readonly {
+input.readonly,
+input[readonly] {
   border: none !important;
   background: transparent !important;
   font-weight: 500;
@@ -215,7 +216,7 @@ function anadirMeta() {
 
   // Permitir volver a editar con doble clic o toque
   div.querySelectorAll("input").forEach(input => {
-    input.addEventListener("dblclick", habilitarEdicion);
+    input.addEventListener("click", habilitarEdicion);
     input.addEventListener("touchend", habilitarEdicion);
   });
 
@@ -263,17 +264,14 @@ function continuar() {
 }
 
 function habilitarEdicion(event) {
-  event.stopPropagation(); // evita propagación al padre
+  event.stopPropagation();
   const input = event.target;
 
-  if (input.hasAttribute('readonly')) {
-    input.removeAttribute('readonly');
-    input.classList.remove('readonly');
-    input.focus();
-    input.select(); // selecciona todo al tocar
-  }
+  input.removeAttribute('readonly');
+  input.classList.remove('readonly');
+  input.focus();
+  input.select(); // selecciona todo el contenido
 }
-
 
 document.addEventListener("input", function (e) {
   if (e.target.classList.contains("monto-meta")) {
