@@ -182,17 +182,17 @@
   <img src="https://cadamenudo.github.io/UI-UX/assets/icons/piggy-purple-coin.png" alt="Cerdito" class="cerdito" />
 
 <div id="listaMetas">
-<div class="meta-item">
-  <div class="numero">1</div>
-  <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
-  <div class="campo-monto">
-    <span class="simbolo-moneda">$</span>
-    <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
+  <div class="meta-item">
+    <div class="numero">1</div>
+    <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
+    <div class="campo-monto">
+      <span class="simbolo-moneda">$</span>
+      <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
+    </div>
+    <div class="mensaje-error">Por favor ingresa un monto válido mayor a cero</div>
+    <div class="drag-handle">≡</div>
+    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
   </div>
-  <div class="drag-handle">≡</div>
-  <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
-</div>
-
 </div>
 
   <button class="btn-add" onclick="anadirMeta()">+ añadir meta</button>
@@ -206,6 +206,8 @@
 
   <button class="continuar" onclick="continuar()">Continuar</button>
 
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  
   <script>
 const simbolo = JSON.parse(localStorage.getItem("moneda"))?.simbolo || "$";
 
@@ -320,15 +322,14 @@ function numerarMetas() {
     }
   });
 }
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    new Sortable(document.getElementById("listaMetas"), {
-  handle: ".drag-handle",
-  animation: 150,
-  onEnd: function () {
-    numerarMetas();
-    actualizarTotal();
-  }
-});
+  new Sortable(document.getElementById("listaMetas"), {
+    handle: ".drag-handle",
+    animation: 150,
+    onEnd: function () {
+      numerarMetas();
+      actualizarTotal();
+    }
+  });
   </script>
 </body>
 </html>
