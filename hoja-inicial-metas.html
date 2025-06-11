@@ -298,6 +298,11 @@ input.confirmado {
   font-size: 0.95rem;
   cursor: pointer;
 }
+    button.continuar:disabled {
+  background-color: #C4B5FD; /* tono morado claro */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 
   </style>
 </head>
@@ -339,7 +344,7 @@ input.confirmado {
   <a href="#" onclick="mostrarModalPrefieroDespues(event)">Prefiero hacerlo después</a>
 </p>
 
-  <button class="continuar" onclick="continuar()">Continuar</button>
+ <button class="continuar" id="btnContinuar" disabled>Continuar</button>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   
@@ -409,6 +414,10 @@ function actualizarTotal() {
     total += val;
   });
   document.getElementById("totalAnual").textContent = total.toLocaleString();
+
+  // 🔒 Desactiva botón si no hay metas
+  const btn = document.getElementById("btnContinuar");
+  btn.disabled = total === 0;
 } 
 
 document.addEventListener("input", actualizarTotal);
