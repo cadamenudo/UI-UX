@@ -144,12 +144,29 @@
       margin-top: 4px;
       display: none;
     }
-input.readonly,
-input[readonly] {
+.readonly {
   border: none !important;
-  background: transparent !important;
+  background-color: transparent !important;
   font-weight: 500;
   padding: 0;
+}
+
+.numero {
+  background-color: #5932EA;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+.drag-handle {
+  font-size: 1.25rem;
+  color: #9CA3AF;
+  cursor: grab;
+  margin-left: 0.5rem;
 }
 
   </style>
@@ -166,13 +183,16 @@ input[readonly] {
 
 <div id="listaMetas">
 <div class="meta-item">
-  <input type="text" class="nombre-meta" placeholder="Meta" />
+  <div class="numero">1</div>
+  <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
   <div class="campo-monto">
     <span class="simbolo-moneda">$</span>
-    <input type="number" class="monto-meta" value="0" />
+    <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
   </div>
+  <div class="drag-handle">≡</div>
   <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
 </div>
+
 </div>
 
   <button class="btn-add" onclick="anadirMeta()">+ añadir meta</button>
@@ -206,22 +226,25 @@ function anadirMeta() {
   const div = document.createElement("div");
   div.className = "meta-item";
   div.innerHTML = `
+    <div class="numero"></div>
     <input type="text" class="nombre-meta" placeholder="Meta" onkeydown="handleEnter(event, this)" />
     <div class="campo-monto">
       <span class="simbolo-moneda">${simbolo}</span>
       <input type="number" class="monto-meta" value="0" onkeydown="handleEnter(event, this)" />
     </div>
-    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal();">&times;</button>
+    <div class="drag-handle">≡</div>
+    <button class="btn-delete" onclick="this.parentElement.remove(); actualizarTotal(); numerarMetas();">&times;</button>
   `;
 
-  // Permitir volver a editar con doble clic o toque
   div.querySelectorAll("input").forEach(input => {
     input.addEventListener("click", habilitarEdicion);
     input.addEventListener("touchend", habilitarEdicion);
   });
 
   document.getElementById("listaMetas").appendChild(div);
+  numerarMetas();
 }
+
 
 function handleEnter(event, input) {
   if (event.key === 'Enter') {
@@ -288,7 +311,24 @@ document.addEventListener("input", function (e) {
     e.target.value = "";
   }
 });
-
+function numerarMetas() {
+  const items = document.querySelectorAll("#listaMetas .meta-item");
+  items.forEach((item, index) => {
+    const numero = item.querySelector(".numero");
+    if (numero) {
+      numero.textContent = index + 1;
+    }
+  });
+}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    new Sortable(document.getElementById("listaMetas"), {
+  handle: ".drag-handle",
+  animation: 150,
+  onEnd: function () {
+    numerarMetas();
+    actualizarTotal();
+  }
+});
   </script>
 </body>
 </html>
