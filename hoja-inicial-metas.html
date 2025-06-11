@@ -286,6 +286,18 @@ input.confirmado {
   color: #111827;
   box-shadow: none;
 }
+    .preferencia {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.preferencia a {
+  color: #3956E8;
+  text-decoration: underline;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
 
   </style>
 </head>
@@ -322,6 +334,10 @@ input.confirmado {
     <span><span class="simbolo-moneda">$</span><span id="totalAnual">0</span></span>
   </div>
 </div>
+
+  <p class="preferencia">
+  <a href="#" onclick="mostrarModalPrefieroDespues(event)">Prefiero hacerlo después</a>
+</p>
 
   <button class="continuar" onclick="continuar()">Continuar</button>
 
@@ -454,6 +470,11 @@ function validarConfirmado(input) {
     input.setAttribute('readonly', true);
   }
 }
+    function mostrarModalPrefieroDespues(event) {
+  event.preventDefault();
+  alert("Puedes establecer tus metas más adelante desde la sección de ahorro.");
+}
+
   </script>
 </body>
 </html>
