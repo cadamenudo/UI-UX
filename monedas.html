@@ -136,6 +136,12 @@ main {
   margin-top: 0.15rem;   /* 👈 sube el logo */
   margin-bottom: 0.05rem;  /* 👈 espacio antes del título */
 }
+    button:disabled {
+  background-color: #D1D5DB;
+  color: #9CA3AF;
+  cursor: not-allowed;
+}
+
 
   </style>
 </head>
@@ -375,7 +381,7 @@ main {
   </div>
 </div>
 </main>
-  <button onclick="continuar()">Continuar</button>
+  <button id="btnContinuar" onclick="continuar()" disabled>Continuar</button>
   
   <script>
     const opciones = document.querySelectorAll(".opcion");
@@ -390,6 +396,17 @@ main {
       const codigo = seleccion?.dataset.codigo || "USD";
       alert("Has seleccionado: " + codigo);
     }
+    
+      // ✅ Activa el botón al seleccionar una opción
+      btnContinuar.disabled = false;
+    });
+  });
+
+  function continuar() {
+    const seleccion = document.querySelector(".opcion.seleccionada");
+    const codigo = seleccion?.dataset.codigo || "USD";
+    alert("Has seleccionado: " + codigo);
+  }
   </script>
 
 </body>
