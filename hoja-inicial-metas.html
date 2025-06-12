@@ -303,6 +303,19 @@ input.confirmado {
   cursor: not-allowed;
   opacity: 0.6;
 }
+.link-omitir {
+  display: block;
+  margin-top: 1.5rem; /* o el espaciado que necesites */
+  color: #3B44F6; /* tu color azul */
+  text-align: center;
+  text-decoration: none; /* ✅ esto quita la línea */
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.link-omitir:hover {
+  text-decoration: none; /* ✅ también quita la línea al hacer hover */
+}
 
   </style>
 </head>
@@ -341,7 +354,7 @@ input.confirmado {
 </div>
 
   <p class="preferencia">
-  <a href="#" onclick="mostrarModalPrefieroDespues(event)">Prefiero hacerlo después</a>
+  <a href="#" onclick="mostrarModalPrefieroDespues(event)" class="link-omitir">Prefiero hacerlo después</a>
 </p>
 
  <button class="continuar" id="btnContinuar" disabled>Continuar</button>
