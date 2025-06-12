@@ -305,12 +305,19 @@ input.confirmado {
 }
 .link-omitir {
   display: block;
-  margin-top: 1.5rem; /* o el espaciado que necesites */
-  color: #3B44F6; /* tu color azul */
+  margin-top: 1.5rem;
+  color: #3B44F6;
   text-align: center;
-  text-decoration: none; /* ✅ esto quita la línea */
+  text-decoration: none !important; /* <- esto forza eliminar la línea */
   font-size: 0.95rem;
   font-weight: 500;
+}
+
+.link-omitir:visited,
+.link-omitir:focus,
+.link-omitir:hover,
+.link-omitir:active {
+  text-decoration: none !important;
 }
 
 .link-omitir:hover {
