@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantalla de Videos | CadaMenudo</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css" />
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background: #FAFBFF;
+      color: #0F172A;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .pantalla-videos h2 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitulo {
+      color: #64748B;
+      margin-bottom: 1.5rem;
+    }
+
+    .video-principal {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      margin-bottom: 2rem;
+    }
+
+    .video-principal img {
+      width: 100%;
+      display: block;
+    }
+
+    .info-video {
+      padding: 1rem;
+    }
+
+    .info-video p {
+      margin: 0.5rem 0 0;
+      font-size: 0.95rem;
+      color: #334155;
+    }
+
+    .seccion-video {
+      margin-bottom: 1rem;
+    }
+
+    .seccion-video button {
+      width: 100%;
+      background: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 1rem;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .seccion-video button::after {
+      content: "\25BC";
+      font-size: 1rem;
+      transition: transform 0.3s;
+    }
+
+    .seccion-video.open button::after {
+      transform: rotate(180deg);
+    }
+
+    .lista-oculta {
+      display: none;
+      list-style: none;
+      padding-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .lista-oculta li {
+      padding: 0.5rem 0;
+      cursor: pointer;
+      color: #3956E8;
+    }
+
+    .lista-oculta li:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="pantalla-videos">
+    <h2>¡Bienvenido, Frank!</h2>
+    <p class="subtitulo">¿A dónde quieres ir hoy?</p>
+
+    <div class="video-principal" onclick="abrirVideo('https://url.video.destacado')">
+      <img src="https://via.placeholder.com/600x340.png?text=Video+Principal" alt="Video principal" />
+      <div class="info-video">
+        <strong>La misión de CadaMenudo</strong>
+        <p>Por qué cada menudo es importante para ti<br />CONSTRUIR EL HÁBITO DE REGISTRAR Y CONTROLAR</p>
+      </div>
+    </div>
+
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Cada Menudo 101</button>
+      <ul class="lista-oculta">
+        <li onclick="abrirVideo('https://url.video1')">El ABC de CadaMenudo</li>
+        <li onclick="abrirVideo('https://url.video2')">Cómo arranco a usar CadaMenudo</li>
+        <li onclick="abrirVideo('https://url.video3')">Qué son los mensajes de colores con alertas</li>
+      </ul>
+    </div>
+
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Metas</button>
+      <ul class="lista-oculta">
+        <li onclick="abrirVideo('https://url.video4')">Cómo utilizar las metas de ahorro</li>
+      </ul>
+    </div>
+
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Ahorro y Gastos</button>
+      <ul class="lista-oculta">
+        <li>Cómo saber cuánto ahorras y gastas con CadaMenudo</li>
+        <li>¿Cómo registro el ahorro?</li>
+        <li>¿Cómo registro la contribución al retiro?</li>
+      </ul>
+    </div>
+
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Transacciones</button>
+      <ul class="lista-oculta">
+        <li>¿Cómo registro una transacción?</li>
+        <li>¿Cómo realizar un seguimiento de las transacciones?</li>
+      </ul>
+    </div>
+
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Categorías</button>
+      <ul class="lista-oculta">
+        <li>¿Cómo usar las categorías en CadaMenudo?</li>
+        <li>¿Por qué los ingresos se dividen en tres categorías?</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function toggleLista(button) {
+      const seccion = button.parentElement;
+      const lista = button.nextElementSibling;
+      const abierta = lista.style.display === 'block';
+      lista.style.display = abierta ? 'none' : 'block';
+      seccion.classList.toggle('open', !abierta);
+    }
+
+    function abrirVideo(url) {
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
