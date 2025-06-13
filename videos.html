@@ -285,31 +285,21 @@
 </div>
 
   <script>
-    function toggleLista(button) {
-      const seccion = button.parentElement;
-      const lista = button.nextElementSibling;
-      const abierta = lista.style.display === 'block';
-      lista.style.display = abierta ? 'none' : 'block';
-      seccion.classList.toggle('open', !abierta);
-    }
 
-    function abrirVideo(url) {
-      window.open(url, '_blank');
-    }
     function toggleLista(button) {
-  const secciones = document.querySelectorAll('.seccion-video');
-  const seccion = button.parentElement;
-  const lista = button.nextElementSibling;
-  const abierta = lista.style.display === 'block';
+  const todas = document.querySelectorAll('.seccion-video');
 
-  secciones.forEach(s => {
-    s.classList.remove('open');
-    const ul = s.querySelector('ul');
-    if (ul) ul.style.display = 'none';
+  todas.forEach(seccion => {
+    if (seccion !== button.parentElement) {
+      seccion.classList.remove('open');
+    }
   });
 
+  const seccionActual = button.parentElement;
+  seccionActual.classList.toggle('open');
+});
+
   if (!abierta) {
-    lista.style.display = 'block';
     seccion.classList.add('open');
   }
 }
