@@ -38,6 +38,36 @@
       display: block;
     }
 
+.video-item {
+  display: block;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  margin-bottom: 1rem;
+}
+
+.video-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0;
+}
+
+.video-item .titulo-video {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #000;
+  padding: 0.75rem 1rem 0 1rem;
+}
+
+.video-item .tiempo-video {
+  font-size: 0.875rem;
+  color: #64748B;
+  padding: 0 1rem 1rem 1rem;
+}
+
+
     .info-video {
       padding: 1rem;
     }
@@ -267,6 +297,23 @@
     function abrirVideo(url) {
       window.open(url, '_blank');
     }
+    function toggleLista(button) {
+  const secciones = document.querySelectorAll('.seccion-video');
+  const seccion = button.parentElement;
+  const lista = button.nextElementSibling;
+  const abierta = lista.style.display === 'block';
+
+  secciones.forEach(s => {
+    s.classList.remove('open');
+    const ul = s.querySelector('ul');
+    if (ul) ul.style.display = 'none';
+  });
+
+  if (!abierta) {
+    lista.style.display = 'block';
+    seccion.classList.add('open');
+  }
+}
   </script>
 </body>
 </html>
