@@ -296,22 +296,17 @@
 </div>
 
   <script>
-
-    function toggleLista(button) {
+function toggleLista(button) {
   const todas = document.querySelectorAll('.seccion-video');
-
-  todas.forEach(seccion => {
-    if (seccion !== button.parentElement) {
-      seccion.classList.remove('open');
-    }
-  });
-
   const seccionActual = button.parentElement;
-  seccionActual.classList.toggle('open');
-});
+  const yaAbierta = seccionActual.classList.contains('open');
 
-  if (!abierta) {
-    seccion.classList.add('open');
+  // Cierra todas las secciones
+  todas.forEach(seccion => seccion.classList.remove('open'));
+
+  // Si no estaba abierta, ábrela
+  if (!yaAbierta) {
+    seccionActual.classList.add('open');
   }
 }
   </script>
