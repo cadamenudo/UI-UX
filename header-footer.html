@@ -170,12 +170,13 @@
   border: none;
   padding: 0.5rem 1rem;
   font-size: 0.85rem;
-  border-radius: 8px;
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
   cursor: pointer;
-  margin-top: 1.2rem;
-  height: 38px;
-  align-self: flex-end;
-  transition: background-color 0.2s;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .boton-buscar:hover {
@@ -361,17 +362,19 @@ input[type="date"] {
   <!-- 🔹 Calendario HTML tipo Blazor -->
   
 <section class="calendario-contenedor">
-<div class="campo-fecha mdl-textfield mdl-js-textfield">
+  <div class="campo-fecha">
     <label for="fechaDesde">Desde</label>
-    <input class="mdl-textfield__input" type="text" id="fechaDesde" value="01/01/2025">
+    <input type="text" id="fechaDesde" value="01/01/2025">
   </div>
 
-  <div class="campo-fecha mdl-textfield mdl-js-textfield">
+  <div class="campo-fecha">
     <label for="fechaHasta">Hasta</label>
-    <input class="mdl-textfield__input" type="text" id="fechaHasta" value="31/05/2025">
+    <input type="text" id="fechaHasta" value="31/05/2025">
   </div>
 
-  <button id="btnBuscar" class="boton-buscar">Buscar</button>
+  <button class="boton-buscar" onclick="filtrarFechas()">
+    🔍
+  </button>
 </section>
   
   <!-- 🔹 Gráfico 1: Meta del año -->
