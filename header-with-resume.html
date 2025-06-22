@@ -168,7 +168,8 @@ header {
 
 .resumen-horizontal {
   margin: 1.5rem auto;
-  max-width: 100%;
+  width: 100%;
+  max-width: 960px;
   background: white;
   border-radius: 24px;
   padding: 1.5rem;
@@ -177,25 +178,25 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: stretch;
+  align-items: center;
   gap: 1rem;
 
-  overflow-x: auto;           /* 🔁 permite scroll horizontal si es necesario */
-  -webkit-overflow-scrolling: touch;
+  /* 🚫 Quitamos overflow */
+  box-sizing: border-box;
 }
 
 .dato {
-  flex: 1 0 120px;            /* 👈 mínimo ancho para evitar colapso */
+  flex: 1; /* 📐 distribuye el ancho uniformemente */
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.75rem;
-  min-width: 120px;
+  gap: 0.5rem;
+  min-width: 0; /* ✅ asegura que se adapte al contenedor */
 }
 
 .icono-circulo {
-  width: 36px;                /* 🔽 más pequeño */
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -204,25 +205,31 @@ header {
 }
 
 .icono-circulo img {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
 }
 
 .texto {
   display: flex;
   flex-direction: column;
   text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .texto span {
   font-size: 0.7rem;
   color: #475569;
+  line-height: 1;
 }
 
 .texto strong {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #0f172a;
   font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
   </style>
