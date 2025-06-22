@@ -130,7 +130,7 @@
     }
 
     .bloque-calendario {
-  width: 100%;
+  max-width: 940px; 
   display: flex;
   justify-content: center;
   margin-bottom: 1.5rem;
@@ -176,23 +176,26 @@
 }
 
 .boton-buscar {
-  background-color: transparent;
+  background-color: #594AE2;
+  color: white;
   border: none;
-  padding: 0.4rem;
   border-radius: 12px;
   cursor: pointer;
   height: 2.4rem;
-  width: 2.4rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  font-size: 0.85rem;
+  font-family: 'Greycliff CF', sans-serif;
 }
 
 .boton-buscar img {
-  width: 1.2rem;
-  height: 1.2rem;
-  filter: brightness(0) saturate(100%) invert(25%) sepia(37%) saturate(4885%) hue-rotate(227deg) brightness(90%) contrast(92%);
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1); /* ícono blanco */
 }
+
 @media (max-width: 320px) {
   .calendario-contenedor {
     flex-direction: column; /* Solo en pantallas MUY pequeñas */
@@ -384,9 +387,10 @@ input[type="date"] {
       <input type="text" id="fechaHasta" class="input-fecha" value="31/05/2025">
     </div>
 
-    <button class="boton-buscar" title="Buscar">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/buscar.png" alt="Buscar">
-    </button>
+  <button class="boton-buscar">
+    <img src="https://cadamenudo.github.io/UI-UX/assets/icons/buscar.png" alt="Buscar" />
+    <span>Buscar</span>
+  </button>
   </div>
 </section>
 
