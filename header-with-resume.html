@@ -165,7 +165,8 @@ header {
     }
 
     /* 🔽 Estilos del resumen */
-.resumen-fila {
+
+    .resumen-horizontal {
   margin: 2rem auto;
   max-width: 960px;
   background: white;
@@ -174,18 +175,20 @@ header {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 
   display: flex;
+  flex-direction: row;            /* 👈 SIEMPRE horizontal */
   justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+  overflow-x: auto;              /* 👈 por si el contenido es muy estrecho */
 }
 
 .dato {
   flex: 1;
   display: flex;
-  flex-direction: column;   /* 👈 ícono, texto y número uno debajo del otro */
+  flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.5rem;
+  min-width: 110px;              /* 👈 evita colapsar en móviles muy estrechos */
 }
 
 .icono-circulo {
@@ -215,20 +218,12 @@ header {
 .texto span {
   font-size: 0.9rem;
   color: #475569;
-  display: block;
+  margin-top: 0.5rem;
 }
 
 .texto strong {
   font-size: 1.25rem;
   color: #0f172a;
-}
-
-/* Responsivo en móvil */
-@media (max-width: 768px) {
-  .resumen-fila {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
 }
 
 
@@ -249,7 +244,7 @@ header {
 
   <!-- 🔽 Resumen debajo del header -->
 
-<section class="resumen resumen-fila">
+<section class="resumen resumen-horizontal">
   <div class="dato ingresos">
     <div class="icono-circulo">
       <img src="assets/icons/ingreso.png" alt="Ingresos" />
