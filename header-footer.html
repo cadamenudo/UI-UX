@@ -129,12 +129,10 @@
       font-weight: bold;
     }
 
-    .bloque-calendario {
+.bloque-calendario {
   max-width: 940px; 
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
+  margin: 1rem auto 1.5rem auto;
+  padding: 1rem 2rem;
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -142,15 +140,12 @@
 }
 .calendario-contenedor {
   display: flex;
-  flex-wrap: nowrap;             
-  gap: 2rem;
-  margin: 1rem 0;
-  max-width: 300px;
-  width: 100%;
-  padding: 0 1rem;            
-  box-sizing: border-box;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .campo-fecha {
@@ -199,6 +194,16 @@
 @media (max-width: 320px) {
   .calendario-contenedor {
     flex-direction: column; /* Solo en pantallas MUY pequeñas */
+  }
+  
+  .campo-fechas {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .boton-buscar {
+    width: 100%;
+    justify-content: center;
   }
 }
 
