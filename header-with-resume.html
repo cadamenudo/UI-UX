@@ -170,7 +170,7 @@ header {
   max-width: 960px;
   display: flex;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .resumen-item {
@@ -178,18 +178,10 @@ header {
   background: white;
   border-radius: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  padding: 2rem;
+  padding: 1.5rem 2rem;
   display: flex;
-  justify-content: center;
   align-items: center;
-}
-
-.contenido-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  text-align: center;
+  gap: 1rem;
 }
 
 .icono-circulo {
@@ -215,31 +207,18 @@ header {
   width: 28px;
   height: 28px;
 }
-    
-.contenido-item span {
+
+.texto span {
+  display: block;
   font-size: 0.9rem;
   color: #475569;
 }
 
-.contenido-item strong {
-  font-size: 1.2rem;
+.texto strong {
+  font-size: 1.25rem;
   color: #0f172a;
 }
-    .resumen-item img {
-      width: 40px;
-      height: 40px;
-    }
 
-    .resumen-item .texto span {
-      display: block;
-      font-size: 0.9rem;
-      color: #475569;
-    }
-
-    .resumen-item .texto strong {
-      font-size: 1.1rem;
-      color: #0f172a;
-    }
   </style>
 </head>
 <body>
@@ -256,35 +235,37 @@ header {
 </header>
 
   <!-- 🔽 Resumen debajo del header -->
-<section class="resumen">
+
+  <section class="resumen">
   <div class="resumen-item ingresos">
-    <div class="contenido-item">
-      <div class="icono-circulo">
-        <img src="assets/icons/ingreso.png" alt="Ingresos" />
-      </div>
+    <div class="icono-circulo">
+      <img src="assets/icons/ingreso.png" alt="Ingresos" />
+    </div>
+    <div class="texto">
       <span>Ingresos</span>
       <strong>$6,000.00</strong>
     </div>
   </div>
   <div class="resumen-item gastos">
-    <div class="contenido-item">
-      <div class="icono-circulo">
-        <img src="assets/icons/gastos.png" alt="Gastos" />
-      </div>
+    <div class="icono-circulo">
+      <img src="assets/icons/gastos.png" alt="Gastos" />
+    </div>
+    <div class="texto">
       <span>Gastos</span>
       <strong>$3,531.23</strong>
     </div>
   </div>
   <div class="resumen-item ahorros">
-    <div class="contenido-item">
-      <div class="icono-circulo">
-        <img src="assets/icons/ahorro.png" alt="Ahorros" />
-      </div>
+    <div class="icono-circulo">
+      <img src="assets/icons/ahorro.png" alt="Ahorros" />
+    </div>
+    <div class="texto">
       <span>Ahorros</span>
       <strong>$600.00</strong>
     </div>
   </div>
 </section>
+
 
   <!-- 🔽 Dropdown de usuario -->
   <div id="menuUsuario" class="menu-usuario">
