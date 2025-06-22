@@ -139,13 +139,29 @@
   padding: 0 1rem;              /* 👈 Padding interno lateral */
   box-sizing: border-box;
   justify-content: space-between;
+  align-items: center;
 }
 
 .campo-fecha {
   flex: 1;
-  min-width: 140px;
+  min-width: 130px;
   display: flex;
   flex-direction: column;
+}
+    .campo-fecha label {
+  font-size: 0.7rem;
+  margin-bottom: 0.25rem;
+  display: block;
+  color: #334155;
+}
+
+.campo-fecha input {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+  width: 100%;
+  box-sizing: border-box;
 }
 @media (max-width: 320px) {
   .calendario-contenedor {
