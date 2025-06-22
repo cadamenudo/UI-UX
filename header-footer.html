@@ -8,6 +8,11 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <!-- JS Flatpickr + Español -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+  <!-- Estilos Flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   
   <style>
     body {
@@ -132,8 +137,8 @@
 .calendario-contenedor {
   display: flex;
   flex-wrap: wrap;              /* 👈 Permite que baje en mobile */
-  gap: 1.5rem;
-  margin: 2rem auto;
+  gap: 1rem;
+  margin: 1rem 0;
   max-width: 600px;
   width: 100%;
   padding: 0 1rem;              /* 👈 Padding interno lateral */
@@ -142,8 +147,10 @@
 }
 
 .campo-fecha {
-  flex: 1 1 48%;                /* 👈 Toma hasta el 48% del ancho disponible */
-  min-width: 140px;            /* 👈 Asegura legibilidad en pantallas chicas */
+  flex: 1;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
 }
     @media (max-width: 500px) {
   .campo-fecha {
@@ -327,12 +334,12 @@ input[type="date"] {
 <section class="calendario-contenedor">
   <div class="campo-fecha mdl-textfield mdl-js-textfield">
     <label for="fechaDesde">Desde</label>
-    <input class="mdl-textfield__input" type="date" id="fechaDesde" value="2025-01-01">
+    <input class="mdl-textfield__input" type="text" id="fechaDesde" value="01/01/2025">
   </div>
 
   <div class="campo-fecha mdl-textfield mdl-js-textfield">
     <label for="fechaHasta">Hasta</label>
-    <input class="mdl-textfield__input" type="date" id="fechaHasta" value="2025-05-31">
+    <input class="mdl-textfield__input" type="text" id="fechaHasta" value="31/05/2025">
   </div>
 </section>
   
@@ -466,6 +473,17 @@ input[type="date"] {
         event.target.style.display = "none";
       }
     }
+      flatpickr("#fechaDesde", {
+    locale: "es",
+    dateFormat: "d/m/Y",
+    defaultDate: "01/01/2025"
+  });
+
+  flatpickr("#fechaHasta", {
+    locale: "es",
+    dateFormat: "d/m/Y",
+    defaultDate: "31/05/2025"
+  });
   </script>
 </body>
 </html>
