@@ -158,28 +158,40 @@
       cursor: pointer;
     }
 
-    /* 🔽 Estilos para el resumen */
-    #bloqueResumen {
-      margin: 0 auto;
+    /* 🔽 Estilos del resumen */
+    .resumen {
+      margin: 2rem auto 0 auto;
       max-width: 960px;
       background: white;
       border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      margin-top: 1.5rem;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
     }
 
-    #bloqueResumen h2 {
-      font-size: 1.25rem;
-      color: #0f172a;
-      font-weight: 600;
-      margin-top: 0;
+    .resumen-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
     }
 
-    #bloqueResumen p {
-      font-size: 0.95rem;
+    .resumen-item img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .resumen-item .texto span {
+      display: block;
+      font-size: 0.9rem;
       color: #475569;
-      margin-top: 0.5rem;
+    }
+
+    .resumen-item .texto strong {
+      font-size: 1.1rem;
+      color: #0f172a;
     }
   </style>
 </head>
@@ -197,9 +209,28 @@
   </header>
 
   <!-- 🔽 Resumen debajo del header -->
-  <section id="bloqueResumen">
-    <h2>Resumen General</h2>
-    <p>Este bloque representa el resumen de ingresos, gastos y ahorro.</p>
+  <section class="resumen">
+    <div class="resumen-item">
+      <img src="assets/icons/ingreso.png" alt="Ingresos" />
+      <div class="texto">
+        <span>Ingresos</span>
+        <strong>$6,000.00</strong>
+      </div>
+    </div>
+    <div class="resumen-item">
+      <img src="assets/icons/gastos.png" alt="Gastos" />
+      <div class="texto">
+        <span>Gastos</span>
+        <strong>$3,531.23</strong>
+      </div>
+    </div>
+    <div class="resumen-item">
+      <img src="assets/icons/ahorro.png" alt="Ahorros" />
+      <div class="texto">
+        <span>Ahorros</span>
+        <strong>$600.00</strong>
+      </div>
+    </div>
   </section>
 
   <!-- 🔽 Dropdown de usuario -->
@@ -264,4 +295,5 @@
   </script>
 </body>
 </html>
+
 
