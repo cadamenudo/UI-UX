@@ -131,14 +131,24 @@
 
 .calendario-contenedor {
   display: flex;
-  gap: 2rem;
+  flex-wrap: wrap;              /* 👈 Permite que baje en mobile */
+  gap: 1.5rem;
   margin: 2rem auto;
   max-width: 600px;
+  width: 100%;
+  padding: 0 1rem;              /* 👈 Padding interno lateral */
+  box-sizing: border-box;
   justify-content: space-between;
 }
 
 .campo-fecha {
-  width: 100%;
+  flex: 1 1 48%;                /* 👈 Toma hasta el 48% del ancho disponible */
+  min-width: 140px;            /* 👈 Asegura legibilidad en pantallas chicas */
+}
+    @media (max-width: 500px) {
+  .campo-fecha {
+    flex: 1 1 100%;            /* En pantallas pequeñas toma 100% */
+  }
 }
 
 .mdl-textfield label {
