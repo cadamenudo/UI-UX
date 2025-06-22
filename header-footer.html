@@ -427,6 +427,25 @@ input[type="date"] {
   
   <!-- 🧠 SCRIPT OPCIONAL -->
   <script>
+<!-- Flatpickr CSS y JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+<script>
+  flatpickr("#fechaDesde", {
+    locale: "es",
+    dateFormat: "d/m/Y",
+    defaultDate: "01/01/2025"
+  });
+
+  flatpickr("#fechaHasta", {
+    locale: "es",
+    dateFormat: "d/m/Y",
+    defaultDate: "31/05/2025"
+  });
+</script>
+  
   // ✅ Simulación de datos dinámicos (por ejemplo, en el futuro podrías conectarlo a una API)
   const resumenData = {
     ingresos: "$6,000.00",
@@ -484,23 +503,6 @@ input[type="date"] {
         event.target.style.display = "none";
       }
     }
-      flatpickr("#fechaDesde", {
-    locale: "es",
-    dateFormat: "d/m/Y",
-    defaultDate: "01/01/2025"
-  });
-
-  flatpickr("#fechaHasta", {
-    locale: "es",
-    dateFormat: "d/m/Y",
-    defaultDate: "31/05/2025"
-  });
   </script>
-  <!-- Flatpickr CSS y JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<!-- Español -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 </body>
 </html>
