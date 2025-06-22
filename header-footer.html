@@ -136,7 +136,7 @@
 
 .calendario-contenedor {
   display: flex;
-  flex-wrap: wrap;              /* 👈 Permite que baje en mobile */
+  flex-wrap: nowrap;              /* 👈 Permite que baje en mobile */
   gap: 1rem;
   margin: 1rem 0;
   max-width: 600px;
@@ -148,13 +148,13 @@
 
 .campo-fecha {
   flex: 1;
-  min-width: 160px;
+  min-width: 140px;
   display: flex;
   flex-direction: column;
 }
-    @media (max-width: 500px) {
-  .campo-fecha {
-    flex: 1 1 100%;            /* En pantallas pequeñas toma 100% */
+@media (max-width: 320px) {
+  .calendario-contenedor {
+    flex-direction: column; /* Solo en pantallas MUY pequeñas */
   }
 }
 
