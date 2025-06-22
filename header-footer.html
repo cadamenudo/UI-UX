@@ -164,23 +164,23 @@
   box-sizing: border-box;
 }
 
-    .boton-buscar {
-  background-color: #594AE2;
-  color: white;
+.boton-buscar {
+  background-color: transparent;
   border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
+  padding: 0.4rem;
   border-radius: 12px;
-  padding: 0.5rem 0.75rem;
   cursor: pointer;
   height: 2.4rem;
+  width: 2.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.boton-buscar:hover {
-  background-color: #483ac9;
+.boton-buscar img {
+  width: 1.2rem;
+  height: 1.2rem;
+  filter: brightness(0) saturate(100%) invert(25%) sepia(37%) saturate(4885%) hue-rotate(227deg) brightness(90%) contrast(92%);
 }
 @media (max-width: 320px) {
   .calendario-contenedor {
@@ -373,9 +373,10 @@ input[type="date"] {
   </div>
 
   <button class="boton-buscar" onclick="filtrarFechas()">
-    🔍
+    <img src="https://cadamenudo.github.io/UI-UX/assets/icons/buscar.png" alt="Buscar" />
   </button>
 </section>
+
   
   <!-- 🔹 Gráfico 1: Meta del año -->
 <div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
