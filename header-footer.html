@@ -125,24 +125,63 @@
       font-weight: bold;
     }
 
-      .calendario-blazor {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 12px;
-    background: #fff;
-    font-family: 'Greycliff CF', sans-serif;
-    font-size: 0.9rem;
-    color: #0f172a;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  .grupo-fechas {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
   }
 
-  .calendario-blazor:focus {
+  .input-group {
+    position: relative;
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .input-group input[type="date"] {
+    width: 100%;
+    padding: 1rem 0.75rem 0.25rem;
+    font-size: 1rem;
+    font-family: 'Greycliff CF', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: #fff;
+    color: #0f172a;
     outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .input-group label {
+    position: absolute;
+    top: 1rem;
+    left: 0.75rem;
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+    pointer-events: none;
+    background: white;
+    padding: 0 4px;
+    transition: all 0.2s ease-out;
+  }
+
+  .input-group input:focus {
     border-color: #594AE2;
     box-shadow: 0 0 0 2px rgba(89, 74, 226, 0.2);
   }
 
+  .input-group input:focus + label,
+  .input-group input:not(:placeholder-shown) + label {
+    top: -0.5rem;
+    left: 0.6rem;
+    font-size: 0.75rem;
+    color: #594AE2;
+  }
+
+  /* Para compatibilidad con placeholder en date */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.3);
+    cursor: pointer;
+  }
     .footer-menu {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -300,16 +339,19 @@
   </div>
 
   <!-- 🔹 Calendario HTML tipo Blazor -->
-<div style="display: flex; gap: 1rem; padding: 1rem;">
-  <div style="flex: 1;">
-    <label for="fechaDesde" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Desde</label>
-    <input type="date" id="fechaDesde" name="fechaDesde" class="calendario-blazor"/>
+<div class="grupo-fechas">
+  <div class="input-group">
+    <input type="date" id="fechaDesde" required />
+    <label for="fechaDesde">Desde</label>
   </div>
-  <div style="flex: 1;">
-    <label for="fechaHasta" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Hasta</label>
-    <input type="date" id="fechaHasta" name="fechaHasta" class="calendario-blazor"/>
+
+  <div class="input-group">
+    <input type="date" id="fechaHasta" required />
+    <label for="fechaHasta">Hasta</label>
   </div>
 </div>
+
+<div id="fechasSeleccionadas" class="texto-fechas"></div>
 
   <!-- 🔹 Gráfico 1: Meta del año -->
 <div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
@@ -408,19 +450,31 @@
   }
     
  // ✅ Ejecutar calendario blazor
-      const fechaDesde = document.getElementById('fechaDesde');
+  const fechaDesde = document.getElementById('fechaDesde');
   const fechaHasta = document.getElementById('fechaHasta');
+  const fechasTexto = document.getElementById('fechasSeleccionadas');
 
+  // Valores iniciales como en Blazor
   fechaDesde.value = "2025-01-01";
   fechaHasta.value = "2025-05-31";
 
-  fechaDesde.addEventListener('change', () => {
-    console.log("Desde:", fechaDesde.value);
-  });
+  function actualizarFechas() {
+    const desde = fechaDesde.value;
+    const hasta = fechaHasta.value;
 
-  fechaHasta.addEventListener('change', () => {
-    console.log("Hasta:", fechaHasta.value);
-  });
+    if (desde > hasta) {
+      fechasTexto.textContent = "⚠️ La fecha inicial no puede ser mayor que la final.";
+      fechasTexto.style.color = "#dc2626";
+    } else {
+      fechasTexto.textContent = `Rango seleccionado: ${desde} → ${hasta}`;
+      fechasTexto.style.color = "#334155";
+    }
+  }
+
+  fechaDesde.addEventListener('change', actualizarFechas);
+  fechaHasta.addEventListener('change', actualizarFechas);
+
+  actualizarFechas(); // Inicial
     
   // ✅ Ejecutar actualización con los datos actuales
   actualizarResumen(resumenData);
