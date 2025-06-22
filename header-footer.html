@@ -163,6 +163,24 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+    .boton-buscar {
+  background-color: #594AE2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  height: 38px;
+  align-self: flex-end;
+  transition: background-color 0.2s;
+}
+
+.boton-buscar:hover {
+  background-color: #483ac9;
+}
 @media (max-width: 320px) {
   .calendario-contenedor {
     flex-direction: column; /* Solo en pantallas MUY pequeñas */
@@ -343,15 +361,17 @@ input[type="date"] {
   <!-- 🔹 Calendario HTML tipo Blazor -->
   
 <section class="calendario-contenedor">
- <div class="campo-fecha">
+<div class="campo-fecha mdl-textfield mdl-js-textfield">
     <label for="fechaDesde">Desde</label>
-    <input type="text" id="fechaDesde" />
+    <input class="mdl-textfield__input" type="text" id="fechaDesde" value="01/01/2025">
   </div>
 
-  <div class="campo-fecha">
+  <div class="campo-fecha mdl-textfield mdl-js-textfield">
     <label for="fechaHasta">Hasta</label>
-    <input type="text" id="fechaHasta" />
+    <input class="mdl-textfield__input" type="text" id="fechaHasta" value="31/05/2025">
   </div>
+
+  <button id="btnBuscar" class="boton-buscar">Buscar</button>
 </section>
   
   <!-- 🔹 Gráfico 1: Meta del año -->
@@ -444,6 +464,13 @@ input[type="date"] {
     locale: "es",
     dateFormat: "d/m/Y",
     defaultDate: "31/05/2025"
+  });
+
+   document.getElementById("btnBuscar").addEventListener("click", () => {
+    const desde = document.getElementById("fechaDesde").value;
+    const hasta = document.getElementById("fechaHasta").value;
+    console.log("Filtrando desde:", desde, "hasta:", hasta);
+    // Aquí puedes agregar lógica para filtrar resultados, mostrar mensajes, etc.
   });
 
   // ✅ Simulación de datos dinámicos (ejemplo)
