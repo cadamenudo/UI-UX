@@ -166,71 +166,42 @@ header {
 
     /* 🔽 Estilos del resumen */
 
-.resumen-horizontal {
-  margin: 1.5rem auto;
-  width: 100%;
-  max-width: 960px;
-  background: white;
-  border-radius: 24px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    .resumen {
+      display: flex;
+      justify-content: space-between;
+      background: #fff;
+      width: 90%;
+      margin: -2rem auto 1rem; /* sube sin invadir el header */
+      padding: 1rem;
+      border-radius: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      gap: 0.5rem;
+      max-width: 700px;
+    }
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
+    .resumen-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      text-align: left;
+    }
 
-  /* 🚫 Quitamos overflow */
-  box-sizing: border-box;
-}
+    .resumen-item img {
+      width: 30px;
+      height: 30px;
+    }
 
-.dato {
-  flex: 1; /* 📐 distribuye el ancho uniformemente */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 0; /* ✅ asegura que se adapte al contenedor */
-}
+    .resumen-item .texto {
+      display: flex;
+      flex-direction: column;
+    }
 
-.icono-circulo {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.icono-circulo img {
-  width: 24px;
-  height: 24px;
-}
-
-.texto {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.texto span {
-  font-size: 0.7rem;
-  color: #475569;
-  line-height: 1;
-}
-
-.texto strong {
-  font-size: 0.9rem;
-  color: #0f172a;
-  font-weight: 600;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    .resumen-item .texto strong {
+      font-size: 0.85rem;
+    }
 
   </style>
 </head>
@@ -249,35 +220,29 @@ header {
 
   <!-- 🔽 Resumen debajo del header -->
 
-<section class="resumen resumen-horizontal">
-  <div class="dato ingresos">
-    <div class="icono-circulo">
+  <section class="resumen">
+    <div class="resumen-item">
       <img src="assets/icons/ingreso.png" alt="Ingresos" />
+      <div class="texto">
+        <span>Ingresos</span>
+        <strong>$6,000.00</strong>
+      </div>
     </div>
-    <div class="texto">
-      <span>Ingresos</span>
-      <strong>$6,000.00</strong>
-    </div>
-  </div>
-  <div class="dato gastos">
-    <div class="icono-circulo">
+    <div class="resumen-item">
       <img src="assets/icons/gastos.png" alt="Gastos" />
+      <div class="texto">
+        <span>Gastos</span>
+        <strong>$3,531.23</strong>
+      </div>
     </div>
-    <div class="texto">
-      <span>Gastos</span>
-      <strong>$3,531.23</strong>
-    </div>
-  </div>
-  <div class="dato ahorros">
-    <div class="icono-circulo">
+    <div class="resumen-item">
       <img src="assets/icons/ahorro.png" alt="Ahorros" />
+      <div class="texto">
+        <span>Ahorros</span>
+        <strong>$600.00</strong>
+      </div>
     </div>
-    <div class="texto">
-      <span>Ahorros</span>
-      <strong>$600.00</strong>
-    </div>
-  </div>
-</section>
+  </section>
 
 
   <!-- 🔽 Dropdown de usuario -->
