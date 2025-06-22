@@ -144,7 +144,7 @@
 
 .campo-fecha {
   flex: 1;
-  min-width: 130px;
+  min-width: 120px;
   display: flex;
   flex-direction: column;
 }
@@ -343,14 +343,14 @@ input[type="date"] {
   <!-- 🔹 Calendario HTML tipo Blazor -->
   
 <section class="calendario-contenedor">
-  <div class="campo-fecha mdl-textfield mdl-js-textfield">
+ <div class="campo-fecha">
     <label for="fechaDesde">Desde</label>
-    <input class="mdl-textfield__input" type="text" id="fechaDesde" value="01/01/2025">
+    <input type="text" id="fechaDesde" />
   </div>
 
-  <div class="campo-fecha mdl-textfield mdl-js-textfield">
+  <div class="campo-fecha">
     <label for="fechaHasta">Hasta</label>
-    <input class="mdl-textfield__input" type="text" id="fechaHasta" value="31/05/2025">
+    <input type="text" id="fechaHasta" />
   </div>
 </section>
   
