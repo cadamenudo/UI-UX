@@ -425,14 +425,15 @@ input[type="date"] {
     </div>
   </div>
   
-  <!-- 🧠 SCRIPT OPCIONAL -->
-  <script>
-<!-- Flatpickr CSS y JS -->
+<!-- ✅ Flatpickr CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- 🧠 Script principal -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
 <script>
+  // ✅ Inicializar calendarios con formato español
   flatpickr("#fechaDesde", {
     locale: "es",
     dateFormat: "d/m/Y",
@@ -444,9 +445,8 @@ input[type="date"] {
     dateFormat: "d/m/Y",
     defaultDate: "31/05/2025"
   });
-</script>
-  
-  // ✅ Simulación de datos dinámicos (por ejemplo, en el futuro podrías conectarlo a una API)
+
+  // ✅ Simulación de datos dinámicos (ejemplo)
   const resumenData = {
     ingresos: "$6,000.00",
     gastos: "$3,531.23",
@@ -454,7 +454,7 @@ input[type="date"] {
     superavit: "$1,868.77"
   };
 
-  // ✅ Puedes usar esta función para actualizar los datos del resumen desde JS
+  // ✅ Actualizar datos del resumen
   function actualizarResumen(data) {
     const items = document.querySelectorAll('.resumen-item');
     if (items.length >= 3) {
@@ -469,9 +469,7 @@ input[type="date"] {
     }
   }
 
-  
- // ✅ Ejecutar calendario blazor
-    
+  // ✅ Escuchar cambios en el calendario
   const fechaDesde = document.getElementById('fechaDesde');
   const fechaHasta = document.getElementById('fechaHasta');
 
@@ -482,27 +480,27 @@ input[type="date"] {
   fechaHasta.addEventListener('change', () => {
     console.log("Hasta:", fechaHasta.value);
   });
-    
-  // ✅ Ejecutar actualización con los datos actuales
-    
+
+  // ✅ Ejecutar resumen al cargar
   actualizarResumen(resumenData);
 
-        function abrirModal(idModal, archivo) {
-      const modal = document.getElementById(idModal);
-      const iframe = modal.querySelector('iframe');
-      if (iframe) iframe.src = archivo;
-      modal.style.display = 'flex';
-    }
+  // ✅ Funciones de modales
+  function abrirModal(idModal, archivo) {
+    const modal = document.getElementById(idModal);
+    const iframe = modal.querySelector('iframe');
+    if (iframe) iframe.src = archivo;
+    modal.style.display = 'flex';
+  }
 
-    function cerrarModal(idModal) {
-      document.getElementById(idModal).style.display = 'none';
-    }
+  function cerrarModal(idModal) {
+    document.getElementById(idModal).style.display = 'none';
+  }
 
-    window.onclick = function(event) {
-      if (event.target.classList.contains('modal')) {
-        event.target.style.display = "none";
-      }
+  window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+      event.target.style.display = "none";
     }
-  </script>
+  }
+</script>
 </body>
 </html>
