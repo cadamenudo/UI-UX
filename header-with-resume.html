@@ -165,22 +165,25 @@ header {
     }
 
     /* 🔽 Estilos del resumen */
-.resumen {
+.resumen-unico {
   margin: 2rem auto;
   max-width: 960px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.resumen-item {
   background: white;
   border-radius: 24px;
+  padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.dato {
+  flex: 1;
+  min-width: 100px;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .icono-circulo {
@@ -192,15 +195,13 @@ header {
   justify-content: center;
 }
 
-.resumen-item.ingresos .icono-circulo {
+.dato.ingresos .icono-circulo {
   background-color: #f5f3ff;
 }
-
-.resumen-item.gastos .icono-circulo {
+.dato.gastos .icono-circulo {
   background-color: #f1f5f9;
 }
-
-.resumen-item.ahorros .icono-circulo {
+.dato.ahorros .icono-circulo {
   background-color: #fef9c3;
 }
 
@@ -210,9 +211,9 @@ header {
 }
 
 .texto span {
-  display: block;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #475569;
+  display: block;
 }
 
 .texto strong {
@@ -220,18 +221,17 @@ header {
   color: #0f172a;
 }
 
-    @media (max-width: 768px) {
-  .resumen {
+/* Responsivo para móvil */
+@media (max-width: 768px) {
+  .resumen-unico {
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
-  .resumen-item {
-    width: 100%;
+  .dato {
     justify-content: flex-start;
   }
 }
-
 
   </style>
 </head>
@@ -250,8 +250,8 @@ header {
 
   <!-- 🔽 Resumen debajo del header -->
 
-  <section class="resumen">
-  <div class="resumen-item ingresos">
+<section class="resumen resumen-unico">
+  <div class="dato ingresos">
     <div class="icono-circulo">
       <img src="assets/icons/ingreso.png" alt="Ingresos" />
     </div>
@@ -260,7 +260,7 @@ header {
       <strong>$6,000.00</strong>
     </div>
   </div>
-  <div class="resumen-item gastos">
+  <div class="dato gastos">
     <div class="icono-circulo">
       <img src="assets/icons/gastos.png" alt="Gastos" />
     </div>
@@ -269,7 +269,7 @@ header {
       <strong>$3,531.23</strong>
     </div>
   </div>
-  <div class="resumen-item ahorros">
+  <div class="dato ahorros">
     <div class="icono-circulo">
       <img src="assets/icons/ahorro.png" alt="Ahorros" />
     </div>
