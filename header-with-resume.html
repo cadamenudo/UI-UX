@@ -172,18 +172,19 @@ header {
   border-radius: 24px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  display: flex;
+
+  display: flex;               /* 👈 clave */
+  flex-direction: row;         /* 👈 clave */
   justify-content: space-between;
+  align-items: center;
   gap: 2rem;
-  flex-wrap: wrap;
 }
 
 .dato {
-  flex: 1;
-  min-width: 100px;
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex: 1;
 }
 
 .icono-circulo {
@@ -221,17 +222,14 @@ header {
   color: #0f172a;
 }
 
-/* Responsivo para móvil */
+/* Responsivo SOLO en pantallas pequeñas */
 @media (max-width: 768px) {
   .resumen-unico {
     flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .dato {
-    justify-content: flex-start;
+    align-items: stretch;
   }
 }
+
 
   </style>
 </head>
