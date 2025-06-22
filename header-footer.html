@@ -5,137 +5,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Cada Menudo</title>
   <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
-  <style>
+   <style>
     body {
-    margin: 0;
-    background: #FAFBFF;
-    color: #000000;
-    padding-bottom: 80px;
-  }
+      margin: 0;
+      background: #FAFBFF;
+      color: #000000;
+      font-family: 'Greycliff CF', sans-serif;
+      padding-bottom: 80px;
+    }
 
-  .header-bar {
-    background-color: #594AE2;
-    padding: 1rem 2rem;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .header-bar {
+      background-color: #594AE2;
+      padding: 1rem 2rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-  .logo {
-    height: 30px;
-  }
+    .logo {
+      height: 30px;
+    }
 
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
-  .user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-  }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
 
-  .resumen-box {
-    background-color: white;
-    border-radius: 24px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-    padding: 1.5rem;
-    margin-top: 0.5rem;
-    margin-bottom: 1.25rem;
-  }
+    .resumen-box {
+      background-color: white;
+      border-radius: 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-.resumen-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 0;
-}
+    .resumen-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+      min-width: 0;
+    }
 
-.resumen-icono {
-  width: 40px;
-  height: 40px;
-  background: #ffffff;
-  border-radius: 50%;
-  padding: 6px;
-  flex-shrink: 0;
-}
+    .resumen-icono {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      padding: 6px;
+      flex-shrink: 0;
+    }
 
-.resumen-texto {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  max-width: 100%;
-  align-items: flex-start;
-}
+    .resumen-texto {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+      max-width: 100%;
+    }
 
-.resumen-texto span:first-child {
-  font-size: 0.85rem;
-}
+    .resumen-texto span:first-child {
+      font-size: 0.85rem;
+    }
 
-.resumen-monto {
-  font-weight: 700;
-  font-size: 1.2rem;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
-}
+    .resumen-monto {
+      font-weight: 700;
+      font-size: 1.2rem;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+    }
 
-/* 👇 VERSIÓN MÓVIL */
-@@media (max-width: 480px) {
-  .resumen-item {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+    .alerta-superavit {
+      margin: 1rem;
+      padding: 1rem;
+      background-color: #D1FAE5;
+      color: #065F46;
+      border-radius: 12px;
+      font-weight: bold;
+    }
 
-  .resumen-icono {
-    display: none;
-  }
+    .footer-menu {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      text-align: center;
+      align-items: center;
+      font-size: 0.5rem;
+      gap: 0.25rem;
+      padding: 0.75rem 0;
+      background-color: #594AE2;
+      color: white;
+    }
 
-  .resumen-texto span:first-child {
-    font-size: 0.75rem;
-  }
+    .footer-menu img {
+      height: 28px;
+      width: auto;
+      margin-bottom: 4px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-  .resumen-monto {
-    font-size: 1rem;
-  }
-}
+    .footer-menu .registrar-icono {
+      height: 32px;
+      width: auto;
+      margin-bottom: 4px;
+    }
 
-.footer-menu {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  text-align: center;
-  align-items: center;
-  font-size: 0.5rem;
-  gap: 0.25rem;
-}
+    .footer-menu .registrar-texto {
+      font-weight: 600;
+      font-size: 0.5rem;
+      margin-top: 4px;
+    }
 
-.footer-menu img {
-  height: 28px;
-  width: auto;
-  margin-bottom: 4px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
+    @media (max-width: 480px) {
+      .resumen-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
 
-.footer-menu .registrar-icono {
-  height: 32px;
-  width: auto;  /* 👈 mantiene aspecto natural */
-  margin-bottom: 4px;
-}
+      .resumen-icono {
+        display: none;
+      }
 
-.footer-menu .registrar-texto {
-  font-weight: 600;
-  font-size: 0.5rem;
-  margin-top: 4px;
-}
+      .resumen-texto span:first-child {
+        font-size: 0.75rem;
+      }
+
+      .resumen-monto {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
