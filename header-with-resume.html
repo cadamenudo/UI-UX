@@ -160,28 +160,48 @@
 
     /* 🔽 Estilos del resumen */
 .resumen {
-  margin: 2rem auto 0 auto;
-  width: 100%;
+  margin: 2rem auto;
   max-width: 960px;
   background: white;
   border-radius: 16px;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
   display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  box-sizing: border-box;
+  justify-content: space-between;
+  gap: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .resumen-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 0.5rem;
-  flex: 0 1 auto;
+  gap: 1rem;
+  flex: 1;
 }
 
+  .icono-circulo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+}
+
+.resumen-item.ingresos .icono-circulo {
+  background-color: #f5f3ff;
+}
+.resumen-item.gastos .icono-circulo {
+  background-color: #f1f5f9;
+}
+.resumen-item.ahorros .icono-circulo {
+  background-color: #fef9c3;
+}
+
+.icono-circulo img {
+  width: 28px;
+  height: 28px;
+}
     .resumen-item img {
       width: 40px;
       height: 40px;
@@ -213,29 +233,35 @@
 </header>
 
   <!-- 🔽 Resumen debajo del header -->
-  <section class="resumen">
-    <div class="resumen-item">
+<section class="resumen">
+  <div class="resumen-item ingresos">
+    <div class="icono-circulo">
       <img src="assets/icons/ingreso.png" alt="Ingresos" />
-      <div class="texto">
-        <span>Ingresos</span>
-        <strong>$6,000.00</strong>
-      </div>
     </div>
-    <div class="resumen-item">
+    <div class="texto">
+      <span>Ingresos</span>
+      <strong>$6,000.00</strong>
+    </div>
+  </div>
+  <div class="resumen-item gastos">
+    <div class="icono-circulo">
       <img src="assets/icons/gastos.png" alt="Gastos" />
-      <div class="texto">
-        <span>Gastos</span>
-        <strong>$3,531.23</strong>
-      </div>
     </div>
-    <div class="resumen-item">
+    <div class="texto">
+      <span>Gastos</span>
+      <strong>$3,531.23</strong>
+    </div>
+  </div>
+  <div class="resumen-item ahorros">
+    <div class="icono-circulo">
       <img src="assets/icons/ahorro.png" alt="Ahorros" />
-      <div class="texto">
-        <span>Ahorros</span>
-        <strong>$600.00</strong>
-      </div>
     </div>
-  </section>
+    <div class="texto">
+      <span>Ahorros</span>
+      <strong>$600.00</strong>
+    </div>
+  </div>
+</section>
 
   <!-- 🔽 Dropdown de usuario -->
   <div id="menuUsuario" class="menu-usuario">
