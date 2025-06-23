@@ -320,14 +320,12 @@
       document.getElementById('modalCategorias').style.display = 'none';
     }
     function seleccionarSubcategoria(nombre) {
-      // Si se está usando desde un iframe, accede al DOM del padre
-      try {
-        window.parent.document.getElementById('inputCategoria').value = nombre;
-        window.parent.document.getElementById('modalRegistrar').style.display = 'none';
-      } catch (e) {
-        // Si no está en iframe, úsalo local
-        document.getElementById('categoria').value = nombre;
+      const campoCategoria = document.getElementById('categoria');
+      if (campoCategoria) {
+        campoCategoria.value = nombre;
         cerrarModalCategorias();
+      } else {
+        console.error("❌ No se encontró el input con id 'categoria'.");
       }
     }
     function toggleGrupo(header) {
