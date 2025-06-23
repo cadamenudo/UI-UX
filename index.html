@@ -422,29 +422,44 @@ input[type="date"] {
 
   
   <!-- 🔹 Gráfico 1: Meta del año -->
-<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
-  <h2 style="text-align: center; font-size: 1.1rem;">Meta para el año</h2>
-  <canvas id="graficoMetas"></canvas>
-</div>
+<section class="bloque">
+  <h2>Meta para el año</h2>
+  <canvas id="graficoMetas" height="250"></canvas>
+</section>
 
 <!-- 🔹 Gráfico 2: Ingresos vs Gastos -->
-<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
-  <h2 style="text-align: center; font-size: 1.1rem;">Ingresos vs Gastos</h2>
+<section class="bloque">
+  <h2>Ingresos vs Gastos</h2>
   <canvas id="graficoIngresosGastos"></canvas>
-</div>
+</section>
 
 <!-- 🔹 Gráfico 3: Ingresos Totales -->
-<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
-  <h2 style="text-align: center; font-size: 1.1rem;">Ingresos Totales</h2>
+<section class="bloque">
+  <h2>Ingresos Totales</h2>
   <canvas id="graficoIngresosTotales"></canvas>
-</div>
+</section>
 
 <!-- 🔹 Gráfico 4: Gastos Totales + Subcategorías -->
-<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
-  <h2 style="text-align: center; font-size: 1.1rem;">Gastos Totales</h2>
-  <canvas id="graficoGastosTotales"></canvas>
-</div>
-
+<section class="bloque">
+  <h2>Gastos Totales</h2>
+  <canvas id="graficoGastosTotales" width="280" height="280"></canvas>
+  <label for="selectorCategoria">Ver subcategorías:</label>
+  <select id="selectorCategoria" class="select-categorias">
+    <option value="alimentacion" selected>Alimentación</option>
+    <option value="casa">Casa</option>
+    <option value="cuidado">Cuidado Personal</option>
+    <option value="dependientes">Dependientes</option>
+    <option value="deuda">Deuda</option>
+    <option value="entretenimiento">Entretenimiento</option>
+    <option value="medicos">Gastos Médicos</option>
+    <option value="impuestos">Impuestos</option>
+    <option value="donaciones">Regalos y Donaciones</option>
+    <option value="seguros">Seguros</option>
+    <option value="telecom">Telecomunicaciones</option>
+    <option value="transporte">Transportación</option>
+  </select>
+  <canvas id="graficoSubcategoria" width="280" height="280" style="margin-top: 30px;"></canvas>
+</section>
   <!-- 🔹 Legal -->
    <div class="footer-legales">
     <button onclick="abrirModal('modalTerminos', 'terminos.html')">Términos</button>
