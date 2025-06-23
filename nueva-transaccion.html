@@ -399,8 +399,7 @@
       document.getElementById('modalCategorias').style.display = 'flex';
     }
     function cerrarModalCategorias() {
-      const modal = document.querySelector('.formulario');
-      modal.style.display = 'none';
+      document.getElementById('modalCategorias').style.display = 'none';
     }
     function seleccionarSubcategoria(nombre) {
       document.getElementById('categoria').value = nombre;
