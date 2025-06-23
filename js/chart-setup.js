@@ -195,7 +195,7 @@ type: 'doughnut',
     transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
   };
   
-  let chartSub = new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
+  window.chartSub = new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
    type: 'doughnut',
     data: {
       labels: subcategorias['alimentacion'].labels,
