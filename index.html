@@ -1,702 +1,586 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Inicio | CadaMenudo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Cada Menudo</title>
   <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <style>
-        @font-face {
-      font-family: 'Greycliff CF';
-      src: url('fonts/GreycliffCF-Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-    }
     body {
       margin: 0;
-      font-family: 'Greycliff CF', sans-serif;
       background: #FAFBFF;
       color: #000000;
+      font-family: 'Greycliff CF', sans-serif;
+      padding-top: 80px; 
       padding-bottom: 80px;
+      overflow-x: hidden;
+      width: 100%;
     }
 
-    header {
+    .header-bar {
       background-color: #594AE2;
-      color: #fff;
+      padding: 1rem 1rem;
+      color: white;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 1rem 1.5rem 3.5rem; /* 👈 le damos altura extra al fondo morado */
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 64px;
+      box-sizing: border-box;
+    }
+        .footer-menu {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      text-align: center;
+      align-items: center;
+      font-size: 0.5rem;
+      gap: 0.25rem;
+      padding: 0.75rem 0;
+      background-color: #594AE2;
+      color: white;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
     }
 
     .logo {
-      height: 28px;
+      height: 30px;
     }
 
-    .usuario {
+    .user-info {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      max-width: 50%;
-      text-align: right;
+      gap: 0.75rem;
     }
 
-    .usuario img {
+    .user-avatar {
       width: 36px;
       height: 36px;
       border-radius: 50%;
     }
 
-     .usuario span {
-      font-size: 0.85rem;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-        
-    .resumen {
-      display: flex;
-      justify-content: space-between;
-      background: #fff;
-      width: 90%;
-      margin: -2rem auto 1rem; /* sube sin invadir el header */
-      padding: 1rem;
+    .resumen-box {
+      background-color: white;
       border-radius: 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      gap: 0.5rem;
-      max-width: 700px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin: 0.25rem 1rem 1rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .resumen-item {
-      flex: 1;
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 0.5rem;
-      font-size: 0.8rem;
-      text-align: left;
+      flex: 1;
+      min-width: 0;
     }
 
-    .resumen-item img {
-      width: 30px;
-      height: 30px;
+    .resumen-icono {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      padding: 6px;
+      flex-shrink: 0;
     }
 
-    .resumen-item .texto {
+    .resumen-texto {
       display: flex;
       flex-direction: column;
+      flex: 1;
+      min-width: 0;
+      max-width: 100%;
     }
 
-    .resumen-item .texto strong {
+    .resumen-texto span:first-child {
       font-size: 0.85rem;
     }
 
-    .superavit {
-      background: #e8fdf2;
-      color: #0a8754;
-      margin: 0 1rem;
-      padding: 0.8rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
+    .resumen-monto {
+      font-weight: 700;
+      font-size: 1.2rem;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
     }
-    
-.fechas-dos-columnas {
+
+    .alerta-superavit {
+      margin: 1rem;
+      padding: 1rem;
+      background-color: #D1FAE5;
+      color: #065F46;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+.calendario-contenedor {
   display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
   justify-content: space-between;
-  gap: 1rem;
-  margin: 1rem;
-  padding: 0; /* opcional */
-}
-
-.bloque-fecha {
-  flex: 1;
-  background: #fff;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  min-width: 0; /* previene overflow */
-}
-
-.bloque-fecha label {
-  font-size: 0.75rem;
-  color: #64748B;
-  margin-bottom: 4px;
-}
-
-.bloque-fecha input[type="date"] {
+  align-items: flex-end;
   width: 100%;
-  padding: 0.5rem;
-  font-size: 0.85rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-family: 'Greycliff CF', sans-serif;
+  max-width: 100%;
+  padding: 0 1rem;
   box-sizing: border-box;
 }
-    .seccion-graficos {
-      margin: 1rem;
-    }
 
-    .grafico-placeholder {
-      width: 100%;
-      height: 180px;
-      background: #f2f2f2;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-    }
-    .grafico-lineal-container {
+.campo-fecha {
+  flex: 1 1 100px;         /* Permite que se reduzcan hasta 100px si es necesario */
+  max-width: 130px;        /* Limita su ancho máximo */
+  min-width: 90px;         /* Asegura que no colapsen demasiado */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;                /* Espacio entre label e input */
+}
+    .campo-fecha label {
+  font-size: 0.7rem;
+  margin-bottom: 0.25rem;
+  display: block;
+  color: #334155;
+  text-align: left;
+}
+
+.campo-fecha input {
+  font-size: 0.65rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  box-sizing: border-box;
+  height: 2.4rem;                /* 👈 un poco más de altura */
+  line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: left;
+  overflow: hidden;             /* 👈 evita corte en Android */
+  white-space: nowrap;          /* 👈 mantiene todo en una línea */
+  text-overflow: ellipsis;      /* 👈 si se corta, pone "..." */
 }
-canvas {
-  width: 100% !important;
-  height: auto !important;
+
+/* Opcional para Firefox */
+input[type="date"]::-moz-placeholder {
+  opacity: 1;
 }
-    footer.navbar {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #ffffff;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: space-around;
+.boton-buscar {
+  background-color: #594AE2;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-family: 'Greycliff CF', sans-serif;
+}
+
+.boton-buscar img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1); /* ícono blanco */
+}
+
+@media (max-width: 320px) {
+  .calendario-contenedor {
+    flex-direction: column; /* Solo en pantallas MUY pequeñas */
+  }
+  
+  .campo-fechas {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .boton-buscar {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.mdl-textfield label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+input[type="date"] {
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  color: #1f2937;
+  background: transparent;
+  font-family: 'Greycliff CF', sans-serif;
+}
+    .footer-menu {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      text-align: center;
       align-items: center;
-      padding: 0.4rem 0;
+      font-size: 0.6rem;
+      gap: 0.25rem;
+      padding: 0.75rem 0;
+      background-color: #594AE2;
+      color: white;
     }
 
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 0.65rem;
-      color: #64748B;
+    .footer-menu img {
+      height: 28px;
+      width: auto;
+      margin-bottom: 4px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .nav-item img {
-      width: 26px;
-      height: 20px;
+    .footer-menu .registrar-icono {
+      height: 32px;
+      width: auto;
       margin-bottom: 4px;
     }
-    .nav-item-nuevo img {
-  width: 36px;
-  height: 28px;
-}
-    .banner-legales {
-  text-align: center;
-  font-family: 'Greycliff CF', sans-serif;
-  font-size: 12px;
-  color: #64748B;
-  padding: 16px 0;
-  line-height: 1.0;
-}
-.banner-legales a {
-  color: #64748B;
-  text-decoration: none;
-}
-.bloque-sin-sombra {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1.25rem 1.5rem; /* Menos espacio arriba */
-  margin-bottom: 2rem;
-}
-.titulo-grafico {
-  font-family: 'Greycliff CF', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #000;
-  margin-bottom: 2rem; /* Espacio claro entre título y canvas */
-  text-align: center;
-}
 
-.subtitulo-select {
-  display: block;
-  margin-top: 16px;
-  font-size: 0.9rem;
-  color: #374151;
-  font-weight: 500;
-  font-family: 'Greycliff CF', sans-serif;
-}
+    .footer-menu .registrar-texto {
+      font-weight: 600;
+      font-size: 0.75rem;
+      margin-top: 4px;
+    }
 
-.select-categorias {
+    @media (max-width: 480px) {
+      .resumen-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .resumen-icono {
+        display: none;
+      }
+
+      .resumen-texto span:first-child {
+        font-size: 0.75rem;
+      }
+
+      .resumen-monto {
+        font-size: 1rem;
+      }
+    }
+
+    .footer-legales {
   width: 100%;
-  padding: 8px;
-  font-family: 'Greycliff CF', sans-serif;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-top: 4px;
+  text-align: center;
+  font-size: 0.7rem;
+  color: #94A3B8;
+  background: #FAFBFF;
+  padding: 8px 0 2px;
+  margin-top: 2rem;
+  margin-bottom: 1rem; 
+}
+
+.footer-legales a,
+.footer-legales button {
+  color: #94A3B8;
+  text-decoration: none;
+  margin: 0 4px;
+  background: none;
+  border: none;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  cursor: pointer;
+}
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      max-width: 350px;
+      width: 90%;
+      padding: 1.5rem;
+      border-radius: 16px;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: #64748B;
+      cursor: pointer;
+    }
+
+    iframe {
+      border-radius: 8px;
+    }
+    .flatpickr-calendar {
+  font-size: 12px; /* ✅ Reduce todo el popup */
+}
+
+.flatpickr-day {
+  font-size: 11px; /* ✅ Reduce los números del calendario */
+  max-width: 32px;
+  height: 28px;
+  line-height: 28px;
 }
 
   </style>
 </head>
 <body>
-<header>
-  <img src="assets/logo/cada-menudo-logo-white.png" class="logo" alt="CadaMenudo logo" />
-  <div class="usuario">
-    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario" />
-    <span>Hola xavier</span>
+
+  <!-- 🔹 HEADER -->
+  <div class="header-bar">
+    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cada-menudo-logo-white.png" alt="Logo" class="logo" />
+    <div class="user-info">
+      <span>Hola Xavier</span>
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" class="user-avatar" />
+    </div>
   </div>
-</header>
 
-
-  <section class="resumen">
+  <!-- 🔸 RESUMEN -->
+  <div class="resumen-box">
     <div class="resumen-item">
-      <img src="assets/icons/ingreso.png" alt="Ingresos" />
-      <div class="texto">
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png" class="resumen-icono" />
+      <div class="resumen-texto">
         <span>Ingresos</span>
-        <strong>$6,000.00</strong>
+        <span class="resumen-monto">$6,000.00</span>
       </div>
     </div>
+
     <div class="resumen-item">
-      <img src="assets/icons/gastos.png" alt="Gastos" />
-      <div class="texto">
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/gastos.png" class="resumen-icono" />
+      <div class="resumen-texto">
         <span>Gastos</span>
-        <strong>$3,531.23</strong>
+        <span class="resumen-monto">$3,531.23</span>
       </div>
     </div>
+
     <div class="resumen-item">
-      <img src="assets/icons/ahorro.png" alt="Ahorros" />
-      <div class="texto">
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/ahorro.png" class="resumen-icono" />
+      <div class="resumen-texto">
         <span>Ahorros</span>
-        <strong>$600.00</strong>
+        <span class="resumen-monto">$600.00</span>
       </div>
     </div>
-  </section>
-
-  <div class="superavit">
-    ✅ SUPER: Tienes un sobrante de <strong>$1,868.77</strong>
   </div>
 
-<div class="fechas-dos-columnas">
-  <div class="bloque-fecha">
-    <label for="fechaDesde">Desde</label>
-    <input id="fechaDesde" type="date" value="2025-01-01" />
+  <!-- 🔹 SUPERÁVIT -->
+  <div class="alerta-superavit">
+    SUPER: Tienes un sobrante de <strong>$1,868.77</strong>
   </div>
-  <div class="bloque-fecha">
-    <label for="fechaHasta">Hasta</label>
-    <input id="fechaHasta" type="date" value="2025-05-31" />
-  </div>
-</div>
 
-<section class="bloque-sin-sombra">
-  <h4 class="titulo-grafico">Meta para el año</h4>
-  <canvas id="graficoMetas" height="250"></canvas>
-</section>
-
-<section class="bloque-sin-sombra">
-  <h4 class="titulo-grafico">Ingresos vs Gastos</h4>
-  <div class="grafico-lineal-container">
-    <canvas id="graficoLineal"></canvas>
-  </div>
-</section>
+  <!-- 🔹 Calendario HTML tipo Blazor -->
   
-<section class="bloque-sin-sombra">
-  <h4 class="titulo-grafico">Ingresos Totales</h4>
-  <div class="grafico-dona-ingresos" style="max-width: 320px; margin: 0 auto;">
-    <canvas id="graficoDonaIngresos" width="280" height="280"></canvas>
+<section class="calendario-contenedor">
+  <div class="campo-fecha">
+    <label for="fechaDesde">Desde</label>
+    <input type="text" id="fechaDesde" class="mdl-textfield__input" value="01/01/2025">
   </div>
+
+  <div class="campo-fecha">
+    <label for="fechaHasta">Hasta</label>
+    <input type="text" id="fechaHasta" class="mdl-textfield__input" value="31/05/2025">
+  </div>
+
+  <button class="boton-buscar">
+    <img src="https://cadamenudo.github.io/UI-UX/assets/icons/buscar.png" alt="Buscar" style="height: 1rem;">
+    Buscar
+  </button>
 </section>
 
-  <section class="bloque-sin-sombra">
-<h4 class="titulo-grafico">Gastos Totales</h4>
-<div style="max-width: 320px; margin: 0 auto;">
-  <canvas id="graficoDonaGastos" width="280" height="280"></canvas>
+  
+  <!-- 🔹 Gráfico 1: Meta del año -->
+<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
+  <h2 style="text-align: center; font-size: 1.1rem;">Meta para el año</h2>
+  <canvas id="graficoMetas"></canvas>
+</div>
 
-  <label for="selectorCategoria" class="subtitulo-select">Ver subcategorías:</label>
-  <select id="selectorCategoria" class="select-categorias">
-      <option value="alimentacion" selected>Alimentación</option>
-      <option value="alimentacion">Alimentación</option>
-      <option value="casa">Casa</option>
-      <option value="cuidado">Cuidado Personal</option>
-      <option value="dependientes">Dependientes</option>
-      <option value="deuda">Deuda</option>
-      <option value="entretenimiento">Entretenimiento</option>
-      <option value="medicos">Gastos Médicos</option>
-      <option value="impuestos">Impuestos</option>
-      <option value="donaciones">Regalos y Donaciones</option>
-      <option value="seguros">Seguros</option>
-      <option value="telecom">Telecomunicaciones</option>
-      <option value="transporte">Transportación</option>
-    </select>
+<!-- 🔹 Gráfico 2: Ingresos vs Gastos -->
+<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
+  <h2 style="text-align: center; font-size: 1.1rem;">Ingresos vs Gastos</h2>
+  <canvas id="graficoIngresosGastos"></canvas>
+</div>
 
-    <canvas id="graficoSubcategoria" width="280" height="280" style="margin-top: 30px;"></canvas>
+<!-- 🔹 Gráfico 3: Ingresos Totales -->
+<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
+  <h2 style="text-align: center; font-size: 1.1rem;">Ingresos Totales</h2>
+  <canvas id="graficoIngresosTotales"></canvas>
+</div>
+
+<!-- 🔹 Gráfico 4: Gastos Totales + Subcategorías -->
+<div class="grafico-box" style="border-radius:16px; background:white; padding:1.5rem; margin: 1.5rem;">
+  <h2 style="text-align: center; font-size: 1.1rem;">Gastos Totales</h2>
+  <canvas id="graficoGastosTotales"></canvas>
+</div>
+
+  <!-- 🔹 Legal -->
+   <div class="footer-legales">
+    <button onclick="abrirModal('modalTerminos', 'terminos.html')">Términos</button>
+    <button onclick="abrirModal('modalPrivacidad', 'privacidad.html')">Política de Privacidad</button>
+    <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
   </div>
-</section>
-<div class="banner-legales">
-  <p>
- <a href="/terminos.html" target="_blank">Términos</a> y <a href="/privacidad.html" target="_blank">Políticas</a> / <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
-  </p>
-</div>
-  <footer class="navbar">
-    <div class="nav-item">
-      <img src="assets/icons/home.png" alt="Home" />
-      <span>Inicio</span>
+
+  <!-- 🔻 FOOTER MENÚ -->
+  <footer class="footer-menu">
+    <div>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/home.png" alt="Home" />
+      <div>Tablero</div>
     </div>
-    <div class="nav-item">
-      <img src="assets/icons/transacciones.png" alt="Movimientos" />
-      <span>Transacciones</span>
+    <div>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/transacciones.png" alt="Transacciones" />
+      <div>Transacciones</div>
     </div>
-<div class="nav-item nav-item-nuevo">
-  <img src="assets/icons/nueva.png" alt="Nuevo" />
-  <span>Registrar</span>
-</div>
-    <div class="nav-item">
-      <img src="assets/icons/metas.png" alt="Metas" />
-      <span>Metas</span>
+    <div>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/nueva.png" alt="Registrar" class="registrar-icono" />
+      <div class="registrar-texto">Registrar</div>
     </div>
-    <div class="nav-item">
-      <img src="assets/icons/buscar.png" alt="Buscar" />
-      <span>Buscar</span>
-    </div> 
+    <div>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/metas.png" alt="Metas" />
+      <div>Metas</div>
+    </div>
+    <div>
+      <img src="https://cadamenudo.github.io/UI-UX/assets/icons/buscar.png" alt="Buscar" />
+      <div>Buscar</div>
+    </div>
   </footer>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Modal Términos -->
+  <div id="modalTerminos" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="cerrarModal('modalTerminos')">×</button>
+      <iframe width="100%" height="300" style="border:none;"></iframe>
+    </div>
+  </div>
+
+  <!-- Modal Privacidad -->
+  <div id="modalPrivacidad" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="cerrarModal('modalPrivacidad')">×</button>
+      <iframe width="100%" height="300" style="border:none;"></iframe>
+    </div>
+  </div>
+  
+<!-- ✅ Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- 🧠 Script principal -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
 <script>
-  // Gráfico de metas (barras verticales apiladas)
-const ctxMetas = document.getElementById('graficoMetas').getContext('2d');
-new Chart(ctxMetas, {
-  type: 'bar',
-  data: {
-    labels: ['Meta', 'Progreso'],
-    datasets: [
-      {
-        label: 'Meta',
-        data: [5000, null],
-        backgroundColor: '#E8C239',
-        borderRadius: 10,
-        barThickness: 50,
-        categoryPercentage: 0.6,
-        stack: 'progreso' // ✅ necesario para alinear correctamente
-      },
-      {
-        label: 'Faltante',
-        data: [null, 2500], // primero faltante
-        backgroundColor: '#AAB8F2',
-        borderRadius: {
-          bottomLeft: 10,
-          bottomRight: 10
-        },
-        barThickness: 50,
-        categoryPercentage: 0.6,
-        stack: 'progreso'
-      },
-      {
-        label: 'Logrado',
-        data: [null, 2500], // luego logrado
-        backgroundColor: '#3956E8',
-        borderRadius: {
-          topLeft: 10,
-          topRight: 10
-        },
-        barThickness: 50,
-        categoryPercentage: 0.6,
-        stack: 'progreso'
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        backgroundColor: '#fff',
-        titleColor: '#000',
-        bodyColor: '#000',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.parsed.y;
-            return `${label}: $${value.toLocaleString()}`;
-          }
-        }
-      },
-      legend: {
-        display: false
-      }
-    },
-    scales: {
-      x: {
-        stacked: true,
-        grid: {
-          display: false
-        },
-        ticks: {
-          color: '#64748B'
-        }
-      },
-    y: {
-      display: false,
-      stacked: true,
-      grid: {
-        display: false
-      },
-      ticks: {
-        display: false
-      }
+  // ✅ Inicializar calendarios con formato español
+  flatpickr("#fechaDesde", {
+    locale: "es",
+    dateFormat: "d/m/Y",
+    defaultDate: "01/01/2025"
+  });
+
+  flatpickr("#fechaHasta", {
+    locale: "es",
+    dateFormat: "d/m/Y",
+    defaultDate: "31/05/2025"
+  });
+
+   document.getElementById("btnBuscar").addEventListener("click", () => {
+    const desde = document.getElementById("fechaDesde").value;
+    const hasta = document.getElementById("fechaHasta").value;
+    console.log("Filtrando desde:", desde, "hasta:", hasta);
+    // Aquí puedes agregar lógica para filtrar resultados, mostrar mensajes, etc.
+  });
+
+  // ✅ Simulación de datos dinámicos (ejemplo)
+  const resumenData = {
+    ingresos: "$6,000.00",
+    gastos: "$3,531.23",
+    ahorros: "$600.00",
+    superavit: "$1,868.77"
+  };
+
+  // ✅ Actualizar datos del resumen
+  function actualizarResumen(data) {
+    const items = document.querySelectorAll('.resumen-item');
+    if (items.length >= 3) {
+      items[0].querySelector('.resumen-monto').textContent = data.ingresos;
+      items[1].querySelector('.resumen-monto').textContent = data.gastos;
+      items[2].querySelector('.resumen-monto').textContent = data.ahorros;
     }
+
+    const alerta = document.querySelector('.alerta-superavit');
+    if (alerta) {
+      alerta.innerHTML = `SUPER: Tienes un sobrante de <strong>${data.superavit}</strong>`;
     }
   }
-});
 
-  // Gráfico de ingresos vs gastos (línea)
-  const ctxLineal = document.getElementById('graficoLineal').getContext('2d');
-new Chart(ctxLineal, {
-  type: 'line',
-  data: {
-    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
-    datasets: [
-      {
-        label: 'Ingresos',
-        data: [3200, 3300, 3100, 3400, 3500],
-        borderColor: '#3716B3',
-        backgroundColor: 'rgba(55, 22, 179, 0.1)',
-        tension: 0.4,
-        fill: true,
-        pointRadius: 3,
-        pointHoverRadius: 6
-      },
-      {
-        label: 'Gastos',
-        data: [2800, 2900, 2700, 3000, 3100],
-        borderColor: '#BA68C8',
-        backgroundColor: 'rgba(186, 104, 200, 0.1)',
-        tension: 0.4,
-        fill: true,
-        pointRadius: 3,
-        pointHoverRadius: 6
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        backgroundColor: '#fff',
-        titleColor: '#000',
-        bodyColor: '#000',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        displayColors: false,
-        callbacks: {
-          label: function(context) {
-            const label = context.dataset.label || '';
-            const value = context.formattedValue;
-            return `${label}: $${value}`;
-          }
-        }
-      },
-      legend: {
-        display: false
-      }
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          color: '#64748B'
-        }
-      },
-      y: {
-        beginAtZero: true,
-        ticks: {
-          color: '#64748B'
-        },
-        grid: {
-          color: '#eee'
-        }
-      }
+  // ✅ Escuchar cambios en el calendario
+  const fechaDesde = document.getElementById('fechaDesde');
+  const fechaHasta = document.getElementById('fechaHasta');
+
+  fechaDesde.addEventListener('change', () => {
+    console.log("Desde:", fechaDesde.value);
+  });
+
+  fechaHasta.addEventListener('change', () => {
+    console.log("Hasta:", fechaHasta.value);
+  });
+
+  // ✅ Ejecutar resumen al cargar
+  actualizarResumen(resumenData);
+
+  // ✅ Funciones de modales
+  function abrirModal(idModal, archivo) {
+    const modal = document.getElementById(idModal);
+    const iframe = modal.querySelector('iframe');
+    if (iframe) iframe.src = archivo;
+    modal.style.display = 'flex';
+  }
+
+  function cerrarModal(idModal) {
+    document.getElementById(idModal).style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+      event.target.style.display = "none";
     }
   }
-});
-// Gráfico de ingresos totales (dona)
-
-const centerTextPlugin = {
-  id: 'centerText',
-  beforeDraw(chart) {
-    const { width, height } = chart;
-    const ctx = chart.ctx;
-    const total = chart.config.data.datasets[0].data.reduce((a, b) => a + b, 0);
-
-    ctx.save();
-    ctx.font = 'bold 14px Greycliff CF, sans-serif';
-    ctx.fillStyle = '#64748B';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('Total', width / 2, height / 2 - 12);
-
-    ctx.font = 'bold 20px Greycliff CF, sans-serif';
-    ctx.fillStyle = '#000';
-    ctx.fillText(`$${total.toLocaleString()}`, width / 2, height / 2 + 12);
-    ctx.restore();
-  }
-};
-
-const ctxDona = document.getElementById('graficoDonaIngresos').getContext('2d');
-new Chart(ctxDona, {
-  type: 'doughnut',
-  data: {
-    labels: ['Sueldo', 'Negocio', 'Inversiones', 'Otros'],
-    datasets: [{
-      data: [4200, 1300, 900, 600],
-      backgroundColor: ['#3956E8', '#7459D9', '#E8C239', '#AAB8F2'],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    responsive: true,
-    cutout: '60%',
-    plugins: {
-      tooltip: {
-        backgroundColor: '#fff',
-        titleColor: '#000',
-        bodyColor: '#000',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        callbacks: {
-          label: function(context) {
-            const label = context.label;
-            const value = context.formattedValue;
-            return `${label}: $${value}`;
-          }
-        }
-      },
-      legend: {
-        display: false
-      }
-    }
-  },
-  plugins: [centerTextPlugin] // ✅ AQUI es donde estaba faltando
-});
-// 🎯 Plugin para mostrar el total en el centro
-const centerTextPluginGastos = {
-  id: 'centerTextGastos',
-  beforeDraw(chart) {
-    const { width, height } = chart;
-    const ctx = chart.ctx;
-    const total = chart.config.data.datasets[0].data.reduce((a, b) => a + b, 0);
-
-    ctx.save();
-    ctx.font = 'bold 14px Greycliff CF, sans-serif';
-    ctx.fillStyle = '#64748B';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('Total', width / 2, height / 2 - 12);
-
-    ctx.font = 'bold 20px Greycliff CF, sans-serif';
-    ctx.fillStyle = '#000';
-    ctx.fillText(`$${total.toLocaleString()}`, width / 2, height / 2 + 12);
-    ctx.restore();
-  }
-};
-
-// 🎨 Paleta de colores
-const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
-
-// 📊 Datos de categorías de gasto
-const categoriasGasto = {
-  labels: ['Alimentación', 'Casa', 'Cuidado Personal', 'Deuda', 'Entretenimiento', 'Impuestos'],
-  data: [1200, 900, 400, 600, 350, 450]
-};
-
-// 📊 Datos de subcategorías
-const subcategorias = {
-  alimentacion: { labels: ['Supermercado', 'Comidas fuera', 'Café'], data: [800, 300, 100] },
-  casa: { labels: ['Hipoteca', 'Servicios', 'Mantenimiento'], data: [500, 250, 150] },
-  cuidado: { labels: ['Higiene', 'Peluquería'], data: [250, 150] },
-  dependientes: { labels: ['Escuela', 'Ropa', 'Cuidado niños'], data: [400, 200, 150] },
-  deuda: { labels: ['Tarjetas', 'Préstamos'], data: [350, 250] },
-  entretenimiento: { labels: ['Cine', 'Streaming'], data: [200, 150] },
-  medicos: { labels: ['Seguro', 'Copagos'], data: [300, 150] },
-  impuestos: { labels: ['Federal', 'Propiedad'], data: [300, 150] },
-  donaciones: { labels: ['ONG', 'Familia'], data: [200, 150] },
-  seguros: { labels: ['Auto', 'Vida'], data: [250, 150] },
-  telecom: { labels: ['Internet', 'Celular'], data: [100, 80] },
-  transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
-};
-
-// ✅ Gráfico de gastos totales
-const ctxGastos = document.getElementById('graficoDonaGastos').getContext('2d');
-new Chart(ctxGastos, {
-  type: 'doughnut',
-  data: {
-    labels: categoriasGasto.labels,
-    datasets: [{
-      data: categoriasGasto.data,
-      backgroundColor: colores
-    }]
-  },
-  options: {
-    responsive: true,
-    cutout: '60%',
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#fff',
-        titleColor: '#000',
-        bodyColor: '#000',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        callbacks: {
-          label: function(context) {
-            return `${context.label}: $${context.formattedValue}`;
-          }
-        }
-      }
-    }
-  },
-  plugins: [centerTextPluginGastos]
-});
-
-// ✅ Gráfico de subcategorías
-const ctxSub = document.getElementById('graficoSubcategoria').getContext('2d');
-let chartSub = new Chart(ctxSub, {
-  type: 'doughnut',
-  data: {
-    labels: subcategorias['alimentacion'].labels,
-    datasets: [{
-      data: subcategorias['alimentacion'].data,
-      backgroundColor: colores
-    }]
-  },
-  options: {
-    responsive: true,
-    cutout: '60%',
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#fff',
-        titleColor: '#000',
-        bodyColor: '#000',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        callbacks: {
-          label: function(context) {
-            return `${context.label}: $${context.formattedValue}`;
-          }
-        }
-      }
-    }
-  },
-  plugins: [centerTextPluginGastos]
-});
-
-// 🔄 Selector dinámico de subcategorías
-const selector = document.getElementById('selectorCategoria');
-selector.addEventListener('change', function () {
-  const seleccion = this.value;
-  if (subcategorias[seleccion]) {
-    const nuevaData = subcategorias[seleccion];
-    chartSub.data.labels = nuevaData.labels;
-    chartSub.data.datasets[0].data = nuevaData.data;
-    chartSub.update();
-  }
-});
-
 </script>
-
+  <script src="js/chart-setup.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.initCharts) {
+      window.initCharts();
+    }
+  });
+</script>
 </body>
 </html>
