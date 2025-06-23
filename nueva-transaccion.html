@@ -395,7 +395,8 @@
       document.getElementById('modalCategorias').style.display = 'flex';
     }
     function cerrarModalCategorias() {
-      document.getElementById('modalCategorias').style.display = 'none';
+      const modal = document.querySelector('.formulario');
+      modal.style.display = 'none';
     }
     function seleccionarSubcategoria(nombre) {
       document.getElementById('categoria').value = nombre;
