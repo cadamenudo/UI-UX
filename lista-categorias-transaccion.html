@@ -58,10 +58,114 @@
     li:hover {
       text-decoration: underline;
     }
+        /* Modal de Categorías */
+.modal-categorias {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-contenido {
+  background: #fff;
+  width: 100%;
+  max-width: 350px;
+  max-height: 80vh;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+    .grupo {
+      margin-bottom: 1rem;
+    }
+    .grupo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #F3F4F6;
+      margin-top: 0.5rem;
+    }
+    .circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .contenido {
+      display: none;
+      margin-left: 1rem;
+      margin-top: 0.5rem;
+    }
+    .subtitulo {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-top: 0.8rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.3rem 0;
+    }
+    li {
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      background: #F9FAFB;
+      margin-bottom: 0.3rem;
+      cursor: pointer;
+    }
+    li:hover {
+      background: #E5E7EB;
+    }
+.cerrar-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 2rem;
+  color: #64748B;
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+  z-index: 10;
+}
+    .cerrar-categorias {
+  position: sticky;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+  color: #64748B;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  display: block;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  line-height: 1;
+}
   </style>
 </head>
 <body>
+  
+  <div class="formulario">
+    <button class="cerrar-modal" onclick="cerrarModal()">x</button>
 
+    <!-- MODAL CATEGORÍAS -->
+<div id="modalCategorias" class="modal-categorias">
+  <div class="modal-contenido">
+    <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
+    <h3>Selecciona una subcategoría</h3>
+    
   <div class="grupo" style="--color:#3956E8;">
     <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
       <div style="display:flex;align-items:center;">
@@ -206,6 +310,25 @@
   </div>
 
   <script>
+          function cerrarModal() {
+    window.parent.document.getElementById('modalRegistrar').style.display = 'none';
+  }
+        function abrirModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'flex';
+    }
+    function cerrarModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'none';
+    }
+    function seleccionarSubcategoria(nombre) {
+      document.getElementById('categoria').value = nombre;
+      cerrarModalCategorias();
+    }
+    function toggleGrupo(header) {
+      const contenido = header.nextElementSibling;
+      const abierto = contenido.style.display === 'block';
+      document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
+      contenido.style.display = abierto ? 'none' : 'block';
+    }
     function toggleGrupo(grupo) {
       document.querySelectorAll('.grupo').forEach(g => g.classList.remove('abierto'));
       grupo.classList.add('abierto');
