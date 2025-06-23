@@ -19,7 +19,7 @@ window.initCharts = function () {
     });
 
     // Ingresos vs Gastos
-    new Chart(document.getElementById('graficoLineal'), {
+    new Chart(document.getElementById('graficoIngresosGastos'), {
         type: 'line',
         data: {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
@@ -55,7 +55,7 @@ window.initCharts = function () {
         options: { responsive: true, cutout: '60%', plugins: { legend: { display: false } } }
     };
 
-    new Chart(document.getElementById('graficoDonaIngresos'), {
+    new Chart(document.getElementById('graficoIngresosTotales'), {
         ...donaOptions,
         data: {
             labels: ['Sueldo', 'Negocio', 'Inversiones', 'Otros'],
@@ -63,7 +63,7 @@ window.initCharts = function () {
         }
     });
 
-    new Chart(document.getElementById('graficoDonaGastos'), {
+    new Chart(document.getElementById('graficoGastosTotales'), {
         ...donaOptions,
         data: {
             labels: ['Alimentación', 'Casa', 'Cuidado Personal', 'Deuda'],
