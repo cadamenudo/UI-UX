@@ -230,3 +230,4 @@ type: 'doughnut',
     chartSub.data.datasets[0].data = nuevaData.data;
     chartSub.update();
   });
+};
