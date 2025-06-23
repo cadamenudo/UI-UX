@@ -155,8 +155,14 @@ window.initCharts = function () {
     plugins: [centerTextPlugin]
   });
 
-  // Subcategorías de gasto
+  // Gastos Totales y subcategorías
   const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
+
+  const categoriasGasto = {
+    labels: ['Alimentación', 'Casa', 'Cuidado Personal', 'Deuda', 'Entretenimiento', 'Impuestos'],
+    data: [1200, 900, 400, 600, 350, 450]
+  };
+
   const subcategorias = {
     alimentacion: { labels: ['Supermercado', 'Comidas fuera', 'Café'], data: [800, 300, 100] },
     casa: { labels: ['Hipoteca', 'Servicios', 'Mantenimiento'], data: [500, 250, 150] },
@@ -172,8 +178,6 @@ window.initCharts = function () {
     transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
   };
 
-  // ✅ Donut de subcategoría inicial
-// ✅ Dona principal: Gastos Totales por categoría
 window.chartGasto = new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
   type: 'doughnut',
   data: {
