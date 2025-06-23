@@ -159,17 +159,25 @@
 
 .campo-fecha input {
   font-size: 0.65rem;
-  padding: 0.25rem 0.4rem;
+  padding: 0.4rem 0.6rem;
   border-radius: 8px;
   border: 1px solid #CBD5E1;
   width: 100%;
   box-sizing: border-box;
+  height: 2.4rem;                /* 👈 un poco más de altura */
+  line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
   text-align: left;
-}
-    .campo-fecha input::placeholder {
-  text-align: left;
+  overflow: hidden;             /* 👈 evita corte en Android */
+  white-space: nowrap;          /* 👈 mantiene todo en una línea */
+  text-overflow: ellipsis;      /* 👈 si se corta, pone "..." */
 }
 
+/* Opcional para Firefox */
+input[type="date"]::-moz-placeholder {
+  opacity: 1;
+}
 .boton-buscar {
   background-color: #594AE2;
   color: white;
