@@ -328,12 +328,6 @@
         console.error("❌ No se encontró el input con id 'categoria'.");
       }
     }
-    function toggleGrupo(header) {
-      const contenido = header.nextElementSibling;
-      const abierto = contenido.style.display === 'block';
-      document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
-      contenido.style.display = abierto ? 'none' : 'block';
-    }
     function toggleGrupo(grupo) {
       document.querySelectorAll('.grupo').forEach(g => g.classList.remove('abierto'));
       grupo.classList.add('abierto');
