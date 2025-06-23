@@ -71,6 +71,7 @@
 }
 
 .modal-contenido {
+  position: relative;
   background: #fff;
   width: 100%;
   max-width: 350px;
@@ -139,7 +140,7 @@
   z-index: 10;
 }
     .cerrar-categorias {
-  position: sticky;
+  position: absolute;
   top: 0;
   right: 0;
   font-size: 2rem;
@@ -156,7 +157,7 @@
   </style>
 </head>
 <body>
-  
+  <h3>Selecciona una subcategoría</h3>
   <div class="formulario">
     <button class="cerrar-modal" onclick="cerrarModal()">x</button>
   <div class="grupo" style="--color:#3956E8;">
@@ -304,31 +305,58 @@
     <!-- MODAL CATEGORÍAS -->
 <div id="modalCategorias" class="modal-categorias">
   <div class="modal-contenido">
-    <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
-    <h3>Selecciona una subcategoría</h3>
   <script>
-          function cerrarModal() {
-    window.parent.document.getElementById('modalRegistrar').style.display = 'none';
+function cerrarModal() {
+  window.parent.document.getElementById('modalRegistrar').style.display = 'none';
+}
+
+function abrirModalCategorias() {
+  document.getElementById('modalCategorias').style.display = 'flex';
+}
+
+function cerrarModalCategorias() {
+  document.getElementById('modalCategorias').style.display = 'none';
+  document.querySelectorAll('.grupo').forEach(g => g.classList.remove('abierto'));
+}
+
+function seleccionarSubcategoria(nombre) {
+  const campoCategoria = document.getElementById('categoria');
+  if (campoCategoria) {
+    campoCategoria.value = nombre;
+    cerrarModalCategorias();
+  } else {
+    console.error("❌ No se encontró el input con id 'categoria'.");
   }
-        function abrirModalCategorias() {
-      document.getElementById('modalCategorias').style.display = 'flex';
-    }
-    function cerrarModalCategorias() {
-      document.getElementById('modalCategorias').style.display = 'none';
-    }
-    function seleccionarSubcategoria(nombre) {
-      const campoCategoria = document.getElementById('categoria');
-      if (campoCategoria) {
-        campoCategoria.value = nombre;
-        cerrarModalCategorias();
-      } else {
-        console.error("❌ No se encontró el input con id 'categoria'.");
-      }
-    }
-    function toggleGrupo(grupo) {
-      document.querySelectorAll('.grupo').forEach(g => g.classList.remove('abierto'));
-      grupo.classList.add('abierto');
-    }
+}
+
+function toggleGrupo(grupo) {
+  const yaAbierto = grupo.classList.contains('abierto');
+
+  // Cierra todos
+  document.querySelectorAll('.grupo').forEach(g => g.classList.remove('abierto'));
+
+  if (!yaAbierto) {
+    grupo.classList.add('abierto');
+    expandirModalCategorias();
+  } else {
+    colapsarModalCategoriasSiVacio();
+  }
+}
+
+function expandirModalCategorias() {
+  const modal = document.querySelector('.modal-contenido');
+  if (modal) {
+    modal.style.maxHeight = '90vh'; // o puedes usar 'none' si no hay límite
+  }
+}
+
+function colapsarModalCategoriasSiVacio() {
+  const algunoAbierto = document.querySelector('.grupo.abierto');
+  const modal = document.querySelector('.modal-contenido');
+  if (!algunoAbierto && modal) {
+    modal.style.maxHeight = '400px'; // o el valor que quieras al colapsar
+  }
+}
   </script>
 </body>
 </html>
