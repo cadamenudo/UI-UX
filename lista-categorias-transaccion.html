@@ -159,13 +159,6 @@
   
   <div class="formulario">
     <button class="cerrar-modal" onclick="cerrarModal()">x</button>
-
-    <!-- MODAL CATEGORÍAS -->
-<div id="modalCategorias" class="modal-categorias">
-  <div class="modal-contenido">
-    <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
-    <h3>Selecciona una subcategoría</h3>
-    
   <div class="grupo" style="--color:#3956E8;">
     <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
       <div style="display:flex;align-items:center;">
@@ -308,7 +301,11 @@
       </ul>
     </div>
   </div>
-
+    <!-- MODAL CATEGORÍAS -->
+<div id="modalCategorias" class="modal-categorias">
+  <div class="modal-contenido">
+    <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
+    <h3>Selecciona una subcategoría</h3>
   <script>
           function cerrarModal() {
     window.parent.document.getElementById('modalRegistrar').style.display = 'none';
