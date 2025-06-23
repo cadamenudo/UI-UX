@@ -173,34 +173,66 @@ window.initCharts = function () {
   };
 
   // ✅ Donut de subcategoría inicial
-  window.chartSub = new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
-    type: 'doughnut',
-    data: {
-      labels: subcategorias['alimentacion'].labels,
-      datasets: [{
-        data: subcategorias['alimentacion'].data,
-        backgroundColor: colores
-      }]
-    },
-    options: {
-      responsive: true,
-      cutout: '60%',
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#fff',
-          titleColor: '#000',
-          bodyColor: '#000',
-          borderColor: '#ccc',
-          borderWidth: 1,
-          callbacks: {
-            label: ctx => `${ctx.label}: $${ctx.formattedValue}`
-          }
+// ✅ Dona principal: Gastos Totales por categoría
+window.chartGasto = new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
+  type: 'doughnut',
+  data: {
+    labels: categoriasGasto.labels,
+    datasets: [{
+      data: categoriasGasto.data,
+      backgroundColor: colores
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        callbacks: {
+          label: ctx => `${ctx.label}: $${ctx.formattedValue}`
         }
       }
-    },
-    plugins: [centerTextPlugin]
-  });
+    }
+  },
+  plugins: [centerTextPlugin]
+});
+
+// ✅ Dona secundaria: Subcategorías (esta es la que cambia dinámicamente)
+window.chartSub = new Chart(document.getElementById('graficoSubcategoria').getContext('2d'), {
+  type: 'doughnut',
+  data: {
+    labels: subcategorias['alimentacion'].labels,
+    datasets: [{
+      data: subcategorias['alimentacion'].data,
+      backgroundColor: colores
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        callbacks: {
+          label: ctx => `${ctx.label}: $${ctx.formattedValue}`
+        }
+      }
+    }
+  },
+  plugins: [centerTextPlugin]
+});
+
 
   // ✅ Cambiar subcategoría al seleccionar
   const selector = document.getElementById('selectorCategoria');
