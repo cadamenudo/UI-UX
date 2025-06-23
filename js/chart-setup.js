@@ -194,7 +194,8 @@ type: 'doughnut',
     telecom: { labels: ['Internet', 'Celular'], data: [100, 80] },
     transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
   };
-    new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
+  
+  let chartSub = new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
    type: 'doughnut',
     data: {
       labels: subcategorias['alimentacion'].labels,
