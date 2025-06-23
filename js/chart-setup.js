@@ -1,4 +1,3 @@
-
 window.initCharts = function () {
   // Meta del año
   new Chart(document.getElementById('graficoMetas').getContext('2d'), {
@@ -51,23 +50,15 @@ window.initCharts = function () {
         legend: { display: false }
       },
       scales: {
-        x: {
-          stacked: true,
-          grid: { display: false },
-          ticks: { color: '#64748B' }
-        },
-        y: {
-          stacked: true,
-          display: false,
-          grid: { display: false }
-        }
+        x: { stacked: true, grid: { display: false }, ticks: { color: '#64748B' } },
+        y: { stacked: true, display: false, grid: { display: false } }
       }
     }
   });
 
-    // Ingresos vs Gastos
-    new Chart(document.getElementById('graficoIngresosGastos').getContext('2d'), {
- type: 'line',
+  // Ingresos vs Gastos
+  new Chart(document.getElementById('graficoIngresosGastos').getContext('2d'), {
+    type: 'line',
     data: {
       labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May'],
       datasets: [
@@ -106,20 +97,13 @@ window.initCharts = function () {
         legend: { display: false }
       },
       scales: {
-        x: {
-          grid: { display: false },
-          ticks: { color: '#64748B' }
-        },
-        y: {
-          beginAtZero: true,
-          grid: { color: '#eee' },
-          ticks: { color: '#64748B' }
-        }
+        x: { grid: { display: false }, ticks: { color: '#64748B' } },
+        y: { beginAtZero: true, grid: { color: '#eee' }, ticks: { color: '#64748B' } }
       }
     }
   });
 
-  // Plugin texto centro para donas
+  // Plugin para texto al centro
   const centerTextPlugin = {
     id: 'centerText',
     beforeDraw(chart) {
@@ -142,8 +126,8 @@ window.initCharts = function () {
   };
 
   // Ingresos Totales (dona)
-    new Chart(document.getElementById('graficoIngresosTotales').getContext('2d'), {
-type: 'doughnut',
+  new Chart(document.getElementById('graficoIngresosTotales').getContext('2d'), {
+    type: 'doughnut',
     data: {
       labels: ['Sueldo', 'Negocio', 'Inversiones', 'Otros'],
       datasets: [{
@@ -171,15 +155,8 @@ type: 'doughnut',
     plugins: [centerTextPlugin]
   });
 
-  // Gastos Totales y subcategorías
-
-    const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
-
-  const categoriasGasto = {
-    labels: ['Alimentación', 'Casa', 'Cuidado Personal', 'Deuda', 'Entretenimiento', 'Impuestos'],
-    data: [1200, 900, 400, 600, 350, 450]
-  };
-
+  // Subcategorías de gasto
+  const colores = ['#3956E8', '#7459D9', '#E8C239', '#BA68C8', '#AAB8F2', '#64748B'];
   const subcategorias = {
     alimentacion: { labels: ['Supermercado', 'Comidas fuera', 'Café'], data: [800, 300, 100] },
     casa: { labels: ['Hipoteca', 'Servicios', 'Mantenimiento'], data: [500, 250, 150] },
@@ -194,9 +171,10 @@ type: 'doughnut',
     telecom: { labels: ['Internet', 'Celular'], data: [100, 80] },
     transporte: { labels: ['Gasolina', 'Mantenimiento'], data: [200, 100] }
   };
-  
+
+  // ✅ Donut de subcategoría inicial
   window.chartSub = new Chart(document.getElementById('graficoGastosTotales').getContext('2d'), {
-   type: 'doughnut',
+    type: 'doughnut',
     data: {
       labels: subcategorias['alimentacion'].labels,
       datasets: [{
@@ -224,11 +202,17 @@ type: 'doughnut',
     plugins: [centerTextPlugin]
   });
 
-  document.getElementById('selectorCategoria').addEventListener('change', function () {
-    const seleccion = this.value;
-    const nuevaData = subcategorias[seleccion];
-    chartSub.data.labels = nuevaData.labels;
-    chartSub.data.datasets[0].data = nuevaData.data;
-    chartSub.update();
-  });
+  // ✅ Cambiar subcategoría al seleccionar
+  const selector = document.getElementById('selectorCategoria');
+  if (selector) {
+    selector.addEventListener('change', function () {
+      const seleccion = this.value;
+      const nuevaData = subcategorias[seleccion];
+      if (nuevaData && window.chartSub) {
+        chartSub.data.labels = nuevaData.labels;
+        chartSub.data.datasets[0].data = nuevaData.data;
+        chartSub.update();
+      }
+    });
+  }
 };
