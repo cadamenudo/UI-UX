@@ -391,6 +391,10 @@
 </div> <!-- ⬅️ cierre final de .formulario -->
   
   <script>
+
+      function cerrarModal() {
+    window.parent.document.getElementById('modalRegistrar').style.display = 'none';
+  }
     function abrirModalCategorias() {
       document.getElementById('modalCategorias').style.display = 'flex';
     }
