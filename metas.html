@@ -258,14 +258,6 @@
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
     </div>
 
-    <h3>Progreso en el año</h3>
-    <div class="bloque-progreso-anual">
-      <div class="barra-progreso">
-        <div class="relleno" id="barraRelleno"></div>
-      </div>
-      <div class="progreso-numero" id="porcentajeTexto">0%</div>
-    </div>
-
     <h3>Resultado</h3>
     <div class="bloque-resumen">
       <div class="fila-resumen">
@@ -311,8 +303,6 @@
       document.getElementById("metaTotal").innerText = formatoMoneda(total);
       document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
       document.getElementById("faltan").innerText = formatoMoneda(faltan);
-      document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
-      document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
     }
 
     function actualizarNumeros() {
