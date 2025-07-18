@@ -13,18 +13,16 @@
       margin: 0;
       padding: 0;
       color: #111827;
-      overflow-x: hidden
+      overflow-x: hidden;
     }
 
-.pagina-metas {
-  width: 100%;
-  padding: 1.5rem;
-  box-sizing: border-box;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 0;
-  min-height: 100vh; /* opcional si quieres cuerpo completo */
-}
+    .pagina-metas {
+      width: 100%;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      background: #fff;
+      min-height: 100vh;
+    }
 
     h2 {
       font-size: 24px;
@@ -40,37 +38,38 @@
       margin-top: 1.5rem;
     }
 
-.meta-item {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  align-items: center;
-}
+    .meta-item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
 
-.meta-item input.descripcion {
-  flex: 2 1 0%;       /* ✅ el campo de texto ocupa el doble */
-  min-width: 0;
-}
+    .meta-item input.descripcion {
+      flex: 2 1 0%;
+      min-width: 0;
+    }
 
-.meta-item input.monto {
-  flex: 1 1 100px;     /* ✅ el monto ocupa menos */
-  max-width: 140px;
-  text-align: right;
-}
+    .meta-item input.monto {
+      flex: 1 1 100px;
+      max-width: 140px;
+      text-align: right;
+    }
 
     @media (max-width: 400px) {
-  .meta-item {
-    flex-direction: column;
-    align-items: stretch;
-  }
+      .meta-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
 
-  .meta-item input.descripcion,
-  .meta-item input.monto {
-    width: 100%;
-    max-width: 100%;
-  }
-}
+      .meta-item input.descripcion,
+      .meta-item input.monto {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
     .numero {
       background: #594AE2;
       color: white;
@@ -82,7 +81,7 @@
       line-height: 24px;
       font-size: 12px;
       display: inline-block;
-      flex-shrink: 0; 
+      flex-shrink: 0;
     }
 
     .drag {
@@ -109,14 +108,14 @@
       font-size: 16px;
     }
 
-.meta-item input.confirmado {
-  border: none !important;
-  background: transparent !important;
-  font-weight: 600;
-  color: #111827;
-  box-shadow: none;
-  pointer-events: none;
-}
+    .meta-item input.confirmado {
+      border: none !important;
+      background: transparent !important;
+      font-weight: 600;
+      color: #111827;
+      box-shadow: none;
+      pointer-events: none;
+    }
 
     .eliminar {
       font-size: 18px;
@@ -141,12 +140,14 @@
       margin-top: 2rem;
       font-weight: bold;
     }
+
     .bloque-progreso-anual {
-      background: #F3F4F6; /* gris claro */
+      background: #F3F4F6;
       padding: 1rem;
       border-radius: 12px;
       margin-top: 1.5rem;
     }
+
     .barra-progreso {
       background: #E5E7EB;
       border-radius: 10px;
@@ -167,7 +168,7 @@
       text-align: right;
       margin-top: 4px;
       font-weight: 600;
-      color: #00AC4F; /* verde */
+      color: #00AC4F;
     }
 
     .resumen {
@@ -185,66 +186,67 @@
       color: #111827;
     }
 
-.botones-finales {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 2rem;
-}
+    .botones-finales {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
 
-.btn-cancelar {
-  background: #EEF1FF;
-  color: #594AE2;
-  border: 2px solid #EEF1FF;
-  border-radius: 12px;
-  padding: 0.75rem 1.5rem;
-  font-size: 16px;
-  width: 50%;
-  cursor: pointer;
-}
+    .btn-cancelar {
+      background: #EEF1FF;
+      color: #594AE2;
+      border: 2px solid #EEF1FF;
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      font-size: 16px;
+      width: 50%;
+      cursor: pointer;
+    }
 
-.btn-cancelar:hover {
-  background: #EFF6FF;
-}
+    .btn-cancelar:hover {
+      background: #EFF6FF;
+    }
 
-.btn-registrar {
-  background: #594AE2;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 0.75rem 1.5rem;
-  font-size: 16px;
-  width: 50%;
-  cursor: pointer;
-}
+    .btn-registrar {
+      background: #594AE2;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      font-size: 16px;
+      width: 50%;
+      cursor: pointer;
+    }
 
     .bloque-resumen {
-  background: #F3F4F6;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-top: 1rem;
-}
+      background: #F3F4F6;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
 
-.fila-resumen {
-  display: flex;
-  justify-content: space-between;
-  margin: 12px 0;
-  color: #4B5563;
-}
+    .fila-resumen {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0;
+      color: #4B5563;
+    }
 
-.fila-resumen strong {
-  color: #111827;
-}
+    .fila-resumen strong {
+      color: #111827;
+    }
+
     input::placeholder {
-  color: #9CA3AF; /* gris suave */
-}
-
+      color: #9CA3AF;
+    }
   </style>
 </head>
 <body>
   <div class="pagina-metas">
     <h2>Metas de ahorro</h2>
     <p class="subtitulo">Establace tus metas para los próximos 12 meses y ordénalas de acuerdo a tus prioridades</p>
+
     <div class="lista-metas" id="listaMetas">
       <div class="meta-item">
         <span class="numero">1</span>
@@ -255,14 +257,14 @@
       </div>
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
     </div>
-    
-<h3>Progreso en el año</h3>
-<div class="bloque-progreso-anual">
-  <div class="barra-progreso">
-    <div class="relleno" id="barraRelleno"></div>
-  </div>
-  <div class="progreso-numero" id="porcentajeTexto">0%</div>
-</div>
+
+    <h3>Progreso en el año</h3>
+    <div class="bloque-progreso-anual">
+      <div class="barra-progreso">
+        <div class="relleno" id="barraRelleno"></div>
+      </div>
+      <div class="progreso-numero" id="porcentajeTexto">0%</div>
+    </div>
 
     <h3>Resultado</h3>
     <div class="bloque-resumen">
@@ -278,141 +280,149 @@
         <span>Faltan</span>
         <strong id="faltan">$0</strong>
       </div>
-      </div>
-    <!-- ✅ Fuera del fondo gris -->
-      <div class="botones-finales">
-        <button class="btn-cancelar" onclick="cancelarCambios()">Cancelar</button>
-        <button class="btn-registrar">Registrar</button>
-      </div>
-<script>
-  function limpiarNumero(str) {
-    return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
-  }
+    </div>
 
-  function formatoMoneda(num) {
-    return "$" + num.toLocaleString("en-US");
-  }
+    <div class="botones-finales">
+      <button class="btn-cancelar" onclick="cancelarCambios()">Cancelar</button>
+      <button class="btn-registrar">Registrar</button>
+    </div>
+  </div>
 
-  function calcular() {
-    const inputs = document.querySelectorAll(".monto");
-    let total = 0;
-    inputs.forEach(input => {
-      total += limpiarNumero(input.value);
-    });
+  <script>
+    function limpiarNumero(str) {
+      return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
+    }
 
-    const ahorro = 0; // valor fijo
-    const faltan = Math.max(0, total - ahorro);
-    const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
+    function formatoMoneda(num) {
+      return "$" + num.toLocaleString("en-US");
+    }
 
-    document.getElementById("metaTotal").innerText = formatoMoneda(total);
-    document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
-    document.getElementById("faltan").innerText = formatoMoneda(faltan);
-    document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
-    document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
-  }
-
-  function actualizarNumeros() {
-    const items = document.querySelectorAll(".meta-item");
-    items.forEach((item, index) => {
-      item.querySelector(".numero").innerText = index + 1;
-    });
-  }
-
-  function agregarMeta() {
-    const lista = document.getElementById("listaMetas");
-    const nuevaMeta = document.createElement("div");
-    nuevaMeta.className = "meta-item";
-    nuevaMeta.innerHTML = `
-      <span class="numero">0</span>
-      <span class="drag">≡</span>
-      <input type="text" class="descripcion" value="Nueva meta" />
-      <input type="text" class="monto" value="$0" />
-      <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
-    `;
-    lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
-    actualizarNumeros();
-    prepararInputsMeta(); // aplica eventos a nuevos inputs
-    calcular();
-  }
-
-  function eliminarMeta(elemento) {
-    const meta = elemento.closest(".meta-item");
-    meta.remove();
-    actualizarNumeros();
-    calcular();
-  }
-
-  function prepararInputsMeta() {
-    const descripciones = document.querySelectorAll('.descripcion');
-    descripciones.forEach(input => {
-      input.addEventListener('focus', () => {
-        input.dataset.original = input.value;
-        input.value = '';
-        input.classList.remove('confirmado');
+    function calcular() {
+      const inputs = document.querySelectorAll(".monto");
+      let total = 0;
+      inputs.forEach(input => {
+        total += limpiarNumero(input.value);
       });
 
-      input.addEventListener('blur', () => {
-        if (input.value.trim() === '') {
-          input.value = input.dataset.original || '';
-        } else {
-          input.classList.add('confirmado');
-        }
+      const ahorro = 0;
+      const faltan = Math.max(0, total - ahorro);
+      const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
+
+      document.getElementById("metaTotal").innerText = formatoMoneda(total);
+      document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
+      document.getElementById("faltan").innerText = formatoMoneda(faltan);
+      document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
+      document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
+    }
+
+    function actualizarNumeros() {
+      const items = document.querySelectorAll(".meta-item");
+      items.forEach((item, index) => {
+        item.querySelector(".numero").innerText = index + 1;
       });
+    }
 
-      input.addEventListener('dblclick', () => {
-        input.classList.remove('confirmado');
-        input.focus();
-      });
-    });
+    function agregarMeta() {
+      const lista = document.getElementById("listaMetas");
+      const nuevaMeta = document.createElement("div");
+      nuevaMeta.className = "meta-item";
+      nuevaMeta.innerHTML = `
+        <span class="numero">0</span>
+        <span class="drag">≡</span>
+        <input type="text" class="descripcion" value="Nueva meta" />
+        <input type="text" class="monto" value="$0" />
+        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
+      `;
+      lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
+      actualizarNumeros();
+      prepararInputsMeta();
+      calcular();
+    }
 
-    const montos = document.querySelectorAll('.monto');
-    montos.forEach(input => {
-      input.addEventListener('focus', () => {
-        input.dataset.original = input.value;
-        input.value = '';
-        input.classList.remove('confirmado');
-      });
-
-      input.addEventListener('blur', () => {
-        const valor = limpiarNumero(input.value);
-        input.value = formatoMoneda(valor);
-        if (valor > 0) {
-          input.classList.add('confirmado');
-        }
-        calcular();
-      });
-
-      input.addEventListener('dblclick', () => {
-        input.classList.remove('confirmado');
-        input.focus();
-      });
-
-      input.addEventListener('keypress', (e) => {
-        if (!/[0-9.]/.test(e.key)) e.preventDefault();
-      });
-    });
-  }
-
-  // Inicial
-  calcular();
-  prepararInputsMeta();
-
-  new Sortable(document.getElementById('listaMetas'), {
-    animation: 150,
-    handle: '.drag',
-    draggable: '.meta-item',
-    onEnd: () => {
+    function eliminarMeta(elemento) {
+      const meta = elemento.closest(".meta-item");
+      meta.remove();
       actualizarNumeros();
       calcular();
     }
-  });
 
-  function cancelarCambios() {
-    if (confirm("¿Estás seguro que deseas descartar los cambios?")) {
-      location.reload();
+    function prepararInputsMeta() {
+      const descripciones = document.querySelectorAll('.descripcion');
+      descripciones.forEach(input => {
+        input.addEventListener('focus', () => {
+          input.dataset.original = input.value;
+          input.value = '';
+          input.classList.remove('confirmado');
+        });
+
+        input.addEventListener('blur', () => {
+          if (input.value.trim() === '') {
+            input.value = input.dataset.original || '';
+          } else {
+            input.classList.add('confirmado');
+          }
+        });
+
+        input.addEventListener('dblclick', () => {
+          input.classList.remove('confirmado');
+          input.focus();
+        });
+      });
+
+      const montos = document.querySelectorAll('.monto');
+      montos.forEach(input => {
+        input.addEventListener('focus', () => {
+          input.dataset.original = input.value;
+          input.value = '';
+          input.classList.remove('confirmado');
+        });
+
+        input.addEventListener('blur', () => {
+          const valor = limpiarNumero(input.value);
+          input.value = formatoMoneda(valor);
+          if (valor > 0) {
+            input.classList.add('confirmado');
+          }
+          calcular();
+        });
+
+        input.addEventListener('dblclick', () => {
+          input.classList.remove('confirmado');
+          input.focus();
+        });
+
+        input.addEventListener('keypress', (e) => {
+          if (!/[0-9.]/.test(e.key)) e.preventDefault();
+        });
+      });
     }
-  }
-</script>
 
+    // Inicial
+    calcular();
+    prepararInputsMeta();
+
+    // Marcar como confirmado si ya hay valor en los montos al cargar
+    document.querySelectorAll(".monto").forEach(input => {
+      if (limpiarNumero(input.value) > 0) {
+        input.classList.add("confirmado");
+      }
+    });
+
+    new Sortable(document.getElementById('listaMetas'), {
+      animation: 150,
+      handle: '.drag',
+      draggable: '.meta-item',
+      onEnd: () => {
+        actualizarNumeros();
+        calcular();
+      }
+    });
+
+    function cancelarCambios() {
+      if (confirm("¿Estás seguro que deseas descartar los cambios?")) {
+        location.reload();
+      }
+    }
+  </script>
 </body>
 </html>
