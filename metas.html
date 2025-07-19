@@ -141,36 +141,6 @@
       font-weight: bold;
     }
 
-    .bloque-progreso-anual {
-      background: #F3F4F6;
-      padding: 1rem;
-      border-radius: 12px;
-      margin-top: 1.5rem;
-    }
-
-    .barra-progreso {
-      background: #E5E7EB;
-      border-radius: 10px;
-      height: 10px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .relleno {
-      background: #00AC4F;
-      height: 100%;
-      width: 0%;
-      border-radius: 10px;
-      transition: width 0.3s ease;
-    }
-
-    .progreso-numero {
-      text-align: right;
-      margin-top: 4px;
-      font-weight: 600;
-      color: #00AC4F;
-    }
-
     .resumen {
       margin-top: 1rem;
     }
@@ -258,14 +228,6 @@
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
     </div>
 
-    <h3>Progreso en el año</h3>
-    <div class="bloque-progreso-anual">
-      <div class="barra-progreso">
-        <div class="relleno" id="barraRelleno"></div>
-      </div>
-      <div class="progreso-numero" id="porcentajeTexto">0%</div>
-    </div>
-
     <h3>Resultado</h3>
     <div class="bloque-resumen">
       <div class="fila-resumen">
@@ -311,8 +273,6 @@
       document.getElementById("metaTotal").innerText = formatoMoneda(total);
       document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
       document.getElementById("faltan").innerText = formatoMoneda(faltan);
-      document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
-      document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
     }
 
     function actualizarNumeros() {
