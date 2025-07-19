@@ -95,6 +95,14 @@
       margin-left: 6px;
       user-select: none;
     }
+    .etiqueta-check {
+  display: inline-block;
+  font-size: 1rem;
+  color: #166534;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
     .eliminar:hover { color: #EF4444; }
     .agregar-meta { color: #9CA3AF; font-size: 14px; margin-top: 0.5rem; cursor: pointer; }
     h3 { margin-top: 2rem; font-weight: bold; }
@@ -151,7 +159,7 @@
         <span class="drag">≡</span>
         <input type="text" class="descripcion" value="Meta 1" />
         <input type="text" class="monto" value="$0" />
-        <span class="etiqueta-cumplida">Cumplida</span>
+        <span class="etiqueta-check">✔️</span>
         <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
       </div>
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
