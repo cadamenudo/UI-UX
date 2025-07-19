@@ -51,15 +51,10 @@
   flex-wrap: nowrap; /* 👈 evita que se rompa en móvil */
 }
 
-.meta-item input.descripcion {
-  flex: 1.5;
-  min-width: 0;
-}
-
+.meta-item input.descripcion,
 .meta-item input.monto {
-  flex: 0.8;
-  min-width: 0;
-  text-align: right;
+  width: 100%;
+  max-width: 120px; /* o el valor que prefieras */
 }
 
 .meta-item .numero,
