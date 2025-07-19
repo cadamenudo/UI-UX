@@ -48,21 +48,31 @@
   background: #fff;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   margin-bottom: 0.75rem;
-  flex-wrap: nowrap; /* 👈 evita que se rompa en móvil */
+  flex-wrap: nowrap;
 }
 
-.meta-item input.descripcion,
+.meta-item input.descripcion {
+  flex: 0 1 100px;
+  min-width: 0;
+  max-width: 120px;  /* 👈 límite para que no se desborde */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .meta-item input.monto {
-  width: 100%;
-  max-width: 120px; /* o el valor que prefieras */
+  flex: 0 0 auto;
+  width: 80px;
+  text-align: right;
 }
 
 .meta-item .numero,
 .meta-item .drag,
-.meta-item .etiqueta-check,
-.meta-item .eliminar {
+.meta-item .eliminar,
+.meta-item .etiqueta-check {
   flex-shrink: 0;
 }
+
 
     @media (max-width: 400px) {
       .meta-item {
