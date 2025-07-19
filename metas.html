@@ -77,23 +77,16 @@
       border-radius: 12px;
       padding: 0.5rem;
     }
-.meta-item {
-  position: relative;
-}
-
-.etiqueta-cumplida {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background-color: #166534;
-  color: white;
-  font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
+    .etiqueta-cumplida {
+      display: none;
+      background-color: #15803d;
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 8px;
+      height: fit-content;
+    }
     .meta-item.cumplida .etiqueta-cumplida { display: inline-block; }
     .eliminar {
       font-size: 18px;
@@ -194,28 +187,17 @@
       document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
       document.getElementById("faltan").innerText = formatoMoneda(faltan);
 
-let acumulado = 0;
-document.querySelectorAll('.meta-item').forEach(meta => {
-  const monto = limpiarNumero(meta.querySelector(".monto").value);
-  const existente = meta.querySelector(".etiqueta-cumplida");
-
-  if (acumulado + monto <= ahorro) {
-    meta.classList.add("cumplida");
-    if (!existente) {
-      const etiqueta = document.createElement("span");
-      etiqueta.className = "etiqueta-cumplida";
-      etiqueta.innerText = "Cumplida";
-      meta.appendChild(etiqueta);
+      let acumulado = 0;
+      document.querySelectorAll('.meta-item').forEach(meta => {
+        const monto = limpiarNumero(meta.querySelector(".monto").value);
+        if (acumulado + monto <= ahorro) {
+          meta.classList.add("cumplida");
+          acumulado += monto;
+        } else {
+          meta.classList.remove("cumplida");
+        }
+      });
     }
-    acumulado += monto;
-  } else {
-    meta.classList.remove("cumplida");
-    if (existente) {
-      existente.remove();
-    }
-  }
-});
-
     function actualizarNumeros() {
       document.querySelectorAll(".meta-item").forEach((item, index) => {
         item.querySelector(".numero").innerText = index + 1;
