@@ -15,6 +15,7 @@
       color: #111827;
       overflow-x: hidden;
     }
+
     .pagina-metas {
       width: 100%;
       padding: 1.5rem;
@@ -22,9 +23,21 @@
       background: #fff;
       min-height: 100vh;
     }
-    h2 { font-size: 24px; font-weight: bold; }
-    .subtitulo { color: #374151; margin-top: 0.5rem; }
-    .lista-metas { margin-top: 1.5rem; }
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .subtitulo {
+      color: #374151;
+      margin-top: 0.5rem;
+    }
+
+    .lista-metas {
+      margin-top: 1.5rem;
+    }
+
     .meta-item {
       display: flex;
       flex-wrap: wrap;
@@ -32,12 +45,31 @@
       margin-bottom: 1rem;
       align-items: center;
     }
-    .meta-item input.descripcion { flex: 2 1 0%; min-width: 0; }
-    .meta-item input.monto { flex: 1 1 100px; max-width: 140px; text-align: right; }
-    @media (max-width: 400px) {
-      .meta-item { flex-direction: column; align-items: stretch; }
-      .meta-item input.descripcion, .meta-item input.monto { width: 100%; max-width: 100%; }
+
+    .meta-item input.descripcion {
+      flex: 2 1 0%;
+      min-width: 0;
     }
+
+    .meta-item input.monto {
+      flex: 1 1 100px;
+      max-width: 140px;
+      text-align: right;
+    }
+
+    @media (max-width: 400px) {
+      .meta-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .meta-item input.descripcion,
+      .meta-item input.monto {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
     .numero {
       background: #594AE2;
       color: white;
@@ -51,19 +83,31 @@
       display: inline-block;
       flex-shrink: 0;
     }
-    .drag { color: #9CA3AF; cursor: grab; font-size: 1.25rem; }
-    .meta-item input.descripcion, .meta-item input.monto {
+
+    .drag {
+      color: #9CA3AF;
+      cursor: grab;
+      font-size: 1.25rem;
+    }
+
+    .meta-item input.descripcion {
+      flex: 1;
       border: 1px solid #E5E7EB;
       border-radius: 10px;
       padding: 6px 10px;
       font-size: 15px;
     }
+
     .meta-item input.monto {
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 6px 12px;
       width: 100px;
       text-align: right;
       font-weight: bold;
       font-size: 16px;
     }
+
     .meta-item input.confirmado {
       border: none !important;
       background: transparent !important;
@@ -72,22 +116,7 @@
       box-shadow: none;
       pointer-events: none;
     }
-    .meta-item.cumplida {
-      background-color: #D1FAE5;
-      border-radius: 12px;
-      padding: 0.5rem;
-    }
-    .etiqueta-cumplida {
-      display: none;
-      background-color: #15803d;
-      color: white;
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      margin-left: 8px;
-      height: fit-content;
-    }
-    .meta-item.cumplida .etiqueta-cumplida { display: inline-block; }
+
     .eliminar {
       font-size: 18px;
       color: #9CA3AF;
@@ -95,36 +124,75 @@
       margin-left: 6px;
       user-select: none;
     }
-    .etiqueta-check {
-  display: inline-block;
-  font-size: 1rem;
-  color: #166534;
-  font-weight: bold;
-  margin-left: 8px;
-}
 
-    .eliminar:hover { color: #EF4444; }
-    .agregar-meta { color: #9CA3AF; font-size: 14px; margin-top: 0.5rem; cursor: pointer; }
-    h3 { margin-top: 2rem; font-weight: bold; }
-    .bloque-resumen {
+    .eliminar:hover {
+      color: #EF4444;
+    }
+
+    .agregar-meta {
+      color: #9CA3AF;
+      font-size: 14px;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
+
+    h3 {
+      margin-top: 2rem;
+      font-weight: bold;
+    }
+
+    .bloque-progreso-anual {
       background: #F3F4F6;
       padding: 1rem;
       border-radius: 12px;
+      margin-top: 1.5rem;
+    }
+
+    .barra-progreso {
+      background: #E5E7EB;
+      border-radius: 10px;
+      height: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .relleno {
+      background: #00AC4F;
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .progreso-numero {
+      text-align: right;
+      margin-top: 4px;
+      font-weight: 600;
+      color: #00AC4F;
+    }
+
+    .resumen {
       margin-top: 1rem;
     }
-    .fila-resumen {
+
+    .resumen div {
       display: flex;
       justify-content: space-between;
-      margin: 12px 0;
+      margin: 6px 0;
       color: #4B5563;
     }
-    .fila-resumen strong { color: #111827; }
+
+    .resumen strong {
+      color: #111827;
+    }
+
     .botones-finales {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
       margin-top: 2rem;
     }
+
     .btn-cancelar {
       background: #EEF1FF;
       color: #594AE2;
@@ -135,6 +203,11 @@
       width: 50%;
       cursor: pointer;
     }
+
+    .btn-cancelar:hover {
+      background: #EFF6FF;
+    }
+
     .btn-registrar {
       background: #594AE2;
       color: white;
@@ -145,7 +218,28 @@
       width: 50%;
       cursor: pointer;
     }
-    input::placeholder { color: #9CA3AF; }
+
+    .bloque-resumen {
+      background: #F3F4F6;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .fila-resumen {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0;
+      color: #4B5563;
+    }
+
+    .fila-resumen strong {
+      color: #111827;
+    }
+
+    input::placeholder {
+      color: #9CA3AF;
+    }
   </style>
 </head>
 <body>
@@ -159,17 +253,33 @@
         <span class="drag">≡</span>
         <input type="text" class="descripcion" value="Meta 1" />
         <input type="text" class="monto" value="$0" />
-        <span class="etiqueta-check">✔️</span>
         <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
       </div>
       <p class="agregar-meta" onclick="agregarMeta()">+ añadir meta</p>
     </div>
 
+    <h3>Progreso en el año</h3>
+    <div class="bloque-progreso-anual">
+      <div class="barra-progreso">
+        <div class="relleno" id="barraRelleno"></div>
+      </div>
+      <div class="progreso-numero" id="porcentajeTexto">0%</div>
+    </div>
+
     <h3>Resultado</h3>
     <div class="bloque-resumen">
-      <div class="fila-resumen"><span>Meta total para el año</span><strong id="metaTotal">$0</strong></div>
-      <div class="fila-resumen"><span>Ahorro en lo que va de año</span><strong id="ahorroActual">$5000</strong></div>
-      <div class="fila-resumen"><span>Faltan</span><strong id="faltan">$0</strong></div>
+      <div class="fila-resumen">
+        <span>Meta total para el año</span>
+        <strong id="metaTotal">$0</strong>
+      </div>
+      <div class="fila-resumen">
+        <span>Ahorro en lo que va de año</span>
+        <strong id="ahorroActual">$5,000</strong>
+      </div>
+      <div class="fila-resumen">
+        <span>Faltan</span>
+        <strong id="faltan">$0</strong>
+      </div>
     </div>
 
     <div class="botones-finales">
@@ -182,35 +292,36 @@
     function limpiarNumero(str) {
       return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
     }
+
     function formatoMoneda(num) {
       return "$" + num.toLocaleString("en-US");
     }
+
     function calcular() {
       const inputs = document.querySelectorAll(".monto");
       let total = 0;
-      inputs.forEach(input => { total += limpiarNumero(input.value); });
-      const ahorro = 5000;
+      inputs.forEach(input => {
+        total += limpiarNumero(input.value);
+      });
+
+      const ahorro = 0;
       const faltan = Math.max(0, total - ahorro);
+      const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
+
       document.getElementById("metaTotal").innerText = formatoMoneda(total);
       document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
       document.getElementById("faltan").innerText = formatoMoneda(faltan);
-
-      let acumulado = 0;
-      document.querySelectorAll('.meta-item').forEach(meta => {
-        const monto = limpiarNumero(meta.querySelector(".monto").value);
-        if (acumulado + monto <= ahorro) {
-          meta.classList.add("cumplida");
-          acumulado += monto;
-        } else {
-          meta.classList.remove("cumplida");
-        }
-      });
+      document.getElementById("barraRelleno").style.width = `${porcentaje}%`;
+      document.getElementById("porcentajeTexto").innerText = `${porcentaje.toFixed(0)}%`;
     }
+
     function actualizarNumeros() {
-      document.querySelectorAll(".meta-item").forEach((item, index) => {
+      const items = document.querySelectorAll(".meta-item");
+      items.forEach((item, index) => {
         item.querySelector(".numero").innerText = index + 1;
       });
     }
+
     function agregarMeta() {
       const lista = document.getElementById("listaMetas");
       const nuevaMeta = document.createElement("div");
@@ -220,7 +331,6 @@
         <span class="drag">≡</span>
         <input type="text" class="descripcion" value="Nueva meta" />
         <input type="text" class="monto" value="$0" />
-        <span class="etiqueta-cumplida">Cumplida</span>
         <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
       `;
       lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
@@ -228,18 +338,23 @@
       prepararInputsMeta();
       calcular();
     }
-    function eliminarMeta(el) {
-      el.closest(".meta-item").remove();
+
+    function eliminarMeta(elemento) {
+      const meta = elemento.closest(".meta-item");
+      meta.remove();
       actualizarNumeros();
       calcular();
     }
+
     function prepararInputsMeta() {
-      document.querySelectorAll('.descripcion').forEach(input => {
+      const descripciones = document.querySelectorAll('.descripcion');
+      descripciones.forEach(input => {
         input.addEventListener('focus', () => {
           input.dataset.original = input.value;
           input.value = '';
           input.classList.remove('confirmado');
         });
+
         input.addEventListener('blur', () => {
           if (input.value.trim() === '') {
             input.value = input.dataset.original || '';
@@ -247,37 +362,52 @@
             input.classList.add('confirmado');
           }
         });
+
         input.addEventListener('dblclick', () => {
           input.classList.remove('confirmado');
           input.focus();
         });
       });
-      document.querySelectorAll('.monto').forEach(input => {
+
+      const montos = document.querySelectorAll('.monto');
+      montos.forEach(input => {
         input.addEventListener('focus', () => {
           input.dataset.original = input.value;
           input.value = '';
           input.classList.remove('confirmado');
         });
+
         input.addEventListener('blur', () => {
           const valor = limpiarNumero(input.value);
           input.value = formatoMoneda(valor);
-          if (valor > 0) input.classList.add('confirmado');
+          if (valor > 0) {
+            input.classList.add('confirmado');
+          }
           calcular();
         });
+
         input.addEventListener('dblclick', () => {
           input.classList.remove('confirmado');
           input.focus();
         });
-        input.addEventListener('keypress', e => {
+
+        input.addEventListener('keypress', (e) => {
           if (!/[0-9.]/.test(e.key)) e.preventDefault();
         });
       });
     }
+
+    // Inicial
     calcular();
     prepararInputsMeta();
+
+    // Marcar como confirmado si ya hay valor en los montos al cargar
     document.querySelectorAll(".monto").forEach(input => {
-      if (limpiarNumero(input.value) > 0) input.classList.add("confirmado");
+      if (limpiarNumero(input.value) > 0) {
+        input.classList.add("confirmado");
+      }
     });
+
     new Sortable(document.getElementById('listaMetas'), {
       animation: 150,
       handle: '.drag',
@@ -287,8 +417,11 @@
         calcular();
       }
     });
+
     function cancelarCambios() {
-      if (confirm("¿Estás seguro que deseas descartar los cambios?")) location.reload();
+      if (confirm("¿Estás seguro que deseas descartar los cambios?")) {
+        location.reload();
+      }
     }
   </script>
 </body>
