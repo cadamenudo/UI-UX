@@ -300,7 +300,12 @@
   font-size: 1rem;
   cursor: pointer;
 }
-
+.placeholder-metas {
+  color: #64748B;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
   </style>
 </head>
 <body>
@@ -311,6 +316,11 @@
   <div class="pagina-metas">
     <p class="subtitulo">Establace tus metas para los próximos 12 meses y ordénalas de acuerdo a tus prioridades</p>
 
+    <p id="placeholderMetas" class="placeholder-metas">
+  No tienes metas aún. Haz clic en <strong>+ Meta</strong> para empezar.
+</p>
+
+<div id="listaMetas"></div>
     <div class="lista-metas" id="listaMetas">
       <div class="meta-item">
         <span class="numero">1</span>
@@ -383,29 +393,39 @@
       });
     }
 
-    function agregarMeta() {
-      const lista = document.getElementById("listaMetas");
-      const nuevaMeta = document.createElement("div");
-      nuevaMeta.className = "meta-item";
-      nuevaMeta.innerHTML = `
-        <span class="numero">0</span>
-        <span class="drag">≡</span>
-        <input type="text" class="descripcion" value="Nueva meta" />
-        <input type="text" class="monto" value="$0" />
-        <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
-      `;
-      lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
-      actualizarNumeros();
-      prepararInputsMeta();
-      calcular();
-    }
+function agregarMeta() {
+  const placeholder = document.getElementById("placeholderMetas");
+  if (placeholder) placeholder.style.display = "none";
 
-    function eliminarMeta(elemento) {
-      const meta = elemento.closest(".meta-item");
-      meta.remove();
-      actualizarNumeros();
-      calcular();
-    }
+  const lista = document.getElementById("listaMetas");
+  const nuevaMeta = document.createElement("div");
+  nuevaMeta.className = "meta-item";
+  nuevaMeta.innerHTML = `
+    <span class="numero">0</span>
+    <span class="drag">≡</span>
+    <input type="text" class="descripcion" value="Nueva meta" />
+    <input type="text" class="monto" value="$0" />
+    <span class="etiqueta-cumplida">Cumplida</span>
+    <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
+  `;
+  lista.appendChild(nuevaMeta);
+  actualizarNumeros();
+  prepararInputsMeta();
+  calcular();
+}
+
+
+function eliminarMeta(el) {
+  el.closest(".meta-item").remove();
+  actualizarNumeros();
+  calcular();
+
+  const metas = document.querySelectorAll('.meta-item');
+  if (metas.length === 0) {
+    const placeholder = document.getElementById("placeholderMetas");
+    if (placeholder) placeholder.style.display = "block";
+  }
+}
 
     function prepararInputsMeta() {
       const descripciones = document.querySelectorAll('.descripcion');
