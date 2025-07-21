@@ -661,9 +661,9 @@ function cerrarModalEditar() {
 function guardarEdicionMeta() {
   if (!metaActual) return;
 
-  const nuevoNombre = document.getElementById('editarNombre').value.trim();
-  const nuevoMonto = parseFloat(document.getElementById('editarMonto').value.trim()) || 0;
-  const nuevaDescripcion = document.getElementById('editarDescripcion').value.trim();
+const nuevoNombre = document.getElementById('editarNombreMeta').value.trim();
+const nuevoMonto = parseFloat(document.getElementById('editarMontoMeta').value.trim()) || 0;
+const nuevaDescripcion = document.getElementById('editarDescripcionMeta').value.trim();
 
   metaActual.querySelector('.descripcion').value = nuevoNombre;
   metaActual.querySelector('.monto').value = `$${nuevoMonto.toLocaleString('en-US')}`;
