@@ -368,6 +368,19 @@
     <button onclick="guardarMetaDesdeModal()" class="btn-guardar">Guardar</button>
   </div>
 </div>
+
+  <!-- Modal de confirmación para borrar -->
+<div id="modalConfirmarBorrado" class="modal-meta" style="display: none;">
+  <div class="modal-contenido">
+    <button class="cerrar-modal" onclick="cerrarModalBorrado()">×</button>
+    <p id="mensajeBorrar">¿Seguro que quieres borrar esta meta?</p>
+    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+      <button onclick="cerrarModalBorrado()">Cancelar</button>
+      <button onclick="confirmarBorrado()" class="btn-guardar">Borrar</button>
+    </div>
+  </div>
+</div>
+
   
   <script>
     function limpiarNumero(str) {
@@ -552,6 +565,38 @@ function guardarMetaDesdeModal() {
   prepararInputsMeta();
   calcular();
 }
+    let metaPendienteEliminar = null;
+
+function confirmarEliminarMeta(el) {
+  const metaItem = el.closest(".meta-item");
+  const descripcionInput = metaItem.querySelector(".descripcion");
+  const nombreMeta = descripcionInput ? descripcionInput.value : "esta meta";
+
+  // Guardamos referencia para eliminar después
+  metaPendienteEliminar = metaItem;
+
+  // Mostrar mensaje con el nombre
+  document.getElementById("mensajeBorrar").innerText = `¿Seguro que quieres borrar la meta "${nombreMeta}"?`;
+
+  // Mostrar modal
+  document.getElementById("modalConfirmarBorrado").style.display = "flex";
+}
+
+function cerrarModalBorrado() {
+  document.getElementById("modalConfirmarBorrado").style.display = "none";
+  metaPendienteEliminar = null;
+}
+
+function confirmarBorrado() {
+  if (metaPendienteEliminar) {
+    metaPendienteEliminar.remove();
+    metaPendienteEliminar = null;
+    calcular();
+    actualizarNumeros();
+  }
+  cerrarModalBorrado();
+}
+
   </script>
 </body>
 </html>
