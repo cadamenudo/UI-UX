@@ -236,6 +236,13 @@
   font-size: 1rem;
   cursor: pointer;
 }
+    .header-metas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem; /* ← margen interno lateral */
+  margin-bottom: 1.5rem;
+}
 
 .modal-meta {
   position: fixed;
@@ -297,7 +304,7 @@
   </style>
 </head>
 <body>
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+<div class="header-metas">
   <h2>Metas de Ahorro</h2>
   <button onclick="abrirModalMeta()" class="btn-meta">+ Meta</button>
 </div>
