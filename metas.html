@@ -328,11 +328,9 @@
   </div>
 
   <p class="subtitulo">Establace tus metas para los próximos 12 meses y ordénalas de acuerdo a tus prioridades</p>
-</div>
 
   <!-- Bloque de aviso -->
   <p class="texto-aviso">Haz clic en <strong>🪄 Meta</strong> para empezar.</p>
-</div>
 
 <!-- Bloque de resultado -->
     <h3>Resultado</h3>
@@ -509,6 +507,11 @@ function eliminarMeta(el) {
     }
     function abrirModalMeta() {
   document.getElementById("modalMeta").style.display = "flex";
+      
+  // Limpiar los campos del formulario
+  document.getElementById('nombreMeta').value = '';
+  document.getElementById('montoMeta').value = '';
+  document.getElementById('descripcionMeta').value = '';
 }
 
 function cerrarModalMeta() {
