@@ -502,13 +502,13 @@ function eliminarMeta(el) {
         location.reload();
       }
     }
-    function abrirModalMeta() {
+function abrirModalMeta() {
   document.getElementById("modalMeta").style.display = "flex";
-      
-  // Limpiar los campos del formulario
-  document.getElementById('nombreMeta').value = '';
-  document.getElementById('montoMeta').value = '';
-  document.getElementById('descripcionMeta').value = '';
+  
+  // Limpiar los campos del formulario correctamente
+  document.getElementById('inputNombreMeta').value = '';
+  document.getElementById('inputMontoMeta').value = '';
+  document.getElementById('inputDescripcionMeta').value = '';
 }
 
 function cerrarModalMeta() {
