@@ -416,7 +416,7 @@
         total += limpiarNumero(input.value);
       });
 
-      const ahorro = 0;
+      const ahorro = 10,000;
       const faltan = Math.max(0, total - ahorro);
       const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
 
@@ -431,7 +431,20 @@
         item.querySelector(".numero").innerText = index + 1;
       });
     }
+const metas = document.querySelectorAll('.meta-item');
+let ahorroRestante = ahorro;
 
+metas.forEach(meta => {
+  const monto = limpiarNumero(meta.querySelector('.monto').value);
+  
+  if (ahorroRestante >= monto) {
+    meta.classList.add('cumplida');
+    ahorroRestante -= monto;
+  } else {
+    meta.classList.remove('cumplida');
+  }
+});
+    
 function agregarMeta() {
   const placeholder = document.getElementById("placeholderMetas");
   if (placeholder) placeholder.style.display = "none";
