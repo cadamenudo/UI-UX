@@ -453,12 +453,12 @@ function agregarMeta() {
   const nuevaMeta = document.createElement("div");
   nuevaMeta.className = "meta-item";
   nuevaMeta.innerHTML = `
-    <span class="numero">0</span>
-    <span class="drag">≡</span>
-    <input type="text" class="descripcion" value="Nueva meta" onclick="abrirModalEditar(this)" readonly />
-    <input type="text" class="monto" value="$0" onclick="abrirModalEditar(this)" readonly />
-    <span class="etiqueta-cumplida">Cumplida</span>
-    <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
+  <span class="numero">0</span>
+  <span class="drag">≡</span>
+  <span class="descripcion editable-span" onclick="abrirModalEditarMeta(this)">Nueva meta</span>
+  <span class="monto editable-span" onclick="abrirModalEditarMeta(this)">$0</span>
+  <span class="etiqueta-cumplida">Cumplida</span>
+  <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
   `;
   lista.appendChild(nuevaMeta);
   actualizarNumeros();
@@ -582,12 +582,14 @@ function guardarMetaDesdeModal() {
   const nuevaMeta = document.createElement("div");
   nuevaMeta.className = "meta-item";
   nuevaMeta.innerHTML = `
+  nuevaMeta.innerHTML = `
     <span class="numero">0</span>
     <span class="drag">≡</span>
-    <input type="text" class="descripcion" value="${nombre}" />
-    <input type="text" class="monto" value="$${parseFloat(monto).toLocaleString('en-US')}" />
+    <span class="descripcion editable-span" onclick="abrirModalEditarMeta(this)">${nombre}</span>
+    <span class="monto editable-span" onclick="abrirModalEditarMeta(this)">$${parseFloat(monto).toLocaleString('en-US')}</span>
     <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
   `;
+
   lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
 
   cerrarModalMeta();
