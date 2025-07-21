@@ -647,9 +647,9 @@ function abrirModalEditar(input) {
   const nombre = meta.querySelector('.descripcion').value;
   const monto = limpiarNumero(meta.querySelector('.monto').value);
 
-  document.getElementById('editarNombre').value = nombre;
-  document.getElementById('editarMonto').value = monto;
-  document.getElementById('editarDescripcion').value = meta.dataset.descripcion || '';
+  document.getElementById('editarNombreMeta').value = nombre;
+  document.getElementById('editarMontoMeta').value = monto;
+  document.getElementById('editarDescripcionMeta').value = meta.dataset.descripcion || '';
 
   document.getElementById('modalEditarMeta').style.display = 'flex';
 }
