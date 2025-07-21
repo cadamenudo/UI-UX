@@ -644,8 +644,8 @@ function abrirModalEditar(input) {
   const meta = input.closest('.meta-item');
   metaActual = meta;
 
-  const nombre = meta.querySelector('.descripcion').value;
-  const monto = limpiarNumero(meta.querySelector('.monto').value);
+  const nombre = meta.querySelector('.descripcion').textContent.trim();
+  const monto = limpiarNumero(meta.querySelector('.monto').textContent.trim());
 
   document.getElementById('editarNombreMeta').value = nombre;
   document.getElementById('editarMontoMeta').value = monto;
