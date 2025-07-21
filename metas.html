@@ -627,44 +627,38 @@ function confirmarBorrado() {
   }
   cerrarModalBorrado();
 }
-let metaEnEdicion = null;
+let metaActual = null;
 
-function abrirModalEditarMeta(metaItem) {
-  metaEnEdicion = metaItem;
+function abrirModalEditar(input) {
+  const meta = input.closest('.meta-item');
+  metaActual = meta;
 
-  const descripcion = metaItem.querySelector(".descripcion").value;
-  const monto = limpiarNumero(metaItem.querySelector(".monto").value);
-  const descripcionExtra = metaItem.dataset.descripcion || "";
+  const nombre = meta.querySelector('.descripcion').value;
+  const monto = limpiarNumero(meta.querySelector('.monto').value);
 
-  document.getElementById("editarNombreMeta").value = descripcion;
-  document.getElementById("editarMontoMeta").value = monto;
-  document.getElementById("editarDescripcionMeta").value = descripcionExtra;
+  document.getElementById('editarNombre').value = nombre;
+  document.getElementById('editarMonto').value = monto;
+  document.getElementById('editarDescripcion').value = meta.dataset.descripcion || '';
 
-  document.getElementById("modalEditarMeta").style.display = "flex";
+  document.getElementById('modalEditarMeta').style.display = 'flex';
 }
 
-function cerrarModalEditarMeta() {
-  document.getElementById("modalEditarMeta").style.display = "none";
-  metaEnEdicion = null;
+function cerrarModalEditar() {
+  document.getElementById('modalEditarMeta').style.display = 'none';
 }
 
 function guardarEdicionMeta() {
-  if (!metaEnEdicion) return;
+  if (!metaActual) return;
 
-  const nuevoNombre = document.getElementById("editarNombreMeta").value.trim();
-  const nuevoMonto = document.getElementById("editarMontoMeta").value.trim();
-  const nuevaDescripcion = document.getElementById("editarDescripcionMeta").value.trim();
+  const nuevoNombre = document.getElementById('editarNombre').value.trim();
+  const nuevoMonto = parseFloat(document.getElementById('editarMonto').value.trim()) || 0;
+  const nuevaDescripcion = document.getElementById('editarDescripcion').value.trim();
 
-  if (!nuevoNombre || !nuevoMonto) {
-    alert("Por favor completa al menos el nombre y el monto.");
-    return;
-  }
+  metaActual.querySelector('.descripcion').value = nuevoNombre;
+  metaActual.querySelector('.monto').value = `$${nuevoMonto.toLocaleString('en-US')}`;
+  metaActual.dataset.descripcion = nuevaDescripcion;
 
-  metaEnEdicion.querySelector(".descripcion").value = nuevoNombre;
-  metaEnEdicion.querySelector(".monto").value = formatoMoneda(parseFloat(nuevoMonto));
-  metaEnEdicion.dataset.descripcion = nuevaDescripcion;
-
-  cerrarModalEditarMeta();
+  cerrarModalEditar();
   calcular();
 }
 
