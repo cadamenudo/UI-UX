@@ -670,6 +670,21 @@ function guardarEdicionMeta() {
   cerrarModalEditar();
   calcular();
 }
+function abrirModalMeta() {
+  const modal = document.getElementById("modalMeta");
+  if (modal) {
+    modal.style.display = "flex";
+  } else {
+    console.error("❌ No se encontró el modal con id 'modalMeta'");
+  }
+}
+
+function cerrarModalMeta() {
+  const modal = document.getElementById("modalMeta");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
 
   </script>
 </body>
