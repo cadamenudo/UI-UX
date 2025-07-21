@@ -236,12 +236,24 @@
   font-size: 1rem;
   cursor: pointer;
 }
-    .header-metas {
+.bloque-header {
+  padding: 1rem 1.5rem;
+}
+
+.header-metas {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1.5rem; /* ← margen interno lateral */
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.subtitulo {
+  background-color: #F2F4F7;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #475569;
+  margin: 0;
 }
 
 .modal-meta {
@@ -309,16 +321,16 @@
   </style>
 </head>
 <body>
-<div class="header-metas">
-  <h2 class="titulo">Metas de ahorro</h2>
-  <button class="btn-meta" onclick="abrirModalMeta()">+ Meta</button>
-</div>
+<div class="bloque-header">
+  <div class="header-metas">
+    <h2 class="titulo">Metas de ahorro</h2>
+    <button class="btn-meta" onclick="abrirModalMeta()">+ Meta</button>
+  </div>
 
-<div class="bloque-subtitulo">
   <p class="subtitulo">Establace tus metas para los próximos 12 meses y ordénalas de acuerdo a tus prioridades</p>
 </div>
     <p id="placeholderMetas" class="placeholder-metas">
-  No tienes metas aún. Haz clic en <strong>+ Meta</strong> para empezar.
+  Haz clic en <strong>+ Meta</strong> para empezar.
 </p>
 
 <div class="lista-metas" id="listaMetas"></div>
