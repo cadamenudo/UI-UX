@@ -575,7 +575,6 @@ function abrirModalMeta() {
 function cerrarModalMeta() {
   document.getElementById("modalMeta").style.display = "none";
 }
-
 function guardarMetaDesdeModal() {
   const nombre = document.getElementById("inputNombreMeta").value.trim();
   const monto = document.getElementById("inputMontoMeta").value.trim();
@@ -589,22 +588,25 @@ function guardarMetaDesdeModal() {
   const lista = document.getElementById("listaMetas");
   const nuevaMeta = document.createElement("div");
   nuevaMeta.className = "meta-item";
-  nuevaMeta.innerHTML = `
+  nuevaMeta.dataset.descripcion = descripcion; // ✅ Guarda la descripción
+
   nuevaMeta.innerHTML = `
     <span class="numero">0</span>
     <span class="drag">≡</span>
-    <span class="descripcion editable-span" onclick="abrirModalEditarMeta(this)">${nombre}</span>
-    <span class="monto editable-span" onclick="abrirModalEditarMeta(this)">$${parseFloat(monto).toLocaleString('en-US')}</span>
+    <input type="text" class="descripcion" value="${nombre}" onclick="abrirModalEditar(this)" readonly />
+    <input type="text" class="monto" value="$${parseFloat(monto).toLocaleString('en-US')}" onclick="abrirModalEditar(this)" readonly />
+    <span class="etiqueta-cumplida">Cumplida</span>
     <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
   `;
 
   lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
 
   cerrarModalMeta();
+
   actualizarNumeros();
-  prepararInputsMeta();
   calcular();
 }
+
     let metaPendienteEliminar = null;
 
 function confirmarEliminarMeta(el) {
