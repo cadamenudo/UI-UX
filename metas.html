@@ -455,8 +455,8 @@ function agregarMeta() {
   nuevaMeta.innerHTML = `
     <span class="numero">0</span>
     <span class="drag">≡</span>
-    <input type="text" class="descripcion" value="Nueva meta" readonly onclick="abrirModalEditarMeta(this.parentElement)" />
-    <input type="text" class="monto" value="$0" readonly onclick="abrirModalEditarMeta(this.parentElement)" />
+    <input type="text" class="descripcion" value="Nueva meta" onclick="abrirModalEditar(this)" readonly />
+    <input type="text" class="monto" value="$0" onclick="abrirModalEditar(this)" readonly />
     <span class="etiqueta-cumplida">Cumplida</span>
     <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
   `;
@@ -557,9 +557,8 @@ function eliminarMeta(el) {
       }
     }
 function abrirModalMeta() {
+  console.log("abriendo modal..."); // 👉 pon esto para testeo
   document.getElementById("modalMeta").style.display = "flex";
-  
-  // Limpiar los campos del formulario correctamente
   document.getElementById('inputNombreMeta').value = '';
   document.getElementById('inputMontoMeta').value = '';
   document.getElementById('inputDescripcionMeta').value = '';
