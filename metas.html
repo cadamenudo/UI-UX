@@ -560,7 +560,7 @@ function guardarMetaDesdeModal() {
     <span class="drag">≡</span>
     <input type="text" class="descripcion" value="${nombre}" />
     <input type="text" class="monto" value="$${parseFloat(monto).toLocaleString('en-US')}" />
-    <span class="eliminar" onclick="eliminarMeta(this)">✕</span>
+    <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
   `;
   lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
 
