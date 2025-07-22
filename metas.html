@@ -649,9 +649,11 @@ function guardarMetaDesdeModal() {
   nuevaMeta.className = "meta-item";
   nuevaMeta.dataset.descripcion = descripcion; // ✅ Guarda la descripción
 
+  const numMetas = lista.querySelectorAll(".meta-item").length;
+  
   nuevaMeta.innerHTML = `
-    <span class="numero">0</span>
-    <span class="drag" onclick="abrirModalOrdenar()">≡</span>
+    <span class="numero">${numMetas + 1}</span>
+    <span class="drag">≡</span>
     <input type="text" class="descripcion" value="${nombre}" onclick="abrirModalEditar(this)" readonly />
     <input type="text" class="monto" value="$${parseFloat(monto).toLocaleString('en-US')}" onclick="abrirModalEditar(this)" readonly />
     <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
@@ -660,7 +662,6 @@ function guardarMetaDesdeModal() {
   lista.insertBefore(nuevaMeta, lista.querySelector(".agregar-meta"));
 
   cerrarModalMeta();
-
   actualizarNumeros();
   calcular();
   activarDragClick();
