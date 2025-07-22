@@ -745,26 +745,29 @@ function abrirModalOrdenar() {
   const contenedor = document.getElementById("listaOrdenarMetas");
   contenedor.innerHTML = "";
 
-  listaOriginal.forEach((item, i) => {
-    const nombre = item.querySelector(".descripcion")?.value || item.querySelector(".descripcion")?.textContent || "Meta";
-    
-    const bloque = document.createElement("div");
-    bloque.className = "meta-ordenable";
-    bloque.setAttribute("data-index", i);
+  listaOriginal.forEach((item, index) => {
+    // Asegura que cada item tenga un ID único
+    item.dataset.metaId = item.dataset.metaId || `meta-${index}`;
 
-    bloque.innerHTML = `
-      <span class="drag-icon">≡</span>
-      <span class="numero">${i + 1}</span>
-      <span class="nombre">${nombre}</span>
-    `;
+    const clone = item.cloneNode(true);
+    clone.dataset.metaId = item.dataset.metaId;
+    clone.classList.remove("cumplida");
 
-    contenedor.appendChild(bloque);
+    // Limpieza visual
+    const drag = clone.querySelector(".drag");
+    if (drag) drag.remove();
+
+    clone.querySelectorAll(".editable-span, .descripcion, .monto, .eliminar").forEach(el => {
+      el.onclick = null;
+    });
+
+    contenedor.appendChild(clone);
   });
 
   new Sortable(contenedor, {
     animation: 150,
-    handle: '.drag-icon',
-    draggable: '.meta-ordenable'
+    handle: '.numero',
+    draggable: '.meta-item'
   });
 
   document.getElementById("modalOrdenarMetas").style.display = "flex";
@@ -775,28 +778,25 @@ function cerrarModalOrdenar() {
 }
 
 function guardarNuevoOrden() {
-  const nuevoOrden = document.querySelectorAll("#listaOrdenarMetas .meta-ordenable");
+  const contenedor = document.getElementById("listaOrdenarMetas");
+  const nuevoOrden = contenedor.querySelectorAll(".meta-item");
+
   const listaOriginal = document.getElementById("listaMetas");
-  const metasOriginales = Array.from(listaOriginal.querySelectorAll(".meta-item"));
   const agregarMeta = listaOriginal.querySelector(".agregar-meta");
 
-  // Insertar en el nuevo orden
-  nuevoOrden.forEach(bloque => {
-    const index = parseInt(bloque.dataset.index);
-    const metaOriginal = metasOriginales[index];
-    if (metaOriginal) {
-      listaOriginal.insertBefore(metaOriginal, agregarMeta);
+  // Crear nuevo array ordenado de elementos reales
+  const fragment = document.createDocumentFragment();
+
+  nuevoOrden.forEach(metaClonada => {
+    const id = metaClonada.dataset.metaId;
+    const original = listaOriginal.querySelector(`.meta-item[data-meta-id="${id}"]`);
+    if (original) {
+      fragment.appendChild(original);
     }
   });
 
-  // Actualizar los números
-  const metasActualizadas = listaOriginal.querySelectorAll(".meta-item:not(.agregar-meta)");
-  metasActualizadas.forEach((meta, i) => {
-    const spanNumero = meta.querySelector(".numero");
-    if (spanNumero) {
-      spanNumero.textContent = i + 1;
-    }
-  });
+  // Reinsertar en el orden nuevo
+  listaOriginal.insertBefore(fragment, agregarMeta);
 
   cerrarModalOrdenar();
   actualizarNumeros();
