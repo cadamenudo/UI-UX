@@ -451,12 +451,17 @@ function calcular() {
 }
 
 
-    function actualizarNumeros() {
-      const items = document.querySelectorAll(".meta-item");
-      items.forEach((item, index) => {
-        item.querySelector(".numero").innerText = index + 1;
-      });
+function actualizarNumeros() {
+  const items = document.querySelectorAll(".meta-item");
+  items.forEach((item, index) => {
+    item.querySelector(".numero").innerText = index + 1;
+
+    const drag = item.querySelector(".drag");
+    if (drag) {
+      drag.style.visibility = (index === 0) ? "hidden" : "visible";
     }
+  });
+}
     
 function agregarMeta() {
   const placeholder = document.getElementById("placeholderMetas");
