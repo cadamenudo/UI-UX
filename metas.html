@@ -397,7 +397,7 @@
 </div>
 
   <!-- Modal Editar Meta Existente -->
-<div id="modalEditarMeta" class="modal-meta" style="display: none;">
+<div id="modalMeta" class="modal-meta" style="display: none;">
   <div class="modal-contenido">
     <button class="cerrar-modal" onclick="cerrarModalEditar()">×</button>
     <h3>Editar Meta</h3>
@@ -570,7 +570,12 @@ function eliminarMeta(el) {
     }
 function abrirModalMeta() {
   metaActual = null;
-  document.getElementById("modalMeta").style.display = "flex";
+
+    const modal = document.getElementById("modalMeta");
+  if (modal) {
+    modal.style.display = "flex";
+  }
+  
   document.getElementById('inputNombreMeta').value = '';
   document.getElementById('inputMontoMeta').value = '';
   document.getElementById('inputDescripcionMeta').value = '';
