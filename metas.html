@@ -485,7 +485,7 @@ function agregarMeta() {
   nuevaMeta.className = "meta-item";
   nuevaMeta.innerHTML = `
   <span class="numero">0</span>
-  <span class="drag">≡</span>
+  <span class="drag" onclick="abrirModalOrdenar()">≡</span>
   <span class="descripcion editable-span" onclick="abrirModalEditarMeta(this)">Nueva meta</span>
   <span class="monto editable-span" onclick="abrirModalEditarMeta(this)">$0</span>
   <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
