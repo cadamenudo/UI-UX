@@ -407,6 +407,19 @@
     <button onclick="guardarEdicionMeta()" class="btn-guardar">Guardar cambios</button>
   </div>
 </div>
+
+  <!-- Modal para reordenar metas -->
+<div id="modalOrdenarMetas" class="modal-meta" style="display:none;">
+  <div class="modal-contenido" style="max-width: 400px;">
+    <button class="cerrar-modal" onclick="cerrarModalOrdenar()">×</button>
+    <h3>Ordenar Metas</h3>
+    <div id="listaOrdenarMetas"></div>
+    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+      <button onclick="cerrarModalOrdenar()">Cancelar</button>
+      <button onclick="guardarNuevoOrden()" class="btn-guardar">Confirmar</button>
+    </div>
+  </div>
+</div>
   
   <script>
         let metaPendienteEliminar = null;
@@ -695,6 +708,52 @@ const nuevaDescripcion = document.getElementById('editarDescripcionMeta').value.
   metaActual.dataset.descripcion = nuevaDescripcion;
 
   cerrarModalEditar();
+  calcular();
+}
+function abrirModalOrdenar() {
+  const listaOriginal = document.querySelectorAll(".meta-item");
+  const contenedor = document.getElementById("listaOrdenarMetas");
+  contenedor.innerHTML = "";
+
+  listaOriginal.forEach(item => {
+    const clone = item.cloneNode(true);
+    clone.classList.remove("cumplida");
+    clone.querySelector(".drag").remove(); // Opcional: oculta icono drag en modal
+
+    // Elimina onclicks innecesarios
+    clone.querySelectorAll(".editable-span, .descripcion, .monto, .eliminar").forEach(el => {
+      el.onclick = null;
+    });
+
+    contenedor.appendChild(clone);
+  });
+
+  new Sortable(contenedor, {
+    animation: 150,
+    handle: '.numero',
+    draggable: '.meta-item'
+  });
+
+  document.getElementById("modalOrdenarMetas").style.display = "flex";
+}
+
+function cerrarModalOrdenar() {
+  document.getElementById("modalOrdenarMetas").style.display = "none";
+}
+
+function guardarNuevoOrden() {
+  const contenedor = document.getElementById("listaOrdenarMetas");
+  const nuevoOrden = contenedor.querySelectorAll(".meta-item");
+
+  const listaOriginal = document.getElementById("listaMetas");
+  const agregarMeta = listaOriginal.querySelector(".agregar-meta");
+
+  nuevoOrden.forEach(meta => {
+    listaOriginal.insertBefore(meta, agregarMeta);
+  });
+
+  cerrarModalOrdenar();
+  actualizarNumeros();
   calcular();
 }
 
