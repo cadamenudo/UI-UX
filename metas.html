@@ -581,6 +581,8 @@ function abrirModalMeta() {
   document.getElementById("inputNombreMeta").value = '';
   document.getElementById("inputMontoMeta").value = '';
   document.getElementById("inputDescripcionMeta").value = '';
+
+  document.getElementById("inputNombreMeta").focus();
 }
 
 function cerrarModalMeta() {
@@ -689,23 +691,6 @@ const nuevaDescripcion = document.getElementById('editarDescripcionMeta').value.
 
   cerrarModalEditar();
   calcular();
-}
-function abrirModalMeta() {
-  metaActual = null;
-  
-  const modal = document.getElementById("modalMeta");
-  if (modal) {
-    modal.style.display = "flex";
-  } else {
-    console.error("❌ No se encontró el modal con id 'modalMeta'");
-  }
-}
-
-function cerrarModalMeta() {
-  const modal = document.getElementById("modalMeta");
-  if (modal) {
-    modal.style.display = "none";
-  }
 }
 
   </script>
