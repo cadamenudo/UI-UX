@@ -689,6 +689,8 @@ const nuevaDescripcion = document.getElementById('editarDescripcionMeta').value.
   calcular();
 }
 function abrirModalMeta() {
+  metaActual = null;
+  
   const modal = document.getElementById("modalMeta");
   if (modal) {
     modal.style.display = "flex";
