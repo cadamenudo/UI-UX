@@ -409,6 +409,8 @@
 </div>
   
   <script>
+        let metaPendienteEliminar = null;
+    
     function limpiarNumero(str) {
       return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
     }
@@ -439,19 +441,6 @@
         item.querySelector(".numero").innerText = index + 1;
       });
     }
-const metas = document.querySelectorAll('.meta-item');
-let ahorroRestante = ahorro;
-
-metas.forEach(meta => {
-  const monto = limpiarNumero(meta.querySelector('.monto').value);
-  
-  if (ahorroRestante >= monto) {
-    meta.classList.add('cumplida');
-    ahorroRestante -= monto;
-  } else {
-    meta.classList.remove('cumplida');
-  }
-});
     
 function agregarMeta() {
   const placeholder = document.getElementById("placeholderMetas");
@@ -604,8 +593,6 @@ function guardarMetaDesdeModal() {
   actualizarNumeros();
   calcular();
 }
-
-    let metaPendienteEliminar = null;
 
 function confirmarEliminarMeta(el) {
   console.log("👉 Función confirmarEliminarMeta ejecutada");
