@@ -608,6 +608,7 @@ function guardarMetaDesdeModal() {
     let metaPendienteEliminar = null;
 
 function confirmarEliminarMeta(el) {
+  console.log("👉 Función confirmarEliminarMeta ejecutada");
   const metaItem = el.closest(".meta-item");
   const descripcionInput = metaItem.querySelector(".descripcion");
   let nombreMeta = "esta meta";
