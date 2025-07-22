@@ -773,21 +773,34 @@ function cerrarModalOrdenar() {
 }
 
 function guardarNuevoOrden() {
-  const nuevoOrden = Array.from(document.querySelectorAll("#listaOrdenarMetas .meta-ordenable"));
+  const nuevoOrden = document.querySelectorAll("#listaOrdenarMetas .meta-ordenable");
   const listaOriginal = document.getElementById("listaMetas");
   const metasOriginales = Array.from(listaOriginal.querySelectorAll(".meta-item"));
   const agregarMeta = listaOriginal.querySelector(".agregar-meta");
 
+  // Insertar en el nuevo orden
   nuevoOrden.forEach(bloque => {
     const index = parseInt(bloque.dataset.index);
     const metaOriginal = metasOriginales[index];
-    listaOriginal.insertBefore(metaOriginal, agregarMeta);
+    if (metaOriginal) {
+      listaOriginal.insertBefore(metaOriginal, agregarMeta);
+    }
+  });
+
+  // Actualizar los números
+  const metasActualizadas = listaOriginal.querySelectorAll(".meta-item:not(.agregar-meta)");
+  metasActualizadas.forEach((meta, i) => {
+    const spanNumero = meta.querySelector(".numero");
+    if (spanNumero) {
+      spanNumero.textContent = i + 1;
+    }
   });
 
   cerrarModalOrdenar();
   actualizarNumeros();
   calcular();
 }
+
 
   </script>
 </body>
