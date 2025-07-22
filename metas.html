@@ -419,21 +419,37 @@
       return "$" + num.toLocaleString("en-US");
     }
 
-    function calcular() {
-      const inputs = document.querySelectorAll(".monto");
-      let total = 0;
-      inputs.forEach(input => {
-        total += limpiarNumero(input.value);
-      });
+function calcular() {
+  const inputs = document.querySelectorAll(".monto");
+  let total = 0;
+  inputs.forEach(input => {
+    total += limpiarNumero(input.value);
+  });
 
-      const ahorro = 0;
-      const faltan = Math.max(0, total - ahorro);
-      const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
+  const ahorro = 0; // Puedes cambiar esto por el valor real si lo tienes
+  const faltan = Math.max(0, total - ahorro);
+  const porcentaje = total > 0 ? (ahorro / total) * 100 : 0;
 
-      document.getElementById("metaTotal").innerText = formatoMoneda(total);
-      document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
-      document.getElementById("faltan").innerText = formatoMoneda(faltan);
+  document.getElementById("metaTotal").innerText = formatoMoneda(total);
+  document.getElementById("ahorroActual").innerText = formatoMoneda(ahorro);
+  document.getElementById("faltan").innerText = formatoMoneda(faltan);
+
+  // 👉 Aquí marcamos metas como cumplidas o no
+  const metas = document.querySelectorAll('.meta-item');
+  let ahorroRestante = ahorro;
+
+  metas.forEach(meta => {
+    const monto = limpiarNumero(meta.querySelector('.monto').value);
+    
+    if (ahorroRestante >= monto) {
+      meta.classList.add('cumplida');
+      ahorroRestante -= monto;
+    } else {
+      meta.classList.remove('cumplida');
     }
+  });
+}
+
 
     function actualizarNumeros() {
       const items = document.querySelectorAll(".meta-item");
