@@ -610,10 +610,14 @@ function guardarMetaDesdeModal() {
 function confirmarEliminarMeta(el) {
   const metaItem = el.closest(".meta-item");
   const descripcionInput = metaItem.querySelector(".descripcion");
-  const nombreMeta = descripcionInput
-  ? (descripcionInput.value || descripcionInput.textContent || "esta meta")
-  : "esta meta";
-
+  let nombreMeta = "esta meta";
+  if (descripcionInput) {
+    if (descripcionInput.tagName === "INPUT") {
+      nombreMeta = descripcionInput.value.trim();
+    } else {
+      nombreMeta = descripcionInput.textContent.trim();
+    }
+  }
   // Guardamos referencia para eliminar después
   metaPendienteEliminar = metaItem;
 
