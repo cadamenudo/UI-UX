@@ -800,7 +800,18 @@ function guardarNuevoOrden() {
   actualizarNumeros();
   calcular();
 }
+    
+function activarDragClick() {
+  const elementosActivadores = document.querySelectorAll(".meta-item .drag, .meta-item .numero");
 
+  elementosActivadores.forEach(el => {
+    el.removeEventListener("click", abrirModalOrdenar);
+    el.removeEventListener("touchstart", abrirModalOrdenar);
+
+    el.addEventListener("click", abrirModalOrdenar);
+    el.addEventListener("touchstart", abrirModalOrdenar, { passive: true });
+  });
+}
 
   </script>
 </body>
