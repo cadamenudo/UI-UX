@@ -657,8 +657,11 @@ function abrirModalEditar(input) {
   const meta = input.closest('.meta-item');
   metaActual = meta;
 
-  const nombre = meta.querySelector('.descripcion').value.trim();
-  const monto = limpiarNumero(meta.querySelector('.monto').value.trim());
+  const nombreInput = meta.querySelector('.descripcion');
+  const montoInput = meta.querySelector('.monto');
+
+  const nombre = nombreInput ? nombreInput.value.trim() : '';
+  const monto = montoInput ? limpiarNumero(montoInput.value.trim()) : 0;
 
   document.getElementById('editarNombreMeta').value = nombre;
   document.getElementById('editarMontoMeta').value = monto;
