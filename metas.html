@@ -623,7 +623,7 @@ function guardarMetaDesdeModal() {
 
   nuevaMeta.innerHTML = `
     <span class="numero">0</span>
-    <span class="drag">≡</span>
+    <span class="drag" onclick="abrirModalOrdenar()">≡</span>
     <input type="text" class="descripcion" value="${nombre}" onclick="abrirModalEditar(this)" readonly />
     <input type="text" class="monto" value="$${parseFloat(monto).toLocaleString('en-US')}" onclick="abrirModalEditar(this)" readonly />
     <span class="eliminar" onclick="confirmarEliminarMeta(this)">✕</span>
