@@ -571,14 +571,16 @@ function eliminarMeta(el) {
 function abrirModalMeta() {
   metaActual = null;
 
-    const modal = document.getElementById("modalMeta");
+  const modal = document.getElementById("modalMeta");
   if (modal) {
     modal.style.display = "flex";
+  } else {
+    console.error("❌ No se encontró el modal con id 'modalMeta'");
   }
   
-  document.getElementById("editarNombreMeta").value = '';
-  document.getElementById("editarMontoMeta").value = '';
-  document.getElementById("editarDescripcionMeta").value = '';
+  document.getElementById("inputNombreMeta").value = '';
+  document.getElementById("inputMontoMeta").value = '';
+  document.getElementById("inputDescripcionMeta").value = '';
 }
 
 function cerrarModalMeta() {
