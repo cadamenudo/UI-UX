@@ -107,34 +107,33 @@
   </style>
 </head>
 <body>
-  <div class="banner">
-    ¡Comienza tu prueba gratuita de 14 días!<br>
-  </div>
+<div class="banner">
+  ¡Comienza tu prueba gratuita de 14 días!<br>
+</div>
 
-  <h2>Selecciona tu plan:</h2>
+<h2>Selecciona tu plan:</h2>
 
-  <div class="plan destacado">
-    <div class="descuento">Ahorras 65%</div>
-    <div class="precio">$35.88<span class="anterior">$102.48</span></div>
-    <p>Plan anual – se renueva cada 12 meses luego del periodo de prueba.</p>
-  <div class="plan" onclick="seleccionarPlan(this)">
-  </div>
+<div class="plan destacado" onclick="seleccionarPlan(this)">
+  <div class="descuento">Ahorras 65%</div>
+  <div class="precio">$35.88<span class="anterior">$102.48</span></div>
+  <p>Plan anual – se renueva cada 12 meses luego del periodo de prueba.</p>
+</div>
 
-  <div class="plan">
-    <div class="precio">$8.54 / mes</div>
-    <p>Plan mensual – se renueva automáticamente cada mes luego del periodo de prueba.</p>
-  <div class="plan" onclick="seleccionarPlan(this)">
-  </div>
+<div class="plan" onclick="seleccionarPlan(this)">
+  <div class="precio">$8.54 / mes</div>
+  <p>Plan mensual – se renueva automáticamente cada mes luego del periodo de prueba.</p>
+</div>
 
-  <button class="boton">Comenzar prueba gratuita</button>
-  <a href="#" class="link-secundario">Ver lo que incluye</a>
+<button class="boton">Comenzar prueba gratuita</button>
+<a href="#" class="link-secundario">Ver lo que incluye</a>
 
-  <div class="nota">
-    Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el periodo de prueba gratuito, a menos que la canceles al menos 24 horas antes. Puedes administrar tu suscripción en cualquier momento desde la sección "Perfil".
-    Recibirás una notificación por correo electrónico siete días antes de que se procese cualquier cargo. Cualquier parte no utilizada del periodo de prueba será cancelada si adquieres una suscripción a CadaMenudo antes de que dicho periodo termine. <br><br>
-    <a href="#" style="color:#64748B;">Política de Privacidad</a> · 
-    <a href="#" style="color:#64748B;">Términos de Uso</a>
-  </div>
+<div class="nota">
+  Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el periodo de prueba gratuito, a menos que la canceles al menos 24 horas antes. Puedes administrar tu suscripción en cualquier momento desde la sección "Perfil".
+  Recibirás una notificación por correo electrónico siete días antes de que se procese cualquier cargo. Cualquier parte no utilizada del periodo de prueba será cancelada si adquieres una suscripción a CadaMenudo antes de que dicho periodo termine. <br><br>
+  <a href="#" style="color:#64748B;">Política de Privacidad</a> · 
+  <a href="#" style="color:#64748B;">Términos de Uso</a>
+</div>
+    
 <script>
   function seleccionarPlan(planSeleccionado) {
     // Remueve la clase 'seleccionado' de todos los planes
