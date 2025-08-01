@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suscripción Premium</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Greycliff CF', sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 1.5rem;
+    }
+
+    .banner {
+      background-color: #34d399; /* verde de éxito */
+      color: white;
+      padding: 1.2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #3956E8;
+      margin-bottom: 1.5rem;
+    }
+
+    .plan {
+      border: 2px solid #d1d5db;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .plan.destacado {
+      border-color: #3956E8;
+      background: #F0F4FF;
+      position: relative;
+    }
+
+    .plan .precio {
+      font-size: 1.75rem;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+
+    .plan .anterior {
+      text-decoration: line-through;
+      color: #64748B;
+      font-size: 0.9rem;
+      margin-left: 0.5rem;
+    }
+
+    .descuento {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #E8C239;
+      color: #000;
+      font-size: 0.8rem;
+      font-weight: bold;
+      padding: 0.3rem 0.6rem;
+      border-radius: 8px;
+    }
+
+    .boton {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: #3956E8;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      padding: 1rem;
+      border-radius: 16px;
+      border: none;
+      margin-top: 1.5rem;
+      cursor: pointer;
+    }
+
+    .link-secundario {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      color: #3956E8;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .nota {
+      font-size: 0.75rem;
+      color: #64748B;
+      text-align: center;
+      margin-top: 1rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner">
+    ¡Obtén funciones premium sin pagar hoy!<br>
+    Comienza tu prueba gratuita de 14 días.
+  </div>
+
+  <h2>Selecciona tu plan:</h2>
+
+  <div class="plan destacado">
+    <div class="descuento">Ahorras 65%</div>
+    <div class="precio">$35.88<span class="anterior">$102.48</span></div>
+    <p>Plan anual – se renueva cada 12 meses luego del periodo de prueba.</p>
+  </div>
+
+  <div class="plan">
+    <div class="precio">$8.54 / mes</div>
+    <p>Plan mensual – se renueva automáticamente cada mes luego del periodo de prueba.</p>
+  </div>
+
+  <button class="boton">Comenzar prueba gratuita</button>
+  <a href="#" class="link-secundario">Ver lo que incluye</a>
+
+  <div class="nota">
+    Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el periodo de prueba gratuito, a menos que la canceles al menos 24 horas antes. Puedes administrar tu suscripción en cualquier momento desde la sección "Perfil".
+    Recibirás una notificación por correo electrónico siete días antes de que se procese cualquier cargo. Cualquier parte no utilizada del periodo de prueba será cancelada si adquieres una suscripción a CadaMenudo antes de que dicho periodo termine. <br><br>
+    <a href="#" style="color:#64748B;">Política de Privacidad</a> · 
+    <a href="#" style="color:#64748B;">Términos de Uso</a>
+  </div>
+
+</body>
+</html>
