@@ -106,15 +106,15 @@
   border: 2px solid #7258D9;
   background: #FBF7FF;
 }
-    .modal {
+.modal {
   display: none;
   position: fixed;
-  z-index: 999;
+  z-index: 9999;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(15, 23, 42, 0.5); /* fondo oscuro */
+  background-color: rgba(15, 23, 42, 0.6); /* fondo oscuro */
   justify-content: center;
   align-items: center;
   padding: 1rem;
@@ -122,24 +122,27 @@
 
 .modal-contenido {
   background-color: #ffffff;
-  padding: 1rem;
   border-radius: 16px;
-  max-width: 720px;
   width: 100%;
+  max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   position: relative;
+  padding: 2rem 1rem 1rem 1rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .cerrar {
   position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 1.5rem;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.8rem;
   font-weight: bold;
   color: #594AE2;
+  background: transparent;
+  border: none;
   cursor: pointer;
+  z-index: 10000;
 }
 .tabla-features {
   font-family: 'Greycliff CF', sans-serif;
