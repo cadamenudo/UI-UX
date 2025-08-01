@@ -106,6 +106,42 @@
   border: 2px solid #7258D9;
   background: #FBF7FF;
 }
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.5); /* fondo oscuro */
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.modal-contenido {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 16px;
+  max-width: 720px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.cerrar {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #594AE2;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
@@ -135,7 +171,41 @@
   <a href="#" style="color:#64748B;">Política de Privacidad</a> · 
   <a href="#" style="color:#64748B;">Términos de Uso</a>
 </div>
-    
+
+  <div id="modalFeatures" class="modal">
+  <div class="modal-contenido">
+    <span class="cerrar" onclick="cerrarModal()">×</span>
+    <table class="tabla-features">
+      <thead>
+        <tr>
+          <th>Funcionalidad</th>
+          <th>Disponible</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Versión gratuita con prueba de 14 días</td><td>✔️</td></tr>
+        <tr><td>Metas de ahorro personalizadas</td><td>✔️</td></tr>
+        <tr><td>Presupuestos mensuales editables</td><td>✔️</td></tr>
+        <tr><td>Clasificación por categorías y subcategorías</td><td>✔️</td></tr>
+        <tr><td>Registro manual de ingresos y gastos</td><td>✔️</td></tr>
+        <tr><td>Dividir transacciones por categorías</td><td>✔️</td></tr>
+        <tr><td>Visualización con gráficas (dona, barras, etc.)</td><td>✔️</td></tr>
+        <tr><td>Análisis de tendencias de gasto</td><td>✔️</td></tr>
+        <tr><td>Fondos de ahorro separados</td><td>✔️</td></tr>
+        <tr><td>Alertas si superas tu presupuesto</td><td>✔️</td></tr>
+        <tr><td>Recordatorios de metas o fechas clave</td><td>✔️</td></tr>
+        <tr><td>Seguimiento de metas con porcentaje de avance</td><td>✔️</td></tr>
+        <tr><td>Programar pagos y automatizarlos</td><td>✔️</td></tr>
+        <tr><td>Contenido educativo integrado (videos y tips)</td><td>✔️</td></tr>
+        <tr><td>Acceso desde web y móvil</td><td>✔️</td></tr>
+        <tr><td>Multiplataforma sin conexión bancaria obligatoria</td><td>✔️</td></tr>
+        <tr><td>Interfaz totalmente en español</td><td>✔️</td></tr>
+        <tr><td>Compatible con celulares, tablets y desktop</td><td>✔️</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <script>
   function seleccionarPlan(planSeleccionado) {
     // Remueve la clase 'seleccionado' de todos los planes
@@ -145,6 +215,20 @@
 
     // Agrega la clase al que fue clickeado
     planSeleccionado.classList.add('seleccionado');
+  }
+    function abrirModal() {
+    document.getElementById("modalFeatures").style.display = "flex";
+  }
+
+  function cerrarModal() {
+    document.getElementById("modalFeatures").style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("modalFeatures");
+    if (event.target == modal) {
+      cerrarModal();
+    }
   }
 </script>
 </body>
