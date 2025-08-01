@@ -100,6 +100,10 @@
       margin-top: 1rem;
       line-height: 1.4;
     }
+    .plan.seleccionado {
+  border: 2px solid #7258D9;
+  background: #FBF7FF;
+}
   </style>
 </head>
 <body>
@@ -113,11 +117,13 @@
     <div class="descuento">Ahorras 65%</div>
     <div class="precio">$35.88<span class="anterior">$102.48</span></div>
     <p>Plan anual – se renueva cada 12 meses luego del periodo de prueba.</p>
+  <div class="plan" onclick="seleccionarPlan(this)">
   </div>
 
   <div class="plan">
     <div class="precio">$8.54 / mes</div>
     <p>Plan mensual – se renueva automáticamente cada mes luego del periodo de prueba.</p>
+  <div class="plan" onclick="seleccionarPlan(this)">
   </div>
 
   <button class="boton">Comenzar prueba gratuita</button>
@@ -129,6 +135,16 @@
     <a href="#" style="color:#64748B;">Política de Privacidad</a> · 
     <a href="#" style="color:#64748B;">Términos de Uso</a>
   </div>
+<script>
+  function seleccionarPlan(planSeleccionado) {
+    // Remueve la clase 'seleccionado' de todos los planes
+    document.querySelectorAll('.plan').forEach(plan => {
+      plan.classList.remove('seleccionado');
+    });
 
+    // Agrega la clase al que fue clickeado
+    planSeleccionado.classList.add('seleccionado');
+  }
+</script>
 </body>
 </html>
