@@ -31,12 +31,14 @@
       margin-bottom: 1.5rem;
     }
 
-    .plan {
-      border: 2px solid #d1d5db;
-      border-radius: 12px;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1rem;
-    }
+.plan {
+  border: 2px solid #d1d5db;
+  background: white;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: 0.2s;
+}
 
     .plan.destacado {
       border-color: #7258D9;
@@ -113,7 +115,7 @@
 
 <h2>Selecciona tu plan:</h2>
 
-<div class="plan destacado" onclick="seleccionarPlan(this)">
+<div class="plan seleccionado" onclick="seleccionarPlan(this)">
   <div class="descuento">Ahorras 65%</div>
   <div class="precio">$35.88<span class="anterior">$102.48</span></div>
   <p>Plan anual – se renueva cada 12 meses luego del periodo de prueba.</p>
