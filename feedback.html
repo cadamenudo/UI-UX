@@ -103,13 +103,9 @@
     </form>
   </div>
 
-  <script>
-    document.getElementById("formFeedback").addEventListener("submit", function(e) {
-      e.preventDefault();
-      // Aquí podrías enviar los datos a una API, email o Google Sheets
-      document.getElementById("mensajeExito").style.display = "block";
-      this.reset();
-    });
+<script>
+  document.getElementById("formFeedback").addEventListener("submit", function(e) {
+    e.preventDefault();
 
     const tipo = document.getElementById("tipo").value;
     const mensajeExito = document.getElementById("mensajeExito");
@@ -142,6 +138,7 @@
 
     this.reset();
   });
-  </script>
+</script>
+
 </body>
 </html>
