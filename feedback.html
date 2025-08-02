@@ -110,6 +110,40 @@
       document.getElementById("mensajeExito").style.display = "block";
       this.reset();
     });
+
+    const tipo = document.getElementById("tipo").value;
+    const mensajeExito = document.getElementById("mensajeExito");
+
+    let texto = "";
+    switch (tipo) {
+      case "sugerencia":
+        texto = "✅ ¡Gracias por tu sugerencia!";
+        break;
+      case "duda":
+        texto = "✅ Recibimos tu duda. Te responderemos pronto.";
+        break;
+      case "problema":
+        texto = "⚠️ Gracias. Revisaremos el problema lo antes posible.";
+        break;
+      case "felicitación":
+        texto = "🎉 ¡Gracias por tu mensaje tan positivo!";
+        break;
+      default:
+        texto = "✅ ¡Gracias por tu mensaje!";
+    }
+
+    mensajeExito.textContent = texto;
+    mensajeExito.style.display = "block";
+
+    // Ocultar mensaje automáticamente después de 4 segundos
+    setTimeout(() => {
+      mensajeExito.style.display = "none";
+    }, 4000);
+
+    this.reset();
+  });
+</script>
+
   </script>
 </body>
 </html>
