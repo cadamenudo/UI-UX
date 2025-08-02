@@ -261,6 +261,39 @@ input.error {
   color: #374151;
   margin-bottom: 1rem;
 }
+.seccion-suscripcion {
+  background: #F9FAFB;
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-top: 2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.seccion-suscripcion h3 {
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.seccion-suscripcion p {
+  color: #444;
+  margin: 0.25rem 0;
+}
+
+.btn-cancelar-suscripcion {
+  margin-top: 1rem;
+  background: none;
+  color: #E53E3E;
+  border: 2px solid #E53E3E;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancelar-suscripcion:hover {
+  background: #E53E3E;
+  color: white;
+}
 
   </style>
 </head>
@@ -274,10 +307,12 @@ input.error {
 
     </div>
 
-    <div class="tabs">
-      <button class="tab-button active" onclick="openTab(event, 'datos')">Datos</button>
-      <button class="tab-button" onclick="openTab(event, 'contrasena')">Contraseña</button>
-    </div>
+<div class="tabs">
+  <button class="tab-button active" onclick="openTab(event, 'datos')">Datos</button>
+  <button class="tab-button" onclick="openTab(event, 'contrasena')">Contraseña</button>
+  <button class="tab-button" onclick="openTab(event, 'pago')">Pago</button>
+</div>
+
 
 <div id="datos" class="tab-content active">
   <div class="form-group">
@@ -346,6 +381,26 @@ input.error {
     <button class="btn-guardar" onclick="cambiarContrasena()">Cambiar</button>
   </div>
 </div>
+
+    <div id="pago" class="tab-content" style="display: none;">
+  <h3>Información de Suscripción</h3>
+  <div class="tarjeta-info">
+    <p><strong>Plan:</strong> Plan mensual</p>
+    <p><strong>Inicio:</strong> 2 de agosto de 2025</p>
+    <p><strong>Próximo cobro:</strong> 2 de septiembre de 2025</p>
+    <p><strong>Monto:</strong> $3.99</p>
+    <p><strong>Método de pago:</strong> Visa **** 1234</p>
+    <p><strong>Estado:</strong> Activo ✅</p>
+  </div>
+
+  <button class="btn-cancelar-suscripcion" onclick="abrirModalCancelar()">
+    Cancelar suscripción
+  </button>
+
+  <div class="nota-cancelacion">
+    La cancelación será efectiva al final del período actual. No se realizan reembolsos parciales.
+  </div>
+</div>
     
     <!-- MODAL PARA EDITAR FOTO DE PERFIL -->
 <div id="modalFoto" class="modal">
@@ -367,7 +422,18 @@ input.error {
   </div>
 </div>
 
+        <!-- MODAL PARA PAGO -->
 
+    <div id="modalCancelar" class="modal-overlay">
+  <div class="modal-contenido">
+    <h3>¿Deseas cancelar tu suscripción?</h3>
+    <p>Tu acceso continuará hasta el final del período pagado. Esta acción no se puede deshacer.</p>
+    <div class="modal-botones">
+      <button onclick="cerrarModalCancelar()" class="btn-cancelar">No</button>
+      <button onclick="confirmarCancelacion()" class="btn-confirmar">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
 
   <script>
     function openTab(evt, tabName) {
