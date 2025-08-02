@@ -344,6 +344,30 @@ input.error {
 .btn-si:hover {
   background: #222;
 }
+.btn-cancelar-suscripcion {
+  background-color: #7459D9;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-cancelar-suscripcion:hover {
+  background-color: #5e47b5;
+}
+
+.btn-cambiar-metodo {
+  margin-top: 0.5rem;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
   </style>
 </head>
@@ -445,13 +469,15 @@ input.error {
     <p><strong>Estado:</strong> Activo ✅</p>
   </div>
 
-  <button class="btn-cancelar-suscripcion" onclick="abrirModalCancelar()">
-    Cancelar suscripción
-  </button>
-
-  <div class="nota-cancelacion">
-    La cancelación será efectiva al final del período actual. No se realizan reembolsos parciales.
+  <div style="text-align: center; margin-top: 1.5rem;">
+    <button class="btn-cancelar-suscripcion" onclick="abrirModalCancelar()">
+      Cancelar suscripción
+    </button>
   </div>
+
+  <p style="text-align: center; font-size: 0.85rem; color: #64748B; margin-top: 0.75rem;">
+    La cancelación será efectiva al final del período actual. No se realizan reembolsos parciales.
+  </p>
 </div>
 
     <!-- MODAL PARA EDITAR FOTO DE PERFIL -->
