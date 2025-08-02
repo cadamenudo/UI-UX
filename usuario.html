@@ -436,6 +436,12 @@ input.error {
     <p><strong>Próximo cobro:</strong> 2 de septiembre de 2025</p>
     <p><strong>Monto:</strong> $3.99</p>
     <p><strong>Método de pago:</strong> Visa **** 1234</p>
+    
+        <!-- ⬇️ Aquí insertas el botón para cambiar método de pago -->
+    <button class="btn-cambiar-metodo" onclick="abrirModalMetodoPago()">
+      Cambiar método de pago
+    </button>
+    
     <p><strong>Estado:</strong> Activo ✅</p>
   </div>
 
@@ -476,6 +482,43 @@ input.error {
     <div class="modal-botones">
       <button onclick="cerrarModalCancelar()" class="btn-cancelar">No</button>
       <button onclick="confirmarCancelacion()" class="btn-confirmar">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para cambiar metodo de pago -->
+    <div id="modalMetodoPago" class="modal" style="display: none;">
+  <div class="modal-contenido">
+    <span class="cerrar" onclick="cerrarModalMetodoPago()">×</span>
+    <h3>Cambiar método de pago</h3>
+
+    <div class="form-group">
+      <label for="nuevo-tipo">Tipo de tarjeta</label>
+      <select id="nuevo-tipo">
+        <option value="visa">Visa</option>
+        <option value="mastercard">Mastercard</option>
+        <option value="amex">American Express</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="nuevo-numero">Número de tarjeta</label>
+      <input type="text" id="nuevo-numero" maxlength="19" placeholder="**** **** **** 5678" />
+    </div>
+
+    <div class="form-group">
+      <label for="nuevo-expira">Fecha de expiración</label>
+      <input type="text" id="nuevo-expira" placeholder="MM/AA" />
+    </div>
+
+    <div class="form-group">
+      <label for="nuevo-cvc">CVC</label>
+      <input type="text" id="nuevo-cvc" maxlength="4" placeholder="123" />
+    </div>
+
+    <div class="botones">
+      <button class="btn-cancelar" onclick="cerrarModalMetodoPago()">Cancelar</button>
+      <button class="btn-guardar" onclick="guardarMetodoPago()">Guardar</button>
     </div>
   </div>
 </div>
@@ -661,7 +704,25 @@ function confirmarCancelarSuscripcion() {
   cerrarModalCancelar();
 }
 
+  function abrirModalMetodoPago() {
+    document.getElementById("modalMetodoPago").style.display = "flex";
+  }
 
+  function cerrarModalMetodoPago() {
+    document.getElementById("modalMetodoPago").style.display = "none";
+  }
+
+  function guardarMetodoPago() {
+    // Aquí iría validación o integración con pasarela
+    const tipo = document.getElementById("nuevo-tipo").value;
+    const numero = document.getElementById("nuevo-numero").value;
+
+    alert(`Método actualizado: ${tipo.toUpperCase()} terminada en ${numero.slice(-4)}`);
+    cerrarModalMetodoPago();
+
+    // También podrías actualizar visualmente el texto dentro de la pestaña pago:
+    // document.querySelector("#pago .seccion-suscripcion p:nth-child(5)").innerHTML = `<strong>Método de pago:</strong> ${tipo} **** ${numero.slice(-4)}`;
+  }
   </script>
 </body>
 </html>
