@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tu Opinión Cuenta | Cada Menudo</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css">
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background-color: #FAFBFF;
+      color: #000;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .feedback-container {
+      max-width: 600px;
+      width: 100%;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .feedback-container h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #3956E8;
+    }
+
+    .feedback-container p {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      color: #475569;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    select, textarea, input {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      background: #3956E8;
+      color: #fff;
+      border: none;
+      padding: 0.9rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2f45c5;
+    }
+
+    .mensaje-exito {
+      margin-top: 1rem;
+      color: green;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="feedback-container">
+    <h1>Tu opinión cuenta</h1>
+    <p>Queremos mejorar cada día. Déjanos tus sugerencias, dudas o comentarios.</p>
+    
+    <form id="formFeedback">
+      <label for="tipo">Tipo de mensaje</label>
+      <select id="tipo" required>
+        <option value="">Selecciona una opción</option>
+        <option value="sugerencia">Sugerencia</option>
+        <option value="duda">Duda</option>
+        <option value="problema">Problema técnico</option>
+        <option value="felicitación">Felicitación</option>
+      </select>
+
+      <label for="mensaje">Tu mensaje</label>
+      <textarea id="mensaje" rows="5" required placeholder="Escribe aquí..."></textarea>
+
+      <label for="correo">Tu correo (opcional)</label>
+      <input type="email" id="correo" placeholder="tucorreo@ejemplo.com">
+
+      <button type="submit">Enviar</button>
+      <div class="mensaje-exito" id="mensajeExito">✅ ¡Gracias por tu mensaje!</div>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("formFeedback").addEventListener("submit", function(e) {
+      e.preventDefault();
+      // Aquí podrías enviar los datos a una API, email o Google Sheets
+      document.getElementById("mensajeExito").style.display = "block";
+      this.reset();
+    });
+  </script>
+</body>
+</html>
