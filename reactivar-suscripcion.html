@@ -86,7 +86,51 @@
 
     <a href="#" class="link" onclick="abrirModal()">Ver lo que incluye</a>
   </div>
+  
+<!-- Modal -->
+  <div id="modalFeatures" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModal()">×</span>
+      <table class="tabla-features">
+        <thead>
+          <tr><th>Funcionalidad</th><th>Disponible</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Metas de ahorro personalizadas</td><td></td></tr>
+          <tr><td>Contenido educativo integrado (videos y tips)</td><td></td></tr>
+          <tr><td>Clasificación por categorías y subcategorías</td><td></td></tr>
+          <tr><td>Registro manual de ingresos y gastos</td><td></td></tr>
+          <tr><td>Detalle de transacciones por categorías</td><td></td></tr>
+          <tr><td>Visualización con gráficas (dona, barras, etc.)</td><td></td></tr>
+          <tr><td>Fondos de ahorro separados</td><td></td></tr>
+          <tr><td>Alertas si estás en déficit o superávit</td><td></td></tr>
+          <tr><td>Recordatorios de metas o fechas clave</td><td></td></tr>
+          <tr><td>Seguimiento del avance de metas</td><td></td></tr>
+          <tr><td>Programar entradas y automatizarlas</td><td></td></tr>
+          <tr><td>Acceso desde web y móvil</td><td></td></tr>
+          <tr><td>Multiplataforma sin conexión bancaria obligatoria</td><td></td></tr>
+          <tr><td>Interfaz totalmente en español</td><td></td></tr>
+          <tr><td>Compatible con celulares, tablets y desktop</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
+  <script>
+    function abrirModal() {
+      document.getElementById("modalFeatures").style.display = "flex";
+    }
+
+    function cerrarModal() {
+      document.getElementById("modalFeatures").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("modalFeatures");
+      if (event.target == modal) {
+        cerrarModal();
+      }
+    }
+  </script>
 </body>
 </html>
-
