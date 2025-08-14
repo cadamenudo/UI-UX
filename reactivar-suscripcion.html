@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reactivar Suscripción</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Greycliff CF', sans-serif;
+      background-color: #ffffff;
+      color: #0f172a;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      width: 140px;
+      margin-bottom: 2rem;
+    }
+
+    .mensaje {
+      max-width: 500px;
+    }
+
+    h1 {
+      color: #594AE2;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .texto {
+      font-size: 1rem;
+      color: #475569;
+      margin-bottom: 2rem;
+    }
+
+    .boton {
+      background-color: #594AE2;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .nota {
+      font-size: 0.75rem;
+      color: #64748B;
+      margin-top: 1.5rem;
+      max-width: 420px;
+    }
+
+    .link {
+      display: block;
+      margin-top: 1rem;
+      color: #594AE2;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://github.com/cadamenudo/UI-UX/blob/main/assets/logo/cadamenudo_logo_BLUE.png?raw=true" alt="Logo CadaMenudo" class="logo" />
+
+  <div class="mensaje">
+    <h1>Tu prueba fue cancelada</h1>
+    <p class="texto">
+      Cancelaste tu periodo gratuito antes de los 14 días.  
+      Puedes reactivarlo y continuar justo donde lo dejaste.
+    </p>
+
+    <button class="boton">🔁 Reactivar prueba gratuita</button>
+
+    <p class="nota">
+      Si ya han pasado los 14 días desde tu registro original, se aplicará el cobro inmediato al reactivar.
+    </p>
+
+    <a href="#" class="link" onclick="abrirModal()">Ver lo que incluye</a>
+  </div>
+
+</body>
+</html>
 
