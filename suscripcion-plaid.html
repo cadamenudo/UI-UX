@@ -70,23 +70,27 @@
       border-color: #3956E8;
     }
 
-    .plan-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
 
-    .plan-nombre {
-      font-size: 1.2rem;
-      margin: 0;
-    }
-
-    .plan-precio {
-      font-weight: bold;
-      font-size: 1rem;
-      color: #3956E8;
-    }
+.plan-nombre {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  flex: 1;
+}
+.plan-precio {
+  color: #3b82f6; /* azul */
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
 
     .plan-descripcion {
       margin-bottom: 1rem;
@@ -155,17 +159,14 @@
       line-height: 1.4;
     }
     /* Descuento flotante en la esquina superior derecha */
-.plan-discount {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: #4ade80;
-  color: #065f46;
+.plan-descuento {
+  background-color: #d1fae5; /* verde claro */
+  color: #065f46; /* verde oscuro */
   font-weight: 600;
-  font-size: 0.8rem;
-  padding: 4px 8px;
+  padding: 0.25rem 0.75rem;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
   </style>
@@ -186,6 +187,7 @@
   <div class="plan-card" id="basico">
     <div class="plan-header">
       <h3 class="plan-nombre">Plan Básico</h3>
+      <span class="plan-descuento" data-anual="Ahorra 20%" data-mensual="">&nbsp;</span>
       <span class="plan-precio" data-mensual="$4.99/mes" data-anual="$47.90/año">--</span>
     </div>
     <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
@@ -196,7 +198,6 @@
       <li>✔️ Gráficas interactivas y reportes</li>
     </ul>
     <div class="plan-footer">
-      <span class="plan-descuento" data-anual="→ Ahorra 20%" data-mensual="">&nbsp;</span>
       <button class="boton-seleccionar">Comenzar prueba gratuita</button>
     </div>
   </div>
@@ -205,6 +206,7 @@
   <div class="plan-card" id="premium">
     <div class="plan-header">
       <h3 class="plan-nombre">Plan Premium*</h3>
+      <span class="plan-descuento" data-anual="→ Ahorra 30%" data-mensual="">&nbsp;</span>
       <span class="plan-precio" data-mensual="$7.99/mes" data-anual="$67.11/año">--</span>
     </div>
     <p class="plan-descripcion">Para usuarios que desean automatizar su control financiero.</p>
@@ -215,7 +217,6 @@
       <li>✔️ Importación diaria de movimientos</li>
     </ul>
     <div class="plan-footer">
-      <span class="plan-descuento" data-anual="→ Ahorra 30%" data-mensual="">&nbsp;</span>
       <button class="boton-seleccionar">Comenzar prueba gratuita</button>
       <small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
     </div>
