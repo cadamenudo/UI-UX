@@ -203,44 +203,60 @@
 <h2>Selecciona tu plan:</h2>
 
 <div class="planes-container">
+<h2 class="titulo-principal">Elige tu plan</h2>
 
-  <div class="plan-card seleccionado" onclick="seleccionarPlan(this)">
-    <div class="plan-header">
-      <h3 class="plan-nombre">Plan Básico</h3>
-      <span class="plan-precio">$4.99/mes</span>
-    </div>
-    <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
-    <ul class="plan-beneficios">
-      <li>✔️ Acceso completo a todas las funciones</li>
-      <li>✔️ Sincronización manual de transacciones</li>
-      <li>✔️ Seguimiento de metas y presupuestos</li>
-      <li>✔️ Gráficas interactivas y reportes</li>
-    </ul>
-    <div class="plan-footer">
-      <span class="plan-descuento">o $47.90/año → Ahorra 20%</span>
-      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
-    </div>
-  </div>
 
-  <div class="plan-card" onclick="seleccionarPlan(this)">
-    <div class="plan-header">
-      <h3 class="plan-nombre">Plan Premium</h3>
-      <span class="plan-precio">$7.99/mes</span>
-    </div>
-    <p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
-    <ul class="plan-beneficios">
-      <li>✔️ Todas las funciones del plan básico</li>
-      <li>✔️ Conexión bancaria segura (Plaid)</li>
-      <li>✔️ Categorización automática de transacciones</li>
-      <li>✔️ Importación diaria de movimientos</li>
-    </ul>
-    <div class="plan-footer">
-      <span class="plan-descuento">o $67.11/año → Ahorra 30%</span>
-      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
-      <small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
-    </div>
-  </div>
+<div class="toggle-opcion" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
+<label style="font-weight: 600; color: #594AE2; cursor: pointer;">
+<input type="radio" name="tipo-plan" value="mensual" checked onchange="togglePlanes(this.value)">
+<span>Mensual</span>
+</label>
+<label style="font-weight: 600; color: #594AE2; cursor: pointer;">
+<input type="radio" name="tipo-plan" value="anual" onchange="togglePlanes(this.value)">
+<span>Anual</span>
+</label>
+</div>
 
+
+<!-- Plan Básico -->
+<div class="plan-card seleccionado" onclick="seleccionarPlan(this)">
+<div class="plan-header">
+<h3 class="plan-nombre">Plan Básico</h3>
+<span class="plan-precio" id="precio-basico">$4.99/mes</span>
+</div>
+<p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
+<ul class="plan-beneficios">
+<li>✔️ Acceso completo a todas las funciones</li>
+<li>✔️ Sincronización manual de transacciones</li>
+<li>✔️ Seguimiento de metas y presupuestos</li>
+<li>✔️ Gráficas interactivas y reportes</li>
+</ul>
+<div class="plan-footer">
+<span class="plan-descuento" id="descuento-basico">o $47.90/año → Ahorra 20%</span>
+<button class="boton-seleccionar">Comenzar prueba gratuita</button>
+</div>
+</div>
+
+
+<!-- Plan Premium -->
+<div class="plan-card" onclick="seleccionarPlan(this)">
+<div class="plan-header">
+<h3 class="plan-nombre">Plan Premium</h3>
+<span class="plan-precio" id="precio-premium">$7.99/mes</span>
+</div>
+<p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
+<ul class="plan-beneficios">
+<li>✔️ Todas las funciones del plan básico</li>
+<li>✔️ Conexión bancaria segura (Plaid)</li>
+<li>✔️ Categorización automática de transacciones</li>
+<li>✔️ Importación diaria de movimientos</li>
+</ul>
+<div class="plan-footer">
+<span class="plan-descuento" id="descuento-premium">o $67.11/año → Ahorra 30%</span>
+<button class="boton-seleccionar">Comenzar prueba gratuita</button>
+<small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
+</div>
+</div>
 </div>
 
 <button class="boton">Comenzar prueba gratuita</button>
@@ -308,6 +324,36 @@
       cerrarModal();
     }
   }
+  function seleccionarPlan(planSeleccionado) {
+document.querySelectorAll('.plan-card').forEach(plan => {
+plan.classList.remove('seleccionado');
+});
+planSeleccionado.classList.add('seleccionado');
+}
+
+
+function togglePlanes(tipo) {
+const precios = {
+mensual: {
+basico: "$4.99/mes",
+premium: "$7.99/mes",
+descBasico: "o $47.90/año → Ahorra 20%",
+descPremium: "o $67.11/año → Ahorra 30%"
+},
+anual: {
+basico: "$47.90/año",
+premium: "$67.11/año",
+descBasico: "equivale a $3.99/mes",
+descPremium: "equivale a $5.59/mes"
+}
+};
+
+
+document.getElementById("precio-basico").textContent = precios[tipo].basico;
+document.getElementById("precio-premium").textContent = precios[tipo].premium;
+document.getElementById("descuento-basico").textContent = precios[tipo].descBasico;
+document.getElementById("descuento-premium").textContent = precios[tipo].descPremium;
+}
 </script>
 </body>
 </html>
