@@ -196,66 +196,62 @@
   </style>
 </head>
 <body>
-<div class="banner">
-  ¡Comienza tu prueba gratuita de 14 días!<br>
-</div>
-
 <div class="planes-container">
-<h2 class="titulo-principal">Elige tu plan</h2>
+  <button class="boton-superior">¡Comienza tu prueba gratuita de 14 días✯</button>
+  <h2 class="titulo-principal">Elige tu plan</h2>
+  
+  <div class="plan-toggle">
+    <label><input type="radio" name="frecuencia" checked> Mensual</label>
+    <label><input type="radio" name="frecuencia"> Anual</label>
+  </div>
 
+  <!-- Plan Básico -->
+  <div class="plan-card destacado">
+    <div class="plan-header">
+      <h3 class="plan-nombre">Plan Básico</h3>
+      <span class="plan-precio">US$ 4.99</span>
+    </div>
+    <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
+    <ul class="plan-beneficios">
+      <li>✓ Acceso completo a todas las funciones</li>
+      <li>✓ Sincronización manual de transacciones</li>
+      <li>✓ Seguimiento de metas y presupuestos</li>
+      <li>✓ Gráficas interactivas y reportes</li>
+    </ul>
+    <div class="plan-footer">
+      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
+    </div>
+  </div>
 
-<div class="toggle-opcion" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
-<label style="font-weight: 600; color: #594AE2; cursor: pointer;">
-<input type="radio" name="tipo-plan" value="mensual" checked onchange="togglePlanes(this.value)">
-<span>Mensual</span>
-</label>
-<label style="font-weight: 600; color: #594AE2; cursor: pointer;">
-<input type="radio" name="tipo-plan" value="anual" onchange="togglePlanes(this.value)">
-<span>Anual</span>
-</label>
+  <!-- Plan Premium -->
+  <div class="plan-card">
+    <div class="plan-header">
+      <h3 class="plan-nombre">Plan Premium</h3>
+      <span class="plan-precio">US$ 7.99</span>
+    </div>
+    <p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
+    <ul class="plan-beneficios">
+      <li>✓ Todas las funciones del plan básico</li>
+      <li>✓ Conexión bancaria segura ✯Plaid✯</li>
+      <li>✓ Categorización automática de transacciones</li>
+      <li>✓ Importación diaria de movimientos</li>
+    </ul>
+    <div class="plan-footer">
+      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
+    </div>
+  </div>
+
+  <div class="ver-mas">Ver lo que incluye</div>
+  <div class="texto-legal">
+    Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el período de prueba gratuito, a menos que la canceles al menos 24 horas antes.
+    Puedes administrar tu suscripción en cualquier momento desde tu sección «Perfil». Recibirás una notificación por correo antes de que se procese cualquier cargo.
+    Cualquier precio u oferta del período de prueba se considera exclusiva para una suscripción a CadaMenudo antes de ese dicho período termine.
+  </div>
+  <div class="legal-links">
+    <a href="#">Política de Privacidad</a> · <a href="#">Términos de Uso</a>
+  </div>
 </div>
 
-
-<!-- Plan Básico -->
-<div class="plan-card seleccionado" onclick="seleccionarPlan(this)">
-<div class="plan-header">
-<h3 class="plan-nombre">Plan Básico</h3>
-<span class="plan-precio" id="precio-basico">$4.99/mes</span>
-</div>
-<p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
-<ul class="plan-beneficios">
-<li>✔️ Acceso completo a todas las funciones</li>
-<li>✔️ Sincronización manual de transacciones</li>
-<li>✔️ Seguimiento de metas y presupuestos</li>
-<li>✔️ Gráficas interactivas y reportes</li>
-</ul>
-<div class="plan-footer">
-<span class="plan-descuento" id="descuento-basico">o $47.90/año → Ahorra 20%</span>
-<button class="boton-seleccionar">Comenzar prueba gratuita</button>
-</div>
-</div>
-
-
-<!-- Plan Premium -->
-<div class="plan-card" onclick="seleccionarPlan(this)">
-<div class="plan-header">
-<h3 class="plan-nombre">Plan Premium</h3>
-<span class="plan-precio" id="precio-premium">$7.99/mes</span>
-</div>
-<p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
-<ul class="plan-beneficios">
-<li>✔️ Todas las funciones del plan básico</li>
-<li>✔️ Conexión bancaria segura (Plaid)</li>
-<li>✔️ Categorización automática de transacciones</li>
-<li>✔️ Importación diaria de movimientos</li>
-</ul>
-<div class="plan-footer">
-<span class="plan-descuento" id="descuento-premium">o $67.11/año → Ahorra 30%</span>
-<button class="boton-seleccionar">Comenzar prueba gratuita</button>
-<small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
-</div>
-</div>
-</div>
 
 <button class="boton">Comenzar prueba gratuita</button>
 <a href="#" class="link-secundario" onclick="abrirModal()">Ver lo que incluye</a>
