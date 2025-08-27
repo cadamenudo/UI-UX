@@ -2,194 +2,228 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Planes Cada Menudo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planes | CadaMenudo</title>
   <style>
     body {
       font-family: 'Greycliff CF', sans-serif;
+      background: #f9fafb;
       margin: 0;
       padding: 2rem;
-      background: #f9fafb;
-      color: #111827;
+      color: #111;
     }
+
     .planes-container {
-      max-width: 480px;
+      max-width: 600px;
       margin: auto;
-      background: #fff;
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
     }
+
     .titulo-principal {
       text-align: center;
       font-size: 1.5rem;
       margin-bottom: 2rem;
     }
+
     .selector-periodo {
       display: flex;
       justify-content: center;
       gap: 1rem;
       margin-bottom: 2rem;
     }
+
     .selector-periodo button {
       padding: 0.5rem 1rem;
-      border: 2px solid #ccc;
-      background: none;
-      border-radius: 8px;
-      font-weight: bold;
+      border: 1px solid #ccc;
+      background: #fff;
       cursor: pointer;
+      border-radius: 20px;
+      font-weight: bold;
     }
+
     .selector-periodo .activo {
+      background-color: #3956E8;
+      color: white;
       border-color: #3956E8;
-      color: #3956E8;
     }
+
     .plan-card {
-      border: 2px solid #e5e7eb;
+      background: white;
       border-radius: 16px;
       padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       margin-bottom: 2rem;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
     }
+
     .plan-card.seleccionado {
       border-color: #3956E8;
-      background: #f0f4ff;
     }
+
     .plan-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 0.75rem;
     }
+
     .plan-nombre {
+      font-size: 1.2rem;
       margin: 0;
-      font-size: 1.25rem;
     }
+
     .plan-precio {
-      font-size: 1.25rem;
       font-weight: bold;
+      font-size: 1rem;
+      color: #3956E8;
     }
+
     .plan-descripcion {
-      margin: 1rem 0;
+      margin-bottom: 1rem;
       color: #64748B;
     }
+
     .plan-beneficios {
-      list-style: none;
-      padding-left: 0;
-      margin: 1rem 0;
-      color: #111;
+      padding-left: 1.2rem;
+      margin-bottom: 1rem;
     }
+
     .plan-beneficios li {
       margin-bottom: 0.5rem;
     }
+
     .plan-footer {
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
+
     .plan-descuento {
-      display: block;
-      color: #16a34a;
-      font-weight: bold;
-      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      color: #10b981;
     }
-    .nota-pais {
-      font-size: 0.8rem;
-      display: block;
-      color: #6b7280;
-      margin-top: 0.5rem;
-    }
+
     .boton-seleccionar {
-      background: #3956E8;
+      padding: 0.75rem;
+      background-color: #7459D9;
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1.25rem;
-      font-size: 1rem;
+      border-radius: 12px;
+      font-weight: bold;
       cursor: pointer;
     }
-    .texto-legal {
+
+    .nota-pais {
       font-size: 0.8rem;
       color: #6b7280;
-      line-height: 1.5;
-      margin-bottom: 1rem;
     }
+
+    .texto-legal {
+      font-size: 0.8rem;
+      color: #475569;
+      margin-top: 2rem;
+      text-align: center;
+      line-height: 1.4;
+    }
+
     .legal-links {
       text-align: center;
-      font-size: 0.8rem;
-      color: #64748B;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
     }
+
     .legal-links a {
       color: #3956E8;
       text-decoration: none;
+      margin: 0 0.5rem;
     }
   </style>
 </head>
 <body>
-  <div class="planes-container">
-    <h2 class="titulo-principal">Elige tu plan</h2>
 
-    <div class="selector-periodo">
-      <button id="btnMensual" class="activo" onclick="cambiarPeriodo('mensual')">Mensual</button>
-      <button id="btnAnual" onclick="cambiarPeriodo('anual')">Anual</button>
-    </div>
+<div class="planes-container">
+  <h2 class="titulo-principal">Elige tu plan</h2>
 
-    <div id="planBasico" class="plan-card seleccionado" onclick="seleccionarPlan(this)">
-      <div class="plan-header">
-        <h3 class="plan-nombre">Plan Básico</h3>
-        <span class="plan-precio" data-mensual="$4.99/mes" data-anual="$47.90/año">$4.99/mes</span>
-      </div>
-      <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
-      <ul class="plan-beneficios">
-        <li>✔️ Acceso completo a todas las funciones</li>
-        <li>✔️ Sincronización manual de transacciones</li>
-        <li>✔️ Seguimiento de metas y presupuestos</li>
-        <li>✔️ Gráficas interactivas y reportes</li>
-      </ul>
-      <div class="plan-footer">
-        <span class="plan-descuento">Ahorra 20% con el plan anual</span>
-        <button class="boton-seleccionar">Comenzar prueba gratuita</button>
-      </div>
-    </div>
+  <div class="selector-periodo">
+    <button id="btnMensual" class="activo">Mensual</button>
+    <button id="btnAnual">Anual</button>
+  </div>
 
-    <div id="planPremium" class="plan-card" onclick="seleccionarPlan(this)">
-      <div class="plan-header">
-        <h3 class="plan-nombre">Plan Premium</h3>
-        <span class="plan-precio" data-mensual="$7.99/mes" data-anual="$67.11/año">$7.99/mes</span>
-      </div>
-      <p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
-      <ul class="plan-beneficios">
-        <li>✔️ Todas las funciones del plan básico</li>
-        <li>✔️ Conexión bancaria segura (Plaid)</li>
-        <li>✔️ Categorización automática de transacciones</li>
-        <li>✔️ Importación diaria de movimientos</li>
-      </ul>
-      <div class="plan-footer">
-        <span class="plan-descuento">Ahorra 30% con el plan anual</span>
-        <button class="boton-seleccionar">Comenzar prueba gratuita</button>
-        <small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
-      </div>
+  <!-- Plan Básico -->
+  <div class="plan-card" id="basico">
+    <div class="plan-header">
+      <h3 class="plan-nombre">Plan Básico</h3>
+      <span class="plan-precio" data-mensual="$4.99/mes" data-anual="$47.90/año">--</span>
     </div>
-
-    <div class="texto-legal">
-      Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el período de prueba gratuito, a menos que la canceles al menos 24 horas antes.
-      Puedes administrar tu suscripción en cualquier momento desde tu sección «Perfil». Recibirás una notificación por correo antes de que se procese cualquier cargo.
-      Cualquier precio u oferta del período de prueba se considera exclusiva para una suscripción a CadaMenudo antes de ese dicho período termine.
-    </div>
-    <div class="legal-links">
-      <a href="#">Política de Privacidad</a> · <a href="#">Términos de Uso</a>
+    <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
+    <ul class="plan-beneficios">
+      <li>✔️ Acceso completo a todas las funciones</li>
+      <li>✔️ Sincronización manual de transacciones</li>
+      <li>✔️ Seguimiento de metas y presupuestos</li>
+      <li>✔️ Gráficas interactivas y reportes</li>
+    </ul>
+    <div class="plan-footer">
+      <span class="plan-descuento" data-anual="→ Ahorra 20%" data-mensual="">&nbsp;</span>
+      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
     </div>
   </div>
 
-  <script>
-    function cambiarPeriodo(periodo) {
-      document.querySelectorAll('.selector-periodo button').forEach(btn => btn.classList.remove('activo'));
-      document.getElementById('btn' + (periodo === 'anual' ? 'Anual' : 'Mensual')).classList.add('activo');
+  <!-- Plan Premium -->
+  <div class="plan-card" id="premium">
+    <div class="plan-header">
+      <h3 class="plan-nombre">Plan Premium</h3>
+      <span class="plan-precio" data-mensual="$7.99/mes" data-anual="$67.11/año">--</span>
+    </div>
+    <p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
+    <ul class="plan-beneficios">
+      <li>✔️ Todas las funciones del plan básico</li>
+      <li>✔️ Conexión bancaria segura (Plaid)</li>
+      <li>✔️ Categorización automática de transacciones</li>
+      <li>✔️ Importación diaria de movimientos</li>
+    </ul>
+    <div class="plan-footer">
+      <span class="plan-descuento" data-anual="→ Ahorra 30%" data-mensual="">&nbsp;</span>
+      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
+      <small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
+    </div>
+  </div>
 
-      document.querySelectorAll('.plan-precio').forEach(el => {
-        el.textContent = el.dataset[periodo];
-      });
-    }
+  <div class="texto-legal">
+    Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el período de prueba gratuito, a menos que la canceles al menos 24 horas antes.<br>
+    Puedes administrar tu suscripción en cualquier momento desde tu sección «Perfil». Recibirás una notificación por correo antes de que se procese cualquier cargo.<br>
+    Cualquier precio u oferta del período de prueba se considera exclusiva para una suscripción a CadaMenudo antes de que dicho período termine.
+  </div>
+  <div class="legal-links">
+    <a href="#">Política de Privacidad</a> · <a href="#">Términos de Uso</a>
+  </div>
+</div>
 
-    function seleccionarPlan(element) {
-      document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('seleccionado'));
-      element.classList.add('seleccionado');
-    }
-  </script>
+<script>
+  const btnMensual = document.getElementById("btnMensual");
+  const btnAnual = document.getElementById("btnAnual");
+  const precios = document.querySelectorAll(".plan-precio");
+  const descuentos = document.querySelectorAll(".plan-descuento");
+  const planes = document.querySelectorAll(".plan-card");
+
+  function activarPeriodo(tipo) {
+    precios.forEach(p => p.textContent = p.dataset[tipo]);
+    descuentos.forEach(d => d.textContent = d.dataset[tipo]);
+    btnMensual.classList.toggle("activo", tipo === "mensual");
+    btnAnual.classList.toggle("activo", tipo === "anual");
+  }
+
+  activarPeriodo("mensual");
+
+  btnMensual.addEventListener("click", () => activarPeriodo("mensual"));
+  btnAnual.addEventListener("click", () => activarPeriodo("anual"));
+
+  planes.forEach(plan => {
+    plan.addEventListener("click", () => {
+      planes.forEach(p => p.classList.remove("seleccionado"));
+      plan.classList.add("seleccionado");
+    });
+  });
+</script>
+
 </body>
 </html>
