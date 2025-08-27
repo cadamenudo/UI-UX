@@ -5,253 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Suscripción</title>
   <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Greycliff CF', sans-serif;
-      background: #ffffff;
-      color: #0f172a;
-      padding: 1.5rem;
-    }
-
-    .banner {
-      background-color: #594AE2;
-      color: white;
-      padding: 1.2rem;
-      font-size: 1.2rem;
-      font-weight: 600;
-      text-align: center;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-    }
-
-    h2 {
-      text-align: center;
-      color: #3956E8;
-      margin-bottom: 1.5rem;
-    }
-
-.plan {
-  position: relative;
-  border: 2px solid #d1d5db;
-  background: white;
-  border-radius: 12px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1rem;
-  transition: 0.2s;
+<style>
+font-weight: 600;
 }
-
-    .plan.destacado {
-      border-color: #7258D9;
-      background: #FBF7FF;
-      position: relative;
-    }
-
-    .plan .precio {
-      font-size: 1.75rem;
-      font-weight: bold;
-      margin-bottom: 0.3rem;
-    }
-
-    .plan .anterior {
-      text-decoration: line-through;
-      color: #64748B;
-      font-size: 0.9rem;
-      margin-left: 0.5rem;
-    }
-
-    .descuento {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: #E8C239;
-      color: #000;
-      font-size: 0.8rem;
-      font-weight: bold;
-      padding: 0.3rem 0.6rem;
-      border-radius: 8px;
-    }
-
-    .boton {
-      display: block;
-      width: 100%;
-      text-align: center;
-      background: #594AE2;
-      color: white;
-      font-weight: bold;
-      font-size: 1rem;
-      padding: 1rem;
-      border-radius: 16px;
-      border: none;
-      margin-top: 1.5rem;
-      cursor: pointer;
-    }
-
-    .link-secundario {
-      display: block;
-      text-align: center;
-      margin-top: 1rem;
-      color: #3956E8;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .nota {
-      font-size: 0.75rem;
-      color: #64748B;
-      text-align: center;
-      margin-top: 1rem;
-      line-height: 1.4;
-    }
-    .plan.seleccionado {
-  border: 2px solid #7258D9;
-  background: #FBF7FF;
+.plan-card {
+background: #fef2f2;
+border-radius: 16px;
+padding: 1.25rem;
+margin-bottom: 1.5rem;
+border: 2px solid transparent;
+transition: border 0.3s, background 0.3s;
 }
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(15, 23, 42, 0.6); /* fondo oscuro */
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
+.plan-card.seleccionado {
+border-color: #594AE2;
+background: #ede9fe;
 }
-
-.modal-contenido {
-  background-color: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  padding: 2rem 1rem 1rem 1rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+.plan-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 0.5rem;
 }
-
-.cerrar {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #594AE2;
-  background: white;
-  border: 2px solid #594AE2;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  line-height: 28px;
-  text-align: center;
-  cursor: pointer;
-  z-index: 10;
+.plan-nombre {
+font-size: 1.1rem;
+font-weight: 700;
 }
-
-.tabla-features {
-  font-family: 'Greycliff CF', sans-serif;
-  max-width: 720px;
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-  margin: 1rem auto;
+.plan-precio {
+font-size: 1.1rem;
+font-weight: 600;
 }
-
-.tabla-features thead th {
-  background-color: #594AE2;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding: 1rem;
-  text-align: left;
+.plan-descripcion {
+font-size: 0.9rem;
+color: #555;
+margin-bottom: 0.75rem;
 }
-
-.tabla-features tbody td {
-  padding: 1rem;
-  font-size: 1rem;
-  border-bottom: 1px solid #eee;
-  background-color: #fff;
+.plan-beneficios {
+padding-left: 1rem;
+margin-bottom: 1rem;
+font-size: 0.9rem;
+color: #333;
 }
-
-.tabla-features tbody tr:nth-child(odd) td {
-  background-color: #FBF7FF;
+.boton-seleccionar {
+display: block;
+width: 100%;
+background: #594AE2;
+color: white;
+border: none;
+padding: 0.75rem;
+border-radius: 12px;
+font-weight: bold;
+cursor: pointer;
 }
-
-.tabla-features td:last-child {
-  text-align: center;
-  font-size: 1.4rem;
-  color: #22C55E;
+.nota-pais {
+display: block;
+margin-top: 0.5rem;
+font-size: 0.75rem;
+color: #888;
+text-align: center;
 }
-
-.tabla-features td:last-child::before {
-  content: "✔️";
-  font-size: 1.4rem;
-}
-
-  </style>
+</style>
 </head>
 <body>
-<div class="planes-container">
-  <button class="boton-superior">¡Comienza tu prueba gratuita de 14 días✯</button>
-  <h2 class="titulo-principal">Elige tu plan</h2>
-  
-  <div class="plan-toggle">
-    <label><input type="radio" name="frecuencia" checked> Mensual</label>
-    <label><input type="radio" name="frecuencia"> Anual</label>
-  </div>
 
-  <!-- Plan Básico -->
-  <div class="plan-card destacado">
-    <div class="plan-header">
-      <h3 class="plan-nombre">Plan Básico</h3>
-      <span class="plan-precio">US$ 4.99</span>
-    </div>
-    <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
-    <ul class="plan-beneficios">
-      <li>✓ Acceso completo a todas las funciones</li>
-      <li>✓ Sincronización manual de transacciones</li>
-      <li>✓ Seguimiento de metas y presupuestos</li>
-      <li>✓ Gráficas interactivas y reportes</li>
-    </ul>
-    <div class="plan-footer">
-      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
-    </div>
-  </div>
+  <div class="planes-container">
+<h2 class="titulo-principal">Elige tu plan</h2>
 
-  <!-- Plan Premium -->
-  <div class="plan-card">
-    <div class="plan-header">
-      <h3 class="plan-nombre">Plan Premium</h3>
-      <span class="plan-precio">US$ 7.99</span>
-    </div>
-    <p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
-    <ul class="plan-beneficios">
-      <li>✓ Todas las funciones del plan básico</li>
-      <li>✓ Conexión bancaria segura ✯Plaid✯</li>
-      <li>✓ Categorización automática de transacciones</li>
-      <li>✓ Importación diaria de movimientos</li>
-    </ul>
-    <div class="plan-footer">
-      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
-    </div>
-  </div>
 
-  <div class="ver-mas">Ver lo que incluye</div>
-  <div class="texto-legal">
-    Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el período de prueba gratuito, a menos que la canceles al menos 24 horas antes.
-    Puedes administrar tu suscripción en cualquier momento desde tu sección «Perfil». Recibirás una notificación por correo antes de que se procese cualquier cargo.
-    Cualquier precio u oferta del período de prueba se considera exclusiva para una suscripción a CadaMenudo antes de ese dicho período termine.
-  </div>
-  <div class="legal-links">
-    <a href="#">Política de Privacidad</a> · <a href="#">Términos de Uso</a>
-  </div>
+<!-- Toggle mensual/anual -->
+<div class="toggle-frecuencia">
+<button class="toggle-btn activo" onclick="cambiarFrecuencia('mensual')">Mensual</button>
+<button class="toggle-btn" onclick="cambiarFrecuencia('anual')">Anual</button>
 </div>
 
+
+<!-- Plan Básico -->
+<div class="plan-card" onclick="seleccionarPlan(this)" data-plan="basico">
+<div class="plan-header">
+<h3 class="plan-nombre">Plan Básico</h3>
+<span class="plan-precio precio-mensual">$4.99/mes</span>
+<span class="plan-precio precio-anual oculto">$47.90/año</span>
+</div>
+<p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
+<ul class="plan-beneficios">
+<li>✔️ Acceso completo a todas las funciones</li>
+<li>✔️ Sincronización manual de transacciones</li>
+<li>✔️ Seguimiento de metas y presupuestos</li>
+<li>✔️ Gráficas interactivas y reportes</li>
+</ul>
+<div class="plan-footer">
+<span class="plan-descuento">Ahorra 20% con el plan anual</span>
+<button class="boton-seleccionar">Comenzar prueba gratuita</button>
+</div>
+</div>
+
+
+<!-- Plan Premium -->
+<div class="plan-card" onclick="seleccionarPlan(this)" data-plan="premium">
+<div class="plan-header">
+<h3 class="plan-nombre">Plan Premium</h3>
+<span class="plan-precio precio-mensual">$7.99/mes</span>
+<span class="plan-precio precio-anual oculto">$67.11/año</span>
+</div>
+<p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
+<ul class="plan-beneficios">
+<li>✔️ Todas las funciones del plan básico</li>
+<li>✔️ Conexión bancaria segura (Plaid)</li>
+<li>✔️ Categorización automática de transacciones</li>
+<li>✔️ Importación diaria de movimientos</li>
+</ul>
+<div class="plan-footer">
+<span class="plan-descuento">Ahorra 30% con el plan anual</span>
+<button class="boton-seleccionar">Comenzar prueba gratuita</button>
+<small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
+</div>
+</div>
+
+
+<div class="texto-legal">
+Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el período de prueba gratuito, a menos que la canceles al menos 24 horas antes.
+Puedes administrar tu suscripción en cualquier momento desde tu sección «Perfil». Recibirás una notificación por correo antes de que se procese cualquier cargo.
+Cualquier precio u oferta del período de prueba se considera exclusiva para una suscripción a CadaMenudo antes de ese dicho período termine.
+</div>
+<div class="legal-links">
+<a href="#">Política de Privacidad</a> · <a href="#">Términos de Uso</a>
+</div>
+</div>
 
 <button class="boton">Comenzar prueba gratuita</button>
 <a href="#" class="link-secundario" onclick="abrirModal()">Ver lo que incluye</a>
