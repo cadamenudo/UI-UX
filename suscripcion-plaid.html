@@ -187,7 +187,7 @@
   <div class="plan-card" id="basico">
     <div class="plan-header">
       <h3 class="plan-nombre">Básico</h3>
-      <span class="plan-descuento" data-anual="Desc 20%" data-mensual="">&nbsp;</span>
+      <span class="plan-descuento" data-anual="20% menos" data-mensual="">&nbsp;</span>
       <span class="plan-precio" data-mensual="$4.99" data-anual="$47.90">--</span>
     </div>
     <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
@@ -206,7 +206,7 @@
   <div class="plan-card" id="premium">
     <div class="plan-header">
       <h3 class="plan-nombre">Premium*</h3>
-      <span class="plan-descuento" data-anual="Desc 30%" data-mensual="">&nbsp;</span>
+      <span class="plan-descuento" data-anual="30% menos" data-mensual="">&nbsp;</span>
       <span class="plan-precio" data-mensual="$7.99" data-anual="$67.11">--</span>
     </div>
     <p class="plan-descripcion">Para usuarios que desean automatizar su control financiero.</p>
@@ -255,6 +255,18 @@
       plan.classList.add("seleccionado");
     });
   });
+  const isAnnual = plan.tipo === "anual"; // ejemplo
+
+const descuentoSpan = planElement.querySelector(".plan-descuento");
+
+if (isAnnual) {
+  descuentoSpan.textContent = "20% descuento";
+  descuentoSpan.style.display = "inline-block";
+} else {
+  descuentoSpan.textContent = "";
+  descuentoSpan.style.display = "none";  // Oculta el span
+}
+
 </script>
 
 </body>
