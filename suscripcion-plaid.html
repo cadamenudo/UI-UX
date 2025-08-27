@@ -1,1 +1,314 @@
-o $47.90/año → Ahorra 20%
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suscripción</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Greycliff CF', sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 1.5rem;
+    }
+
+    .banner {
+      background-color: #594AE2;
+      color: white;
+      padding: 1.2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #3956E8;
+      margin-bottom: 1.5rem;
+    }
+
+.plan {
+  position: relative;
+  border: 2px solid #d1d5db;
+  background: white;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: 0.2s;
+}
+
+    .plan.destacado {
+      border-color: #7258D9;
+      background: #FBF7FF;
+      position: relative;
+    }
+
+    .plan .precio {
+      font-size: 1.75rem;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+
+    .plan .anterior {
+      text-decoration: line-through;
+      color: #64748B;
+      font-size: 0.9rem;
+      margin-left: 0.5rem;
+    }
+
+    .descuento {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #E8C239;
+      color: #000;
+      font-size: 0.8rem;
+      font-weight: bold;
+      padding: 0.3rem 0.6rem;
+      border-radius: 8px;
+    }
+
+    .boton {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: #594AE2;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      padding: 1rem;
+      border-radius: 16px;
+      border: none;
+      margin-top: 1.5rem;
+      cursor: pointer;
+    }
+
+    .link-secundario {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      color: #3956E8;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .nota {
+      font-size: 0.75rem;
+      color: #64748B;
+      text-align: center;
+      margin-top: 1rem;
+      line-height: 1.4;
+    }
+    .plan.seleccionado {
+  border: 2px solid #7258D9;
+  background: #FBF7FF;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.6); /* fondo oscuro */
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.modal-contenido {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 2rem 1rem 1rem 1rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #594AE2;
+  background: white;
+  border: 2px solid #594AE2;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.tabla-features {
+  font-family: 'Greycliff CF', sans-serif;
+  max-width: 720px;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  margin: 1rem auto;
+}
+
+.tabla-features thead th {
+  background-color: #594AE2;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+}
+
+.tabla-features tbody td {
+  padding: 1rem;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+}
+
+.tabla-features tbody tr:nth-child(odd) td {
+  background-color: #FBF7FF;
+}
+
+.tabla-features td:last-child {
+  text-align: center;
+  font-size: 1.4rem;
+  color: #22C55E;
+}
+
+.tabla-features td:last-child::before {
+  content: "✔️";
+  font-size: 1.4rem;
+}
+
+  </style>
+</head>
+<body>
+<div class="banner">
+  ¡Comienza tu prueba gratuita de 14 días!<br>
+</div>
+
+<h2>Selecciona tu plan:</h2>
+
+<div class="planes-container">
+
+  <div class="plan-card seleccionado" onclick="seleccionarPlan(this)">
+    <div class="plan-header">
+      <h3 class="plan-nombre">Plan Básico</h3>
+      <span class="plan-precio">$4.99/mes</span>
+    </div>
+    <p class="plan-descripcion">Ideal para quienes desean controlar su dinero sin conexión bancaria.</p>
+    <ul class="plan-beneficios">
+      <li>✔️ Acceso completo a todas las funciones</li>
+      <li>✔️ Sincronización manual de transacciones</li>
+      <li>✔️ Seguimiento de metas y presupuestos</li>
+      <li>✔️ Gráficas interactivas y reportes</li>
+    </ul>
+    <div class="plan-footer">
+      <span class="plan-descuento">o $47.90/año → Ahorra 20%</span>
+      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
+    </div>
+  </div>
+
+  <div class="plan-card" onclick="seleccionarPlan(this)">
+    <div class="plan-header">
+      <h3 class="plan-nombre">Plan Premium</h3>
+      <span class="plan-precio">$7.99/mes</span>
+    </div>
+    <p class="plan-descripcion">Para usuarios en EE.UU. y PR que desean automatizar su control financiero.</p>
+    <ul class="plan-beneficios">
+      <li>✔️ Todas las funciones del plan básico</li>
+      <li>✔️ Conexión bancaria segura (Plaid)</li>
+      <li>✔️ Categorización automática de transacciones</li>
+      <li>✔️ Importación diaria de movimientos</li>
+    </ul>
+    <div class="plan-footer">
+      <span class="plan-descuento">o $67.11/año → Ahorra 30%</span>
+      <button class="boton-seleccionar">Comenzar prueba gratuita</button>
+      <small class="nota-pais">* Solo disponible en EE.UU. y Puerto Rico</small>
+    </div>
+  </div>
+
+</div>
+
+<button class="boton">Comenzar prueba gratuita</button>
+<a href="#" class="link-secundario" onclick="abrirModal()">Ver lo que incluye</a>
+
+<div class="nota">
+  Puedes cancelar en cualquier momento. La suscripción se renovará automáticamente al finalizar el periodo de prueba gratuito, a menos que la canceles al menos 24 horas antes. Puedes administrar tu suscripción en cualquier momento desde la sección "Perfil".
+  Recibirás una notificación por correo electrónico siete días antes de que se procese cualquier cargo. Cualquier parte no utilizada del periodo de prueba será cancelada si adquieres una suscripción a CadaMenudo antes de que dicho periodo termine. <br><br>
+  <a href="#" style="color:#64748B;">Política de Privacidad</a> · 
+  <a href="#" style="color:#64748B;">Términos de Uso</a>
+</div>
+
+  <div id="modalFeatures" class="modal">
+  <div class="modal-contenido">
+    <span class="cerrar" onclick="cerrarModal()">×</span>
+    <table class="tabla-features">
+      <thead>
+        <tr>
+          <th>Funcionalidad</th>
+          <th>Disponible</th>
+        </tr>
+      </thead>
+      <tbody>
+<tr><td>Metas de ahorro personalizadas</td><td></td></tr>
+<tr><td>Contenido educativo integrado (videos y tips)</td><td></td></tr>
+<tr><td>Clasificación por categorías y subcategorías</td><td></td></tr>
+<tr><td>Registro manual de ingresos y gastos</td><td></td></tr>
+<tr><td>Detalle de transacciones por categorías</td><td></td></tr>
+<tr><td>Visualización con gráficas (dona, barras, etc.)</td><td></td></tr>
+<tr><td>Fondos de ahorro separados</td><td></td></tr>
+<tr><td>Alertas si estas en déficit o superavit</td><td></td></tr>
+<tr><td>Recordatorios de metas o fechas clave</td><td></td></tr>
+<tr><td>Seguimiento del avance de metas</td><td></td></tr>
+<tr><td>Programar entredas y automatizarlas</td><td></td></tr>
+<tr><td>Acceso desde web y móvil</td><td></td></tr>
+<tr><td>Multiplataforma sin conexión bancaria obligatoria (en desarrollo)</td><td></td></tr>
+<tr><td>Interfaz totalmente en español</td><td></td></tr>
+<tr><td>Compatible con celulares, tablets y desktop</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function seleccionarPlan(planSeleccionado) {
+    // Remueve la clase 'seleccionado' de todos los planes
+    document.querySelectorAll('.plan').forEach(plan => {
+      plan.classList.remove('seleccionado');
+    });
+
+    // Agrega la clase al que fue clickeado
+    planSeleccionado.classList.add('seleccionado');
+  }
+    function abrirModal() {
+    document.getElementById("modalFeatures").style.display = "flex";
+  }
+
+  function cerrarModal() {
+    document.getElementById("modalFeatures").style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("modalFeatures");
+    if (event.target == modal) {
+      cerrarModal();
+    }
+  }
+</script>
+</body>
+</html>
+
