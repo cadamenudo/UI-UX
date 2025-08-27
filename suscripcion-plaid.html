@@ -167,6 +167,7 @@
   border-radius: 8px;
   font-size: 0.9rem;
   white-space: nowrap;
+  display: none; /* 👈 Oculto por defecto */
 }
 
   </style>
@@ -237,12 +238,26 @@
   const descuentos = document.querySelectorAll(".plan-descuento");
   const planes = document.querySelectorAll(".plan-card");
 
-  function activarPeriodo(tipo) {
-    precios.forEach(p => p.textContent = p.dataset[tipo]);
-    descuentos.forEach(d => d.textContent = d.dataset[tipo]);
-    btnMensual.classList.toggle("activo", tipo === "mensual");
-    btnAnual.classList.toggle("activo", tipo === "anual");
-  }
+function activarPeriodo(tipo) {
+  precios.forEach(p => {
+    p.textContent = p.dataset[tipo];
+  });
+
+  descuentos.forEach(d => {
+    const valor = d.dataset[tipo];
+    if (valor) {
+      d.textContent = valor;
+      d.style.display = "inline-block";
+    } else {
+      d.textContent = "";
+      d.style.display = "none";
+    }
+  });
+
+  btnMensual.classList.toggle("activo", tipo === "mensual");
+  btnAnual.classList.toggle("activo", tipo === "anual");
+}
+
 
   activarPeriodo("mensual");
 
@@ -255,17 +270,6 @@
       plan.classList.add("seleccionado");
     });
   });
-  const isAnnual = plan.tipo === "anual"; // ejemplo
-
-const descuentoSpan = planElement.querySelector(".plan-descuento");
-
-if (isAnnual) {
-  descuentoSpan.textContent = "20% descuento";
-  descuentoSpan.style.display = "inline-block";
-} else {
-  descuentoSpan.textContent = "";
-  descuentoSpan.style.display = "none";  // Oculta el span
-}
 
 </script>
 
