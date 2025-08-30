@@ -36,12 +36,21 @@
       background:#e8faef;color:#065f46;border:1px solid #c7f3d9;font-size:.8rem;font-weight:800}
     .drop-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .caret{opacity:.7}
-    .drop-panel{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:var(--shadow);
-      padding:10px;display:none;max-height:40vh;overflow:auto;z-index:4;}
+    .drop-panel{
+      position:absolute;left:0;right:0;top:calc(100% + 6px);
+      background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:var(--shadow);
+      display:none;max-height:60vh;overflow:auto;z-index:4;padding-bottom:48px;
+    }
     .dropdown.open .drop-panel{display:block}
     .drop-actions{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px dashed #e5e7eb;border-radius:10px;color:var(--muted);font-weight:700;margin-bottom:8px}
     .check{display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px}
-    .btn-listo{width:100%;margin-top:8px;background:var(--brand);color:#fff;padding:8px 12px;border:0;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn-listo{
+      position:sticky;bottom:0;left:0;right:0;
+      background:var(--brand);color:#fff;padding:10px 12px;
+      border:0;border-top:1px solid #e5e7eb;
+      border-radius:0 0 12px 12px;
+      cursor:pointer;font-weight:700;text-align:center;
+    }
 
     /* Fechas y formato */
     .two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -203,9 +212,7 @@
     window.addEventListener('keydown',e=>{if(e.key==='Escape')modal.setAttribute('aria-hidden','true')});
 
     // Dropdown categorías
-    catsBtn.addEventListener('click',()=>{
-      catsDropdown.classList.toggle('open');
-    });
+    catsBtn.addEventListener('click',()=>{catsDropdown.classList.toggle('open')});
     btnCatsListo.addEventListener('click',()=>{
       catsDropdown.classList.remove('open');
       catsBtn.setAttribute('aria-expanded','false');
@@ -236,7 +243,7 @@
       catsLabel.textContent=count>0?`${count} categoría${count>1?'s':''}`:'Selecciona categorías';
     }
 
-    // Presets de fechas
+    // Presets fechas
     const fmt=d=>d.toISOString().slice(0,10);
     const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
     const startOfYear=d=>{const x=new Date(d);x.setMonth(0,1);return x};
