@@ -14,7 +14,6 @@
       --card:#fff;
       --shadow:0 10px 30px rgba(15,23,42,.12);
       --danger:#ef4444;
-      --radius:16px;
     }
     body{
       margin:0;
@@ -32,7 +31,7 @@
     .modal{
       position:fixed; inset:0; display:none;
       align-items:flex-start; justify-content:center;
-      padding:12px 12px 20px; background:rgba(2,6,23,.4);
+      padding:12px; background:rgba(2,6,23,.4);
       backdrop-filter: blur(4px);
     }
     .modal[aria-hidden="false"]{ display:flex }
@@ -43,11 +42,11 @@
       box-shadow:var(--shadow); overflow:hidden;
       margin-top: max(8px, env(safe-area-inset-top));
       max-height: 92vh; display:flex; flex-direction:column;
+      position:relative;
     }
     .dialog-header{
       display:flex; align-items:center; justify-content:space-between;
       padding:12px 14px; border-bottom:1px solid #e5e7eb; background:#fff;
-      position:sticky; top:0; z-index:2;
     }
     .dialog-title{ font-size:1.1rem; font-weight:800 }
     .dialog-subtitle{ font-size:.9rem; color:var(--muted) }
@@ -93,7 +92,6 @@
     .dialog-footer{
       padding:12px 14px; border-top:1px solid #e5e7eb; background:#fff;
       display:grid; gap:8px;
-      position:sticky; bottom:0; z-index:2;
     }
     .btns{
       display:grid; grid-template-columns:1fr 1fr; gap:8px;
@@ -106,27 +104,40 @@
     .btn[disabled]{ opacity:.5; cursor:not-allowed }
     #mensajeStatus{ text-align:center; font-size:.9rem; color:var(--muted); display:none }
 
-    /* Ultra compacto para pantallas muy estrechas */
+    /* Toast */
+    .toast {
+      position: absolute;
+      top: 8px; left: 50%; transform: translateX(-50%) translateY(-10px);
+      background: #0ea5e9; color:#fff;
+      padding:10px 14px; border-radius:12px;
+      font-weight:700; box-shadow: 0 8px 20px rgba(2,6,23,.18);
+      z-index: 5; pointer-events:none;
+      opacity:0; transition: opacity .2s ease, transform .2s ease;
+    }
+    .toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
+
+    /* Ultra compacto */
     @media (max-width: 340px){
       .cat-grid, .formats, .btns, .preset-bar{ grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
-  <!-- Botón demo para abrir -->
   <div class="demo">
     <button class="btn-primary" id="abrirModal">Abrir modal</button>
   </div>
 
   <!-- Modal Exportar -->
-  <div class="modal" id="modalExport" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="tituloModal">
-    <div class="dialog" role="document">
+  <div class="modal" id="modalExport" aria-hidden="true">
+    <div class="dialog">
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
       <div class="dialog-header">
         <div>
-          <div class="dialog-title" id="tituloModal">Exportar datos</div>
+          <div class="dialog-title">Exportar datos</div>
           <div class="dialog-subtitle">Elige qué descargar y en qué formato</div>
         </div>
-        <button class="btn" id="cerrarModal" style="width:auto;background:none" aria-label="Cerrar">✕</button>
+        <button class="btn" id="cerrarModal" style="width:auto;background:none">✕</button>
       </div>
 
       <form class="dialog-content" onsubmit="return false">
@@ -135,8 +146,7 @@
           <div class="card" id="cardCats">
             <h3 style="margin:0 0 8px">Categorías</h3>
             <label class="cat-header">
-              <input type="checkbox" id="selectAllCats" aria-label="Seleccionar todas las categorías" />
-              Seleccionar todo
+              <input type="checkbox" id="selectAllCats" /> Seleccionar todo
             </label>
             <div id="listaCategorias" class="cat-grid"></div>
             <div class="hint">Selecciona al menos una categoría.</div>
@@ -145,27 +155,25 @@
           <!-- Rango de tiempo -->
           <div class="card" id="cardDates">
             <h3 style="margin:0 0 8px">Rango de tiempo</h3>
-
-            <div class="preset-bar" aria-label="Presets de fecha">
+            <div class="preset-bar">
               <button type="button" class="preset-btn" data-preset="30d">30 días</button>
               <button type="button" class="preset-btn" data-preset="90d">90 días</button>
               <button type="button" class="preset-btn" data-preset="ytd">YTD</button>
               <button type="button" class="preset-btn" data-preset="12m">12 meses</button>
             </div>
-
             <div class="two-col">
-              <input type="date" id="desde" aria-label="Desde" />
-              <input type="date" id="hasta" aria-label="Hasta" />
+              <input type="date" id="desde" />
+              <input type="date" id="hasta" />
             </div>
-            <div class="hint">Elige un rango válido (Desde ≤ Hasta).</div>
+            <div class="hint">Elige un rango válido.</div>
           </div>
 
           <!-- Formato -->
           <div class="card" id="cardFormat">
             <h3 style="margin:0 0 8px">Formato</h3>
             <div class="formats">
-              <label class="radio"><input type="radio" name="formato" value="csv" /> CSV (.csv)</label>
-              <label class="radio"><input type="radio" name="formato" value="xlsx" /> Excel (.xlsx)</label>
+              <label class="radio"><input type="radio" name="formato" value="csv" /> CSV</label>
+              <label class="radio"><input type="radio" name="formato" value="xlsx" /> Excel</label>
               <label class="radio"><input type="radio" name="formato" value="gsheet" /> Google Sheets</label>
               <label class="radio"><input type="radio" name="formato" value="pdf" /> PDF</label>
             </div>
@@ -185,12 +193,6 @@
   </div>
 
   <script>
-    // --- Utilidad de fechas ---
-    const fmt = (d) => d.toISOString().slice(0,10);
-    const addDays = (date, days) => { const x=new Date(date); x.setDate(x.getDate()+days); return x; };
-    const startOfYear = (date) => { const x=new Date(date); x.setMonth(0,1); return x; };
-
-    // --- Config: categorías ---
     const CATEGORIAS = [
       { id: 'ingresos', nombre: 'Ingresos' },
       { id: 'gastos', nombre: 'Gastos' },
@@ -199,7 +201,6 @@
       { id: 'transacciones', nombre: 'Transacciones' }
     ];
 
-    // --- Elementos ---
     const modal = document.getElementById('modalExport');
     const abrirModal = document.getElementById('abrirModal');
     const cerrarModal = document.getElementById('cerrarModal');
@@ -215,41 +216,35 @@
     const cardDates = document.getElementById('cardDates');
     const cardFormat = document.getElementById('cardFormat');
 
-    // --- Render categorías (2 columnas) ---
+    // Render categorías
     CATEGORIAS.forEach(cat => {
       const label = document.createElement('label');
       label.className = 'radio';
       label.innerHTML = `<input type="checkbox" class="cat-check" value="${cat.id}" /> ${cat.nombre}`;
       listaCategorias.appendChild(label);
     });
-
     const catChecks = () => Array.from(document.querySelectorAll('.cat-check'));
 
-    // --- Abrir / cerrar ---
-    const openModal = () => { modal.setAttribute('aria-hidden', 'false'); };
-    const closeModal = () => { modal.setAttribute('aria-hidden', 'true'); };
+    // Open/close
+    const openModal = () => modal.setAttribute('aria-hidden','false');
+    const closeModal = () => modal.setAttribute('aria-hidden','true');
+    abrirModal.onclick = openModal;
+    cerrarModal.onclick = closeModal;
+    btnCancelar.onclick = closeModal;
+    modal.addEventListener('click', e => { if(e.target===modal) closeModal(); });
+    window.addEventListener('keydown', e => { if(e.key==='Escape' && modal.getAttribute('aria-hidden')==='false') closeModal(); });
 
-    abrirModal.addEventListener('click', openModal);
-    cerrarModal.addEventListener('click', closeModal);
-    btnCancelar.addEventListener('click', closeModal);
-
-    // Cerrar haciendo click en el fondo
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-    // Cerrar con ESC
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
-    });
-
-    // --- Presets ---
+    // Presets
+    const fmt = d=>d.toISOString().slice(0,10);
+    const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+    const startOfYear=(d)=>{const x=new Date(d);x.setMonth(0,1);return x};
     function applyPreset(kind){
-      const now = new Date();
-      if(kind==='30d'){ hasta.value = fmt(now); desde.value = fmt(addDays(now,-30)); }
-      else if(kind==='90d'){ hasta.value = fmt(now); desde.value = fmt(addDays(now,-90)); }
-      else if(kind==='ytd'){ hasta.value = fmt(now); desde.value = fmt(startOfYear(now)); }
-      else if(kind==='12m'){ hasta.value = fmt(now); desde.value = fmt(addDays(now,-365)); }
-      updateExportState();
-      highlightPreset(kind);
+      const now=new Date();
+      if(kind==='30d'){ hasta.value=fmt(now); desde.value=fmt(addDays(now,-30)); }
+      else if(kind==='90d'){ hasta.value=fmt(now); desde.value=fmt(addDays(now,-90)); }
+      else if(kind==='ytd'){ hasta.value=fmt(now); desde.value=fmt(startOfYear(now)); }
+      else if(kind==='12m'){ hasta.value=fmt(now); desde.value=fmt(addDays(now,-365)); }
+      updateExportState(); highlightPreset(kind);
     }
     function highlightPreset(kind){
       document.querySelectorAll('.preset-btn').forEach(b=>{
@@ -260,58 +255,51 @@
       btn.addEventListener('click', ()=> applyPreset(btn.dataset.preset));
     });
 
-    // --- Select All: marcar/desmarcar todas ---
-    selectAllCats.addEventListener('change', () => {
-      const checked = selectAllCats.checked;
-      catChecks().forEach(cb => cb.checked = checked);
+    // Select All
+    selectAllCats.addEventListener('change', ()=>{
+      catChecks().forEach(cb=>cb.checked=selectAllCats.checked);
       updateExportState();
     });
-
-    // --- Sincroniza el estado del "Seleccionar todo" si cambian categorías individuales ---
-    document.addEventListener('change', (e) => {
-      if (e.target.classList?.contains('cat-check')) {
-        const all = catChecks();
-        const allChecked = all.length > 0 && all.every(cb => cb.checked);
-        selectAllCats.checked = allChecked;
+    document.addEventListener('change', e=>{
+      if(e.target.classList?.contains('cat-check')){
+        const all=catChecks();
+        selectAllCats.checked= all.length>0 && all.every(cb=>cb.checked);
       }
       updateExportState();
     });
 
-    // --- Validación + habilitar Exportar ---
-    function updateExportState() {
-      const cats = catChecks().filter(cb => cb.checked);
-      const formato = document.querySelector('input[name="formato"]:checked');
-      const fechasOK = !!desde.value && !!hasta.value && (desde.value <= hasta.value);
-
-      // Estado botón
-      btnExportar.disabled = !(cats.length > 0 && formato && fechasOK);
-
-      // Mostrar hints por sección
+    // Validación
+    function updateExportState(){
+      const cats=catChecks().filter(cb=>cb.checked);
+      const formato=document.querySelector('input[name="formato"]:checked');
+      const fechasOK=!!desde.value && !!hasta.value && (desde.value<=hasta.value);
+      btnExportar.disabled=!(cats.length>0 && formato && fechasOK);
       cardCats.classList.toggle('invalid', !(cats.length>0));
       cardFormat.classList.toggle('invalid', !Boolean(formato));
       cardDates.classList.toggle('invalid', !fechasOK);
     }
 
-    // --- Acción Exportar: demo con estados "Bajando…" -> "Completado" ---
-    btnExportar.addEventListener('click', async () => {
-      // Aquí invocarías tu export real:
-      // await exportData({ cats: catChecks().filter(c=>c.checked).map(c=>c.value), desde: desde.value, hasta: hasta.value, formato: document.querySelector('input[name="formato"]:checked').value });
-      mensajeStatus.style.display = 'block';
-      mensajeStatus.textContent = 'Bajando…';
-      btnExportar.disabled = true;
+    // Toast
+    function showToast(text, ms=1500){
+      const t=document.getElementById('toast');
+      t.textContent=text;
+      t.classList.add('show');
+      t.scrollIntoView({block:'nearest', behavior:'smooth'});
+      setTimeout(()=>t.classList.remove('show'), ms);
+    }
 
-      // Simulación de trabajo asíncrono
-      setTimeout(() => {
-        mensajeStatus.textContent = '✅ Completado';
-        setTimeout(() => {
-          mensajeStatus.style.display = 'none';
-          btnExportar.disabled = false;
-          closeModal();
-        }, 1200);
-      }, 2000);
+    // Exportar
+    btnExportar.addEventListener('click', ()=>{
+      mensajeStatus.style.display='block';
+      mensajeStatus.textContent='Bajando…';
+      btnExportar.disabled=true;
+      setTimeout(()=>{
+        mensajeStatus.style.display='none';
+        showToast('✅ Completado',1200);
+        setTimeout(()=>{ btnExportar.disabled=false; closeModal(); },1200);
+      },2000);
     });
 
-    // Inicial
     updateExportState();
   </script>
 </body>
