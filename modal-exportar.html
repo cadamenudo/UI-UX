@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modal Exportar Datos · Cada Menudo</title>
+  <style>
+    :root{
+      --brand:#594AE2;
+      --brand-2:#7459D9;
+      --ink:#0f172a;
+      --muted:#64748B;
+      --bg:#f7f8fb;
+      --card:#fff;
+      --shadow:0 10px 30px rgba(15,23,42,.12);
+    }
+    /* Base */
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
+      color:var(--ink);
+      background:var(--bg);
+    }
+    .demo{padding:20px}
+    .btn-primary{
+      background:var(--brand); color:#fff; padding:12px 16px; border-radius:12px;
+      font-weight:700; border:0; cursor:pointer;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; display:none;
+      align-items:center; justify-content:center;
+      padding:20px; background:rgba(2,6,23,.4);
+      backdrop-filter: blur(4px);
+    }
+    .modal[aria-hidden="false"]{ display:flex }
+
+    .dialog{
+      background:var(--card); width:min(760px, 100%);
+      border-radius:20px; box-shadow:var(--shadow); overflow:hidden;
+    }
+    .dialog-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 18px; border-bottom:1px solid #e5e7eb; background:#fff;
+    }
+    .dialog-title{ font-size:1.1rem; font-weight:800 }
+    .dialog-subtitle{ font-size:.9rem; color:var(--muted) }
+
+    .dialog-content{ padding:8px 18px }
+    .grid{ display:grid; grid-template-columns:1fr; gap:12px }
+    .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:14px }
+
+    .formats{ display:grid; grid-template-columns:1fr; gap:8px }
+    .radio{
+      display:flex; align-items:center; gap:10px;
+      border:1px solid #e5e7eb; border-radius:12px; padding:8px;
+    }
+
+    .dialog-footer{
+      padding:14px 18px; border-top:1px solid #e5e7eb; background:#fff;
+      display:flex; flex-direction:column; gap:8px
+    }
+    .btn{
+      border:0; border-radius:12px; padding:12px 14px; font-weight:700; cursor:pointer; width:100%
+    }
+    .btn-secondary{ background:#f3f4f6 }
+    .btn-accent{ background:var(--brand-2); color:#fff }
+    .btn[disabled]{ opacity:.5; cursor:not-allowed }
+    #mensajeStatus{ text-align:center; font-size:.9rem; color:var(--muted); margin-top:6px; display:none }
+
+    /* Mobile bottom-sheet */
+    @media (max-width: 760px){
+      .modal{ align-items:flex-end; padding:0 }
+      .dialog{
+        width:100%; max-width:100%; border-radius:20px 20px 0 0;
+        max-height:86vh; overflow:auto;
+      }
+      .dialog-header{ padding:12px 14px }
+      .dialog-content{ padding:6px 12px 0 }
+      .card{ padding:10px }
+    }
+  </style>
+</head>
+<body>
+  <!-- Botón demo para abrir -->
+  <div class="demo">
+    <button class="btn-primary" id="abrirModal">Abrir modal</button>
+  </div>
+
+  <!-- Modal Exportar -->
+  <div class="modal" id="modalExport" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="tituloModal">
+    <div class="dialog" role="document">
+      <div class="dialog-header">
+        <div>
+          <div class="dialog-title" id="tituloModal">Exportar datos</div>
+          <div class="dialog-subtitle">Elige qué descargar y en qué formato</div>
+        </div>
+        <button class="btn" id="cerrarModal" style="width:auto;background:none" aria-label="Cerrar">✕</button>
+      </div>
+
+      <form class="dialog-content" onsubmit="return false">
+        <div class="grid">
+          <!-- Categorías -->
+          <div class="card">
+            <h3 style="margin:0 0 8px">Categorías</h3>
+            <div id="listaCategorias"></div>
+          </div>
+
+          <!-- Rango de tiempo -->
+          <div class="card">
+            <h3 style="margin:0 0 8px">Rango de tiempo</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+              <input type="date" id="desde" aria-label="Desde" />
+              <input type="date" id="hasta" aria-label="Hasta" />
+            </div>
+          </div>
+
+          <!-- Formato -->
+          <div class="card">
+            <h3 style="margin:0 0 8px">Formato</h3>
+            <div class="formats">
+              <label class="radio"><input type="radio" name="formato" value="csv" /> CSV (.csv)</label>
+              <label class="radio"><input type="radio" name="formato" value="xlsx" /> Excel (.xlsx)</label>
+              <label class="radio"><input type="radio" name="formato" value="gsheet" /> Google Sheets</label>
+              <label class="radio"><input type="radio" name="formato" value="pdf" /> PDF</label>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="dialog-footer">
+        <button class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+        <button class="btn btn-accent" id="btnExportar" disabled>Exportar</button>
+        <div id="mensajeStatus">Bajando…</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Config: categorías visibles en el modal ---
+    const CATEGORIAS = [
+      { id: 'ingresos', nombre: 'Ingresos' },
+      { id: 'gastos', nombre: 'Gastos' },
+      { id: 'ahorro', nombre: 'Ahorro' },
+      { id: 'metas', nombre: 'Metas' },
+      { id: 'transacciones', nombre: 'Transacciones' }
+    ];
+
+    // --- Elementos ---
+    const modal = document.getElementById('modalExport');
+    const abrirModal = document.getElementById('abrirModal');
+    const cerrarModal = document.getElementById('cerrarModal');
+    const btnCancelar = document.getElementById('btnCancelar');
+    const btnExportar = document.getElementById('btnExportar');
+    const mensajeStatus = document.getElementById('mensajeStatus');
+    const listaCategorias = document.getElementById('listaCategorias');
+    const desde = document.getElementById('desde');
+    const hasta = document.getElementById('hasta');
+
+    // --- Render categorías ---
+    CATEGORIAS.forEach(cat => {
+      const label = document.createElement('label');
+      label.className = 'radio';
+      label.innerHTML = `<input type="checkbox" value="${cat.id}" /> ${cat.nombre}`;
+      listaCategorias.appendChild(label);
+    });
+
+    // --- Abrir / cerrar ---
+    const openModal = () => { modal.setAttribute('aria-hidden', 'false'); };
+    const closeModal = () => { modal.setAttribute('aria-hidden', 'true'); };
+
+    abrirModal.addEventListener('click', openModal);
+    cerrarModal.addEventListener('click', closeModal);
+    btnCancelar.addEventListener('click', closeModal);
+
+    // Cerrar haciendo click en el fondo
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // Cerrar con ESC
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
+    });
+
+    // --- Habilitar botón Exportar solo cuando hay selección válida ---
+    function updateExportState() {
+      const cats = [...document.querySelectorAll('#listaCategorias input:checked')];
+      const formato = document.querySelector('input[name="formato"]:checked');
+      const fechasOK = !!desde.value && !!hasta.value && (desde.value <= hasta.value);
+      btnExportar.disabled = !(cats.length > 0 && formato && fechasOK);
+    }
+    document.addEventListener('change', updateExportState);
+
+    // --- Acción Exportar: demo con estados "Bajando…" -> "Completado" ---
+    btnExportar.addEventListener('click', async () => {
+      // Aquí invocarías tu export real:
+      // await exportData({ cats, desde: desde.value, hasta: hasta.value, formato });
+      mensajeStatus.style.display = 'block';
+      mensajeStatus.textContent = 'Bajando…';
+      btnExportar.disabled = true;
+
+      // Simulación de trabajo asíncrono
+      setTimeout(() => {
+        mensajeStatus.textContent = '✅ Completado';
+        setTimeout(() => {
+          mensajeStatus.style.display = 'none';
+          btnExportar.disabled = false;
+          closeModal();
+        }, 1200);
+      }, 2000);
+    });
+
+    // Inicial
+    updateExportState();
+  </script>
+</body>
+</html>
