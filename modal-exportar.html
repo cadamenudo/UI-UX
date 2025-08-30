@@ -13,6 +13,7 @@
       --bg:#f7f8fb;
       --card:#fff;
       --shadow:0 10px 30px rgba(15,23,42,.12);
+      --danger:#ef4444;
       --radius:16px;
     }
     body{
@@ -27,45 +28,72 @@
       font-weight:700; border:0; cursor:pointer;
     }
 
-    /* Modal */
+    /* Modal (top-sheet) */
     .modal{
       position:fixed; inset:0; display:none;
-      align-items:center; justify-content:center;
-      padding:20px; background:rgba(2,6,23,.4);
+      align-items:flex-start; justify-content:center;
+      padding:12px 12px 20px; background:rgba(2,6,23,.4);
       backdrop-filter: blur(4px);
     }
     .modal[aria-hidden="false"]{ display:flex }
 
     .dialog{
       background:var(--card); width:min(760px, 100%);
-      border-radius:20px; box-shadow:var(--shadow); overflow:hidden;
+      border-radius:0 0 20px 20px; /* pegado arriba */
+      box-shadow:var(--shadow); overflow:hidden;
+      margin-top: max(8px, env(safe-area-inset-top));
+      max-height: 92vh; display:flex; flex-direction:column;
     }
     .dialog-header{
       display:flex; align-items:center; justify-content:space-between;
-      padding:16px 18px; border-bottom:1px solid #e5e7eb; background:#fff;
+      padding:12px 14px; border-bottom:1px solid #e5e7eb; background:#fff;
+      position:sticky; top:0; z-index:2;
     }
     .dialog-title{ font-size:1.1rem; font-weight:800 }
     .dialog-subtitle{ font-size:.9rem; color:var(--muted) }
 
-    .dialog-content{ padding:8px 18px }
+    .dialog-content{ padding:10px 14px; overflow:auto }
     .grid{ display:grid; grid-template-columns:1fr; gap:12px }
-    .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:14px }
+    .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:12px }
 
     /* Controles */
-    .two-col{
-      display:grid; grid-template-columns:1fr 1fr; gap:8px;
-    }
+    .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
     .radio{
       display:flex; align-items:center; gap:10px;
       border:1px solid #e5e7eb; border-radius:12px; padding:10px;
     }
     .cat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .cat-header{
+      display:flex; align-items:center; gap:10px; margin-bottom:8px;
+      border:1px dashed #e5e7eb; border-radius:12px; padding:8px 10px; color:var(--muted);
+      font-weight:700;
+    }
     .formats{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+    /* Presets */
+    .preset-bar{
+      display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:8px;
+    }
+    .preset-btn{
+      border:1px solid #e5e7eb; background:#fff; border-radius:999px;
+      padding:8px 10px; font-weight:700; cursor:pointer;
+    }
+    .preset-btn.active{ border-color:#d4d8ff; box-shadow:0 0 0 3px rgba(89,74,226,.15) }
+
+    /* Validación */
+    .hint{
+      font-size:.85rem; margin-top:8px; color:var(--danger); display:none;
+    }
+    .invalid .hint{ display:block; }
+    .invalid .radio, .invalid input[type="date"]{
+      border-color: rgba(239,68,68,.9);
+    }
 
     /* Footer */
     .dialog-footer{
-      padding:14px 18px; border-top:1px solid #e5e7eb; background:#fff;
+      padding:12px 14px; border-top:1px solid #e5e7eb; background:#fff;
       display:grid; gap:8px;
+      position:sticky; bottom:0; z-index:2;
     }
     .btns{
       display:grid; grid-template-columns:1fr 1fr; gap:8px;
@@ -76,22 +104,11 @@
     .btn-secondary{ background:#f3f4f6 }
     .btn-accent{ background:var(--brand-2); color:#fff }
     .btn[disabled]{ opacity:.5; cursor:not-allowed }
-    #mensajeStatus{ text-align:center; font-size:.9rem; color:var(--muted); }
+    #mensajeStatus{ text-align:center; font-size:.9rem; color:var(--muted); display:none }
 
-    /* Mobile bottom-sheet */
-    @media (max-width: 760px){
-      .modal{ align-items:flex-end; padding:0 }
-      .dialog{
-        width:100%; max-width:100%; border-radius:20px 20px 0 0;
-        max-height:86vh; overflow:auto;
-      }
-      .dialog-header{ padding:12px 14px }
-      .dialog-content{ padding:6px 12px 0 }
-      .card{ padding:10px }
-    }
     /* Ultra compacto para pantallas muy estrechas */
     @media (max-width: 340px){
-      .cat-grid, .formats, .btns{ grid-template-columns:1fr; }
+      .cat-grid, .formats, .btns, .preset-bar{ grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -115,22 +132,36 @@
       <form class="dialog-content" onsubmit="return false">
         <div class="grid">
           <!-- Categorías -->
-          <div class="card">
+          <div class="card" id="cardCats">
             <h3 style="margin:0 0 8px">Categorías</h3>
+            <label class="cat-header">
+              <input type="checkbox" id="selectAllCats" aria-label="Seleccionar todas las categorías" />
+              Seleccionar todo
+            </label>
             <div id="listaCategorias" class="cat-grid"></div>
+            <div class="hint">Selecciona al menos una categoría.</div>
           </div>
 
           <!-- Rango de tiempo -->
-          <div class="card">
+          <div class="card" id="cardDates">
             <h3 style="margin:0 0 8px">Rango de tiempo</h3>
+
+            <div class="preset-bar" aria-label="Presets de fecha">
+              <button type="button" class="preset-btn" data-preset="30d">30 días</button>
+              <button type="button" class="preset-btn" data-preset="90d">90 días</button>
+              <button type="button" class="preset-btn" data-preset="ytd">YTD</button>
+              <button type="button" class="preset-btn" data-preset="12m">12 meses</button>
+            </div>
+
             <div class="two-col">
               <input type="date" id="desde" aria-label="Desde" />
               <input type="date" id="hasta" aria-label="Hasta" />
             </div>
+            <div class="hint">Elige un rango válido (Desde ≤ Hasta).</div>
           </div>
 
           <!-- Formato -->
-          <div class="card">
+          <div class="card" id="cardFormat">
             <h3 style="margin:0 0 8px">Formato</h3>
             <div class="formats">
               <label class="radio"><input type="radio" name="formato" value="csv" /> CSV (.csv)</label>
@@ -138,6 +169,7 @@
               <label class="radio"><input type="radio" name="formato" value="gsheet" /> Google Sheets</label>
               <label class="radio"><input type="radio" name="formato" value="pdf" /> PDF</label>
             </div>
+            <div class="hint">Selecciona un formato.</div>
           </div>
         </div>
       </form>
@@ -147,12 +179,17 @@
           <button class="btn btn-secondary" id="btnCancelar">Cancelar</button>
           <button class="btn btn-accent" id="btnExportar" disabled>Exportar</button>
         </div>
-        <div id="mensajeStatus" style="display:none">Bajando…</div>
+        <div id="mensajeStatus">Bajando…</div>
       </div>
     </div>
   </div>
 
   <script>
+    // --- Utilidad de fechas ---
+    const fmt = (d) => d.toISOString().slice(0,10);
+    const addDays = (date, days) => { const x=new Date(date); x.setDate(x.getDate()+days); return x; };
+    const startOfYear = (date) => { const x=new Date(date); x.setMonth(0,1); return x; };
+
     // --- Config: categorías ---
     const CATEGORIAS = [
       { id: 'ingresos', nombre: 'Ingresos' },
@@ -170,16 +207,23 @@
     const btnExportar = document.getElementById('btnExportar');
     const mensajeStatus = document.getElementById('mensajeStatus');
     const listaCategorias = document.getElementById('listaCategorias');
+    const selectAllCats = document.getElementById('selectAllCats');
     const desde = document.getElementById('desde');
     const hasta = document.getElementById('hasta');
+
+    const cardCats = document.getElementById('cardCats');
+    const cardDates = document.getElementById('cardDates');
+    const cardFormat = document.getElementById('cardFormat');
 
     // --- Render categorías (2 columnas) ---
     CATEGORIAS.forEach(cat => {
       const label = document.createElement('label');
       label.className = 'radio';
-      label.innerHTML = `<input type="checkbox" value="${cat.id}" /> ${cat.nombre}`;
+      label.innerHTML = `<input type="checkbox" class="cat-check" value="${cat.id}" /> ${cat.nombre}`;
       listaCategorias.appendChild(label);
     });
+
+    const catChecks = () => Array.from(document.querySelectorAll('.cat-check'));
 
     // --- Abrir / cerrar ---
     const openModal = () => { modal.setAttribute('aria-hidden', 'false'); };
@@ -197,19 +241,61 @@
       if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
     });
 
-    // --- Habilitar botón Exportar solo cuando hay selección válida ---
+    // --- Presets ---
+    function applyPreset(kind){
+      const now = new Date();
+      if(kind==='30d'){ hasta.value = fmt(now); desde.value = fmt(addDays(now,-30)); }
+      else if(kind==='90d'){ hasta.value = fmt(now); desde.value = fmt(addDays(now,-90)); }
+      else if(kind==='ytd'){ hasta.value = fmt(now); desde.value = fmt(startOfYear(now)); }
+      else if(kind==='12m'){ hasta.value = fmt(now); desde.value = fmt(addDays(now,-365)); }
+      updateExportState();
+      highlightPreset(kind);
+    }
+    function highlightPreset(kind){
+      document.querySelectorAll('.preset-btn').forEach(b=>{
+        b.classList.toggle('active', b.dataset.preset===kind);
+      });
+    }
+    document.querySelectorAll('.preset-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> applyPreset(btn.dataset.preset));
+    });
+
+    // --- Select All: marcar/desmarcar todas ---
+    selectAllCats.addEventListener('change', () => {
+      const checked = selectAllCats.checked;
+      catChecks().forEach(cb => cb.checked = checked);
+      updateExportState();
+    });
+
+    // --- Sincroniza el estado del "Seleccionar todo" si cambian categorías individuales ---
+    document.addEventListener('change', (e) => {
+      if (e.target.classList?.contains('cat-check')) {
+        const all = catChecks();
+        const allChecked = all.length > 0 && all.every(cb => cb.checked);
+        selectAllCats.checked = allChecked;
+      }
+      updateExportState();
+    });
+
+    // --- Validación + habilitar Exportar ---
     function updateExportState() {
-      const cats = [...document.querySelectorAll('#listaCategorias input:checked')];
+      const cats = catChecks().filter(cb => cb.checked);
       const formato = document.querySelector('input[name="formato"]:checked');
       const fechasOK = !!desde.value && !!hasta.value && (desde.value <= hasta.value);
+
+      // Estado botón
       btnExportar.disabled = !(cats.length > 0 && formato && fechasOK);
+
+      // Mostrar hints por sección
+      cardCats.classList.toggle('invalid', !(cats.length>0));
+      cardFormat.classList.toggle('invalid', !Boolean(formato));
+      cardDates.classList.toggle('invalid', !fechasOK);
     }
-    document.addEventListener('change', updateExportState);
 
     // --- Acción Exportar: demo con estados "Bajando…" -> "Completado" ---
     btnExportar.addEventListener('click', async () => {
       // Aquí invocarías tu export real:
-      // await exportData({ cats, desde: desde.value, hasta: hasta.value, formato });
+      // await exportData({ cats: catChecks().filter(c=>c.checked).map(c=>c.value), desde: desde.value, hasta: hasta.value, formato: document.querySelector('input[name="formato"]:checked').value });
       mensajeStatus.style.display = 'block';
       mensajeStatus.textContent = 'Bajando…';
       btnExportar.disabled = true;
