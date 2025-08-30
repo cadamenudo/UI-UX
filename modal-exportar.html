@@ -13,8 +13,8 @@
       --bg:#f7f8fb;
       --card:#fff;
       --shadow:0 10px 30px rgba(15,23,42,.12);
+      --radius:16px;
     }
-    /* Base */
     body{
       margin:0;
       font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
@@ -51,23 +51,32 @@
     .grid{ display:grid; grid-template-columns:1fr; gap:12px }
     .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:14px }
 
-    .formats{ display:grid; grid-template-columns:1fr; gap:8px }
+    /* Controles */
+    .two-col{
+      display:grid; grid-template-columns:1fr 1fr; gap:8px;
+    }
     .radio{
       display:flex; align-items:center; gap:10px;
-      border:1px solid #e5e7eb; border-radius:12px; padding:8px;
+      border:1px solid #e5e7eb; border-radius:12px; padding:10px;
     }
+    .cat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .formats{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 
+    /* Footer */
     .dialog-footer{
       padding:14px 18px; border-top:1px solid #e5e7eb; background:#fff;
-      display:flex; flex-direction:column; gap:8px
+      display:grid; gap:8px;
+    }
+    .btns{
+      display:grid; grid-template-columns:1fr 1fr; gap:8px;
     }
     .btn{
-      border:0; border-radius:12px; padding:12px 14px; font-weight:700; cursor:pointer; width:100%
+      border:0; border-radius:12px; padding:12px 14px; font-weight:700; cursor:pointer; width:100%;
     }
     .btn-secondary{ background:#f3f4f6 }
     .btn-accent{ background:var(--brand-2); color:#fff }
     .btn[disabled]{ opacity:.5; cursor:not-allowed }
-    #mensajeStatus{ text-align:center; font-size:.9rem; color:var(--muted); margin-top:6px; display:none }
+    #mensajeStatus{ text-align:center; font-size:.9rem; color:var(--muted); }
 
     /* Mobile bottom-sheet */
     @media (max-width: 760px){
@@ -79,6 +88,10 @@
       .dialog-header{ padding:12px 14px }
       .dialog-content{ padding:6px 12px 0 }
       .card{ padding:10px }
+    }
+    /* Ultra compacto para pantallas muy estrechas */
+    @media (max-width: 340px){
+      .cat-grid, .formats, .btns{ grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -104,13 +117,13 @@
           <!-- Categorías -->
           <div class="card">
             <h3 style="margin:0 0 8px">Categorías</h3>
-            <div id="listaCategorias"></div>
+            <div id="listaCategorias" class="cat-grid"></div>
           </div>
 
           <!-- Rango de tiempo -->
           <div class="card">
             <h3 style="margin:0 0 8px">Rango de tiempo</h3>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+            <div class="two-col">
               <input type="date" id="desde" aria-label="Desde" />
               <input type="date" id="hasta" aria-label="Hasta" />
             </div>
@@ -130,15 +143,17 @@
       </form>
 
       <div class="dialog-footer">
-        <button class="btn btn-secondary" id="btnCancelar">Cancelar</button>
-        <button class="btn btn-accent" id="btnExportar" disabled>Exportar</button>
-        <div id="mensajeStatus">Bajando…</div>
+        <div class="btns">
+          <button class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+          <button class="btn btn-accent" id="btnExportar" disabled>Exportar</button>
+        </div>
+        <div id="mensajeStatus" style="display:none">Bajando…</div>
       </div>
     </div>
   </div>
 
   <script>
-    // --- Config: categorías visibles en el modal ---
+    // --- Config: categorías ---
     const CATEGORIAS = [
       { id: 'ingresos', nombre: 'Ingresos' },
       { id: 'gastos', nombre: 'Gastos' },
@@ -158,7 +173,7 @@
     const desde = document.getElementById('desde');
     const hasta = document.getElementById('hasta');
 
-    // --- Render categorías ---
+    // --- Render categorías (2 columnas) ---
     CATEGORIAS.forEach(cat => {
       const label = document.createElement('label');
       label.className = 'radio';
