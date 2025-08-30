@@ -7,81 +7,71 @@
   <style>
     :root{
       --brand:#594AE2; --brand-2:#7459D9; --ink:#0f172a; --muted:#64748B;
-      --bg:#f7f8fb; --card:#fff; --shadow:0 10px 30px rgba(15,23,42,.12); --danger:#ef4444; --ok:#16a34a;
+      --bg:#f7f8fb; --card:#fff; --shadow:0 10px 30px rgba(15,23,42,.12);
+      --danger:#ef4444; --ok:#16a34a;
     }
-    body{ margin:0; font-family:ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; color:var(--ink); background:var(--bg); }
-    .demo{ padding:20px }
-    .btn-primary{ background:var(--brand); color:#fff; padding:12px 16px; border-radius:12px; font-weight:700; border:0; cursor:pointer; }
+    body{margin:0;font-family:ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;color:var(--ink);background:var(--bg);}
+    .demo{padding:20px}
+    .btn-primary{background:var(--brand);color:#fff;padding:12px 16px;border-radius:12px;font-weight:700;border:0;cursor:pointer;}
 
-    /* Modal (top-sheet) */
-    .modal{ position:fixed; inset:0; display:none; align-items:flex-start; justify-content:center; padding:12px; background:rgba(2,6,23,.4); backdrop-filter:blur(4px); }
-    .modal[aria-hidden="false"]{ display:flex }
-    .dialog{ background:var(--card); width:min(760px,100%); border-radius:0 0 20px 20px; box-shadow:var(--shadow); overflow:hidden;
-      margin-top:max(8px, env(safe-area-inset-top)); max-height:92vh; display:flex; flex-direction:column; position:relative; }
-    .dialog-header{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #e5e7eb; background:#fff; }
-    .dialog-title{ font-size:1.1rem; font-weight:800 } .dialog-subtitle{ font-size:.9rem; color:var(--muted) }
-    .dialog-content{ padding:10px 14px; overflow:auto } .grid{ display:grid; grid-template-columns:1fr; gap:12px }
-    .card{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:12px }
+    /* Modal */
+    .modal{position:fixed;inset:0;display:none;align-items:flex-start;justify-content:center;padding:12px;background:rgba(2,6,23,.4);backdrop-filter:blur(4px);}
+    .modal[aria-hidden="false"]{display:flex}
+    .dialog{background:var(--card);width:min(760px,100%);border-radius:0 0 20px 20px;box-shadow:var(--shadow);overflow:hidden;
+      margin-top:max(8px, env(safe-area-inset-top));max-height:92vh;display:flex;flex-direction:column;position:relative;}
+    .dialog-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #e5e7eb;background:#fff;}
+    .dialog-title{font-size:1.1rem;font-weight:800}.dialog-subtitle{font-size:.9rem;color:var(--muted)}
+    .dialog-content{padding:10px 14px;overflow:auto}.grid{display:grid;gap:12px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:12px}
 
     /* Dropdown categorías */
-    .dropdown{ position:relative }
-    .drop-btn{
-      width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px;
-      border:1px solid #e5e7eb; background:#fff; border-radius:12px; padding:12px; font-weight:700; cursor:pointer;
-      transition:border-color .2s ease;
-    }
-    .drop-btn:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(89,74,226,.2) }
-    .drop-left{ display:flex; align-items:center; gap:8px; min-width:0 }
-    .status{ display:none; align-items:center; gap:6px; white-space:nowrap }
-    .drop-btn.has-selection .status{ display:inline-flex }
-    .check-ico{
-      width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center;
-      background:var(--ok); color:#fff; border-radius:999px; font-size:12px; line-height:1;
-    }
-    .count-badge{
-      display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:22px; padding:0 6px;
-      border-radius:999px; background:#e8faef; color:#065f46; border:1px solid #c7f3d9; font-size:.8rem; font-weight:800;
-    }
-    .drop-label{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .caret{ opacity:.7 }
-
-    .drop-panel{
-      position:absolute; left:0; right:0; top:calc(100% + 6px); background:#fff; border:1px solid #e5e7eb; border-radius:14px;
-      box-shadow:var(--shadow); padding:10px; display:none; max-height:40vh; overflow:auto; z-index:4;
-    }
-    .dropdown.open .drop-panel{ display:block }
-    .drop-actions{ display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px dashed #e5e7eb; border-radius:10px; color:var(--muted); font-weight:700; margin-bottom:8px }
-    .check{ display:flex; align-items:center; gap:10px; border:1px solid #e5e7eb; border-radius:10px; padding:10px; margin-bottom:8px }
+    .dropdown{position:relative}
+    .drop-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border:1px solid #e5e7eb;background:#fff;border-radius:12px;padding:12px;font-weight:700;cursor:pointer;}
+    .drop-left{display:flex;align-items:center;gap:8px;min-width:0}
+    .status{display:none;align-items:center;gap:6px;white-space:nowrap}
+    .drop-btn.has-selection .status{display:inline-flex}
+    .check-ico{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;background:var(--ok);color:#fff;border-radius:999px;font-size:12px;line-height:1}
+    .count-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;
+      background:#e8faef;color:#065f46;border:1px solid #c7f3d9;font-size:.8rem;font-weight:800}
+    .drop-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .caret{opacity:.7}
+    .drop-panel{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:var(--shadow);
+      padding:10px;display:none;max-height:40vh;overflow:auto;z-index:4;}
+    .dropdown.open .drop-panel{display:block}
+    .drop-actions{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px dashed #e5e7eb;border-radius:10px;color:var(--muted);font-weight:700;margin-bottom:8px}
+    .check{display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px}
+    .btn-listo{width:100%;margin-top:8px;background:var(--brand);color:#fff;padding:8px 12px;border:0;border-radius:10px;cursor:pointer;font-weight:700}
 
     /* Fechas y formato */
-    .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
-    .radio{ display:flex; align-items:center; gap:10px; border:1px solid #e5e7eb; border-radius:12px; padding:10px }
-    .formats{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .radio{display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+    .formats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
     /* Presets */
-    .preset-bar{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:8px }
-    .preset-btn{ border:1px solid #e5e7eb; background:#fff; border-radius:999px; padding:8px 10px; font-weight:700; cursor:pointer }
-    .preset-btn.active{ border-color:#d4d8ff; box-shadow:0 0 0 3px rgba(89,74,226,.15) }
+    .preset-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
+    .preset-btn{border:1px solid #e5e7eb;background:#fff;border-radius:999px;padding:8px 10px;font-weight:700;cursor:pointer}
+    .preset-btn.active{border-color:#d4d8ff;box-shadow:0 0 0 3px rgba(89,74,226,.15)}
 
     /* Validación */
-    .hint{ font-size:.85rem; margin-top:8px; color:var(--danger); display:none }
-    .invalid .hint{ display:block }
-    .invalid .radio, .invalid .drop-btn, .invalid input[type="date"]{ border-color:rgba(239,68,68,.9) }
+    .hint{font-size:.85rem;margin-top:8px;color:var(--danger);display:none}
+    .invalid .hint{display:block}
+    .invalid .radio,.invalid .drop-btn,.invalid input[type="date"]{border-color:rgba(239,68,68,.9)}
 
     /* Footer */
-    .dialog-footer{ padding:12px 14px; border-top:1px solid #e5e7eb; background:#fff; display:grid; gap:8px }
-    .btns{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
-    .btn{ border:0; border-radius:12px; padding:12px 14px; font-weight:700; cursor:pointer; width:100% }
-    .btn-secondary{ background:#f3f4f6 } .btn-accent{ background:var(--brand-2); color:#fff } .btn[disabled]{ opacity:.5; cursor:not-allowed }
-    #mensajeStatus{ text-align:center; font-size:.9rem; color:var(--muted); display:none }
+    .dialog-footer{padding:12px 14px;border-top:1px solid #e5e7eb;background:#fff;display:grid;gap:8px}
+    .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .btn{border:0;border-radius:12px;padding:12px 14px;font-weight:700;cursor:pointer;width:100%}
+    .btn-secondary{background:#f3f4f6}.btn-accent{background:var(--brand-2);color:#fff}.btn[disabled]{opacity:.5;cursor:not-allowed}
+    #mensajeStatus{text-align:center;font-size:.9rem;color:var(--muted);display:none}
 
     /* Toast */
-    .toast{ position:absolute; top:8px; left:50%; transform:translateX(-50%) translateY(-10px); background:#0ea5e9; color:#fff;
-      padding:10px 14px; border-radius:12px; font-weight:700; box-shadow:0 8px 20px rgba(2,6,23,.18); z-index:5; pointer-events:none; opacity:0;
-      transition:opacity .2s ease, transform .2s ease }
-    .toast.show{ opacity:1; transform:translateX(-50%) translateY(0) }
+    .toast{position:absolute;top:8px;left:50%;transform:translateX(-50%) translateY(-10px);background:#0ea5e9;color:#fff;
+      padding:10px 14px;border-radius:12px;font-weight:700;box-shadow:0 8px 20px rgba(2,6,23,.18);z-index:5;pointer-events:none;opacity:0;
+      transition:opacity .2s ease,transform .2s ease}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-    @media (max-width:340px){ .formats, .btns, .preset-bar{ grid-template-columns:1fr } }
+    @media(max-width:340px){.formats,.btns,.preset-bar{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -91,7 +81,7 @@
 
   <div class="modal" id="modalExport" aria-hidden="true">
     <div class="dialog">
-      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <div id="toast" class="toast"></div>
 
       <div class="dialog-header">
         <div>
@@ -103,9 +93,9 @@
 
       <form class="dialog-content" onsubmit="return false">
         <div class="grid">
-          <!-- Categorías (dropdown) -->
+          <!-- Categorías -->
           <div class="card" id="cardCats">
-            <h3 style="margin:0 0 8px">Categorías</h3>
+            <h3>Categorías</h3>
             <div class="dropdown" id="catsDropdown">
               <button type="button" class="drop-btn" id="catsBtn" aria-expanded="false">
                 <span class="drop-left">
@@ -115,19 +105,20 @@
                   </span>
                   <span class="drop-label" id="catsLabel">Selecciona categorías</span>
                 </span>
-                <span class="caret" aria-hidden>▾</span>
+                <span class="caret">▾</span>
               </button>
-              <div class="drop-panel" role="menu" aria-label="Categorías">
+              <div class="drop-panel">
                 <label class="drop-actions"><input type="checkbox" id="catsSelectAll"> Seleccionar todo</label>
                 <div id="catsList"></div>
+                <button type="button" class="btn-listo" id="btnCatsListo">Listo</button>
               </div>
             </div>
             <div class="hint">Selecciona al menos una categoría.</div>
           </div>
 
-          <!-- Rango de tiempo -->
+          <!-- Fechas -->
           <div class="card" id="cardDates">
-            <h3 style="margin:0 0 8px">Rango de tiempo</h3>
+            <h3>Rango de tiempo</h3>
             <div class="preset-bar">
               <button type="button" class="preset-btn" data-preset="30d">30 días</button>
               <button type="button" class="preset-btn" data-preset="90d">90 días</button>
@@ -135,19 +126,21 @@
               <button type="button" class="preset-btn" data-preset="12m">12 meses</button>
             </div>
             <div class="two-col">
-              <input type="date" id="desde" aria-label="Desde" />
-              <input type="date" id="hasta" aria-label="Hasta" />
+              <input type="date" id="desde" />
+              <input type="date" id="hasta" />
             </div>
-            <div class="hint">Elige un rango válido (Desde ≤ Hasta).</div>
+            <div class="hint">Elige un rango válido.</div>
           </div>
 
-          <!-- Formato (3 opciones) -->
+          <!-- Formato -->
           <div class="card" id="cardFormat">
-            <h3 style="margin:0 0 8px">Formato</h3>
+            <h3>Formato</h3>
             <div class="formats">
-              <label class="radio"><input type="radio" name="formato" value="xlsx" /> Excel (.xlsx)</label>
-              <label class="radio"><input type="radio" name="formato" value="gsheet" /> Google Sheets</label>
               <label class="radio"><input type="radio" name="formato" value="pdf" /> PDF</label>
+              <label class="radio"><input type="radio" name="formato" value="xlsx" /> Excel (.xlsx)</label>
+              <label class="radio"><input type="radio" name="formato" value="csv" /> CSV (.csv)</label>
+              <label class="radio"><input type="radio" name="formato" value="quickbooks" /> QuickBooks</label>
+              <label class="radio"><input type="radio" name="formato" value="quicken" /> Quicken</label>
             </div>
             <div class="hint">Selecciona un formato.</div>
           </div>
@@ -165,67 +158,99 @@
   </div>
 
   <script>
-    const CATEGORIAS=[{id:'ingresos',nombre:'Ingresos'},{id:'gastos',nombre:'Gastos'},{id:'ahorro',nombre:'Ahorro'},{id:'metas',nombre:'Metas'},{id:'transacciones',nombre:'Transacciones'}];
+    const CATEGORIAS=[
+      {id:'ingresos',nombre:'Ingresos'},
+      {id:'gastos',nombre:'Gastos'},
+      {id:'ahorro',nombre:'Ahorro'},
+      {id:'metas',nombre:'Metas'},
+      {id:'transacciones',nombre:'Transacciones'}
+    ];
 
-    const modal=document.getElementById('modalExport'); const abrirModal=document.getElementById('abrirModal');
-    const cerrarModal=document.getElementById('cerrarModal'); const btnCancelar=document.getElementById('btnCancelar');
-    const btnExportar=document.getElementById('btnExportar'); const mensajeStatus=document.getElementById('mensajeStatus');
-    const cardCats=document.getElementById('cardCats'); const cardDates=document.getElementById('cardDates'); const cardFormat=document.getElementById('cardFormat');
-
-    const catsDropdown=document.getElementById('catsDropdown'); const catsBtn=document.getElementById('catsBtn');
-    const catsLabel=document.getElementById('catsLabel'); const catsBadge=document.getElementById('catsBadge'); const catsStatus=document.getElementById('catsStatus');
-    const catsPanel=catsDropdown.querySelector('.drop-panel'); const catsList=document.getElementById('catsList'); const catsSelectAll=document.getElementById('catsSelectAll');
-
-    const desde=document.getElementById('desde'); const hasta=document.getElementById('hasta');
+    const modal=document.getElementById('modalExport');
+    const abrirModal=document.getElementById('abrirModal');
+    const cerrarModal=document.getElementById('cerrarModal');
+    const btnCancelar=document.getElementById('btnCancelar');
+    const btnExportar=document.getElementById('btnExportar');
+    const mensajeStatus=document.getElementById('mensajeStatus');
+    const cardCats=document.getElementById('cardCats');
+    const cardDates=document.getElementById('cardDates');
+    const cardFormat=document.getElementById('cardFormat');
+    const catsDropdown=document.getElementById('catsDropdown');
+    const catsBtn=document.getElementById('catsBtn');
+    const catsLabel=document.getElementById('catsLabel');
+    const catsBadge=document.getElementById('catsBadge');
+    const catsStatus=document.getElementById('catsStatus');
+    const catsList=document.getElementById('catsList');
+    const catsSelectAll=document.getElementById('catsSelectAll');
+    const btnCatsListo=document.getElementById('btnCatsListo');
+    const desde=document.getElementById('desde');
+    const hasta=document.getElementById('hasta');
 
     // Render categorías
     CATEGORIAS.forEach(cat=>{
-      const lab=document.createElement('label'); lab.className='check';
+      const lab=document.createElement('label');
+      lab.className='check';
       lab.innerHTML=`<input type="checkbox" class="cat-check" value="${cat.id}" /> ${cat.nombre}`;
       catsList.appendChild(lab);
     });
     const catChecks=()=>Array.from(document.querySelectorAll('.cat-check'));
 
     // Abrir/cerrar modal
-    const openModal=()=>modal.setAttribute('aria-hidden','false'); const closeModal=()=>modal.setAttribute('aria-hidden','true');
-    abrirModal.onclick=openModal; cerrarModal.onclick=closeModal; btnCancelar.onclick=closeModal;
-    modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
-    window.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.getAttribute('aria-hidden')==='false')closeModal();});
+    abrirModal.onclick=()=>modal.setAttribute('aria-hidden','false');
+    cerrarModal.onclick=()=>modal.setAttribute('aria-hidden','true');
+    btnCancelar.onclick=()=>modal.setAttribute('aria-hidden','true');
+    modal.addEventListener('click',e=>{if(e.target===modal)modal.setAttribute('aria-hidden','true')});
+    window.addEventListener('keydown',e=>{if(e.key==='Escape')modal.setAttribute('aria-hidden','true')});
 
-    // Dropdown
-    catsBtn.addEventListener('click',()=>{const isOpen=catsDropdown.classList.toggle('open'); catsBtn.setAttribute('aria-expanded',String(isOpen)); if(isOpen){catsPanel.scrollTop=0;}});
-    document.addEventListener('click',e=>{if(!catsDropdown.contains(e.target)&&!catsBtn.contains(e.target)){catsDropdown.classList.remove('open'); catsBtn.setAttribute('aria-expanded','false');}});
+    // Dropdown categorías
+    catsBtn.addEventListener('click',()=>{
+      catsDropdown.classList.toggle('open');
+    });
+    btnCatsListo.addEventListener('click',()=>{
+      catsDropdown.classList.remove('open');
+      catsBtn.setAttribute('aria-expanded','false');
+    });
+    document.addEventListener('click',e=>{
+      if(!catsDropdown.contains(e.target)&&!catsBtn.contains(e.target)){
+        catsDropdown.classList.remove('open');
+        catsBtn.setAttribute('aria-expanded','false');
+      }
+    });
 
     // Select All
-    catsSelectAll.addEventListener('change',()=>{catChecks().forEach(cb=>cb.checked=catsSelectAll.checked); updateCatsVisuals(); updateExportState();});
-    catsList.addEventListener('change',e=>{
-      if(e.target.classList.contains('cat-check')){
-        const all=catChecks(); catsSelectAll.checked=all.length>0&&all.every(cb=>cb.checked);
-        updateCatsVisuals(); updateExportState();
-        // Auto-cerrar dropdown si hay al menos 1 seleccionado (y no fue el toggle global)
-        if(catChecks().some(cb=>cb.checked) && e.target !== catsSelectAll){
-          catsDropdown.classList.remove('open'); catsBtn.setAttribute('aria-expanded','false');
-        }
-      }
+    catsSelectAll.addEventListener('change',()=>{
+      catChecks().forEach(cb=>cb.checked=catsSelectAll.checked);
+      updateCatsVisuals();updateExportState();
+    });
+    catsList.addEventListener('change',()=>{
+      const all=catChecks();
+      catsSelectAll.checked=all.length>0&&all.every(cb=>cb.checked);
+      updateCatsVisuals();updateExportState();
     });
 
     function updateCatsVisuals(){
       const count=catChecks().filter(cb=>cb.checked).length;
-      catsBadge.textContent = count;
-      catsBtn.classList.toggle('has-selection', count>0);
-      catsStatus.style.display = count>0 ? 'inline-flex' : 'none';
-      catsLabel.textContent = count>0 ? `${count} categoría${count>1?'s':''}` : 'Selecciona categorías';
+      catsBadge.textContent=count;
+      catsBtn.classList.toggle('has-selection',count>0);
+      catsStatus.style.display=count>0?'inline-flex':'none';
+      catsLabel.textContent=count>0?`${count} categoría${count>1?'s':''}`:'Selecciona categorías';
     }
 
-    // Presets
-    const fmt=d=>d.toISOString().slice(0,10); const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x}; const startOfYear=d=>{const x=new Date(d);x.setMonth(0,1);return x};
-    function applyPreset(kind){const now=new Date(); if(kind==='30d'){hasta.value=fmt(now);desde.value=fmt(addDays(now,-30));}
+    // Presets de fechas
+    const fmt=d=>d.toISOString().slice(0,10);
+    const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+    const startOfYear=d=>{const x=new Date(d);x.setMonth(0,1);return x};
+    function applyPreset(kind){
+      const now=new Date();
+      if(kind==='30d'){hasta.value=fmt(now);desde.value=fmt(addDays(now,-30));}
       else if(kind==='90d'){hasta.value=fmt(now);desde.value=fmt(addDays(now,-90));}
       else if(kind==='ytd'){hasta.value=fmt(now);desde.value=fmt(startOfYear(now));}
       else if(kind==='12m'){hasta.value=fmt(now);desde.value=fmt(addDays(now,-365));}
-      updateExportState(); highlightPreset(kind);}
-    function highlightPreset(kind){document.querySelectorAll('.preset-btn').forEach(b=>b.classList.toggle('active',b.dataset.preset===kind));}
-    document.querySelectorAll('.preset-btn').forEach(btn=>{btn.addEventListener('click',()=>applyPreset(btn.dataset.preset));});
+      updateExportState();
+    }
+    document.querySelectorAll('.preset-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>applyPreset(btn.dataset.preset));
+    });
 
     // Validación
     document.addEventListener('change',updateExportState);
@@ -233,35 +258,29 @@
       const cats=catChecks().filter(cb=>cb.checked);
       const formato=document.querySelector('input[name="formato"]:checked');
       const fechasOK=!!desde.value&&!!hasta.value&&(desde.value<=hasta.value);
-
-      btnExportar.disabled = !(cats.length>0 && formato && fechasOK);
-
-      cardCats.classList.toggle('invalid', !(cats.length>0));
-      cardFormat.classList.toggle('invalid', !Boolean(formato));
-      cardDates.classList.toggle('invalid', !fechasOK);
+      btnExportar.disabled=!(cats.length>0&&formato&&fechasOK);
+      cardCats.classList.toggle('invalid',!(cats.length>0));
+      cardFormat.classList.toggle('invalid',!formato);
+      cardDates.classList.toggle('invalid',!fechasOK);
     }
 
     // Toast
     function showToast(text,ms=1500){
       const t=document.getElementById('toast');
-      t.textContent=text; t.classList.add('show');
-      t.scrollIntoView({block:'nearest', behavior:'smooth'});
-      setTimeout(()=> t.classList.remove('show'), ms);
+      t.textContent=text;t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),ms);
     }
 
     // Export demo
     btnExportar.addEventListener('click',()=>{
-      mensajeStatus.style.display='block'; mensajeStatus.textContent='Bajando…';
-      btnExportar.disabled=true;
+      mensajeStatus.style.display='block';mensajeStatus.textContent='Bajando…';btnExportar.disabled=true;
       setTimeout(()=>{
-        mensajeStatus.style.display='none';
-        showToast('✅ Completado',1200);
-        setTimeout(()=>{ btnExportar.disabled=false; closeModal(); },1200);
+        mensajeStatus.style.display='none';showToast('✅ Completado',1200);
+        setTimeout(()=>{btnExportar.disabled=false;modal.setAttribute('aria-hidden','true');},1200);
       },2000);
     });
 
-    // Inicial
-    updateCatsVisuals(); updateExportState();
+    updateCatsVisuals();updateExportState();
   </script>
 </body>
 </html>
