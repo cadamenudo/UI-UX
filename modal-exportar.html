@@ -44,14 +44,21 @@
     .dropdown.open .drop-panel{display:block}
     .drop-actions{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px dashed #e5e7eb;border-radius:10px;color:var(--muted);font-weight:700;margin-bottom:8px}
     .check{display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px}
-    .btn-listo{
-      position:sticky;bottom:0;left:0;right:0;
-      background:var(--brand);color:#fff;padding:10px 12px;
-      border:0;border-top:1px solid #e5e7eb;
-      border-radius:0 0 12px 12px;
-      cursor:pointer;font-weight:700;text-align:center;
-    }
-
+.btn-listo{
+  position: sticky;
+  bottom: 10px; /* un poco despegado del borde */
+  margin: 12px auto; /* centra horizontalmente */
+  width: auto;       /* no ocupar todo el ancho */
+  padding: 8px 20px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* para destacarlo */
+}
     /* Fechas y formato */
     .two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .radio{display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;border-radius:12px;padding:10px}
