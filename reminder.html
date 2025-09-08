@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Modal de Reminder — Cada Menudo</title>
+
+<link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+
+<style>
+  :root{
+    --cm-primary:#3956E8;
+    --cm-secondary:#7459D9;
+    --cm-accent:#E8C239;
+    --cm-bg:#f7f8fa;
+    --cm-text:#111;
+    --cm-muted:#64748B;
+    --cm-border:#e5e7eb;
+    --radius:16px;
+  }
+  body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;
+       margin:0; background:var(--cm-bg); color:var(--cm-text)}
+  /* Demo button */
+  .demo{
+    display:flex; align-items:center; justify-content:center; min-height:100dvh;
+  }
+  .btn{
+    background:var(--cm-primary); color:#fff; border:none; border-radius:999px;
+    padding:.9rem 1.25rem; font-weight:700; cursor:pointer; box-shadow:0 6px 20px rgba(57,86,232,.25);
+  }
+  .btn:disabled{opacity:.6; cursor:not-allowed}
+  .btn-outline{background:#fff; color:var(--cm-primary); border:2px solid var(--cm-primary)}
+  .btn-muted{background:#fff; color:#111; border:1px solid var(--cm-border)}
+  .btn-danger{background:#ef4444; color:#fff}
+  .btn-ghost{background:transparent; border:none; color:var(--cm-muted)}
+
+  /* Overlay & modal */
+  .overlay{position:fixed; inset:0; background:rgba(17,24,39,.48); display:none; z-index:9998}
+  .overlay.show{display:block}
+  .modal{position:fixed; inset:0; display:grid; place-items:center; z-index:9999; padding:16px; pointer-events:none}
+  .modal.show{pointer-events:auto}
+  .sheet{
+    width:min(720px,100%); background:#fff; border-radius:var(--radius);
+    box-shadow:0 24px 80px rgba(2,6,23,.30); overflow:hidden; transform:translateY(12px); opacity:0;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .modal.show .sheet{transform:translateY(0); opacity:1}
+  .hdr{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:18px 20px; border-bottom:1px solid var(--cm-border); background:linear-gradient(0deg,#fff, #fafbff);
+  }
+  .hdr h2{margin:0; font-size:1.15rem}
+  .hdr .badge{display:inline-flex; align-items:center; gap:.4rem; background:rgba(57,86,232,.08); color:var(--cm-primary);
+    padding:.25rem .6rem; border-radius:999px; font-size:.8rem; font-weight:700}
+  .body{padding:18px 20px}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media (max-width:720px){ .grid{grid-template-columns:1fr} .hdr{padding:16px} .body{padding:14px} }
+
+  .field{display:flex; flex-direction:column; gap:6px}
+  label{font-size:.9rem; color:var(--cm-muted); font-weight:700}
+  input[type="text"], input[type="date"], input[type="time"], select, textarea{
+    width:100%; border:1px solid var(--cm-border); border-radius:12px; padding:.8rem .9rem; font:inherit; background:#fff;
+  }
+  textarea{min-height:92px; resize:vertical}
+  .inline{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .chip{
+    display:inline-flex; align-items:center; gap:.45rem; border:1px solid var(--cm-border); padding:.45rem .7rem;
+    border-radius:999px; cursor:pointer; user-select:none; font-size:.9rem;
+  }
+  .chip input{accent-color:var(--cm-primary)}
+  .muted{color:var(--cm-muted); font-size:.85rem}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .row.push{justify-content:space-between}
+  .ft{
+    display:flex; gap:10px; justify-content:space-between; align-items:center; padding:14px 16px; border-top:1px solid var(--cm-border);
+    background:#fff; position:sticky; bottom:0
+  }
+  .ft .l, .ft .r{display:flex; gap:10px; align-items:center}
+  .req{color:#ef4444}
+
+  /* Custom recurrence row */
+  .days{display:flex; gap:6px; flex-wrap:wrap}
+  .day{
+    width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--cm-border); border-radius:10px; cursor:pointer;
+    user-select:none; font-weight:700; color:var(--cm-muted); background:#fff;
+  }
+  .day[aria-pressed="true"]{background:var(--cm-primary); color:#fff; border-color:var(--cm-primary)}
+
+  /* Toast */
+  .toast{position:fixed; right:16px; bottom:16px; background:#111; color:#fff; padding:.8rem 1rem; border-radius:12px;
+         box-shadow:0 10px 30px rgba(0,0,0,.25); opacity:0; transform:translateY(12px); pointer-events:none}
+  .toast.show{opacity:1; transform:translateY(0); transition:opacity .2s, transform .2s}
+</style>
+</head>
+<body>
+
+<div class="demo">
+  <button class="btn" onclick="openReminderModal()">+ Nuevo reminder</button>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="rem-overlay" hidden></div>
+
+<!-- Modal -->
+<div class="modal" id="rem-modal" role="dialog" aria-modal="true" aria-labelledby="rem-title" hidden>
+  <div class="sheet" role="document">
+    <div class="hdr">
+      <h2 id="rem-title">Nuevo recordatorio</h2>
+      <span class="badge">Cada Menudo • Reminder</span>
+      <button class="btn-ghost" aria-label="Cerrar" id="rem-close">✕</button>
+    </div>
+
+    <form class="body" id="rem-form">
+      <div class="grid">
+        <div class="field">
+          <label for="rem-name">Título <span class="req">*</span></label>
+          <input id="rem-name" name="name" type="text" placeholder="Ej: Pagar tarjeta / Revisar presupuesto" required />
+        </div>
+
+        <div class="field">
+          <label for="rem-type">Tipo</label>
+          <select id="rem-type" name="type">
+            <option value="custom">Personalizado</option>
+            <option value="bill">Pago de factura</option>
+            <option value="budget">Revisión de presupuesto</option>
+            <option value="goal">Aporte a meta</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="rem-date">Fecha <span class="req">*</span></label>
+          <input id="rem-date" name="date" type="date" required />
+        </div>
+
+        <div class="field">
+          <label for="rem-time">Hora <span class="req">*</span></label>
+          <input id="rem-time" name="time" type="time" required />
+        </div>
+
+        <div class="field">
+          <label for="rem-recur">Recurrencia</label>
+          <select id="rem-recur" name="recur">
+            <option value="once">Una vez</option>
+            <option value="daily">Diario</option>
+            <option value="weekly">Semanal</option>
+            <option value="monthly">Mensual</option>
+            <option value="custom">Custom (elige días)</option>
+          </select>
+        </div>
+
+        <div class="field" id="custom-days" style="display:none">
+          <label>Días de la semana</label>
+          <div class="days" role="group" aria-label="Días">
+            <!-- L M X J V S D -->
+            <button type="button" class="day" data-day="MO" aria-pressed="false">L</button>
+            <button type="button" class="day" data-day="TU" aria-pressed="false">M</button>
+            <button type="button" class="day" data-day="WE" aria-pressed="false">X</button>
+            <button type="button" class="day" data-day="TH" aria-pressed="false">J</button>
+            <button type="button" class="day" data-day="FR" aria-pressed="false">V</button>
+            <button type="button" class="day" data-day="SA" aria-pressed="false">S</button>
+            <button type="button" class="day" data-day="SU" aria-pressed="false">D</button>
+          </div>
+          <span class="muted">Selecciona 1+ días si eliges “Custom”.</span>
+        </div>
+
+        <div class="field">
+          <label>Canales</label>
+          <div class="inline">
+            <label class="chip"><input type="checkbox" name="push" checked> Push</label>
+            <label class="chip"><input type="checkbox" name="email"> Email</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Opciones rápidas (snooze)</label>
+          <div class="inline">
+            <button class="btn-muted" type="button" data-snooze="10m">+10 min</button>
+            <button class="btn-muted" type="button" data-snooze="60m">+1 h</button>
+            <button class="btn-muted" type="button" data-snooze="tomorrow9">Mañana 9:00</button>
+          </div>
+          <span class="muted">Ajusta rápidamente la hora antes de guardar.</span>
+        </div>
+
+        <div class="field" style="grid-column:1/-1">
+          <label for="rem-notes">Notas</label>
+          <textarea id="rem-notes" name="notes" placeholder="Detalle opcional…"></textarea>
+        </div>
+      </div>
+    </form>
+
+    <div class="ft">
+      <div class="l">
+        <button class="btn-ghost" id="rem-delete" style="display:none">Eliminar</button>
+      </div>
+      <div class="r">
+        <button class="btn-outline" type="button" id="rem-cancel">Cancelar</button>
+        <button class="btn" id="rem-save">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="rem-toast" role="status" aria-live="polite">Recordatorio guardado ✅</div>
+
+<script>
+/* -------- Minimal modal API -------- */
+const overlay = document.getElementById('rem-overlay');
+const modal   = document.getElementById('rem-modal');
+const form    = document.getElementById('rem-form');
+const toast   = document.getElementById('rem-toast');
+const recur   = document.getElementById('rem-recur');
+const customDays = document.getElementById('custom-days');
+const closeBtn= document.getElementById('rem-close');
+const cancelBtn=document.getElementById('rem-cancel');
+const saveBtn = document.getElementById('rem-save');
+const deleteBtn=document.getElementById('rem-delete');
+let lastFocused = null;
+
+function openReminderModal(data){
+  lastFocused = document.activeElement;
+  overlay.hidden=false; overlay.classList.add('show');
+  modal.hidden=false; modal.classList.add('show');
+  // Defaults
+  const now = new Date();
+  const pad = n=>String(n).padStart(2,'0');
+  const today = now.toISOString().slice(0,10);
+  const time  = pad(now.getHours())+':'+pad(Math.max(now.getMinutes()+5,0));
+  form.reset();
+  document.getElementById('rem-name').value = data?.name || '';
+  document.getElementById('rem-type').value = data?.type || 'custom';
+  document.getElementById('rem-date').value = data?.date || today;
+  document.getElementById('rem-time').value = data?.time || time;
+  document.getElementById('rem-notes').value= data?.notes || '';
+  document.querySelector('input[name="push"]').checked = data?.push ?? true;
+  document.querySelector('input[name="email"]').checked= !!data?.email;
+  recur.value = data?.recur || 'once';
+  customDays.style.display = recur.value==='custom' ? '' : 'none';
+  // Preselect custom days if provided
+  document.querySelectorAll('.day').forEach(btn=>{
+    btn.setAttribute('aria-pressed', data?.days?.includes(btn.dataset.day) ? 'true' : 'false');
+  });
+  // Focus first field
+  setTimeout(()=>document.getElementById('rem-name').focus(), 10);
+  trapFocus(true);
+}
+function closeReminderModal(){
+  overlay.classList.remove('show'); modal.classList.remove('show');
+  setTimeout(()=>{ overlay.hidden=true; modal.hidden=true; }, 160);
+  trapFocus(false);
+  if(lastFocused) lastFocused.focus();
+}
+window.openReminderModal = openReminderModal;
+window.closeReminderModal = closeReminderModal;
+
+/* -------- UI interactions -------- */
+overlay.addEventListener('click', closeReminderModal);
+closeBtn.addEventListener('click', closeReminderModal);
+cancelBtn.addEventListener('click', closeReminderModal);
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && !modal.hidden) closeReminderModal(); });
+
+recur.addEventListener('change', ()=>{
+  customDays.style.display = recur.value==='custom' ? '' : 'none';
+});
+
+document.querySelectorAll('.day').forEach(btn=>{
+  btn.addEventListener('click', ()=> {
+    const pressed = btn.getAttribute('aria-pressed')==='true';
+    btn.setAttribute('aria-pressed', String(!pressed));
+  });
+});
+
+document.querySelectorAll('[data-snooze]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    const t = document.getElementById('rem-time');
+    const d = document.getElementById('rem-date');
+    const [h,m] = (t.value || '09:00').split(':').map(Number);
+    const base = new Date(d.value || new Date().toISOString().slice(0,10));
+    base.setHours(h||9, m||0, 0, 0);
+    const kind = b.dataset.snooze;
+    if(kind==='10m') base.setMinutes(base.getMinutes()+10);
+    else if(kind==='60m') base.setMinutes(base.getMinutes()+60);
+    else if(kind==='tomorrow9'){ base.setDate(base.getDate()+1); base.setHours(9,0,0,0);}
+    const pad=n=>String(n).padStart(2,'0');
+    d.value = base.toISOString().slice(0,10);
+    t.value = pad(base.getHours())+':'+pad(base.getMinutes());
+  });
+});
+
+/* -------- Save (emit event payload) -------- */
+saveBtn.addEventListener('click', (e)=>{
+  e.preventDefault();
+  if(!form.reportValidity()){
+    showToast('Completa los campos requeridos ⚠️');
+    return;
+  }
+  const days = Array.from(document.querySelectorAll('.day[aria-pressed="true"]')).map(b=>b.dataset.day);
+  if(recur.value==='custom' && days.length===0){
+    showToast('Elige al menos un día para “Custom” ⚠️'); return;
+  }
+  const payload = {
+    name: form.name.value.trim(),
+    type: form.type.value,
+    date: form.date.value,
+    time: form.time.value,
+    recur: form.recur.value,
+    days: days,
+    push: form.push.checked,
+    email: form.email.checked,
+    notes: form.notes.value.trim()
+  };
+  // Dispara evento para que la app consuma
+  window.dispatchEvent(new CustomEvent('reminder:create', { detail: payload }));
+  showToast('Recordatorio guardado ✅');
+  closeReminderModal();
+});
+
+/* -------- A11y focus trap -------- */
+let focusables = [];
+function trapFocus(enable){
+  if(enable){
+    focusables = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const first = focusables[0];
+    const last  = focusables[focusables.length-1];
+    modal.addEventListener('keydown', handleTrap);
+    function handleTrap(e){
+      if(e.key!=='Tab') return;
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  } else {
+    modal.removeEventListener('keydown', handleTrap);
+  }
+}
+
+/* -------- Toast -------- */
+let toastTimer;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove('show'), 2200);
+}
+
+// Auto-open example (delete in prod)
+// openReminderModal();
+
+</script>
+</body>
+</html>
