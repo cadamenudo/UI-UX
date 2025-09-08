@@ -15,8 +15,6 @@
 body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial; margin:0; background:var(--cm-bg); color:var(--cm-text)}
 .header{position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--cm-border); padding:14px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between}
 .header h1{margin:0; font-size:1.1rem}
-.search{flex:1; display:flex; gap:8px}
-.search input{flex:1; padding:.7rem .9rem; border:1px solid var(--cm-border); border-radius:999px; font:inherit}
 .btn{background:var(--cm-primary); color:#fff; border:none; border-radius:999px; padding:.7rem 1rem; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(57,86,232,.25)}
 .btn-outline{background:#fff; color:var(--cm-primary); border:2px solid var(--cm-primary)}
 .container{max-width:820px; margin:10px auto; padding:0 12px 80px}
@@ -32,12 +30,11 @@ body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'
 .actions{display:flex; gap:6px}
 .iconbtn{border:1px solid var(--cm-border); background:#fff; padding:.45rem .6rem; border-radius:10px; cursor:pointer}
 .iconbtn.danger{border-color:#fecaca; color:#b91c1c}
-.empty{background:#fff; border:1px dashed var(--cm-border); padding:22px; border-radius:14px; text-align:center; color:var(--cm-muted)}
-.fab{position:fixed; right:18px; bottom:18px; z-index:40; display:flex; gap:10px}
+.empty{background:#fff; border:1px dashed var(--cm-border); padding:22px; border-radius:14px; text-align:center; color:#var(--cm-muted)}
 .toast{position:fixed; right:16px; bottom:86px; background:#111; color:#fff; padding:.8rem 1rem; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.25); opacity:0; transform:translateY(12px); pointer-events:none}
 .toast.show{opacity:1; transform:translateY(0); transition:opacity .2s, transform .2s}
 
-/* ===== Modal (mismo estilo del prototipo anterior, reducido) ===== */
+/* ===== Modal ===== */
 .overlay{position:fixed; inset:0; background:rgba(17,24,39,.48); display:none; z-index:9998}
 .overlay.show{display:block}
 .modal{position:fixed; inset:0; display:grid; place-items:center; z-index:9999; padding:16px; pointer-events:none}
@@ -58,7 +55,7 @@ input[type="text"], input[type="date"], input[type="time"], select, textarea{
 }
 textarea{min-height:90px}
 .days{display:flex; gap:6px; flex-wrap:wrap}
-.day{width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--cm-border); border-radius:10px; cursor:pointer; user-select:none; font-weight:700; color:var(--cm-muted); background:#fff}
+.day{width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--cm-border); border-radius:10px; cursor:pointer; user-select:none; font-weight:700; color:#var(--cm-muted); background:#fff}
 .day[aria-pressed="true"]{background:var(--cm-primary); color:#fff; border-color:var(--cm-primary)}
 .ft{display:flex; gap:10px; justify-content:flex-end; align-items:center; padding:12px 14px; border-top:1px solid var(--cm-border); background:#fff}
 .btn-ghost{background:transparent; border:none; color:var(--cm-muted); cursor:pointer}
@@ -74,11 +71,9 @@ textarea{min-height:90px}
 </div>
 
 <!-- Content -->
-<div class="container" id="list">
-  <!-- Secciones se inyectan por JS -->
-</div>
+<div class="container" id="list"></div>
 
-<!-- Empty state (oculto si hay items) -->
+<!-- Empty state -->
 <template id="tpl-empty">
   <div class="empty">
     <p><strong>Sin recordatorios</strong></p>
@@ -111,11 +106,6 @@ textarea{min-height:90px}
     <div class="items"></div>
   </div>
 </template>
-
-<!-- FAB -->
-<div class="fab">
-  <button class="btn" id="btn-new">+ Nuevo</button>
-</div>
 
 <!-- Toast -->
 <div class="toast" id="toast" role="status" aria-live="polite">Hecho ✅</div>
@@ -195,7 +185,6 @@ const toast = $('#toast');
 function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 2000); }
 function pad(n){ return String(n).padStart(2,'0'); }
 function isoLocalDate(d){ const z= new Date(d); z.setMinutes(z.getMinutes()-z.getTimezoneOffset()); return z.toISOString().slice(0,10); }
-function todayISO(){ return isoLocalDate(new Date()); }
 function tomorrowISO(){ const d= new Date(); d.setDate(d.getDate()+1); return isoLocalDate(d); }
 function parseDT(dateISO, timeHM){ const [h,m]=timeHM.split(':').map(Number); const d=new Date(dateISO); d.setHours(h||0,m||0,0,0); return d; }
 function fmtTime(hm){const [h,m]=hm.split(':').map(Number); const d=new Date(); d.setHours(h,m); return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});}
@@ -237,14 +226,9 @@ function recurBadge(item){
 }
 function typeBadge(t){ const map={custom:'Personal', bill:'Factura', budget:'Presupuesto', goal:'Meta'}; return map[t]||t; }
 
-function render(filter=''){
+function render(){
   listEl.innerHTML='';
   const items = loadAll()
-    .filter(x=>{
-      if(!filter) return true;
-      const q=filter.toLowerCase();
-      return (x.name||'').toLowerCase().includes(q) || (x.notes||'').toLowerCase().includes(q);
-    })
     .sort((a,b)=> parseDT(a.date,a.time) - parseDT(b.date,b.time));
 
   if(items.length===0){ listEl.appendChild($('#tpl-empty').content.cloneNode(true)); return; }
@@ -278,9 +262,7 @@ function render(filter=''){
 }
 
 /* ===== CRUD UI ===== */
-$('#btn-new').addEventListener('click', ()=> openModal());
-$('#btn-clear').addEventListener('click', ()=>{ $('#q').value=''; render(''); });
-$('#q').addEventListener('input', (e)=> render(e.target.value.trim()));
+document.getElementById('btn-new').addEventListener('click', ()=> openModal());
 
 function editItem(id){
   const it = loadAll().find(x=>x.id===id);
@@ -288,14 +270,13 @@ function editItem(id){
   openModal(it);
 }
 function delItem(id){
-  if(confirm('¿Eliminar este recordatorio?')){ removeById(id); render($('#q').value.trim()); showToast('Eliminado'); }
+  if(confirm('¿Eliminar este recordatorio?')){ removeById(id); render(); showToast('Eliminado'); }
 }
 
 /* ===== Modal logic ===== */
 const ovl = $('#ovl'), mdl=$('#mdl'), frm=$('#frm');
 const rowDays = $('#row-days'), recur = $('#recur');
 function openModal(data){
-  // defaults
   frm.reset();
   $('#ttl').textContent = data?.id ? 'Editar recordatorio' : 'Nuevo recordatorio';
   $('#rem-id').value = data?.id || '';
@@ -348,12 +329,12 @@ $('#btn-save').addEventListener('click', (e)=>{
     notes: $('#notes').value.trim()
   };
   upsert(item);
-  render($('#q').value.trim());
+  render();
   closeModal();
   showToast('Guardado ✅');
 });
 
-/* ===== Seed demo (opcional primera carga) ===== */
+/* ===== Seed demo (solo primera carga) ===== */
 (function seed(){
   if(loadAll().length) { render(); return; }
   const demo=[
@@ -364,9 +345,6 @@ $('#btn-save').addEventListener('click', (e)=>{
   demo.forEach(d=>upsert(d));
   render();
 })();
-
-/* Render initial */
-render();
 </script>
 </body>
 </html>
