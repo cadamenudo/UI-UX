@@ -1,145 +1,163 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Modal de Reminder — Cada Menudo</title>
-
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Recordatorios — Cada Menudo</title>
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
-
 <style>
-  :root{
-    --cm-primary:#3956E8;
-    --cm-secondary:#7459D9;
-    --cm-accent:#E8C239;
-    --cm-bg:#f7f8fa;
-    --cm-text:#111;
-    --cm-muted:#64748B;
-    --cm-border:#e5e7eb;
-    --radius:16px;
-  }
-  body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;
-       margin:0; background:var(--cm-bg); color:var(--cm-text)}
-  /* Demo button */
-  .demo{
-    display:flex; align-items:center; justify-content:center; min-height:100dvh;
-  }
-  .btn{
-    background:var(--cm-primary); color:#fff; border:none; border-radius:999px;
-    padding:.9rem 1.25rem; font-weight:700; cursor:pointer; box-shadow:0 6px 20px rgba(57,86,232,.25);
-  }
-  .btn:disabled{opacity:.6; cursor:not-allowed}
-  .btn-outline{background:#fff; color:var(--cm-primary); border:2px solid var(--cm-primary)}
-  .btn-muted{background:#fff; color:#111; border:1px solid var(--cm-border)}
-  .btn-danger{background:#ef4444; color:#fff}
-  .btn-ghost{background:transparent; border:none; color:var(--cm-muted)}
+:root{
+  --cm-primary:#3956E8; --cm-secondary:#7459D9; --cm-accent:#E8C239;
+  --cm-bg:#f7f8fa; --cm-text:#111; --cm-muted:#64748B; --cm-border:#e5e7eb;
+  --radius:16px;
+}
+*{box-sizing:border-box}
+body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial; margin:0; background:var(--cm-bg); color:var(--cm-text)}
+.header{position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--cm-border); padding:14px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between}
+.header h1{margin:0; font-size:1.1rem}
+.search{flex:1; display:flex; gap:8px}
+.search input{flex:1; padding:.7rem .9rem; border:1px solid var(--cm-border); border-radius:999px; font:inherit}
+.btn{background:var(--cm-primary); color:#fff; border:none; border-radius:999px; padding:.7rem 1rem; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(57,86,232,.25)}
+.btn-outline{background:#fff; color:var(--cm-primary); border:2px solid var(--cm-primary)}
+.container{max-width:820px; margin:10px auto; padding:0 12px 80px}
+.section{margin:18px 0}
+.section h2{margin:8px 4px 10px; font-size:.95rem; color:#334155}
+.card{background:#fff; border:1px solid var(--cm-border); border-radius:14px; padding:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0; box-shadow:0 4px 14px rgba(2,6,23,.04)}
+.left{display:flex; align-items:flex-start; gap:12px}
+.dot{width:14px; height:14px; border-radius:999px; background:var(--cm-secondary); margin-top:6px; flex:0 0 auto}
+.meta{font-size:.85rem; color:var(--cm-muted)}
+.title{font-weight:800}
+.badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px}
+.badge{font-size:.75rem; padding:.15rem .5rem; border-radius:999px; border:1px solid var(--cm-border); color:#334155; background:#f9fafb}
+.actions{display:flex; gap:6px}
+.iconbtn{border:1px solid var(--cm-border); background:#fff; padding:.45rem .6rem; border-radius:10px; cursor:pointer}
+.iconbtn.danger{border-color:#fecaca; color:#b91c1c}
+.empty{background:#fff; border:1px dashed var(--cm-border); padding:22px; border-radius:14px; text-align:center; color:var(--cm-muted)}
+.fab{position:fixed; right:18px; bottom:18px; z-index:40; display:flex; gap:10px}
+.toast{position:fixed; right:16px; bottom:86px; background:#111; color:#fff; padding:.8rem 1rem; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.25); opacity:0; transform:translateY(12px); pointer-events:none}
+.toast.show{opacity:1; transform:translateY(0); transition:opacity .2s, transform .2s}
 
-  /* Overlay & modal */
-  .overlay{position:fixed; inset:0; background:rgba(17,24,39,.48); display:none; z-index:9998}
-  .overlay.show{display:block}
-  .modal{position:fixed; inset:0; display:grid; place-items:center; z-index:9999; padding:16px; pointer-events:none}
-  .modal.show{pointer-events:auto}
-  .sheet{
-    width:min(720px,100%); background:#fff; border-radius:var(--radius);
-    box-shadow:0 24px 80px rgba(2,6,23,.30); overflow:hidden; transform:translateY(12px); opacity:0;
-    transition:transform .2s ease, opacity .2s ease;
-  }
-  .modal.show .sheet{transform:translateY(0); opacity:1}
-  .hdr{
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:18px 20px; border-bottom:1px solid var(--cm-border); background:linear-gradient(0deg,#fff, #fafbff);
-  }
-  .hdr h2{margin:0; font-size:1.15rem}
-  .hdr .badge{display:inline-flex; align-items:center; gap:.4rem; background:rgba(57,86,232,.08); color:var(--cm-primary);
-    padding:.25rem .6rem; border-radius:999px; font-size:.8rem; font-weight:700}
-  .body{padding:18px 20px}
-  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-  @media (max-width:720px){ .grid{grid-template-columns:1fr} .hdr{padding:16px} .body{padding:14px} }
-
-  .field{display:flex; flex-direction:column; gap:6px}
-  label{font-size:.9rem; color:var(--cm-muted); font-weight:700}
-  input[type="text"], input[type="date"], input[type="time"], select, textarea{
-    width:100%; border:1px solid var(--cm-border); border-radius:12px; padding:.8rem .9rem; font:inherit; background:#fff;
-  }
-  textarea{min-height:92px; resize:vertical}
-  .inline{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-  .chip{
-    display:inline-flex; align-items:center; gap:.45rem; border:1px solid var(--cm-border); padding:.45rem .7rem;
-    border-radius:999px; cursor:pointer; user-select:none; font-size:.9rem;
-  }
-  .chip input{accent-color:var(--cm-primary)}
-  .muted{color:var(--cm-muted); font-size:.85rem}
-  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-  .row.push{justify-content:space-between}
-  .ft{
-    display:flex; gap:10px; justify-content:space-between; align-items:center; padding:14px 16px; border-top:1px solid var(--cm-border);
-    background:#fff; position:sticky; bottom:0
-  }
-  .ft .l, .ft .r{display:flex; gap:10px; align-items:center}
-  .req{color:#ef4444}
-
-  /* Custom recurrence row */
-  .days{display:flex; gap:6px; flex-wrap:wrap}
-  .day{
-    width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--cm-border); border-radius:10px; cursor:pointer;
-    user-select:none; font-weight:700; color:var(--cm-muted); background:#fff;
-  }
-  .day[aria-pressed="true"]{background:var(--cm-primary); color:#fff; border-color:var(--cm-primary)}
-
-  /* Toast */
-  .toast{position:fixed; right:16px; bottom:16px; background:#111; color:#fff; padding:.8rem 1rem; border-radius:12px;
-         box-shadow:0 10px 30px rgba(0,0,0,.25); opacity:0; transform:translateY(12px); pointer-events:none}
-  .toast.show{opacity:1; transform:translateY(0); transition:opacity .2s, transform .2s}
+/* ===== Modal (mismo estilo del prototipo anterior, reducido) ===== */
+.overlay{position:fixed; inset:0; background:rgba(17,24,39,.48); display:none; z-index:9998}
+.overlay.show{display:block}
+.modal{position:fixed; inset:0; display:grid; place-items:center; z-index:9999; padding:16px; pointer-events:none}
+.modal.show{pointer-events:auto}
+.sheet{width:min(720px,100%); background:#fff; border-radius:var(--radius);
+  box-shadow:0 24px 80px rgba(2,6,23,.30); overflow:hidden; transform:translateY(12px); opacity:0;
+  transition:transform .2s ease, opacity .2s ease;}
+.modal.show .sheet{transform:translateY(0); opacity:1}
+.hdr{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid var(--cm-border)}
+.hdr h3{margin:0; font-size:1.05rem}
+.body{padding:16px 18px}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media (max-width:720px){ .grid{grid-template-columns:1fr} }
+.field{display:flex; flex-direction:column; gap:6px}
+label{font-size:.9rem; color:var(--cm-muted); font-weight:700}
+input[type="text"], input[type="date"], input[type="time"], select, textarea{
+  width:100%; border:1px solid var(--cm-border); border-radius:12px; padding:.7rem .85rem; font:inherit; background:#fff;
+}
+textarea{min-height:90px}
+.days{display:flex; gap:6px; flex-wrap:wrap}
+.day{width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--cm-border); border-radius:10px; cursor:pointer; user-select:none; font-weight:700; color:var(--cm-muted); background:#fff}
+.day[aria-pressed="true"]{background:var(--cm-primary); color:#fff; border-color:var(--cm-primary)}
+.ft{display:flex; gap:10px; justify-content:flex-end; align-items:center; padding:12px 14px; border-top:1px solid var(--cm-border); background:#fff}
+.btn-ghost{background:transparent; border:none; color:var(--cm-muted); cursor:pointer}
+.req{color:#ef4444}
 </style>
 </head>
 <body>
 
-<div class="demo">
-  <button class="btn" onclick="openReminderModal()">+ Nuevo reminder</button>
+<!-- Header -->
+<div class="header">
+  <h1>Recordatorios</h1>
+  <div class="search">
+    <input id="q" type="search" placeholder="Buscar por título o nota…">
+    <button class="btn-outline" id="btn-clear">Limpiar</button>
+  </div>
 </div>
 
-<!-- Overlay -->
-<div class="overlay" id="rem-overlay" hidden></div>
+<!-- Content -->
+<div class="container" id="list">
+  <!-- Secciones se inyectan por JS -->
+</div>
 
-<!-- Modal -->
-<div class="modal" id="rem-modal" role="dialog" aria-modal="true" aria-labelledby="rem-title" hidden>
+<!-- Empty state (oculto si hay items) -->
+<template id="tpl-empty">
+  <div class="empty">
+    <p><strong>Sin recordatorios</strong></p>
+    <p>Presiona “Nuevo” para crear tu primer reminder.</p>
+  </div>
+</template>
+
+<!-- Item template -->
+<template id="tpl-item">
+  <div class="card" data-id="">
+    <div class="left">
+      <div class="dot" aria-hidden="true"></div>
+      <div>
+        <div class="title"></div>
+        <div class="meta"></div>
+        <div class="badges"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="iconbtn" data-act="edit" title="Editar">✎</button>
+      <button class="iconbtn danger" data-act="delete" title="Eliminar">🗑</button>
+    </div>
+  </div>
+</template>
+
+<!-- Section template -->
+<template id="tpl-section">
+  <div class="section" data-group="">
+    <h2></h2>
+    <div class="items"></div>
+  </div>
+</template>
+
+<!-- FAB -->
+<div class="fab">
+  <button class="btn" id="btn-new">+ Nuevo</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">Hecho ✅</div>
+
+<!-- ===== Modal (crear/editar) ===== -->
+<div class="overlay" id="ovl" hidden></div>
+<div class="modal" id="mdl" role="dialog" aria-modal="true" aria-labelledby="ttl" hidden>
   <div class="sheet" role="document">
     <div class="hdr">
-      <h2 id="rem-title">Nuevo recordatorio</h2>
-      <span class="badge">Cada Menudo • Reminder</span>
-      <button class="btn-ghost" aria-label="Cerrar" id="rem-close">✕</button>
+      <h3 id="ttl">Nuevo recordatorio</h3>
+      <button class="btn-ghost" id="x" aria-label="Cerrar">✕</button>
     </div>
-
-    <form class="body" id="rem-form">
+    <form class="body" id="frm">
+      <input type="hidden" name="id" id="rem-id"/>
       <div class="grid">
         <div class="field">
-          <label for="rem-name">Título <span class="req">*</span></label>
-          <input id="rem-name" name="name" type="text" placeholder="Ej: Pagar tarjeta / Revisar presupuesto" required />
+          <label for="name">Título <span class="req">*</span></label>
+          <input id="name" name="name" type="text" required placeholder="Ej: Pagar tarjeta / Revisión presupuesto">
         </div>
-
         <div class="field">
-          <label for="rem-type">Tipo</label>
-          <select id="rem-type" name="type">
+          <label for="type">Tipo</label>
+          <select id="type" name="type">
             <option value="custom">Personalizado</option>
             <option value="bill">Pago de factura</option>
             <option value="budget">Revisión de presupuesto</option>
             <option value="goal">Aporte a meta</option>
           </select>
         </div>
-
         <div class="field">
-          <label for="rem-date">Fecha <span class="req">*</span></label>
-          <input id="rem-date" name="date" type="date" required />
+          <label for="date">Fecha <span class="req">*</span></label>
+          <input id="date" name="date" type="date" required>
         </div>
-
         <div class="field">
-          <label for="rem-time">Hora <span class="req">*</span></label>
-          <input id="rem-time" name="time" type="time" required />
+          <label for="time">Hora <span class="req">*</span></label>
+          <input id="time" name="time" type="time" required>
         </div>
-
         <div class="field">
-          <label for="rem-recur">Recurrencia</label>
-          <select id="rem-recur" name="recur">
+          <label for="recur">Recurrencia</label>
+          <select id="recur" name="recur">
             <option value="once">Una vez</option>
             <option value="daily">Diario</option>
             <option value="weekly">Semanal</option>
@@ -147,11 +165,9 @@
             <option value="custom">Custom (elige días)</option>
           </select>
         </div>
-
-        <div class="field" id="custom-days" style="display:none">
-          <label>Días de la semana</label>
-          <div class="days" role="group" aria-label="Días">
-            <!-- L M X J V S D -->
+        <div class="field" id="row-days" style="display:none">
+          <label>Días (si Custom)</label>
+          <div class="days">
             <button type="button" class="day" data-day="MO" aria-pressed="false">L</button>
             <button type="button" class="day" data-day="TU" aria-pressed="false">M</button>
             <button type="button" class="day" data-day="WE" aria-pressed="false">X</button>
@@ -160,190 +176,200 @@
             <button type="button" class="day" data-day="SA" aria-pressed="false">S</button>
             <button type="button" class="day" data-day="SU" aria-pressed="false">D</button>
           </div>
-          <span class="muted">Selecciona 1+ días si eliges “Custom”.</span>
         </div>
-
-        <div class="field">
-          <label>Canales</label>
-          <div class="inline">
-            <label class="chip"><input type="checkbox" name="push" checked> Push</label>
-            <label class="chip"><input type="checkbox" name="email"> Email</label>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Opciones rápidas (snooze)</label>
-          <div class="inline">
-            <button class="btn-muted" type="button" data-snooze="10m">+10 min</button>
-            <button class="btn-muted" type="button" data-snooze="60m">+1 h</button>
-            <button class="btn-muted" type="button" data-snooze="tomorrow9">Mañana 9:00</button>
-          </div>
-          <span class="muted">Ajusta rápidamente la hora antes de guardar.</span>
-        </div>
-
         <div class="field" style="grid-column:1/-1">
-          <label for="rem-notes">Notas</label>
-          <textarea id="rem-notes" name="notes" placeholder="Detalle opcional…"></textarea>
+          <label for="notes">Notas</label>
+          <textarea id="notes" name="notes" placeholder="Detalle opcional…"></textarea>
         </div>
       </div>
     </form>
-
     <div class="ft">
-      <div class="l">
-        <button class="btn-ghost" id="rem-delete" style="display:none">Eliminar</button>
-      </div>
-      <div class="r">
-        <button class="btn-outline" type="button" id="rem-cancel">Cancelar</button>
-        <button class="btn" id="rem-save">Guardar</button>
-      </div>
+      <button class="btn-outline" id="btn-cancel" type="button">Cancelar</button>
+      <button class="btn" id="btn-save">Guardar</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="rem-toast" role="status" aria-live="polite">Recordatorio guardado ✅</div>
-
 <script>
-/* -------- Minimal modal API -------- */
-const overlay = document.getElementById('rem-overlay');
-const modal   = document.getElementById('rem-modal');
-const form    = document.getElementById('rem-form');
-const toast   = document.getElementById('rem-toast');
-const recur   = document.getElementById('rem-recur');
-const customDays = document.getElementById('custom-days');
-const closeBtn= document.getElementById('rem-close');
-const cancelBtn=document.getElementById('rem-cancel');
-const saveBtn = document.getElementById('rem-save');
-const deleteBtn=document.getElementById('rem-delete');
-let lastFocused = null;
+/* ===== Utilities ===== */
+const $ = (s, r=document)=>r.querySelector(s);
+const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+const toast = $('#toast');
+function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 2000); }
+function pad(n){ return String(n).padStart(2,'0'); }
+function isoLocalDate(d){ const z= new Date(d); z.setMinutes(z.getMinutes()-z.getTimezoneOffset()); return z.toISOString().slice(0,10); }
+function todayISO(){ return isoLocalDate(new Date()); }
+function tomorrowISO(){ const d= new Date(); d.setDate(d.getDate()+1); return isoLocalDate(d); }
+function parseDT(dateISO, timeHM){ const [h,m]=timeHM.split(':').map(Number); const d=new Date(dateISO); d.setHours(h||0,m||0,0,0); return d; }
+function fmtTime(hm){const [h,m]=hm.split(':').map(Number); const d=new Date(); d.setHours(h,m); return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});}
 
-function openReminderModal(data){
-  lastFocused = document.activeElement;
-  overlay.hidden=false; overlay.classList.add('show');
-  modal.hidden=false; modal.classList.add('show');
-  // Defaults
+/* ===== Storage (demo) ===== */
+const KEY='cm.reminders.v1';
+function loadAll(){ try{ return JSON.parse(localStorage.getItem(KEY))||[] }catch{ return [] } }
+function saveAll(list){ localStorage.setItem(KEY, JSON.stringify(list)); }
+function upsert(item){
+  const list=loadAll();
+  if(item.id){ const i=list.findIndex(x=>x.id===item.id); if(i>-1) list[i]=item; else list.push(item); }
+  else { item.id = crypto.randomUUID(); list.push(item); }
+  saveAll(list); return item;
+}
+function removeById(id){ const list=loadAll().filter(x=>x.id!==id); saveAll(list); }
+
+/* ===== Render list ===== */
+const listEl = $('#list');
+const tplSection = $('#tpl-section');
+const tplItem = $('#tpl-item');
+const SECTION_ORDER = ['today','tomorrow','upcoming','past'];
+const SECTION_LABELS = {today:'Hoy', tomorrow:'Mañana', upcoming:'Próximos', past:'Pasados'};
+function groupKey(item){
   const now = new Date();
-  const pad = n=>String(n).padStart(2,'0');
-  const today = now.toISOString().slice(0,10);
-  const time  = pad(now.getHours())+':'+pad(Math.max(now.getMinutes()+5,0));
-  form.reset();
-  document.getElementById('rem-name').value = data?.name || '';
-  document.getElementById('rem-type').value = data?.type || 'custom';
-  document.getElementById('rem-date').value = data?.date || today;
-  document.getElementById('rem-time').value = data?.time || time;
-  document.getElementById('rem-notes').value= data?.notes || '';
-  document.querySelector('input[name="push"]').checked = data?.push ?? true;
-  document.querySelector('input[name="email"]').checked= !!data?.email;
-  recur.value = data?.recur || 'once';
-  customDays.style.display = recur.value==='custom' ? '' : 'none';
-  // Preselect custom days if provided
-  document.querySelectorAll('.day').forEach(btn=>{
-    btn.setAttribute('aria-pressed', data?.days?.includes(btn.dataset.day) ? 'true' : 'false');
-  });
-  // Focus first field
-  setTimeout(()=>document.getElementById('rem-name').focus(), 10);
-  trapFocus(true);
+  const d = parseDT(item.date, item.time);
+  const t0 = new Date(); t0.setHours(0,0,0,0);
+  const t1 = new Date(); t1.setHours(24,0,0,0);
+  const t2 = new Date(); t2.setHours(48,0,0,0);
+  if(d>=t0 && d<t1) return 'today';
+  if(d>=t1 && d<t2) return 'tomorrow';
+  if(d>=now) return 'upcoming';
+  return 'past';
 }
-function closeReminderModal(){
-  overlay.classList.remove('show'); modal.classList.remove('show');
-  setTimeout(()=>{ overlay.hidden=true; modal.hidden=true; }, 160);
-  trapFocus(false);
-  if(lastFocused) lastFocused.focus();
+function recurBadge(item){
+  const map={once:'Una vez', daily:'Diario', weekly:'Semanal', monthly:'Mensual', custom:'Custom'};
+  let s=map[item.recur]||'';
+  if(item.recur==='custom' && item.days?.length){ s+=' ('+item.days.join(',')+')'; }
+  return s;
 }
-window.openReminderModal = openReminderModal;
-window.closeReminderModal = closeReminderModal;
+function typeBadge(t){ const map={custom:'Personal', bill:'Factura', budget:'Presupuesto', goal:'Meta'}; return map[t]||t; }
 
-/* -------- UI interactions -------- */
-overlay.addEventListener('click', closeReminderModal);
-closeBtn.addEventListener('click', closeReminderModal);
-cancelBtn.addEventListener('click', closeReminderModal);
-document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && !modal.hidden) closeReminderModal(); });
+function render(filter=''){
+  listEl.innerHTML='';
+  const items = loadAll()
+    .filter(x=>{
+      if(!filter) return true;
+      const q=filter.toLowerCase();
+      return (x.name||'').toLowerCase().includes(q) || (x.notes||'').toLowerCase().includes(q);
+    })
+    .sort((a,b)=> parseDT(a.date,a.time) - parseDT(b.date,b.time));
 
-recur.addEventListener('change', ()=>{
-  customDays.style.display = recur.value==='custom' ? '' : 'none';
-});
+  if(items.length===0){ listEl.appendChild($('#tpl-empty').content.cloneNode(true)); return; }
 
-document.querySelectorAll('.day').forEach(btn=>{
-  btn.addEventListener('click', ()=> {
-    const pressed = btn.getAttribute('aria-pressed')==='true';
-    btn.setAttribute('aria-pressed', String(!pressed));
-  });
-});
-
-document.querySelectorAll('[data-snooze]').forEach(b=>{
-  b.addEventListener('click', ()=>{
-    const t = document.getElementById('rem-time');
-    const d = document.getElementById('rem-date');
-    const [h,m] = (t.value || '09:00').split(':').map(Number);
-    const base = new Date(d.value || new Date().toISOString().slice(0,10));
-    base.setHours(h||9, m||0, 0, 0);
-    const kind = b.dataset.snooze;
-    if(kind==='10m') base.setMinutes(base.getMinutes()+10);
-    else if(kind==='60m') base.setMinutes(base.getMinutes()+60);
-    else if(kind==='tomorrow9'){ base.setDate(base.getDate()+1); base.setHours(9,0,0,0);}
-    const pad=n=>String(n).padStart(2,'0');
-    d.value = base.toISOString().slice(0,10);
-    t.value = pad(base.getHours())+':'+pad(base.getMinutes());
-  });
-});
-
-/* -------- Save (emit event payload) -------- */
-saveBtn.addEventListener('click', (e)=>{
-  e.preventDefault();
-  if(!form.reportValidity()){
-    showToast('Completa los campos requeridos ⚠️');
-    return;
+  const groups = {};
+  for(const it of items){
+    const g = groupKey(it);
+    (groups[g] ||= []).push(it);
   }
-  const days = Array.from(document.querySelectorAll('.day[aria-pressed="true"]')).map(b=>b.dataset.day);
-  if(recur.value==='custom' && days.length===0){
-    showToast('Elige al menos un día para “Custom” ⚠️'); return;
-  }
-  const payload = {
-    name: form.name.value.trim(),
-    type: form.type.value,
-    date: form.date.value,
-    time: form.time.value,
-    recur: form.recur.value,
-    days: days,
-    push: form.push.checked,
-    email: form.email.checked,
-    notes: form.notes.value.trim()
-  };
-  // Dispara evento para que la app consuma
-  window.dispatchEvent(new CustomEvent('reminder:create', { detail: payload }));
-  showToast('Recordatorio guardado ✅');
-  closeReminderModal();
-});
-
-/* -------- A11y focus trap -------- */
-let focusables = [];
-function trapFocus(enable){
-  if(enable){
-    focusables = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-    const first = focusables[0];
-    const last  = focusables[focusables.length-1];
-    modal.addEventListener('keydown', handleTrap);
-    function handleTrap(e){
-      if(e.key!=='Tab') return;
-      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
-      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  for(const key of SECTION_ORDER){
+    const arr = groups[key];
+    if(!arr || arr.length===0) continue;
+    const sec = tplSection.content.firstElementChild.cloneNode(true);
+    sec.dataset.group = key;
+    sec.querySelector('h2').textContent = SECTION_LABELS[key];
+    const holder = sec.querySelector('.items');
+    for(const it of arr){
+      const node = tplItem.content.firstElementChild.cloneNode(true);
+      node.dataset.id = it.id;
+      node.querySelector('.title').textContent = it.name;
+      node.querySelector('.meta').textContent = `${new Date(it.date).toLocaleDateString()} • ${fmtTime(it.time)}`;
+      const badges = node.querySelector('.badges');
+      const b1 = document.createElement('span'); b1.className='badge'; b1.textContent = typeBadge(it.type); badges.appendChild(b1);
+      const b2 = document.createElement('span'); b2.className='badge'; b2.textContent = recurBadge(it); badges.appendChild(b2);
+      node.querySelector('[data-act="edit"]').addEventListener('click', ()=> editItem(it.id));
+      node.querySelector('[data-act="delete"]').addEventListener('click', ()=> delItem(it.id));
+      holder.appendChild(node);
     }
-  } else {
-    modal.removeEventListener('keydown', handleTrap);
+    listEl.appendChild(sec);
   }
 }
 
-/* -------- Toast -------- */
-let toastTimer;
-function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>toast.classList.remove('show'), 2200);
+/* ===== CRUD UI ===== */
+$('#btn-new').addEventListener('click', ()=> openModal());
+$('#btn-clear').addEventListener('click', ()=>{ $('#q').value=''; render(''); });
+$('#q').addEventListener('input', (e)=> render(e.target.value.trim()));
+
+function editItem(id){
+  const it = loadAll().find(x=>x.id===id);
+  if(!it) return;
+  openModal(it);
+}
+function delItem(id){
+  if(confirm('¿Eliminar este recordatorio?')){ removeById(id); render($('#q').value.trim()); showToast('Eliminado'); }
 }
 
-// Auto-open example (delete in prod)
-// openReminderModal();
+/* ===== Modal logic ===== */
+const ovl = $('#ovl'), mdl=$('#mdl'), frm=$('#frm');
+const rowDays = $('#row-days'), recur = $('#recur');
+function openModal(data){
+  // defaults
+  frm.reset();
+  $('#ttl').textContent = data?.id ? 'Editar recordatorio' : 'Nuevo recordatorio';
+  $('#rem-id').value = data?.id || '';
+  $('#name').value   = data?.name || '';
+  $('#type').value   = data?.type || 'custom';
+  const now = new Date();
+  const defDate = isoLocalDate(now);
+  const defTime = pad(now.getHours())+':'+pad(Math.max(0, now.getMinutes()+5));
+  $('#date').value   = data?.date || defDate;
+  $('#time').value   = data?.time || defTime;
+  $('#notes').value  = data?.notes || '';
+  recur.value = data?.recur || 'once';
+  rowDays.style.display = recur.value==='custom' ? '' : 'none';
+  $$('.day').forEach(d=>d.setAttribute('aria-pressed', data?.days?.includes(d.dataset.day) ? 'true':'false'));
 
+  ovl.hidden=false; ovl.classList.add('show');
+  mdl.hidden=false; mdl.classList.add('show');
+  setTimeout(()=>$('#name').focus(), 20);
+}
+function closeModal(){
+  ovl.classList.remove('show'); mdl.classList.remove('show');
+  setTimeout(()=>{ ovl.hidden=true; mdl.hidden=true; }, 150);
+}
+$('#x').addEventListener('click', closeModal);
+$('#btn-cancel').addEventListener('click', closeModal);
+ovl.addEventListener('click', closeModal);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !mdl.hidden) closeModal(); });
+
+recur.addEventListener('change', ()=> rowDays.style.display = recur.value==='custom' ? '' : 'none');
+$$('.day').forEach(btn=> btn.addEventListener('click', ()=> {
+  const on = btn.getAttribute('aria-pressed')==='true';
+  btn.setAttribute('aria-pressed', String(!on));
+}));
+
+$('#btn-save').addEventListener('click', (e)=>{
+  e.preventDefault();
+  if(!frm.reportValidity()){
+    showToast('Completa los campos requeridos ⚠️'); return;
+  }
+  const days = $$('.day[aria-pressed="true"]').map(b=>b.dataset.day);
+  if(recur.value==='custom' && days.length===0){ showToast('Elige 1+ días para Custom ⚠️'); return; }
+  const item = {
+    id: $('#rem-id').value || undefined,
+    name: $('#name').value.trim(),
+    type: $('#type').value,
+    date: $('#date').value,
+    time: $('#time').value,
+    recur: $('#recur').value,
+    days,
+    notes: $('#notes').value.trim()
+  };
+  upsert(item);
+  render($('#q').value.trim());
+  closeModal();
+  showToast('Guardado ✅');
+});
+
+/* ===== Seed demo (opcional primera carga) ===== */
+(function seed(){
+  if(loadAll().length) { render(); return; }
+  const demo=[
+    {name:'Pagar escuela', type:'bill', date: tomorrowISO(), time:'06:00', recur:'monthly', days:[], notes:''},
+    {name:'IBKR meeting', type:'custom', date: tomorrowISO(), time:'14:00', recur:'weekly', days:['WE'], notes:'Zoom link…'},
+    {name:'Savings app meeting', type:'custom', date: isoLocalDate(new Date(Date.now()+3*86400000)), time:'13:30', recur:'weekly', days:['FR'], notes:''},
+  ];
+  demo.forEach(d=>upsert(d));
+  render();
+})();
+
+/* Render initial */
+render();
 </script>
 </body>
 </html>
