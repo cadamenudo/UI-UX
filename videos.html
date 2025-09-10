@@ -343,8 +343,30 @@
     </li>
   </ul>
 </div>
-
+<!-- Modal de video -->
+<div id="videoModal" style="display:none">
+  <div id="videoOverlay" onclick="cerrarModal()"></div>
+  <div id="videoFrameWrapper">
+    <button id="cerrarBtn" onclick="cerrarModal()">×</button>
+    <iframe id="videoFrame" allowfullscreen></iframe>
+  </div>
+</div>
 <script>
+
+function abrirVideoVimeo(url) {
+  const modal = document.getElementById('videoModal');
+  const iframe = document.getElementById('videoFrame');
+  iframe.src = url + '?autoplay=1';
+  modal.style.display = 'flex';
+}
+
+function cerrarModal() {
+  const modal = document.getElementById('videoModal');
+  const iframe = document.getElementById('videoFrame');
+  iframe.src = '';
+  modal.style.display = 'none';
+}
+
 function toggleLista(button) {
   const todas = document.querySelectorAll('.seccion-video');
   const seccionActual = button.parentElement;
