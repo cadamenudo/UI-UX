@@ -36,49 +36,34 @@ body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'
 
 /* ===== Toast de reminder (5 min antes) ===== */
 .toast-reminder{
-  position:fixed; 
-  bottom:20px; right:20px; 
-  background:#3956E8; 
-  color:#fff; 
-  padding:1rem 1.25rem; 
-  border-radius:14px; 
-  box-shadow:0 6px 20px rgba(0,0,0,.25); 
-  opacity:0; 
-  transform:translateY(12px); 
-  pointer-events:none; 
-  transition:opacity .3s, transform .3s;
-  z-index:10000;
-  font-weight:700;
-  max-width:92vw;
+  position:fixed; bottom:20px; right:20px;
+  background:#3956E8; color:#fff; padding:1rem 1.25rem;
+  border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,.25);
+  opacity:0; transform:translateY(12px); pointer-events:none;
+  transition:opacity .3s, transform .3s; z-index:10000; font-weight:700; max-width:92vw;
 }
 .toast-reminder.show{ opacity:1; transform:translateY(0); }
 .toast-reminder .line{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
 .toast-reminder .line b{font-weight:800}
-.toast-reminder button{
-  background:#fff; 
-  color:#3956E8; 
-  border:none; 
-  border-radius:8px; 
-  margin-left:10px; 
-  padding:6px 10px; 
-  cursor:pointer;
-}
+.toast-reminder button{background:#fff; color:#3956E8; border:none; border-radius:8px; margin-left:10px; padding:6px 10px; cursor:pointer}
 
-/* ===== Mini modal (Heads-up al abrir) ===== */
-.mini-ovl{position:fixed; inset:0; background:rgba(17,24,39,.15); display:none; z-index:9996;}
-.mini-ovl.show{display:block}
-.mini-modal{position:fixed; inset:0; display:grid; place-items:center; padding:16px; z-index:9997; pointer-events:none;}
-.mini-card{
-  width:min(420px,100%); background:#fff; border:1px solid #e5e7eb; border-radius:16px;
-  box-shadow:0 16px 60px rgba(2,6,23,.25); padding:14px; pointer-events:auto;
-  transform:translateY(12px); opacity:0; transition:transform .2s ease, opacity .2s ease;
+/* ===== Bottom Sheet (Heads-up al abrir) ===== */
+.bs-ovl{position:fixed; inset:0; background:rgba(17,24,39,.15); display:none; z-index:9996;}
+.bs-ovl.show{display:block}
+.bs-wrap{position:fixed; inset:0; display:grid; align-items:end; z-index:9997; pointer-events:none}
+.bs-sheet{
+  width:100%; background:#fff; border-top-left-radius:18px; border-top-right-radius:18px;
+  border:1px solid #e5e7eb; box-shadow:0 -8px 40px rgba(2,6,23,.25);
+  pointer-events:auto; transform:translateY(110%); transition:transform .25s ease; padding:14px 16px;
 }
-.mini-modal.show .mini-card{transform:translateY(0); opacity:1}
-.mini-title{font-weight:800; margin:0 0 6px}
-.mini-sub{color:#64748B; font-size:.9rem; margin:0 0 10px}
-.mini-actions{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap}
-.mini-btn{border:1px solid #e5e7eb; background:#fff; border-radius:10px; padding:.55rem .8rem; cursor:pointer}
-.mini-btn.primary{background:#3956E8; color:#fff; border-color:#3956E8; font-weight:700}
+.bs-wrap.show .bs-sheet{ transform:translateY(0); }
+.bs-grip{width:44px; height:5px; background:#e5e7eb; border-radius:999px; margin:6px auto 10px;}
+.bs-row{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+.bs-title{font-weight:800; margin:0}
+.bs-sub{color:#64748B; font-size:.9rem; margin:2px 0 0}
+.bs-actions{display:flex; gap:8px; flex-wrap:wrap}
+.bs-btn{border:1px solid #e5e7eb; background:#fff; border-radius:10px; padding:.55rem .8rem; cursor:pointer}
+.bs-btn.primary{background:#3956E8; color:#fff; border-color:#3956E8; font-weight:700}
 
 /* ===== Modal CRUD ===== */
 .overlay{position:fixed; inset:0; background:rgba(17,24,39,.48); display:none; z-index:9998}
@@ -157,17 +142,22 @@ textarea{min-height:90px}
 <div class="toast" id="toast" role="status" aria-live="polite">Hecho ✅</div>
 <div id="rem-toast" class="toast-reminder" aria-live="assertive" aria-atomic="true" hidden></div>
 
-<!-- Mini heads-up modal shown on load -->
-<div id="mini-ovl" class="mini-ovl" hidden></div>
-<div id="mini-modal" class="mini-modal" aria-modal="true" role="dialog" hidden>
-  <div class="mini-card" role="document">
-    <h3 class="mini-title">⏰ <span id="mm-title">Recordatorio</span></h3>
-    <p class="mini-sub" id="mm-time">Hoy a las 2:00 PM</p>
-    <div class="mini-actions">
-      <button class="mini-btn" id="mm-done">Hecho</button>
-      <button class="mini-btn" id="mm-snooze">+10m</button>
-      <button class="mini-btn" id="mm-list">Ver lista</button>
-      <button class="mini-btn primary" id="mm-close">Cerrar</button>
+<!-- Bottom Sheet Heads-up -->
+<div id="bs-ovl" class="bs-ovl" hidden></div>
+<div id="bs-wrap" class="bs-wrap" aria-modal="true" role="dialog" hidden>
+  <div class="bs-sheet" role="document">
+    <div class="bs-grip" aria-hidden="true"></div>
+    <div class="bs-row">
+      <div>
+        <h3 class="bs-title">⏰ <span id="bs-title">Recordatorio</span></h3>
+        <p class="bs-sub" id="bs-time">Hoy a las 2:00 PM</p>
+      </div>
+      <div class="bs-actions">
+        <button class="bs-btn" id="bs-done">Marcar como hecho</button>
+        <button class="bs-btn" id="bs-snooze">+10m</button>
+        <button class="bs-btn" id="bs-list">Ver lista</button>
+        <button class="bs-btn primary" id="bs-close">Cerrar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -401,14 +391,9 @@ $('#btn-save').addEventListener('click', (e)=>{
 });
 
 /* ===== Lógica TOAST 5 min antes ===== */
-function todayTargetMs(r){
-  const [h,m]=(r.time||'00:00').split(':').map(Number);
-  const d=new Date(); d.setHours(h||0,m||0,0,0); return d.getTime();
-}
+function todayTargetMs(r){ const [h,m]=(r.time||'00:00').split(':').map(Number); const d=new Date(); d.setHours(h||0,m||0,0,0); return d.getTime(); }
 function appliesToday(r){
-  const today = todayISO();
-  const todayW = weekdayCode(today);
-  const baseW = weekdayCode(r.date);
+  const today = todayISO(); const todayW = weekdayCode(today); const baseW = weekdayCode(r.date);
   switch(r.recur){
     case 'once':    return r.date===today;
     case 'daily':   return true;
@@ -423,105 +408,102 @@ function getNotifiedSet(){
   const arr = JSON.parse(localStorage.getItem(key) || '[]');
   return { key, set:new Set(arr) };
 }
-function saveNotifiedSet(obj){
-  localStorage.setItem(obj.key, JSON.stringify(Array.from(obj.set)));
-}
+function saveNotifiedSet(obj){ localStorage.setItem(obj.key, JSON.stringify(Array.from(obj.set))); }
+
 let lastToastId = null;
 function showReminderToast(rem){
   const el = document.getElementById('rem-toast');
   el.innerHTML = `<div class="line">⏰ <b>${rem.name}</b> — ${fmtTime(rem.time)}
     <button onclick="snoozeReminder('${rem.id}')">+10m</button></div>`;
-  el.hidden = false;
-  requestAnimationFrame(()=> el.classList.add('show'));
+  el.hidden = false; requestAnimationFrame(()=> el.classList.add('show'));
   lastToastId = rem.id;
   setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=> el.hidden=true, 300); }, 6000);
 }
 function snoozeReminder(id){
-  const list = loadAll();
-  const r = list.find(x=>x.id===id);
-  if(!r){ return; }
-  const now = new Date();
-  now.setMinutes(now.getMinutes()+10);
-  r.date = isoLocalDate(now);
-  r.time = pad(now.getHours())+':'+pad(now.getMinutes());
+  const list = loadAll(); const r = list.find(x=>x.id===id); if(!r) return;
+  const now = new Date(); now.setMinutes(now.getMinutes()+10);
+  r.date = isoLocalDate(now); r.time = pad(now.getHours())+':'+pad(now.getMinutes());
   saveAll(list.map(x=>x.id===r.id? r : x));
-  // permitir re-notificar hoy
   const notif = getNotifiedSet(); notif.set.delete(id); saveNotifiedSet(notif);
   const el = document.getElementById('rem-toast'); el.classList.remove('show'); setTimeout(()=> el.hidden=true, 300);
   showToast('Pospuesto +10m');
 }
 function checkDueToasts(){
-  const list = loadAll();
-  const now = Date.now();
-  const notif = getNotifiedSet();
+  const list = loadAll(); const now = Date.now(); const notif = getNotifiedSet();
   for(const r of list){
     if(!appliesToday(r)) continue;
-    const tgt = todayTargetMs(r);
-    const fiveMinBefore = tgt - 5*60*1000;
+    const tgt = todayTargetMs(r); const fiveMinBefore = tgt - 5*60*1000;
     if (now >= fiveMinBefore && now < fiveMinBefore + 60*1000){
-      if(!notif.set.has(r.id)){
-        showReminderToast(r);
-        notif.set.add(r.id); saveNotifiedSet(notif);
-      }
+      if(!notif.set.has(r.id)){ showReminderToast(r); notif.set.add(r.id); saveNotifiedSet(notif); }
     }
   }
 }
 setInterval(checkDueToasts, 30000);
 
-/* ===== Mini heads-up al abrir ===== */
-function getSeen(){ const k='cm.reminders.headsup.'+todayISO(); return {k, set:new Set(JSON.parse(localStorage.getItem(k)||'[]'))}; }
-function putSeen(o){ localStorage.setItem(o.k, JSON.stringify([...o.set])); }
-let mmQueue = [], mmOpen=false;
-function enqueueHeadsUp(rem){ mmQueue.push(rem); if(!mmOpen) showNextHeadsUp(); }
-function showNextHeadsUp(){
-  if(mmQueue.length===0){ mmOpen=false; return; }
-  mmOpen=true;
-  const rem = mmQueue.shift();
-  const ovl = $('#mini-ovl'), modal = $('#mini-modal');
-  $('#mm-title').textContent = rem.name || 'Recordatorio';
+/* ===== Bottom Sheet (heads-up al abrir) ===== */
+function getDoneToday(){ const k='cm.reminders.done.'+todayISO(); return {k, set:new Set(JSON.parse(localStorage.getItem(k)||'[]'))}; }
+function putDoneToday(o){ localStorage.setItem(o.k, JSON.stringify([...o.set])); }
+
+let bsQueue=[], bsOpen=false;
+function enqueueBS(rem){ bsQueue.push(rem); if(!bsOpen) showNextBS(); }
+
+function showNextBS(){
+  if(bsQueue.length===0){ bsOpen=false; return; }
+  bsOpen=true;
+  const rem = bsQueue.shift();
+
+  const ovl = document.getElementById('bs-ovl');
+  const wrap= document.getElementById('bs-wrap');
+  document.getElementById('bs-title').textContent = rem.name || 'Recordatorio';
+
   const now = Date.now(), tgt = todayTargetMs(rem);
   const deltaMin = Math.round((tgt - now)/60000);
   const label = deltaMin < 0 ? `Vencido hace ${Math.abs(deltaMin)} min` :
                 deltaMin === 0 ? 'Ahora' : `Hoy a las ${fmtTime(rem.time)}`;
-  $('#mm-time').textContent = label;
+  document.getElementById('bs-time').textContent = label;
 
   ovl.hidden=false; ovl.classList.add('show');
-  modal.hidden=false; modal.classList.add('show');
+  wrap.hidden=false; wrap.classList.add('show');
 
   const close = ()=>{
-    ovl.classList.remove('show'); modal.classList.remove('show');
-    setTimeout(()=>{ ovl.hidden=true; modal.hidden=true; mmOpen=false; showNextHeadsUp(); }, 160);
+    ovl.classList.remove('show'); wrap.classList.remove('show');
+    setTimeout(()=>{ ovl.hidden=true; wrap.hidden=true; bsOpen=false; showNextBS(); }, 180);
   };
   ovl.onclick = close;
-  $('#mm-close').onclick = close;
-  $('#mm-list').onclick = ()=>{ close(); document.getElementById('list')?.scrollIntoView({behavior:'smooth'}); };
+  document.getElementById('bs-close').onclick = close;
+  document.getElementById('bs-list').onclick = ()=>{ close(); document.getElementById('list')?.scrollIntoView({behavior:'smooth'}); };
 
-  $('#mm-snooze').onclick = ()=>{
-    const list = loadAll();
-    const r = list.find(x=>x.id===rem.id);
+  document.getElementById('bs-snooze').onclick = ()=>{
+    const list = loadAll(); const r = list.find(x=>x.id===rem.id);
     if(r){
-      const n = new Date();
-      n.setMinutes(n.getMinutes()+10);
-      r.date = isoLocalDate(n);
-      r.time = pad(n.getHours())+':'+pad(n.getMinutes());
+      const n=new Date(); n.setMinutes(n.getMinutes()+10);
+      r.date = isoLocalDate(n); r.time = pad(n.getHours())+':'+pad(n.getMinutes());
       saveAll(list.map(x=>x.id===r.id? r : x));
+      const done = getDoneToday(); done.set.delete(rem.id); putDoneToday(done);
     }
-    close();
+    close(); showToast('Pospuesto +10m');
   };
-  $('#mm-done').onclick = ()=>{
-    const seen = getSeen(); seen.set.add(rem.id); putSeen(seen);
-    close();
+
+  document.getElementById('bs-done').onclick = ()=>{
+    const done = getDoneToday(); done.set.add(rem.id); putDoneToday(done);
+    close(); showToast('Marcado como hecho');
   };
 }
+
 function headsUpOnLoad(){
   const list = loadAll(); if(!list.length) return;
-  const now = Date.now(); const seen = getSeen();
+  const now = Date.now(); const done = getDoneToday();
+
+  // candidatos: aplican hoy, hasta 30 min vencidos, y no "hechos" hoy
   const todays = list.filter(r=>{
     if(!appliesToday(r)) return false;
     const tgt = todayTargetMs(r);
-    return tgt >= now - 30*60*1000; // hasta 30 min vencido
+    if(tgt < now - 30*60*1000) return false;
+    if(done.set.has(r.id)) return false;
+    return true;
   }).sort((a,b)=> todayTargetMs(a)-todayTargetMs(b));
-  todays.forEach(r=>{ if(!seen.set.has(r.id)) enqueueHeadsUp(r); });
+
+  todays.forEach(enqueueBS);
 }
 document.addEventListener('DOMContentLoaded', headsUpOnLoad);
 
@@ -547,4 +529,3 @@ render(); checkDueToasts();
 </script>
 </body>
 </html>
-
