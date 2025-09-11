@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chip — Pagar AMEX (+2)</title>
+<style>
+  :root{
+    --cm-primary:#3956E8;
+    --cm-border:#e5e7eb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial}
+  /* ===== Chip flotante sobre el “footer” ===== */
+  .rem-chip{
+    position:fixed;
+    right:16px; bottom:24px;                /* ajusta según tu footer real */
+    display:flex; align-items:center; gap:10px;
+    background:#fff; border:1px solid var(--cm-border); border-radius:999px;
+    box-shadow:0 10px 28px rgba(2,6,23,.18);
+    padding:.55rem .9rem; font-weight:700; color:#111; cursor:pointer;
+    z-index:20000;
+  }
+  .rem-chip .dot{
+    width:12px; height:12px; border-radius:999px; background:var(--cm-primary);
+  }
+  .rem-chip .txt{font-weight:700; font-size:.9rem}
+  .rem-chip .cnt{font-weight:800; margin-left:6px; color:var(--cm-primary); opacity:.95}
+
+  /* Estado “urgente” opcional (si lo necesitas, añade la clase .urgent al botón) */
+  .rem-chip.urgent{border-color:#fed7aa; box-shadow:0 10px 28px rgba(234,88,12,.18)}
+  .rem-chip.urgent .dot{background:#EA580C}
+  .rem-chip.urgent .txt{color:#EA580C}
+  .rem-chip.urgent .cnt{color:#EA580C}
+  @keyframes pulseSoft{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .rem-chip.urgent{animation:pulseSoft 1.6s ease-in-out infinite}
+</style>
+</head>
+<body>
+
+<!-- Chip flotante -->
+<button id="rem-chip" class="rem-chip" aria-label="Recordatorios para hoy: Pagar AMEX más dos">
+  <span class="dot" aria-hidden="true"></span>
+  <span class="txt">Pagar AMEX</span>
+  <span class="cnt">(+2)</span>
+</button>
+
+<script>
+  // Ejemplo: al hacer click, abre tu cola/sheet (aquí solo mostramos un alert)
+  document.getElementById('rem-chip').addEventListener('click', () => {
+    alert('Abrir cola de recordatorios…');
+  });
+</script>
+
+</body>
+</html>
