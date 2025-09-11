@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chip de Recordatorios</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chip + Cola de Recordatorios</title>
   <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
   <style>
     body{margin:0; font-family:'Greycliff CF',system-ui,sans-serif; background:#f7f8fa; min-height:100vh;}
@@ -41,6 +41,7 @@
     .rem-badge{font-size:.75rem; padding:.15rem .5rem; border-radius:999px; border:1px solid #e5e7eb; color:#334155; background:#f9fafb}
     .rem-actions{display:flex; gap:6px}
     .rem-btn{border:1px solid #e5e7eb; background:#fff; padding:.45rem .6rem; border-radius:10px; cursor:pointer}
+    .rem-btn.danger{border-color:#fecaca; color:#b91c1c}
   </style>
 </head>
 <body>
@@ -48,8 +49,8 @@
   <!-- CHIP -->
   <button id="remChip" class="rem-chip" aria-haspopup="dialog" aria-controls="remQueue">
     <span class="dot" aria-hidden="true"></span>
-    <span>Pagar AMEX</span>
-    <span class="cnt">(+2)</span>
+    <span id="chipTitle">Pagar AMEX</span>
+    <span class="cnt" id="chipCnt">(+2)</span>
   </button>
 
   <!-- MODAL / COLA -->
@@ -60,29 +61,45 @@
         <h3 id="remTitle" class="rem-title">Recordatorios para hoy</h3>
         <button class="rem-close" id="remClose">Cerrar</button>
       </div>
-      <div class="rem-body" id="remList">
-        <!-- Se llena con JS -->
-      </div>
+      <div class="rem-body" id="remList"></div>
     </div>
   </div>
 
   <script>
-    // Demo data
-    const REMS = [
-      { id:'1', name:'Pagar AMEX', date:'2025-09-11', time:'09:00', type:'Factura', recur:'Una vez' },
+    // ===== Demo data (ordenados por hora, el primero define el chip) =====
+    let REMS = [
+      { id:'1', name:'Pagar AMEX', date:'2025-09-11', time:'09:00', type:'Factura',  recur:'Una vez' },
       { id:'2', name:'IBKR meeting', date:'2025-09-11', time:'14:00', type:'Personal', recur:'Semanal' },
       { id:'3', name:'Savings app meeting', date:'2025-09-11', time:'13:30', type:'Personal', recur:'Semanal' },
     ];
 
-    // Helpers
-    function fmtTime(hm){ const [h,m]=hm.split(':'); const d=new Date(); d.setHours(+h,+m,0,0);
-      return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
+    // ===== Helpers =====
+    function fmtTime(hm){
+      const [h,m]=hm.split(':'); const d=new Date(); d.setHours(+h,+m,0,0);
+      return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+    }
+    function sortByTime(arr){ return arr.slice().sort((a,b)=> a.time.localeCompare(b.time)); }
 
-    // Render lista
+    // ===== Chip state =====
+    function refreshChip(){
+      const arr = sortByTime(REMS);
+      const title = document.getElementById('chipTitle');
+      const cnt   = document.getElementById('chipCnt');
+      if(arr.length===0){
+        title.textContent = 'Sin recordatorios';
+        cnt.textContent = '';
+        return;
+      }
+      title.textContent = arr[0].name;
+      const extra = arr.length-1;
+      cnt.textContent = extra>0 ? `(+${extra})` : '';
+    }
+
+    // ===== Render lista de la cola =====
     function renderQueue(){
       const wrap = document.getElementById('remList');
       wrap.innerHTML = '';
-      REMS.forEach(r=>{
+      sortByTime(REMS).forEach(r=>{
         const el = document.createElement('div');
         el.className = 'rem-card';
         el.innerHTML = `
@@ -98,24 +115,59 @@
             </div>
           </div>
           <div class="rem-actions">
-            <button class="rem-btn" title="Posponer +10m">+10m</button>
-            <button class="rem-btn" title="Hecho">✓</button>
+            <button class="rem-btn" data-act="edit"  data-id="${r.id}" title="Editar">✎</button>
+            <button class="rem-btn danger" data-act="del"   data-id="${r.id}" title="Eliminar">🗑</button>
           </div>`;
         wrap.appendChild(el);
       });
+
+      // wire actions
+      wrap.querySelectorAll('.rem-btn').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          const id  = e.currentTarget.getAttribute('data-id');
+          const act = e.currentTarget.getAttribute('data-act');
+          if(act==='edit') onEdit(id);
+          if(act==='del')  onDelete(id);
+        });
+      });
     }
 
-    // Abrir / cerrar
+    // ===== Acciones =====
+    function onEdit(id){
+      const i = REMS.findIndex(r=>r.id===id);
+      if(i<0) return;
+      const current = REMS[i].name;
+      const name = prompt('Editar título del recordatorio:', current);
+      if(name===null) return;
+      const trimmed = name.trim();
+      if(!trimmed) return;
+      REMS[i].name = trimmed;
+      renderQueue();
+      refreshChip();
+    }
+
+    function onDelete(id){
+      const r = REMS.find(x=>x.id===id);
+      if(!r) return;
+      if(!confirm(`¿Eliminar "${r.name}"?`)) return;
+      REMS = REMS.filter(x=>x.id!==id);
+      renderQueue();
+      refreshChip();
+      // si vacía, cierra modal
+      if(REMS.length===0) closeQueue();
+    }
+
+    // ===== Abrir / cerrar modal =====
     const chip  = document.getElementById('remChip');
     const ovl   = document.getElementById('remOvl');
     const modal = document.getElementById('remQueue');
-    const close = document.getElementById('remClose');
+    const closeBtn = document.getElementById('remClose');
 
     function openQueue(){
       renderQueue();
       ovl.classList.add('show');
       modal.classList.add('show');
-      close.focus();
+      closeBtn.focus();
     }
     function closeQueue(){
       ovl.classList.remove('show');
@@ -124,9 +176,12 @@
     }
 
     chip.addEventListener('click', openQueue);
-    close.addEventListener('click', closeQueue);
+    closeBtn.addEventListener('click', closeQueue);
     ovl.addEventListener('click', closeQueue);
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeQueue(); });
+
+    // init
+    refreshChip();
   </script>
 </body>
 </html>
