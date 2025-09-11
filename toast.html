@@ -67,7 +67,7 @@ body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'
 
 /* ===== Chip flotante sobre el footer ===== */
 .rem-chip{
-  position:fixed; right:16px; bottom:76px; /* ajusta según alto del footer */
+  position:fixed; right:16px; bottom:96px; /* subido para asegurar visibilidad sobre footer */
   display:flex; align-items:center; gap:10px;
   background:#fff; border:1px solid #e5e7eb; border-radius:999px;
   box-shadow:0 10px 28px rgba(2,6,23,.18);
@@ -77,7 +77,7 @@ body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'
 .rem-chip .dot{width:12px; height:12px; border-radius:999px; background:#3956E8;}
 .rem-chip .txt{font-weight:700; font-size:.9rem}
 .rem-chip .cnt{font-weight:800; margin-left:6px; color:#3956E8; opacity:.9}
-/* urgente (≤5m o vencido ≤30m) */
+/* urgente (≤5m o vencido) */
 .rem-chip.urgent{border-color:#fed7aa; box-shadow:0 10px 28px rgba(234,88,12,.18)}
 .rem-chip.urgent .dot{background:#EA580C}
 .rem-chip.urgent .txt{color:#EA580C}
@@ -341,7 +341,7 @@ function render(){
     }
     listEl.appendChild(sec);
   }
-  updateFooterSignal(); // <- mantiene el chip al día
+  updateFooterSignal();
 }
 
 /* ===== CRUD UI ===== */
@@ -470,7 +470,7 @@ function checkDueToasts(){
 }
 setInterval(checkDueToasts, 30000);
 
-/* ===== Bottom Sheet (heads-up al abrir) ===== */
+/* ===== Bottom Sheet (cola) ===== */
 function getDoneToday(){ const k='cm.reminders.done.'+todayISO(); return {k, set:new Set(JSON.parse(localStorage.getItem(k)||'[]'))}; }
 function putDoneToday(o){ localStorage.setItem(o.k, JSON.stringify([...o.set])); }
 
@@ -520,41 +520,19 @@ function showNextBS(){
   };
 }
 
+/* ===== Al cargar: solo pintar chip (no abrir sheet) ===== */
 function headsUpOnLoad(){
-  const list = loadAll(); 
-  if(!list.length){ 
-    updateFooterSignal();
-    return;
-  }
-  const now = Date.now(); 
-  const done = getDoneToday();
-
-  // Detecta si hay pendientes de HOY (hasta 30m vencidos) para pintar el chip
-  const todays = list.filter(r=>{
-    if(!appliesToday(r)) return false;
-    const tgt = todayTargetMs(r);
-    if(tgt < now - 30*60*1000) return false; // vencidos >30m no cuentan para el chip
-    if(done.set.has(r.id)) return false;
-    return true;
-  }).sort((a,b)=> todayTargetMs(a)-todayTargetMs(b));
-
-  // No abrimos sheet ni encolamos; solo actualizamos el chip
   updateFooterSignal();
 }
 document.addEventListener('DOMContentLoaded', headsUpOnLoad);
 
-/* ===== CHIP: lógica de pendientes de hoy ===== */
+/* ===== CHIP: pendientes de hoy (sin ventana de 30m) ===== */
 function pendingTodayList(){
   const list = loadAll();
   const done = getDoneToday();
-  const now = Date.now();
-
-  return list.filter(r=>{
-    if(!appliesToday(r)) return false;
-    if(done.set.has(r.id)) return false;
-    const tgt = todayTargetMs(r);
-    return tgt >= now - 30*60*1000; // incluye vencidos ≤30m
-  }).sort((a,b)=> todayTargetMs(a)-todayTargetMs(b));
+  return list
+    .filter(r => appliesToday(r) && !done.set.has(r.id))
+    .sort((a,b)=> todayTargetMs(a)-todayTargetMs(b));
 }
 
 function updateFooterSignal(){
@@ -579,12 +557,12 @@ function updateFooterSignal(){
   const remaining = items.length - 1;
   extra.textContent = remaining > 0 ? `(+${remaining})` : '';
 
-  // estado urgente (≤5m o vencido ≤30m)
+  // estado urgente (≤5m o ya vencido)
   const now = Date.now();
   const urgent = items.some(r=>{
     const tgt = todayTargetMs(r);
     const diffMin = Math.round((tgt - now)/60000);
-    return diffMin <= 5;
+    return diffMin <= 5; // incluye negativos (vencidos)
   });
   chip.classList.toggle('urgent', urgent);
 
@@ -598,14 +576,11 @@ document.getElementById('rem-chip')?.addEventListener('click', ()=>{
   const items = pendingTodayList();
   if(items.length===0) return;
 
-  // Si el sheet está abierto, respetamos la cola actual (no interrumpimos)
-  if (typeof bsOpen !== 'undefined' && bsOpen) return;
+  if (typeof bsOpen !== 'undefined' && bsOpen) return; // respetar cola abierta
 
-  // Encolamos pendientes que no estén ya en la cola
   const existing = new Set(idsInQueue());
   items.forEach(r=>{ if(!existing.has(r.id)) enqueueBS(r); });
 
-  // Si no está abierto, mostramos el primero
   if(!bsOpen) showNextBS();
 });
 
@@ -627,8 +602,11 @@ document.getElementById('rem-chip')?.addEventListener('click', ()=>{
 })();
 
 /* Render inicial + timers */
-render(); checkDueToasts(); updateFooterSignal();
-setInterval(updateFooterSignal, 60000); // refresco suave del chip
+render(); 
+checkDueToasts(); 
+updateFooterSignal();
+setInterval(updateFooterSignal, 60000);
+setTimeout(updateFooterSignal, 0);
 </script>
 </body>
 </html>
