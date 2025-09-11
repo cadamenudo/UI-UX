@@ -1,95 +1,132 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Chip + Cola de Recordatorios</title>
-<style>
-  :root{
-    --cm-primary:#3956E8;
-    --cm-border:#e5e7eb;
-    --cm-muted:#64748B;
-  }
-  *{box-sizing:border-box}
-  body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial; background:#f7f8fa}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chip de Recordatorios</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+  <style>
+    body{margin:0; font-family:'Greycliff CF',system-ui,sans-serif; background:#f7f8fa; min-height:100vh;}
 
-  /* ===== Chip flotante ===== */
-  .rem-chip{
-    position:fixed;
-    right:16px; bottom:24px;
-    display:flex; align-items:center; gap:10px;
-    background:#fff; border:1px solid var(--cm-border); border-radius:999px;
-    box-shadow:0 10px 28px rgba(2,6,23,.18);
-    padding:.55rem .9rem; font-weight:700; color:#111; cursor:pointer;
-    z-index:20000;
-  }
-  .rem-chip .dot{width:12px; height:12px; border-radius:999px; background:var(--cm-primary);}
-  .rem-chip .txt{font-weight:700; font-size:.9rem}
-  .rem-chip .cnt{font-weight:800; margin-left:6px; color:var(--cm-primary); opacity:.95}
+    /* === CHIP flotante === */
+    .rem-chip{position:fixed; right:16px; bottom:24px; display:flex; align-items:center; gap:10px;
+      background:#fff; border:1px solid #e5e7eb; border-radius:999px; padding:.55rem .9rem; font-weight:700;
+      color:#111; box-shadow:0 10px 28px rgba(2,6,23,.18); cursor:pointer; z-index:20000;}
+    .rem-chip .dot{width:12px; height:12px; border-radius:999px; background:#3956E8}
+    .rem-chip .cnt{color:#3956E8; font-weight:800}
 
-  /* ===== Overlay y Bottom Sheet ===== */
-  .bs-ovl{position:fixed; inset:0; background:rgba(17,24,39,.25); display:none; z-index:21000;}
-  .bs-ovl.show{display:block}
-  .bs-wrap{position:fixed; inset:0; display:grid; align-items:end; z-index:21001; pointer-events:none}
-  .bs-sheet{
-    width:100%; background:#fff; border-top-left-radius:18px; border-top-right-radius:18px;
-    border:1px solid #e5e7eb; box-shadow:0 -8px 40px rgba(2,6,23,.25);
-    pointer-events:auto; transform:translateY(110%); transition:transform .25s ease;
-    padding:14px 16px;
-  }
-  .bs-wrap.show .bs-sheet{ transform:translateY(0); }
-  .bs-grip{width:44px; height:5px; background:#e5e7eb; border-radius:999px; margin:6px auto 14px;}
-  .bs-title{font-weight:800; margin:0 0 12px; font-size:1rem}
-  .rem-list{list-style:none; margin:0; padding:0}
-  .rem-list li{
-    padding:10px 0; border-bottom:1px solid #f1f5f9;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  .rem-list li:last-child{border-bottom:none}
-  .rem-name{font-weight:600}
-  .rem-time{font-size:.85rem; color:var(--cm-muted)}
-</style>
+    /* Overlay + Modal */
+    .rem-ovl{position:fixed; inset:0; background:rgba(2,6,23,.36); display:none; z-index:20001}
+    .rem-ovl.show{display:block}
+    .rem-modal{position:fixed; inset:0; display:grid; place-items:center; z-index:20002; pointer-events:none}
+    .rem-modal.show .rem-sheet{transform:translateY(0); opacity:1}
+    .rem-sheet{width:min(760px,calc(100% - 24px)); background:#fff; border-radius:16px; border:1px solid #e5e7eb;
+      box-shadow:0 24px 80px rgba(2,6,23,.30); overflow:hidden; transform:translateY(10px); opacity:0;
+      transition:transform .18s ease, opacity .18s ease; pointer-events:auto}
+    .rem-hdr{display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 16px; border-bottom:1px solid #e5e7eb}
+    .rem-title{margin:0; font:700 1.05rem/1.2 system-ui, -apple-system, Segoe UI, Roboto}
+    .rem-close{border:none; background:#f3f4f6; color:#374151; border-radius:10px; padding:.5rem .7rem; cursor:pointer}
+
+    /* Lista con estilo tarjetas */
+    .rem-body{padding:10px 12px 14px; max-height:70vh; overflow:auto; background:#f7f8fa}
+    .rem-card{background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0;
+      box-shadow:0 4px 14px rgba(2,6,23,.04)}
+    .rem-left{display:flex; align-items:flex-start; gap:12px}
+    .rem-dot{width:14px; height:14px; border-radius:999px; background:#7459D9; margin-top:6px; flex:0 0 auto}
+    .rem-ttl{font-weight:800}
+    .rem-meta{font-size:.85rem; color:#64748B}
+    .rem-badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px}
+    .rem-badge{font-size:.75rem; padding:.15rem .5rem; border-radius:999px; border:1px solid #e5e7eb; color:#334155; background:#f9fafb}
+    .rem-actions{display:flex; gap:6px}
+    .rem-btn{border:1px solid #e5e7eb; background:#fff; padding:.45rem .6rem; border-radius:10px; cursor:pointer}
+  </style>
 </head>
 <body>
 
-<!-- Chip flotante -->
-<button id="rem-chip" class="rem-chip" aria-label="Recordatorios para hoy">
-  <span class="dot" aria-hidden="true"></span>
-  <span class="txt">Pagar AMEX</span>
-  <span class="cnt">(+2)</span>
-</button>
+  <!-- CHIP -->
+  <button id="remChip" class="rem-chip" aria-haspopup="dialog" aria-controls="remQueue">
+    <span class="dot" aria-hidden="true"></span>
+    <span>Pagar AMEX</span>
+    <span class="cnt">(+2)</span>
+  </button>
 
-<!-- Cola (bottom sheet) -->
-<div id="bs-ovl" class="bs-ovl"></div>
-<div id="bs-wrap" class="bs-wrap" aria-modal="true" role="dialog">
-  <div class="bs-sheet" role="document">
-    <div class="bs-grip" aria-hidden="true"></div>
-    <h3 class="bs-title">⏰ Recordatorios</h3>
-    <ul class="rem-list">
-      <li><span class="rem-name">Pagar AMEX</span> <span class="rem-time">Hoy 3:00 PM</span></li>
-      <li><span class="rem-name">Enviar reporte</span> <span class="rem-time">Hoy 5:30 PM</span></li>
-      <li><span class="rem-name">Llamar a Laura</span> <span class="rem-time">Mañana 9:00 AM</span></li>
-    </ul>
+  <!-- MODAL / COLA -->
+  <div id="remOvl" class="rem-ovl" tabindex="-1"></div>
+  <div id="remQueue" class="rem-modal" role="dialog" aria-modal="true" aria-labelledby="remTitle">
+    <div class="rem-sheet">
+      <div class="rem-hdr">
+        <h3 id="remTitle" class="rem-title">Recordatorios para hoy</h3>
+        <button class="rem-close" id="remClose">Cerrar</button>
+      </div>
+      <div class="rem-body" id="remList">
+        <!-- Se llena con JS -->
+      </div>
+    </div>
   </div>
-</div>
 
-<script>
-const chip = document.getElementById('rem-chip');
-const ovl  = document.getElementById('bs-ovl');
-const wrap = document.getElementById('bs-wrap');
+  <script>
+    // Demo data
+    const REMS = [
+      { id:'1', name:'Pagar AMEX', date:'2025-09-11', time:'09:00', type:'Factura', recur:'Una vez' },
+      { id:'2', name:'IBKR meeting', date:'2025-09-11', time:'14:00', type:'Personal', recur:'Semanal' },
+      { id:'3', name:'Savings app meeting', date:'2025-09-11', time:'13:30', type:'Personal', recur:'Semanal' },
+    ];
 
-function openSheet(){
-  ovl.classList.add('show');
-  wrap.classList.add('show');
-}
-function closeSheet(){
-  ovl.classList.remove('show');
-  wrap.classList.remove('show');
-}
+    // Helpers
+    function fmtTime(hm){ const [h,m]=hm.split(':'); const d=new Date(); d.setHours(+h,+m,0,0);
+      return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
 
-chip.addEventListener('click', openSheet);
-ovl.addEventListener('click', closeSheet);
-</script>
+    // Render lista
+    function renderQueue(){
+      const wrap = document.getElementById('remList');
+      wrap.innerHTML = '';
+      REMS.forEach(r=>{
+        const el = document.createElement('div');
+        el.className = 'rem-card';
+        el.innerHTML = `
+          <div class="rem-left">
+            <span class="rem-dot" aria-hidden="true"></span>
+            <div>
+              <div class="rem-ttl">${r.name}</div>
+              <div class="rem-meta">${new Date().toLocaleDateString()} • ${fmtTime(r.time)}</div>
+              <div class="rem-badges">
+                <span class="rem-badge">${r.type}</span>
+                <span class="rem-badge">${r.recur}</span>
+              </div>
+            </div>
+          </div>
+          <div class="rem-actions">
+            <button class="rem-btn" title="Posponer +10m">+10m</button>
+            <button class="rem-btn" title="Hecho">✓</button>
+          </div>`;
+        wrap.appendChild(el);
+      });
+    }
 
+    // Abrir / cerrar
+    const chip  = document.getElementById('remChip');
+    const ovl   = document.getElementById('remOvl');
+    const modal = document.getElementById('remQueue');
+    const close = document.getElementById('remClose');
+
+    function openQueue(){
+      renderQueue();
+      ovl.classList.add('show');
+      modal.classList.add('show');
+      close.focus();
+    }
+    function closeQueue(){
+      ovl.classList.remove('show');
+      modal.classList.remove('show');
+      chip.focus();
+    }
+
+    chip.addEventListener('click', openQueue);
+    close.addEventListener('click', closeQueue);
+    ovl.addEventListener('click', closeQueue);
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeQueue(); });
+  </script>
 </body>
 </html>
