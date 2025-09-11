@@ -3,53 +3,92 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Chip — Pagar AMEX (+2)</title>
+<title>Chip + Cola de Recordatorios</title>
 <style>
   :root{
     --cm-primary:#3956E8;
     --cm-border:#e5e7eb;
+    --cm-muted:#64748B;
   }
   *{box-sizing:border-box}
-  body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial}
-  /* ===== Chip flotante sobre el “footer” ===== */
+  body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial; background:#f7f8fa}
+
+  /* ===== Chip flotante ===== */
   .rem-chip{
     position:fixed;
-    right:16px; bottom:24px;                /* ajusta según tu footer real */
+    right:16px; bottom:24px;
     display:flex; align-items:center; gap:10px;
     background:#fff; border:1px solid var(--cm-border); border-radius:999px;
     box-shadow:0 10px 28px rgba(2,6,23,.18);
     padding:.55rem .9rem; font-weight:700; color:#111; cursor:pointer;
     z-index:20000;
   }
-  .rem-chip .dot{
-    width:12px; height:12px; border-radius:999px; background:var(--cm-primary);
-  }
+  .rem-chip .dot{width:12px; height:12px; border-radius:999px; background:var(--cm-primary);}
   .rem-chip .txt{font-weight:700; font-size:.9rem}
   .rem-chip .cnt{font-weight:800; margin-left:6px; color:var(--cm-primary); opacity:.95}
 
-  /* Estado “urgente” opcional (si lo necesitas, añade la clase .urgent al botón) */
-  .rem-chip.urgent{border-color:#fed7aa; box-shadow:0 10px 28px rgba(234,88,12,.18)}
-  .rem-chip.urgent .dot{background:#EA580C}
-  .rem-chip.urgent .txt{color:#EA580C}
-  .rem-chip.urgent .cnt{color:#EA580C}
-  @keyframes pulseSoft{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
-  .rem-chip.urgent{animation:pulseSoft 1.6s ease-in-out infinite}
+  /* ===== Overlay y Bottom Sheet ===== */
+  .bs-ovl{position:fixed; inset:0; background:rgba(17,24,39,.25); display:none; z-index:21000;}
+  .bs-ovl.show{display:block}
+  .bs-wrap{position:fixed; inset:0; display:grid; align-items:end; z-index:21001; pointer-events:none}
+  .bs-sheet{
+    width:100%; background:#fff; border-top-left-radius:18px; border-top-right-radius:18px;
+    border:1px solid #e5e7eb; box-shadow:0 -8px 40px rgba(2,6,23,.25);
+    pointer-events:auto; transform:translateY(110%); transition:transform .25s ease;
+    padding:14px 16px;
+  }
+  .bs-wrap.show .bs-sheet{ transform:translateY(0); }
+  .bs-grip{width:44px; height:5px; background:#e5e7eb; border-radius:999px; margin:6px auto 14px;}
+  .bs-title{font-weight:800; margin:0 0 12px; font-size:1rem}
+  .rem-list{list-style:none; margin:0; padding:0}
+  .rem-list li{
+    padding:10px 0; border-bottom:1px solid #f1f5f9;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .rem-list li:last-child{border-bottom:none}
+  .rem-name{font-weight:600}
+  .rem-time{font-size:.85rem; color:var(--cm-muted)}
 </style>
 </head>
 <body>
 
 <!-- Chip flotante -->
-<button id="rem-chip" class="rem-chip" aria-label="Recordatorios para hoy: Pagar AMEX más dos">
+<button id="rem-chip" class="rem-chip" aria-label="Recordatorios para hoy">
   <span class="dot" aria-hidden="true"></span>
   <span class="txt">Pagar AMEX</span>
   <span class="cnt">(+2)</span>
 </button>
 
+<!-- Cola (bottom sheet) -->
+<div id="bs-ovl" class="bs-ovl"></div>
+<div id="bs-wrap" class="bs-wrap" aria-modal="true" role="dialog">
+  <div class="bs-sheet" role="document">
+    <div class="bs-grip" aria-hidden="true"></div>
+    <h3 class="bs-title">⏰ Recordatorios</h3>
+    <ul class="rem-list">
+      <li><span class="rem-name">Pagar AMEX</span> <span class="rem-time">Hoy 3:00 PM</span></li>
+      <li><span class="rem-name">Enviar reporte</span> <span class="rem-time">Hoy 5:30 PM</span></li>
+      <li><span class="rem-name">Llamar a Laura</span> <span class="rem-time">Mañana 9:00 AM</span></li>
+    </ul>
+  </div>
+</div>
+
 <script>
-  // Ejemplo: al hacer click, abre tu cola/sheet (aquí solo mostramos un alert)
-  document.getElementById('rem-chip').addEventListener('click', () => {
-    alert('Abrir cola de recordatorios…');
-  });
+const chip = document.getElementById('rem-chip');
+const ovl  = document.getElementById('bs-ovl');
+const wrap = document.getElementById('bs-wrap');
+
+function openSheet(){
+  ovl.classList.add('show');
+  wrap.classList.add('show');
+}
+function closeSheet(){
+  ovl.classList.remove('show');
+  wrap.classList.remove('show');
+}
+
+chip.addEventListener('click', openSheet);
+ovl.addEventListener('click', closeSheet);
 </script>
 
 </body>
