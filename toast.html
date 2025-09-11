@@ -521,19 +521,25 @@ function showNextBS(){
 }
 
 function headsUpOnLoad(){
-  const list = loadAll(); if(!list.length) return;
-  const now = Date.now(); const done = getDoneToday();
+  const list = loadAll(); 
+  if(!list.length){ 
+    updateFooterSignal();
+    return;
+  }
+  const now = Date.now(); 
+  const done = getDoneToday();
 
-  // candidatos: aplican hoy, hasta 30 min vencidos, y no "hechos" hoy
+  // Detecta si hay pendientes de HOY (hasta 30m vencidos) para pintar el chip
   const todays = list.filter(r=>{
     if(!appliesToday(r)) return false;
     const tgt = todayTargetMs(r);
-    if(tgt < now - 30*60*1000) return false;
+    if(tgt < now - 30*60*1000) return false; // vencidos >30m no cuentan para el chip
     if(done.set.has(r.id)) return false;
     return true;
   }).sort((a,b)=> todayTargetMs(a)-todayTargetMs(b));
 
-  todays.forEach(enqueueBS);
+  // No abrimos sheet ni encolamos; solo actualizamos el chip
+  updateFooterSignal();
 }
 document.addEventListener('DOMContentLoaded', headsUpOnLoad);
 
