@@ -67,11 +67,12 @@ body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'
 
 /* ===== Chip flotante sobre el footer ===== */
 .rem-chip{
-  position:fixed; right:16px; bottom:96px; /* subido para asegurar visibilidad sobre footer */
+  position:fixed; right:16px; bottom:24px;     /* antes 96px */
   display:flex; align-items:center; gap:10px;
   background:#fff; border:1px solid #e5e7eb; border-radius:999px;
   box-shadow:0 10px 28px rgba(2,6,23,.18);
-  padding:.55rem .9rem; font-weight:700; color:#111; cursor:pointer; z-index:10001;
+  padding:.55rem .9rem; font-weight:700; color:#111; cursor:pointer;
+  z-index:20000;                                 
 }
 .rem-chip[hidden]{display:none}
 .rem-chip .dot{width:12px; height:12px; border-radius:999px; background:#3956E8;}
@@ -530,8 +531,16 @@ document.addEventListener('DOMContentLoaded', headsUpOnLoad);
 function pendingTodayList(){
   const list = loadAll();
   const done = getDoneToday();
+  const now = Date.now();
+
   return list
-    .filter(r => appliesToday(r) && !done.set.has(r.id))
+    .filter(r => {
+      if (!appliesToday(r)) return false;
+      if (done.set.has(r.id)) return false;
+      const tgt = todayTargetMs(r);
+      // mantener pendientes incluso si están vencidos hasta 30m
+      return tgt >= now - 30*60*1000;
+    })
     .sort((a,b)=> todayTargetMs(a)-todayTargetMs(b));
 }
 
@@ -557,17 +566,24 @@ function updateFooterSignal(){
   const remaining = items.length - 1;
   extra.textContent = remaining > 0 ? `(+${remaining})` : '';
 
-  // estado urgente (≤5m o ya vencido)
+  // estado urgente (≤5m o vencido ≤30m)
   const now = Date.now();
   const urgent = items.some(r=>{
     const tgt = todayTargetMs(r);
     const diffMin = Math.round((tgt - now)/60000);
-    return diffMin <= 5; // incluye negativos (vencidos)
+    return diffMin <= 5;
   });
   chip.classList.toggle('urgent', urgent);
 
   chip.hidden = false;
 }
+
+// asegurar que pinte al abrir
+document.addEventListener('DOMContentLoaded', ()=> {
+  updateFooterSignal();
+  setTimeout(updateFooterSignal, 0); // doble llamada por seguridad
+});
+
 
 // ids presentes en la cola para evitar duplicados
 function idsInQueue(){ return (typeof bsQueue !== 'undefined' ? bsQueue.map(r=>r.id) : []); }
