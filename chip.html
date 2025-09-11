@@ -3,275 +3,202 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Chip + Cola + Editar (CRUD)</title>
+<title>Chip + Cola de Recordatorios</title>
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
 <style>
-  :root{ --cm-primary:#3956E8; --cm-border:#e5e7eb; --cm-muted:#64748B; }
-  body{margin:0; font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial; background:#f7f8fa; min-height:100vh}
+:root{
+  --cm-primary:#3956E8; --cm-secondary:#7459D9; --cm-accent:#E8C239;
+  --cm-bg:#f7f8fa; --cm-text:#111; --cm-muted:#64748B; --cm-border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial; margin:0; background:var(--cm-bg); color:var(--cm-text); min-height:100vh}
 
-  /* ===== CHIP ===== */
-  .rem-chip{position:fixed; right:16px; bottom:24px; display:flex; align-items:center; gap:10px;
-    background:#fff; border:1px solid var(--cm-border); border-radius:999px; padding:.55rem .9rem;
-    font-weight:700; color:#111; box-shadow:0 10px 28px rgba(2,6,23,.18); cursor:pointer; z-index:20000}
-  .rem-chip .dot{width:12px; height:12px; border-radius:999px; background:#3956E8}
-  .rem-chip .cnt{color:#3956E8; font-weight:800}
+/* ===== CHIP flotante ===== */
+.rem-chip{
+  position:fixed; right:16px; bottom:24px;
+  display:flex; align-items:center; gap:10px;
+  background:#fff; border:1px solid #e5e7eb; border-radius:999px;
+  box-shadow:0 10px 28px rgba(2,6,23,.18);
+  padding:.55rem .9rem; font-weight:700; color:#111; cursor:pointer;
+  z-index:20000;
+}
+.rem-chip[hidden]{display:none}
+.rem-chip .dot{width:10px; height:10px; border-radius:999px; background:#3956E8;}
+.rem-chip .txt{font-weight:700; font-size:.9rem}
+.rem-chip .cnt{font-weight:800; margin-left:6px; color:#3956E8; opacity:.9}
 
-  /* ===== OVERLAY + MODAL QUEUE ===== */
-  .ovl{position:fixed; inset:0; background:rgba(2,6,23,.36); display:none; z-index:20001}
-  .ovl.show{display:block}
-  .modal{position:fixed; inset:0; display:grid; place-items:center; z-index:20002; pointer-events:none}
-  .sheet{width:min(760px,calc(100% - 24px)); background:#fff; border-radius:16px; border:1px solid var(--cm-border);
-    box-shadow:0 24px 80px rgba(2,6,23,.30); overflow:hidden; transform:translateY(10px); opacity:0;
-    transition:transform .18s ease, opacity .18s ease; pointer-events:auto}
-  .modal.show .sheet{transform:translateY(0); opacity:1}
-  .hdr{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-bottom:1px solid var(--cm-border)}
-  .hdr h3{margin:0; font-size:1.05rem}
-  .close{border:none; background:#f3f4f6; color:#374151; border-radius:10px; padding:.5rem .7rem; cursor:pointer}
-  .body{padding:10px 12px 14px; max-height:70vh; overflow:auto; background:#f7f8fa}
+/* ===== MODAL Cola ===== */
+.q-ovl{
+  position:fixed; inset:0; background:rgba(17,24,39,.45);
+  opacity:0; transition:opacity .2s ease; z-index:19998; display:none;
+}
+.q-ovl.show{display:block; opacity:1}
 
-  .card{background:#fff; border:1px solid var(--cm-border); border-radius:14px; padding:12px;
-    display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0; box-shadow:0 4px 14px rgba(2,6,23,.04)}
-  .left{display:flex; align-items:flex-start; gap:12px}
-  .dot-lg{width:14px; height:14px; border-radius:999px; background:#7459D9; margin-top:6px; flex:0 0 auto}
-  .ttl{font-weight:800}
-  .meta{font-size:.85rem; color:#64748B}
-  .badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px}
-  .badge{font-size:.75rem; padding:.15rem .5rem; border-radius:999px; border:1px solid var(--cm-border); color:#334155; background:#f9fafb}
-  .actions{display:flex; gap:6px}
-  .iconbtn{border:1px solid var(--cm-border); background:#fff; padding:.45rem .6rem; border-radius:10px; cursor:pointer}
-  .iconbtn.danger{border-color:#fecaca; color:#b91c1c}
+.q-wrap{
+  position:fixed; inset:0; display:grid; place-items:center;
+  z-index:19999; padding:16px; /* importante: NO pointer-events:none */
+}
+.q-card{
+  width:min(860px,100%); background:#fff; border:1px solid var(--cm-border);
+  border-radius:18px; box-shadow:0 24px 80px rgba(2,6,23,.30);
+  transform:translateY(8px); opacity:0; transition:transform .2s, opacity .2s;
+}
+.q-wrap.show .q-card{transform:translateY(0); opacity:1}
 
-  /* ===== MODAL CRUD (editar) ===== */
-  .ovl-crud{position:fixed; inset:0; background:rgba(17,24,39,.48); display:none; z-index:21001}
-  .ovl-crud.show{display:block}
-  .modal-crud{position:fixed; inset:0; display:grid; place-items:center; z-index:21002; pointer-events:none}
-  .modal-crud.show .sheet{transform:translateY(0); opacity:1}
-  .sheet{ /* already defined above; reused */ }
-  .form{padding:16px 18px}
-  .grid{display:grid; grid-template-columns:1fr; gap:12px}
-  .field{display:flex; flex-direction:column; gap:6px}
-  label{font-size:.9rem; color:var(--cm-muted); font-weight:700}
-  input[type="text"], input[type="date"], input[type="time"], select, textarea{
-    width:100%; border:1px solid var(--cm-border); border-radius:12px; padding:.7rem .85rem; font:inherit; background:#fff;
-  }
-  textarea{min-height:90px}
-  .ft{display:flex; gap:10px; justify-content:flex-end; align-items:center; padding:12px 14px; border-top:1px solid var(--cm-border); background:#fff}
-  .btn{background:var(--cm-primary); color:#fff; border:none; border-radius:999px; padding:.7rem 1rem; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(57,86,232,.25)}
-  .btn-outline{background:#fff; color:var(--cm-primary); border:2px solid var(--cm-primary); border-radius:999px; padding:.6rem 1rem; font-weight:700; cursor:pointer}
-  .req{color:#ef4444}
+.q-hdr{display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:16px 18px; border-bottom:1px solid var(--cm-border)}
+.q-hdr h3{margin:0; font-size:1.05rem}
+.q-close{border:1px solid var(--cm-border); background:#fff; border-radius:10px; padding:.5rem .75rem; cursor:pointer}
+
+.q-list{padding:14px}
+.q-item{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  background:#fff; border:1px solid var(--cm-border); border-radius:14px;
+  padding:12px; box-shadow:0 4px 14px rgba(2,6,23,.04); margin:10px 0;
+}
+.q-left{display:flex; align-items:flex-start; gap:12px}
+.q-dot{width:12px; height:12px; border-radius:999px; background:#7459D9; margin-top:6px}
+.q-title{font-weight:800}
+.q-meta{font-size:.9rem; color:#64748B; margin-top:2px}
+.q-badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px}
+.q-badge{font-size:.75rem; padding:.15rem .5rem; border-radius:999px; border:1px solid var(--cm-border); color:#334155; background:#f9fafb}
+
+.actions{display:flex; gap:6px}
+.iconbtn{border:1px solid var(--cm-border); background:#fff; padding:.45rem .6rem; border-radius:10px; cursor:pointer}
+.iconbtn.danger{border-color:#fecaca; color:#b91c1c}
 </style>
 </head>
 <body>
 
-<!-- CHIP -->
-<button id="chip" class="rem-chip" aria-haspopup="dialog" aria-controls="queue">
+<!-- ===== Chip flotante ===== -->
+<button id="rem-chip" class="rem-chip" type="button" aria-label="Recordatorios para hoy">
   <span class="dot" aria-hidden="true"></span>
-  <span id="chipTitle">Pagar AMEX</span>
-  <span class="cnt" id="chipCnt">(+2)</span>
+  <span class="txt" id="rem-chip-text">Pagar AMEX</span>
+  <span class="cnt" id="rem-chip-extra">(+2)</span>
 </button>
 
-<!-- QUEUE MODAL -->
-<div id="ovl" class="ovl" tabindex="-1"></div>
-<div id="queue" class="modal" role="dialog" aria-modal="true" aria-labelledby="qTitle">
-  <div class="sheet">
-    <div class="hdr">
-      <h3 id="qTitle">Recordatorios para hoy</h3>
-      <button class="close" id="qClose">Cerrar</button>
+<!-- ===== Modal Cola ===== -->
+<div id="qOvl" class="q-ovl" aria-hidden="true"></div>
+<div id="qWrap" class="q-wrap" aria-modal="true" role="dialog" hidden>
+  <div class="q-card" role="document">
+    <div class="q-hdr">
+      <h3>Recordatorios para hoy</h3>
+      <button id="qClose" class="q-close" type="button">Cerrar</button>
     </div>
-    <div class="body" id="qList"></div>
-  </div>
-</div>
-
-<!-- CRUD MODAL (Editar) -->
-<div id="ovlCrud" class="ovl-crud"></div>
-<div id="mdlCrud" class="modal-crud" role="dialog" aria-modal="true" aria-labelledby="crudTitle">
-  <div class="sheet" style="width:min(720px,calc(100% - 24px))">
-    <div class="hdr">
-      <h3 id="crudTitle">Editar recordatorio</h3>
-      <button class="close" id="crudClose" aria-label="Cerrar">✕</button>
-    </div>
-    <form id="frm" class="form">
-      <input type="hidden" id="remId" />
-      <div class="grid">
-        <div class="field">
-          <label for="name">Título <span class="req">*</span></label>
-          <input id="name" type="text" required placeholder="Ej: Pagar tarjeta / Revisión presupuesto">
-        </div>
-        <div class="field">
-          <label for="type">Tipo</label>
-          <select id="type">
-            <option value="Factura">Pago de factura</option>
-            <option value="Personal">Personalizado</option>
-            <option value="Presupuesto">Revisión de presupuesto</option>
-            <option value="Meta">Aporte a meta</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="date">Fecha <span class="req">*</span></label>
-          <input id="date" type="date" required>
-        </div>
-        <div class="field">
-          <label for="time">Hora <span class="req">*</span></label>
-          <input id="time" type="time" required>
-        </div>
-        <div class="field">
-          <label for="recur">Recurrencia</label>
-          <select id="recur">
-            <option>Una vez</option>
-            <option>Diario</option>
-            <option>Semanal</option>
-            <option>Mensual</option>
-          </select>
-        </div>
-        <div class="field" style="grid-column:1/-1">
-          <label for="notes">Notas</label>
-          <textarea id="notes" placeholder="Detalle opcional…"></textarea>
-        </div>
-      </div>
-    </form>
-    <div class="ft">
-      <button class="btn-outline" id="btnCancel" type="button">Cancelar</button>
-      <button class="btn" id="btnSave" type="button">Guardar</button>
-    </div>
+    <div id="qList" class="q-list" aria-live="polite"></div>
   </div>
 </div>
 
 <script>
-  // ===== Demo data =====
-  let REMS = [
-    { id:'1', name:'Pagar AMEX',            date:'2025-09-11', time:'09:00', type:'Factura',  recur:'Una vez',   notes:'' },
-    { id:'2', name:'IBKR meeting',          date:'2025-09-11', time:'14:00', type:'Personal', recur:'Semanal',   notes:'Zoom…' },
-    { id:'3', name:'Savings app meeting',   date:'2025-09-11', time:'13:30', type:'Personal', recur:'Semanal',   notes:'' }
-  ];
+/* ------------------ Datos demo ------------------ */
+const reminders = [
+  { id:'1', name:'Pagar AMEX',        date:'2025-09-11', time:'09:00', type:'bill',    recur:'once'   },
+  { id:'2', name:'Savings app meeting', date:'2025-09-11', time:'13:30', type:'custom', recur:'weekly' },
+  { id:'3', name:'IBKR meeting',        date:'2025-09-11', time:'14:00', type:'custom', recur:'weekly' },
+];
+// utilidades
+function fmtDate(d){ return new Date(d).toLocaleDateString() }
+function fmtTime(t){ const [h,m]=t.split(':').map(Number); const d=new Date(); d.setHours(h,m); return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
+const typeBadge = t => ({bill:'Factura', custom:'Personal', goal:'Meta', budget:'Presupuesto'})[t] || t;
+const recurBadge = r => ({once:'Una vez', daily:'Diario', weekly:'Semanal', monthly:'Mensual'})[r] || r;
 
-  // ===== Helpers =====
-  function fmtTime(hm){ const [h,m]=hm.split(':'); const d=new Date(); d.setHours(+h,+m,0,0); return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
-  function sortByTime(a){ return a.slice().sort((x,y)=> x.time.localeCompare(y.time)); }
-  function pad(n){ return String(n).padStart(2,'0'); }
-  function isoLocalDate(d){ const z=new Date(d); z.setMinutes(z.getMinutes()-z.getTimezoneOffset()); return z.toISOString().slice(0,10); }
+/* ------------------ CHIP ------------------ */
+const chip = document.getElementById('rem-chip');
+const chipTxt = document.getElementById('rem-chip-text');
+const chipExtra = document.getElementById('rem-chip-extra');
 
-  // ===== CHIP =====
-  const chipTitle = document.getElementById('chipTitle');
-  const chipCnt   = document.getElementById('chipCnt');
-  function refreshChip(){
-    const arr = sortByTime(REMS);
-    if(arr.length===0){ chipTitle.textContent='Sin recordatorios'; chipCnt.textContent=''; return; }
-    chipTitle.textContent = arr[0].name;
-    chipCnt.textContent   = arr.length>1 ? `(+${arr.length-1})` : '';
-  }
+function updateChip(){
+  if(!reminders.length){ chip.hidden=true; return; }
+  const next = reminders[0];               // demo: ya ordenados
+  const rest = reminders.length - 1;
+  chipTxt.textContent = next.name || 'Recordatorio';
+  chipExtra.textContent = rest>0 ? `(+${rest})` : '';
+  chip.hidden = false;
+}
+updateChip();
 
-  // ===== QUEUE render =====
-  const qList = document.getElementById('qList');
-  function renderQueue(){
-    qList.innerHTML='';
-    sortByTime(REMS).forEach(r=>{
-      const card = document.createElement('div');
-      card.className='card';
-      card.innerHTML = `
-        <div class="left">
-          <span class="dot-lg" aria-hidden="true"></span>
-          <div>
-            <div class="ttl">${r.name}</div>
-            <div class="meta">${new Date(r.date).toLocaleDateString()} • ${fmtTime(r.time)}</div>
-            <div class="badges">
-              <span class="badge">${r.type}</span>
-              <span class="badge">${r.recur}</span>
-            </div>
+/* ------------------ MODAL COLA ------------------ */
+const qOvl  = document.getElementById('qOvl');
+const qWrap = document.getElementById('qWrap');
+const qList = document.getElementById('qList');
+const qClose= document.getElementById('qClose');
+
+function openQueue(){
+  renderQueue();
+  qWrap.hidden = false;
+  // pequeño raf para animación
+  requestAnimationFrame(()=>{
+    qWrap.classList.add('show');
+    qOvl.classList.add('show');
+    qOvl.setAttribute('aria-hidden','false');
+  });
+}
+function closeQueue(){
+  qWrap.classList.remove('show');
+  qOvl.classList.remove('show');
+  qOvl.setAttribute('aria-hidden','true');
+  setTimeout(()=>{ qWrap.hidden = true; }, 180);
+}
+
+function renderQueue(){
+  qList.innerHTML = '';
+  reminders.forEach(r=>{
+    const card = document.createElement('div');
+    card.className = 'q-item';
+    card.dataset.id = r.id;
+    card.innerHTML = `
+      <div class="q-left">
+        <span class="q-dot" aria-hidden="true"></span>
+        <div>
+          <div class="q-title">${r.name}</div>
+          <div class="q-meta">${fmtDate(r.date)} • ${fmtTime(r.time)}</div>
+          <div class="q-badges">
+            <span class="q-badge">${typeBadge(r.type)}</span>
+            <span class="q-badge">${recurBadge(r.recur)}</span>
           </div>
         </div>
-        <div class="actions">
-          <button class="iconbtn" data-act="edit" data-id="${r.id}" title="Editar">✎</button>
-          <button class="iconbtn danger" data-act="del" data-id="${r.id}" title="Eliminar">🗑</button>
-        </div>`;
-      qList.appendChild(card);
-    });
-    qList.querySelectorAll('.iconbtn').forEach(b=>{
-      b.addEventListener('click', ev=>{
-        const id=ev.currentTarget.getAttribute('data-id');
-        const act=ev.currentTarget.getAttribute('data-act');
-        if(act==='edit') openEdit(id);
-        if(act==='del')  onDelete(id);
-      });
-    });
-  }
-
-  // ===== QUEUE open/close =====
-  const ovl   = document.getElementById('ovl');
-  const modal = document.getElementById('queue');
-  document.getElementById('chip').addEventListener('click', ()=>{ renderQueue(); ovl.classList.add('show'); modal.classList.add('show'); });
-  document.getElementById('qClose').addEventListener('click', ()=>{ ovl.classList.remove('show'); modal.classList.remove('show'); });
-  ovl.addEventListener('click', ()=>{ ovl.classList.remove('show'); modal.classList.remove('show'); });
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ ovl.classList.remove('show'); modal.classList.remove('show'); closeCrud(); }});
-
-  // ===== CRUD open with data =====
-  const ovlCrud = document.getElementById('ovlCrud');
-  const mdlCrud = document.getElementById('mdlCrud');
-  const frm     = document.getElementById('frm');
-
-  function fillForm(r){
-    document.getElementById('remId').value = r.id;
-    document.getElementById('name').value  = r.name || '';
-    document.getElementById('type').value  = r.type || 'Personal';
-    document.getElementById('date').value  = r.date || isoLocalDate(new Date());
-    document.getElementById('time').value  = r.time || (pad(new Date().getHours())+':'+pad(new Date().getMinutes()));
-    document.getElementById('recur').value = r.recur || 'Una vez';
-    document.getElementById('notes').value = r.notes || '';
-  }
-
-  function openCrud(r){
-    fillForm(r);
-    ovlCrud.classList.add('show');
-    mdlCrud.classList.add('show');
-    document.getElementById('name').focus();
-  }
-  function closeCrud(){
-    ovlCrud.classList.remove('show');
-    mdlCrud.classList.remove('show');
-  }
-
-  function openEdit(id){
-    const r = REMS.find(x=>x.id===id);
-    if(!r) return;
-    openCrud(r);
-  }
-
-  // ===== CRUD actions =====
-  document.getElementById('btnCancel').addEventListener('click', closeCrud);
-  document.getElementById('crudClose').addEventListener('click', closeCrud);
-  ovlCrud.addEventListener('click', closeCrud);
-
-  document.getElementById('btnSave').addEventListener('click', ()=>{
-    if(!frm.reportValidity()) return;
-    const id   = document.getElementById('remId').value;
-    const data = {
-      id,
-      name : document.getElementById('name').value.trim(),
-      type : document.getElementById('type').value,
-      date : document.getElementById('date').value,
-      time : document.getElementById('time').value,
-      recur: document.getElementById('recur').value,
-      notes: document.getElementById('notes').value.trim()
-    };
-    const i = REMS.findIndex(x=>x.id===id);
-    if(i>-1) REMS[i]=data;
-    closeCrud();
-    renderQueue();
-    refreshChip();
+      </div>
+      <div class="actions">
+        <button class="iconbtn" type="button" title="Editar" data-act="edit" data-id="${r.id}">✎</button>
+        <button class="iconbtn danger" type="button" title="Eliminar" data-act="del" data-id="${r.id}">🗑</button>
+      </div>`;
+    qList.appendChild(card);
   });
+}
 
-  // ===== Delete =====
-  function onDelete(id){
-    const r = REMS.find(x=>x.id===id);
-    if(!r) return;
-    if(!confirm(`¿Eliminar "${r.name}"?`)) return;
-    REMS = REMS.filter(x=>x.id!==id);
+/* Delegación de eventos para Editar/Borrar */
+qList.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.iconbtn');
+  if(!btn) return;
+  const id  = btn.dataset.id;
+  const act = btn.dataset.act;
+  if(act==='edit') openEdit(id);
+  if(act==='del')  onDelete(id);
+});
+
+function openEdit(id){
+  // 1) Lanza un evento que la app puede escuchar para abrir su editor real
+  window.dispatchEvent(new CustomEvent('reminder:edit', { detail:{ id } }));
+  // 2) Fallback simple (puedes quitarlo al integrar)
+  alert('Editar: '+ id + ' (aquí abres tu modal de edición)');
+}
+
+function onDelete(id){
+  const idx = reminders.findIndex(x=>x.id===id);
+  if(idx>-1 && confirm('¿Eliminar recordatorio?')){
+    reminders.splice(idx,1);
     renderQueue();
-    refreshChip();
-    if(REMS.length===0){ ovl.classList.remove('show'); modal.classList.remove('show'); }
+    updateChip();
   }
+}
 
-  // init
-  refreshChip();
+/* Abrir/Cerrar */
+chip.addEventListener('click', openQueue);
+qClose.addEventListener('click', closeQueue);
+qOvl.addEventListener('click', closeQueue);
+
+/* (Opcional) ejemplo de escucha externa */
+// window.addEventListener('reminder:edit', (e)=> console.log('Abrir editor para', e.detail.id));
 </script>
 </body>
 </html>
