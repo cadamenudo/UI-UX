@@ -136,7 +136,13 @@ h5 span:nth-child(2) {
     .contenido-transacciones {
       display: none;
     }
-
+.icono-recurrente {
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  vertical-align: middle;
+  opacity: 0.8;
+}
   </style>
 </head>
 <body>
@@ -156,6 +162,26 @@ h5 span:nth-child(2) {
   <div class="bloque-categoria">
     <h5><span>Sueldo</span><span><span class="simbolo">$</span>2,400.00</span></h5>
     <div class="contenido-transacciones">
+      
+      <!-- Transacción 1 (recurrente) -->
+      <div class="tarjeta-transaccion">
+        <div class="col-1">
+          <span class="monto"><span class="simbolo">$</span>1,200.00</span>
+          <span class="subcategoria">
+            Sueldo
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/recurrencias.png" alt="Recurrente" class="icono-recurrente" title="Transacción recurrente">
+          </span>
+        </div>
+        <div class="col-2">
+          <span class="fecha">12 mayo 2025</span>
+          <span class="fuente">Banco BCP</span>
+        </div>
+        <div class="col-3">
+          <span class="editar">Editar</span>
+        </div>
+      </div>
+
+      <!-- Transacción 2 (no recurrente) -->
       <div class="tarjeta-transaccion">
         <div class="col-1">
           <span class="monto"><span class="simbolo">$</span>1,200.00</span>
@@ -169,19 +195,7 @@ h5 span:nth-child(2) {
           <span class="editar">Editar</span>
         </div>
       </div>
-      <div class="tarjeta-transaccion">
-        <div class="col-1">
-          <span class="monto"><span class="simbolo">$</span>1,200.00</span>
-          <span class="subcategoria">Sueldo</span>
-        </div>
-        <div class="col-2">
-          <span class="fecha">12 mayo 2025</span>
-          <span class="fuente">Banco BCP</span>
-        </div>
-        <div class="col-3">
-          <span class="editar">Editar</span>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
