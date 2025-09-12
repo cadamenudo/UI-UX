@@ -136,13 +136,18 @@ h5 span:nth-child(2) {
     .contenido-transacciones {
       display: none;
     }
+.acciones-transaccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .icono-recurrente {
   width: 16px;
   height: 16px;
-  margin-left: 4px;
-  vertical-align: middle;
-  opacity: 0.8;
+  opacity: 0.7;
 }
+
   </style>
 </head>
 <body>
@@ -176,9 +181,10 @@ h5 span:nth-child(2) {
           <span class="fecha">12 mayo 2025</span>
           <span class="fuente">Banco BCP</span>
         </div>
-        <div class="col-3">
-          <span class="editar">Editar</span>
-        </div>
+         <div class="acciones-transaccion">
+        <img src="https://cadamenudo.github.io/UI-UX/assets/icons/recurrencias.png" alt="Recurrente" class="icono-recurrente" title="Transacción recurrente">
+        <span class="editar">Editar</span>
+      </div>
       </div>
 
       <!-- Transacción 2 -->
@@ -194,9 +200,10 @@ h5 span:nth-child(2) {
           <span class="fecha">1 mayo 2025</span>
           <span class="fuente">Banco BCP</span>
         </div>
-        <div class="col-3">
-          <span class="editar">Editar</span>
-        </div>
+          <div class="acciones-transaccion">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/recurrencias.png" alt="Recurrente" class="icono-recurrente" title="Transacción recurrente">
+            <span class="editar">Editar</span>
+          </div>
       </div>
 
     </div>
