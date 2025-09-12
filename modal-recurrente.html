@@ -2,109 +2,271 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nueva Transacción Recurrente</title>
-  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css" />
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
   <style>
     body {
       font-family: 'Greycliff CF', sans-serif;
-      background: #f9fafb;
-      margin: 0;
+      background: #F9FAFB;
       padding: 2rem;
-      color: #111827;
+      color: #111;
     }
 
-    .modal-recurrente {
-      max-width: 480px;
+    .modal {
       background: #fff;
-      border-radius: 20px;
+      border-radius: 16px;
       padding: 2rem;
+      max-width: 400px;
       margin: 0 auto;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
 
-    .modal-recurrente h2 {
+    h2 {
       font-size: 1.5rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     label {
       display: block;
       margin-top: 1rem;
-      margin-bottom: 0.25rem;
       font-weight: 600;
-      color: #374151;
+      font-size: 0.9rem;
     }
 
-    input[type="text"],
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
+      padding: 0.6rem;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      margin-top: 0.5rem;
       font-size: 1rem;
-      box-sizing: border-box;
-      font-family: 'Greycliff CF', sans-serif;
+      font-family: inherit;
     }
 
-    textarea {
-      resize: none;
-      min-height: 100px;
+    .icono-categoria {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #F3F4F6;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
     }
 
-    .acciones {
-      margin-top: 2rem;
+    .icono-categoria img {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+    }
+
+    .boton {
+      background: #3956E8;
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    /* Modal de Categorías */
+    .modal-categorias {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-contenido {
+      background: #fff;
+      width: 100%;
+      max-width: 350px;
+      max-height: 80vh;
+      border-radius: 16px;
+      padding: 1.5rem;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .grupo {
+      background: #F9FAFB;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .grupo-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      padding: 0.6rem 1rem;
+      background: #E5E7EB;
+      cursor: pointer;
+      border-radius: 12px;
     }
 
-    .acciones button {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
+    .circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .contenido {
+      display: none;
+      margin-left: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .grupo.abierto .contenido {
+      display: block;
+    }
+
+    .subtitulo {
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-top: 0.8rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      background: #FFFFFF;
+      margin-bottom: 0.3rem;
       cursor: pointer;
     }
 
-    .btn-cancelar {
-      background: #f4f3ff;
-      color: #7c3aed;
+    li:hover {
+      background: #F3F4F6;
     }
 
-    .btn-guardar {
-      background: #4f46e5;
-      color: white;
+    .cerrar-modal {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #64748B;
     }
   </style>
 </head>
 <body>
-  <div class="modal-recurrente">
+
+  <div class="modal">
     <h2>Nueva transacción recurrente</h2>
 
     <label for="nombre">Nombre</label>
-    <input type="text" id="nombre" placeholder="Ej. Salario, Renta, etc." />
+    <input type="text" id="nombre" placeholder="Ej. Pagar renta"/>
 
-    <label for="monto">Monto</label>
-    <input type="text" id="monto" placeholder="USD $1,200" />
+    <label for="categoria">Categoría</label>
+    <div class="icono-categoria" onclick="abrirModalCategorias()">
+      <div><img src="https://cadamenudo.github.io/UI-UX/assets/icons/recurrencias.png" alt="icono"> <span id="categoriaSeleccionada">Seleccionar categoría</span></div>
+    </div>
 
-    <label for="frecuencia">Recurrencia</label>
-    <select id="frecuencia">
-      <option>Diaria</option>
-      <option>Semanal</option>
-      <option>Quincenal</option>
-      <option>Mensual</option>
-      <option>Anual</option>
+    <label for="recurrencia">Recurrencia</label>
+    <select id="recurrencia">
+      <option value="mensual">Mensual</option>
+      <option value="quincenal">Quincenal</option>
+      <option value="semanal">Semanal</option>
     </select>
 
-    <label for="descripcion">Descripción <span style="color:#9ca3af">(opcional)</span></label>
-    <textarea id="descripcion" placeholder="Descripción breve..."></textarea>
+    <label for="monto">Monto</label>
+    <input type="number" id="monto" placeholder="Ej. 150.00" />
 
-    <div class="acciones">
-      <button class="btn-cancelar">Cancelar</button>
-      <button class="btn-guardar">Guardar</button>
+    <label for="descripcion">Descripción (opcional)</label>
+    <textarea id="descripcion" rows="3" placeholder="Notas sobre esta transacción..."></textarea>
+
+    <button class="boton">Guardar transacción</button>
+  </div>
+
+  <!-- Modal Categorías -->
+  <div id="modalCategorias" class="modal-categorias">
+    <div class="modal-contenido">
+      <button class="cerrar-modal" onclick="cerrarModalCategorias()">×</button>
+
+      <div class="grupo">
+        <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
+          <div style="display:flex;align-items:center;">
+            <div class="circle" style="background:#3956E8;"></div> Ingresos
+          </div><span>⌄</span>
+        </div>
+        <div class="contenido">
+          <div class="subtitulo">Pago por trabajo</div>
+          <ul>
+            <li onclick="seleccionarSubcategoria('Salario')">Salario</li>
+            <li onclick="seleccionarSubcategoria('Bono')">Bono</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grupo">
+        <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
+          <div style="display:flex;align-items:center;">
+            <div class="circle" style="background:#6B7280;"></div> Gastos
+          </div><span>⌄</span>
+        </div>
+        <div class="contenido">
+          <div class="subtitulo">Casa</div>
+          <ul>
+            <li onclick="seleccionarSubcategoria('Hipoteca')">Hipoteca</li>
+            <li onclick="seleccionarSubcategoria('Alquiler')">Alquiler</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grupo">
+        <div class="grupo-header" onclick="toggleGrupo(this.parentElement)">
+          <div style="display:flex;align-items:center;">
+            <div class="circle" style="background:#E8C239;"></div> Ahorro
+          </div><span>⌄</span>
+        </div>
+        <div class="contenido">
+          <ul>
+            <li onclick="seleccionarSubcategoria('Reserva emergencia')">Reserva emergencia</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Script -->
+  <script>
+    function abrirModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'flex';
+    }
+
+    function cerrarModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'none';
+      document.querySelectorAll('.grupo').forEach(g => g.classList.remove('abierto'));
+    }
+
+    function toggleGrupo(grupo) {
+      const abierto = grupo.classList.contains('abierto');
+      document.querySelectorAll('.grupo').forEach(g => g.classList.remove('abierto'));
+      if (!abierto) grupo.classList.add('abierto');
+    }
+
+    function seleccionarSubcategoria(nombre) {
+      document.getElementById('categoriaSeleccionada').textContent = nombre;
+      cerrarModalCategorias();
+    }
+  </script>
 </body>
 </html>
