@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nueva Transacción Recurrente</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css" />
+  <style>
+    body {
+      font-family: 'Greycliff CF', sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 2rem;
+      color: #111827;
+    }
+
+    .modal-recurrente {
+      max-width: 480px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .modal-recurrente h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      font-family: 'Greycliff CF', sans-serif;
+    }
+
+    textarea {
+      resize: none;
+      min-height: 100px;
+    }
+
+    .acciones {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .acciones button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-cancelar {
+      background: #f4f3ff;
+      color: #7c3aed;
+    }
+
+    .btn-guardar {
+      background: #4f46e5;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-recurrente">
+    <h2>Nueva transacción recurrente</h2>
+
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" placeholder="Ej. Salario, Renta, etc." />
+
+    <label for="monto">Monto</label>
+    <input type="text" id="monto" placeholder="USD $1,200" />
+
+    <label for="frecuencia">Recurrencia</label>
+    <select id="frecuencia">
+      <option>Diaria</option>
+      <option>Semanal</option>
+      <option>Quincenal</option>
+      <option>Mensual</option>
+      <option>Anual</option>
+    </select>
+
+    <label for="descripcion">Descripción <span style="color:#9ca3af">(opcional)</span></label>
+    <textarea id="descripcion" placeholder="Descripción breve..."></textarea>
+
+    <div class="acciones">
+      <button class="btn-cancelar">Cancelar</button>
+      <button class="btn-guardar">Guardar</button>
+    </div>
+  </div>
+</body>
+</html>
