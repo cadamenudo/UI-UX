@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preview con Recordatorios | Cada Menudo</title>
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- === Contenido original de index.html === -->
+  <div id="app">
+    <iframe src="index.html" style="width:100%;height:100vh;border:none;"></iframe>
+  </div>
+  <!-- === /Contenido original === -->
+
+  <!-- === Recordatorios (Chip + Cola + Modal) | Cada Menudo === -->
+  <style>
+    :root{ --rm-bg:#FFFFFF; --rm-text:#0F172A; --rm-muted:#64748B; --rm-primary:#3956E8; --rm-warning:#E8C239; --rm-shadow:0 8px 24px rgba(15,23,42,.12); --rm-radius:16px; }
+    .rm-font { font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif; }
+    .rm-chip{position:fixed; right:20px; bottom:20px; z-index:9999; display:flex; align-items:center; gap:.5rem; background:var(--rm-bg); color:var(--rm-text); border:1px solid #E5E7EB; border-radius:999px; padding:.55rem .9rem; box-shadow:var(--rm-shadow); cursor:pointer; user-select:none;}
+    .rm-chip .rm-dot{ width:8px; height:8px; border-radius:50%; background:var(--rm-primary);}
+    .rm-chip .rm-count{ font-weight:600; font-size:.9rem;}
+    .rm-chip .rm-close{ margin-left:.25rem; width:22px; height:22px; border-radius:999px; display:grid; place-items:center; border:1px solid #E5E7EB; background:#fff; cursor:pointer;}
+    .rm-chip .rm-close:hover{ background:#F8FAFC;}
+    .rm-modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,.5); z-index:9998; display:none;}
+    .rm-modal{ position:fixed; right:20px; bottom:84px; width:min(420px,calc(100vw - 40px)); background:var(--rm-bg); color:var(--rm-text); border:1px solid #E5E7EB; border-radius:var(--rm-radius); box-shadow:var(--rm-shadow); z-index:9999; display:none; overflow:hidden;}
+    .rm-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #EEF2F7;}
+    .rm-title{ font-weight:700; font-size:1rem;}
+    .rm-actions{ display:flex; align-items:center; gap:.5rem;}
+    .rm-btn{ border:1px solid #E5E7EB; background:#fff; padding:.45rem .65rem; border-radius:10px; cursor:pointer; font-weight:600;}
+    .rm-btn:hover{ background:#F8FAFC;}
+    .rm-body{ padding:12px 12px 4px 12px; max-height:50vh; overflow:auto;}
+    .rm-item{ display:grid; grid-template-columns:1fr auto; gap:.75rem; align-items:center; padding:10px 12px; border:1px solid #EEF2F7; border-radius:12px; margin-bottom:10px; background:#fff;}
+    .rm-item.done{ opacity:.65;}
+    .rm-item .rm-meta{ display:flex; flex-direction:column; gap:2px;}
+    .rm-item .rm-title-text{ font-weight:600;}
+    .rm-item .rm-sub{ color:var(--rm-muted); font-size:.85rem;}
+    .rm-item .rm-controls{ display:flex; align-items:center; gap:6px;}
+    .rm-ico{ width:30px; height:30px; border:1px solid #E5E7EB; border-radius:10px; display:grid; place-items:center; cursor:pointer; background:#fff;}
+    .rm-ico:hover{ background:#F8FAFC;}
+    .rm-footer{ padding:10px 12px 14px 12px; border-top:1px solid #EEF2F7; display:flex; gap:8px;}
+    .rm-input{ flex:1; border:1px solid #E5E7EB; border-radius:10px; padding:.55rem .7rem; outline:none;}
+    .rm-input:focus{ border-color:#CBD5E1; box-shadow:0 0 0 3px rgba(57,86,232,.1);}
+    .rm-badge{ display:inline-flex; align-items:center; gap:6px; background:#F8FAFC; border:1px dashed #E5E7EB; padding:.35rem .55rem; border-radius:999px; font-size:.8rem; color:#0F172A;}
+    .rm-empty{ text-align:center; color:var(--rm-muted); padding:18px 8px;}
+    .rm-show{ animation:rmPop .18s ease-out;} @keyframes rmPop{ from{ transform:translateY(6px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
+    .rm-ico[data-tip]{ position:relative;}
+    .rm-ico[data-tip]:hover::after{ content:attr(data-tip); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#111827; color:#fff; font-size:.72rem; padding:.25rem .4rem; border-radius:6px; white-space:nowrap;}
+    .rm-kbd{ font:inherit; font-size:.75rem; border:1px solid #E5E7EB; background:#fff; border-bottom-width:2px; border-radius:6px; padding:0 .35rem;}
+  </style>
+
+  <!-- Chip flotante -->
+  <div class="rm-chip rm-font" id="rmChip" title="Abrir recordatorios">
+    <div class="rm-dot"></div>
+    <div><strong>Recordatorios</strong> <span class="rm-count" id="rmCount">(0)</span></div>
+    <button class="rm-close" id="rmHideChip" aria-label="Cerrar chip">×</button>
+  </div>
+
+  <!-- Backdrop -->
+  <div class="rm-modal-backdrop" id="rmBackdrop"></div>
+
+  <!-- Modal / Cola -->
+  <div class="rm-modal rm-font rm-show" id="rmModal" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
+    <div class="rm-header">
+      <div class="rm-title" id="rmTitle">Tu cola de recordatorios</div>
+      <div class="rm-actions">
+        <span class="rm-badge">Atajo: <kbd class="rm-kbd">Shift</kbd> + <kbd class="rm-kbd">R</kbd></span>
+        <button class="rm-btn" id="rmCloseModal">Cerrar</button>
+      </div>
+    </div>
+    <div class="rm-body" id="rmList">
+      <div class="rm-empty" id="rmEmpty">Sin recordatorios. Agrega uno abajo 👇</div>
+    </div>
+    <div class="rm-footer">
+      <input class="rm-input" id="rmInput" type="text" placeholder="Nuevo recordatorio (ej. Pagar AMEX)">
+      <button class="rm-btn" id="rmAdd">Añadir</button>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const $ = (q)=>document.querySelector(q);
+    const $list=$("#rmList"),$empty=$("#rmEmpty"),$count=$("#rmCount"),$modal=$("#rmModal"),
+          $backdrop=$("#rmBackdrop"),$chip=$("#rmChip"),$hideChip=$("#rmHideChip"),
+          $close=$("#rmCloseModal"),$add=$("#rmAdd"),$input=$("#rmInput");
+    const LS_KEY="cm_reminders_v1"; let state=load();
+    function load(){ try{const raw=localStorage.getItem(LS_KEY); return raw?JSON.parse(raw):seed();}catch(e){return seed();}}
+    function seed(){ const sample=[{id:uid(),title:"Pagar AMEX",note:"Vence el 25",done:false}]; save(sample); return sample;}
+    function save(v){ localStorage.setItem(LS_KEY,JSON.stringify(v));}
+    function uid(){ return Math.random().toString(36).slice(2,9);}
+    function render(){ $list.innerHTML=""; if(!state.length){$empty.style.display="block";} else{$empty.style.display="none"; state.forEach(i=>$list.appendChild(renderItem(i)));} $count.textContent=`(${state.filter(i=>!i.done).length})`; }
+    function renderItem(i){ const el=document.createElement("div"); el.className="rm-item"+(i.done?" done":""); el.dataset.id=i.id;
+      const meta=document.createElement("div"); meta.className="rm-meta"; const t=document.createElement("div"); t.className="rm-title-text"; t.textContent=i.title; const s=document.createElement("div"); s.className="rm-sub"; s.textContent=i.note||"—"; meta.append(t,s);
+      const ctrls=document.createElement("div"); ctrls.className="rm-controls";
+      const d=btn("✓","Completar",()=>toggleDone(i.id)), e=btn("✎","Editar",()=>editItem(i.id)), x=btn("🗑","Borrar",()=>delItem(i.id));
+      ctrls.append(d,e,x); el.append(meta,ctrls); return el;}
+    function btn(txt,tip,fn){const b=document.createElement("button"); b.className="rm-ico"; b.textContent=txt; b.setAttribute("data-tip",tip); b.onclick=fn; return b;}
+    function toggleDone(id){ state=state.map(it=>it.id===id?{...it,done:!it.done}:it); save(state); render();}
+    function editItem(id){ const it=state.find(x=>x.id===id); if(!it)return; const t=prompt("Editar título:",it.title); if(t===null)return; const n=prompt("Editar nota (opcional):",it.note||""); state=state.map(x=>x.id===id?{...x,title:t.trim()||x.title,note:(n||"").trim()}:x); save(state); render();}
+    function delItem(id){ state=state.filter(x=>x.id!==id); save(state); render();}
+    function addItem(){ const v=$input.value.trim(); if(!v)return; state.unshift({id:uid(),title:v,note:"",done:false}); save(state); $input.value=""; render();}
+    function openModal(){ $modal.style.display="block"; $backdrop.style.display="block"; $input.focus();}
+    function closeModal(){ $modal.style.display="none"; $backdrop.style.display="none";}
+    $chip.addEventListener("click",e=>{ if(e.target===$hideChip)return; openModal();});
+    $hideChip.addEventListener("click",e=>{e.stopPropagation(); $chip.style.display="none";});
+    $close.addEventListener("click",closeModal); $backdrop.addEventListener("click",closeModal);
+    $add.addEventListener("click",addItem); $input.addEventListener("keydown",e=>{if(e.key==="Enter")addItem();});
+    document.addEventListener("keydown",e=>{ if(e.shiftKey&&(e.key==="R"||e.key==="r")){ $chip.style.display="flex"; }});
+    render();
+  })();
+  </script>
+  <!-- === /Recordatorios === -->
+</body>
+</html>
