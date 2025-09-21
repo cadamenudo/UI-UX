@@ -2,114 +2,424 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preview con Recordatorios | Cada Menudo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Desktop | Cada Menudo</title>
+
+  <!-- Tipografías del proyecto -->
   <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --cm-bg:#FAFBFF;
+      --cm-card:#FFFFFF;
+      --cm-text:#0F172A;
+      --cm-muted:#64748B;
+      --cm-border:#E5E7EB;
+      --cm-primary:#3956E8;
+      --cm-secondary:#7459D9;
+      --cm-accent:#E8C239;
+      --cm-sidebar:#0B1B3A;
+      --cm-shadow:0 8px 24px rgba(15,23,42,.08);
+      --radius:16px;
+    }
+    *{ box-sizing:border-box }
+    body{
+      margin:0;
+      background:var(--cm-bg);
+      color:var(--cm-text);
+      font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
+    }
+
+    /* ====== LAYOUT ====== */
+    .layout{
+      display:grid;
+      grid-template-columns: 260px 1fr 340px;
+      grid-template-rows: auto 1fr;
+      min-height:100vh;
+    }
+    aside.sidebar{
+      grid-row:1 / span 2;
+      background:linear-gradient(180deg,#0E1F46 0%, #0B1B3A 100%);
+      color:#fff;
+      padding:20px 16px;
+      border-right:1px solid rgba(255,255,255,.08);
+    }
+    .logo{
+      display:flex; align-items:center; gap:.6rem;
+      font-weight:800; letter-spacing:.3px; font-size:1.1rem;
+      margin-bottom:18px;
+    }
+    .logo .dot{width:10px; height:10px; border-radius:50%; background:var(--cm-accent);}
+    nav ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+    nav li{
+      padding:.75rem .85rem; border-radius:12px; cursor:pointer;
+      display:flex; align-items:center; gap:.6rem; opacity:.9;
+    }
+    nav li:hover{ background:rgba(255,255,255,.08); }
+    nav li.active{ background:rgba(255,255,255,.12); font-weight:700; opacity:1; }
+
+    main.main{
+      padding:28px; overflow:auto;
+    }
+
+    /* ====== CARDS ARRIBA ====== */
+    .top-summary{
+      display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:16px; margin-bottom:18px;
+    }
+    .card{
+      background:var(--cm-card); border:1px solid var(--cm-border);
+      border-radius:var(--radius); padding:18px; box-shadow:var(--cm-shadow);
+    }
+    .metric{
+      display:flex; align-items:center; gap:12px;
+    }
+    .metric .icon{
+      width:36px; height:36px; border-radius:12px; display:grid; place-items:center;
+      border:1px solid var(--cm-border); background:#fff;
+    }
+    .metric h4{ font-size:.95rem; margin:0 0 4px 0; color:var(--cm-muted); }
+    .metric strong{ font-size:1.6rem; letter-spacing:.2px; }
+
+    /* ====== CHARTS HORIZONTALES ====== */
+    .charts{
+      display:grid; grid-template-columns: 1fr 1fr; gap:18px;
+    }
+    .chart-card{
+      background:var(--cm-card); border:1px solid var(--cm-border);
+      border-radius:var(--radius); padding:18px; box-shadow:var(--cm-shadow);
+      display:flex; flex-direction:column; gap:12px;
+      min-height:360px;
+    }
+    .chart-card h3{ margin:0; font-size:1rem; }
+    .legend{
+      margin-top:6px; display:flex; flex-wrap:wrap; gap:10px; color:var(--cm-muted); font-size:.9rem;
+    }
+    .legend .pill{
+      border:1px dashed var(--cm-border); border-radius:999px; padding:.25rem .6rem; background:#F8FAFC;
+    }
+
+    /* ====== RECORDATORIOS DERECHA ====== */
+    aside.reminders{
+      background:#F6F8FF; border-left:1px solid var(--cm-border);
+      padding:22px 18px; display:flex; flex-direction:column; gap:12px;
+    }
+    .rem-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .rem-head h3{ margin:0; font-size:1.05rem; }
+    .kbd{ font-size:.75rem; border:1px solid #E5E7EB; border-bottom-width:2px; border-radius:6px; padding:.05rem .35rem; background:#fff; }
+    .rm-list{ display:flex; flex-direction:column; gap:10px; min-height:180px; }
+    .rm-item{
+      display:grid; grid-template-columns:1fr auto; gap:.75rem; align-items:center;
+      padding:12px; border-radius:12px; border:1px solid var(--cm-border); background:#fff;
+    }
+    .rm-item.done{ opacity:.6; }
+    .rm-meta{ display:flex; flex-direction:column; gap:4px; }
+    .rm-title{ font-weight:700; }
+    .rm-sub{ color:var(--cm-muted); font-size:.9rem; }
+    .rm-ctrls{ display:flex; align-items:center; gap:6px; }
+    .icon-btn{
+      width:32px; height:32px; display:grid; place-items:center; cursor:pointer;
+      border:1px solid var(--cm-border); background:#fff; border-radius:10px;
+    }
+    .icon-btn:hover{ background:#F8FAFC; }
+    .rm-empty{ color:var(--cm-muted); text-align:center; padding:16px 6px; }
+    .rm-add{
+      display:flex; gap:8px; margin-top:4px;
+    }
+    .rm-input{
+      flex:1; border:1px solid var(--cm-border); border-radius:12px; padding:.65rem .8rem; outline:none; background:#fff;
+    }
+    .rm-input:focus{ border-color:#CBD5E1; box-shadow:0 0 0 3px rgba(57,86,232,.12); }
+    .btn{
+      border:1px solid var(--cm-border); background:var(--cm-primary); color:#fff; font-weight:700;
+      border-radius:12px; padding:.65rem .9rem; cursor:pointer;
+    }
+    .btn:hover{ filter:brightness(.95); }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 1200px){
+      .layout{ grid-template-columns: 220px 1fr 320px; }
+    }
+    @media (max-width: 1024px){
+      .layout{ grid-template-columns: 220px 1fr; }
+      aside.reminders{ grid-column: 1 / -1; border-left:none; border-top:1px solid var(--cm-border); }
+      .charts{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px){
+      .layout{ grid-template-columns: 1fr; }
+      aside.sidebar{ grid-row:auto; border-right:none; border-bottom:1px solid rgba(255,255,255,.08); }
+      .top-summary{ grid-template-columns:1fr; }
+    }
+  </style>
 </head>
 <body>
-  <!-- === Contenido original de index.html === -->
-  <div id="app">
-    <iframe src="index.html" style="width:100%;height:100vh;border:none;"></iframe>
-  </div>
-  <!-- === /Contenido original === -->
+  <div class="layout">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+      <div class="logo"><span class="dot"></span> CadaMenudo</div>
+      <nav>
+        <ul>
+          <li class="active">📊 Dashboard</li>
+          <li>👤 Mi cuenta</li>
+          <li>⚙️ Settings</li>
+        </ul>
+      </nav>
+    </aside>
 
-  <!-- === Recordatorios (Chip + Cola + Modal) | Cada Menudo === -->
-  <style>
-    :root{ --rm-bg:#FFFFFF; --rm-text:#0F172A; --rm-muted:#64748B; --rm-primary:#3956E8; --rm-warning:#E8C239; --rm-shadow:0 8px 24px rgba(15,23,42,.12); --rm-radius:16px; }
-    .rm-font { font-family:'Greycliff CF',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif; }
-    .rm-chip{position:fixed; right:20px; bottom:20px; z-index:9999; display:flex; align-items:center; gap:.5rem; background:var(--rm-bg); color:var(--rm-text); border:1px solid #E5E7EB; border-radius:999px; padding:.55rem .9rem; box-shadow:var(--rm-shadow); cursor:pointer; user-select:none;}
-    .rm-chip .rm-dot{ width:8px; height:8px; border-radius:50%; background:var(--rm-primary);}
-    .rm-chip .rm-count{ font-weight:600; font-size:.9rem;}
-    .rm-chip .rm-close{ margin-left:.25rem; width:22px; height:22px; border-radius:999px; display:grid; place-items:center; border:1px solid #E5E7EB; background:#fff; cursor:pointer;}
-    .rm-chip .rm-close:hover{ background:#F8FAFC;}
-    .rm-modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,.5); z-index:9998; display:none;}
-    .rm-modal{ position:fixed; right:20px; bottom:84px; width:min(420px,calc(100vw - 40px)); background:var(--rm-bg); color:var(--rm-text); border:1px solid #E5E7EB; border-radius:var(--rm-radius); box-shadow:var(--rm-shadow); z-index:9999; display:none; overflow:hidden;}
-    .rm-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #EEF2F7;}
-    .rm-title{ font-weight:700; font-size:1rem;}
-    .rm-actions{ display:flex; align-items:center; gap:.5rem;}
-    .rm-btn{ border:1px solid #E5E7EB; background:#fff; padding:.45rem .65rem; border-radius:10px; cursor:pointer; font-weight:600;}
-    .rm-btn:hover{ background:#F8FAFC;}
-    .rm-body{ padding:12px 12px 4px 12px; max-height:50vh; overflow:auto;}
-    .rm-item{ display:grid; grid-template-columns:1fr auto; gap:.75rem; align-items:center; padding:10px 12px; border:1px solid #EEF2F7; border-radius:12px; margin-bottom:10px; background:#fff;}
-    .rm-item.done{ opacity:.65;}
-    .rm-item .rm-meta{ display:flex; flex-direction:column; gap:2px;}
-    .rm-item .rm-title-text{ font-weight:600;}
-    .rm-item .rm-sub{ color:var(--rm-muted); font-size:.85rem;}
-    .rm-item .rm-controls{ display:flex; align-items:center; gap:6px;}
-    .rm-ico{ width:30px; height:30px; border:1px solid #E5E7EB; border-radius:10px; display:grid; place-items:center; cursor:pointer; background:#fff;}
-    .rm-ico:hover{ background:#F8FAFC;}
-    .rm-footer{ padding:10px 12px 14px 12px; border-top:1px solid #EEF2F7; display:flex; gap:8px;}
-    .rm-input{ flex:1; border:1px solid #E5E7EB; border-radius:10px; padding:.55rem .7rem; outline:none;}
-    .rm-input:focus{ border-color:#CBD5E1; box-shadow:0 0 0 3px rgba(57,86,232,.1);}
-    .rm-badge{ display:inline-flex; align-items:center; gap:6px; background:#F8FAFC; border:1px dashed #E5E7EB; padding:.35rem .55rem; border-radius:999px; font-size:.8rem; color:#0F172A;}
-    .rm-empty{ text-align:center; color:var(--rm-muted); padding:18px 8px;}
-    .rm-show{ animation:rmPop .18s ease-out;} @keyframes rmPop{ from{ transform:translateY(6px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
-    .rm-ico[data-tip]{ position:relative;}
-    .rm-ico[data-tip]:hover::after{ content:attr(data-tip); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#111827; color:#fff; font-size:.72rem; padding:.25rem .4rem; border-radius:6px; white-space:nowrap;}
-    .rm-kbd{ font:inherit; font-size:.75rem; border:1px solid #E5E7EB; background:#fff; border-bottom-width:2px; border-radius:6px; padding:0 .35rem;}
-  </style>
+    <!-- ===== MAIN ===== -->
+    <main class="main" id="main">
+      <!-- Arriba: Ingresos/Gastos -->
+      <section class="top-summary">
+        <div class="card">
+          <div class="metric">
+            <div class="icon">💵</div>
+            <div>
+              <h4>Ingresos</h4>
+              <strong id="ingresosTotal">$5,200</strong><br/>
+              <small class="muted">Este mes</small>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="metric">
+            <div class="icon">🧾</div>
+            <div>
+              <h4>Gastos</h4>
+              <strong id="gastosTotal">$2,900</strong><br/>
+              <small class="muted">Este mes</small>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  <!-- Chip flotante -->
-  <div class="rm-chip rm-font" id="rmChip" title="Abrir recordatorios">
-    <div class="rm-dot"></div>
-    <div><strong>Recordatorios</strong> <span class="rm-count" id="rmCount">(0)</span></div>
-    <button class="rm-close" id="rmHideChip" aria-label="Cerrar chip">×</button>
-  </div>
+      <!-- Gráficos en horizontal -->
+      <section class="charts">
+        <div class="chart-card">
+          <h3>Gastos por categoría (dona)</h3>
+          <canvas id="chartDona" aria-label="Gastos por categoría" role="img"></canvas>
+          <div class="legend" id="legendDona"></div>
+        </div>
+        <div class="chart-card">
+          <h3>Evolución mensual (línea)</h3>
+          <canvas id="chartLinea" aria-label="Evolución mensual" role="img"></canvas>
+          <div class="legend">
+            <span class="pill">Ingresos</span>
+            <span class="pill">Gastos</span>
+          </div>
+        </div>
+      </section>
+    </main>
 
-  <!-- Backdrop -->
-  <div class="rm-modal-backdrop" id="rmBackdrop"></div>
-
-  <!-- Modal / Cola -->
-  <div class="rm-modal rm-font rm-show" id="rmModal" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
-    <div class="rm-header">
-      <div class="rm-title" id="rmTitle">Tu cola de recordatorios</div>
-      <div class="rm-actions">
-        <span class="rm-badge">Atajo: <kbd class="rm-kbd">Shift</kbd> + <kbd class="rm-kbd">R</kbd></span>
-        <button class="rm-btn" id="rmCloseModal">Cerrar</button>
+    <!-- ===== RECORDATORIOS ===== -->
+    <aside class="reminders">
+      <div class="rem-head">
+        <h3>Tu cola de recordatorios</h3>
+        <div><span class="kbd">Shift</span> + <span class="kbd">R</span></div>
       </div>
-    </div>
-    <div class="rm-body" id="rmList">
-      <div class="rm-empty" id="rmEmpty">Sin recordatorios. Agrega uno abajo 👇</div>
-    </div>
-    <div class="rm-footer">
-      <input class="rm-input" id="rmInput" type="text" placeholder="Nuevo recordatorio (ej. Pagar AMEX)">
-      <button class="rm-btn" id="rmAdd">Añadir</button>
-    </div>
+
+      <div class="rm-list" id="rmList">
+        <div class="rm-empty" id="rmEmpty">Sin recordatorios. Agrega uno abajo 👇</div>
+      </div>
+
+      <div class="rm-add">
+        <input class="rm-input" id="rmInput" type="text" placeholder="Nuevo recordatorio (ej. Pagar AMEX)">
+        <button class="btn" id="rmAdd">Añadir</button>
+      </div>
+    </aside>
   </div>
 
   <script>
-  (function(){
-    const $ = (q)=>document.querySelector(q);
-    const $list=$("#rmList"),$empty=$("#rmEmpty"),$count=$("#rmCount"),$modal=$("#rmModal"),
-          $backdrop=$("#rmBackdrop"),$chip=$("#rmChip"),$hideChip=$("#rmHideChip"),
-          $close=$("#rmCloseModal"),$add=$("#rmAdd"),$input=$("#rmInput");
-    const LS_KEY="cm_reminders_v1"; let state=load();
-    function load(){ try{const raw=localStorage.getItem(LS_KEY); return raw?JSON.parse(raw):seed();}catch(e){return seed();}}
-    function seed(){ const sample=[{id:uid(),title:"Pagar AMEX",note:"Vence el 25",done:false}]; save(sample); return sample;}
-    function save(v){ localStorage.setItem(LS_KEY,JSON.stringify(v));}
-    function uid(){ return Math.random().toString(36).slice(2,9);}
-    function render(){ $list.innerHTML=""; if(!state.length){$empty.style.display="block";} else{$empty.style.display="none"; state.forEach(i=>$list.appendChild(renderItem(i)));} $count.textContent=`(${state.filter(i=>!i.done).length})`; }
-    function renderItem(i){ const el=document.createElement("div"); el.className="rm-item"+(i.done?" done":""); el.dataset.id=i.id;
-      const meta=document.createElement("div"); meta.className="rm-meta"; const t=document.createElement("div"); t.className="rm-title-text"; t.textContent=i.title; const s=document.createElement("div"); s.className="rm-sub"; s.textContent=i.note||"—"; meta.append(t,s);
-      const ctrls=document.createElement("div"); ctrls.className="rm-controls";
-      const d=btn("✓","Completar",()=>toggleDone(i.id)), e=btn("✎","Editar",()=>editItem(i.id)), x=btn("🗑","Borrar",()=>delItem(i.id));
-      ctrls.append(d,e,x); el.append(meta,ctrls); return el;}
-    function btn(txt,tip,fn){const b=document.createElement("button"); b.className="rm-ico"; b.textContent=txt; b.setAttribute("data-tip",tip); b.onclick=fn; return b;}
-    function toggleDone(id){ state=state.map(it=>it.id===id?{...it,done:!it.done}:it); save(state); render();}
-    function editItem(id){ const it=state.find(x=>x.id===id); if(!it)return; const t=prompt("Editar título:",it.title); if(t===null)return; const n=prompt("Editar nota (opcional):",it.note||""); state=state.map(x=>x.id===id?{...x,title:t.trim()||x.title,note:(n||"").trim()}:x); save(state); render();}
-    function delItem(id){ state=state.filter(x=>x.id!==id); save(state); render();}
-    function addItem(){ const v=$input.value.trim(); if(!v)return; state.unshift({id:uid(),title:v,note:"",done:false}); save(state); $input.value=""; render();}
-    function openModal(){ $modal.style.display="block"; $backdrop.style.display="block"; $input.focus();}
-    function closeModal(){ $modal.style.display="none"; $backdrop.style.display="none";}
-    $chip.addEventListener("click",e=>{ if(e.target===$hideChip)return; openModal();});
-    $hideChip.addEventListener("click",e=>{e.stopPropagation(); $chip.style.display="none";});
-    $close.addEventListener("click",closeModal); $backdrop.addEventListener("click",closeModal);
-    $add.addEventListener("click",addItem); $input.addEventListener("keydown",e=>{if(e.key==="Enter")addItem();});
-    document.addEventListener("keydown",e=>{ if(e.shiftKey&&(e.key==="R"||e.key==="r")){ $chip.style.display="flex"; }});
-    render();
-  })();
+    /* =============================
+      CHARTS (DONUT + LINEA)
+    ==============================*/
+    const fmtUSD = (n)=>'$' + n.toLocaleString('en-US');
+
+    // DONA
+    const donaCtx = document.getElementById('chartDona');
+    const donaData = {
+      labels:['Casa','Comida','Transporte','Entretenimiento','Otros'],
+      datasets:[{
+        data:[1200, 600, 420, 260, 420],
+        borderWidth:0,
+        hoverOffset:8
+      }]
+    };
+    // Colores: dejamos que Chart.js asigne por defecto; si quieres forzar tu paleta, descomenta:
+    // const palette = ['#3956E8','#5C7CFA','#22C2DD','#5AD7B1','#E8C239'];
+
+    const chartDona = new Chart(donaCtx, {
+      type:'doughnut',
+      data:donaData,
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        cutout:'62%',
+        plugins:{
+          legend:{ display:false },
+          tooltip:{
+            callbacks:{
+              label:(ctx)=>`${ctx.label}: ${fmtUSD(ctx.parsed)}`
+            }
+          }
+        }
+      }
+    });
+
+    // Leyenda de dona
+    const legendDonaEl = document.getElementById('legendDona');
+    donaData.labels.forEach((l, i)=>{
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.textContent = `${l} ${fmtUSD(donaData.datasets[0].data[i])}`;
+      legendDonaEl.appendChild(pill);
+    });
+
+    // LÍNEA
+    const lineaCtx = document.getElementById('chartLinea');
+    const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const ingresos = [3200,3600,3800,4100,4500,4800,5200,5400,5600,5800,6000,6200];
+    const gastos   = [2100,2300,2200,2400,2600,2700,2900,3000,3100,3200,3300,3400];
+
+    new Chart(lineaCtx, {
+      type:'line',
+      data:{
+        labels,
+        datasets:[
+          { label:'Ingresos', data:ingresos, borderWidth:2, tension:.35, fill:false },
+          { label:'Gastos', data:gastos, borderWidth:2, tension:.35, fill:false }
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+          legend:{ display:false },
+          tooltip:{
+            callbacks:{
+              label:(ctx)=>`${ctx.dataset.label}: ${fmtUSD(ctx.parsed.y)}`
+            }
+          }
+        },
+        scales:{
+          y:{ ticks:{ callback:(v)=>'$'+v } }
+        }
+      }
+    });
+
+    /* =============================
+      RECORDATORIOS (localStorage)
+    ==============================*/
+    (function(){
+      const $ = (q)=>document.querySelector(q);
+      const list = $("#rmList");
+      const empty = $("#rmEmpty");
+      const addBtn = $("#rmAdd");
+      const input = $("#rmInput");
+      const LS_KEY = "cm_reminders_v1";
+
+      let state = load();
+
+      function load(){
+        try{
+          const raw = localStorage.getItem(LS_KEY);
+          return raw ? JSON.parse(raw) : seed();
+        }catch(e){ return seed(); }
+      }
+      function seed(){
+        const demo = [
+          { id: uid(), title:"Pagar AMEX", note:"Vence el 25", done:false },
+          { id: uid(), title:"Enviar factura", note:"Cliente: Acme", done:false }
+        ];
+        save(demo); return demo;
+      }
+      function save(v){ localStorage.setItem(LS_KEY, JSON.stringify(v)); }
+      function uid(){ return Math.random().toString(36).slice(2,9); }
+
+      function render(){
+        list.innerHTML = "";
+        if(!state.length){
+          empty.style.display = "block";
+        }else{
+          empty.style.display = "none";
+          state.forEach(item => list.appendChild(renderItem(item)));
+        }
+      }
+
+      function renderItem(it){
+        const el = document.createElement("div");
+        el.className = "rm-item" + (it.done ? " done" : "");
+        el.dataset.id = it.id;
+
+        const meta = document.createElement("div");
+        meta.className = "rm-meta";
+        const t = document.createElement("div");
+        t.className = "rm-title";
+        t.textContent = it.title;
+        const s = document.createElement("div");
+        s.className = "rm-sub";
+        s.textContent = it.note || "—";
+        meta.append(t,s);
+
+        const ctrls = document.createElement("div");
+        ctrls.className = "rm-ctrls";
+
+        const done = iconBtn("✓","Completar",()=>toggleDone(it.id));
+        const edit = iconBtn("✎","Editar",()=>editItem(it.id));
+        const del  = iconBtn("🗑","Borrar",()=>delItem(it.id));
+
+        ctrls.append(done,edit,del);
+        el.append(meta,ctrls);
+        return el;
+      }
+
+      function iconBtn(txt, tip, fn){
+        const b = document.createElement("button");
+        b.className = "icon-btn";
+        b.textContent = txt;
+        b.title = tip;
+        b.onclick = fn;
+        return b;
+      }
+
+      function toggleDone(id){
+        state = state.map(x => x.id===id ? ({...x, done:!x.done}) : x);
+        save(state); render();
+      }
+      function editItem(id){
+        const it = state.find(x=>x.id===id);
+        if(!it) return;
+        const t = prompt("Editar título:", it.title);
+        if(t===null) return;
+        const n = prompt("Editar nota (opcional):", it.note || "");
+        state = state.map(x => x.id===id ? ({...x, title:t.trim()||x.title, note:(n||"").trim()}) : x);
+        save(state); render();
+      }
+      function delItem(id){
+        state = state.filter(x => x.id!==id);
+        save(state); render();
+      }
+      function addItem(){
+        const v = input.value.trim();
+        if(!v) return;
+        state.unshift({ id:uid(), title:v, note:"", done:false });
+        save(state); input.value=""; render();
+      }
+
+      // Eventos
+      addBtn.addEventListener("click", addItem);
+      input.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addItem(); });
+
+      // Atajo: reabrir foco en recordatorios
+      document.addEventListener("keydown", (e)=>{
+        if(e.shiftKey && (e.key==="R"||e.key==="r")){
+          input.focus();
+        }
+      });
+
+      render();
+    })();
   </script>
-  <!-- === /Recordatorios === -->
 </body>
 </html>
