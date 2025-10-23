@@ -263,6 +263,25 @@ Gracias.`;
     });
   });
 })();
+  // --- FIX de apertura: aseguramos que el launcher funcione ---
+window.addEventListener("DOMContentLoaded", () => {
+  const launcher = document.getElementById("launcher");
+  const chat = document.getElementById("chatWindow");
+
+  if (launcher && chat) {
+    launcher.addEventListener("click", () => {
+      chat.style.display = "grid";   // abre
+    });
+
+    const closeBtn = document.getElementById("closeBtn");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        chat.style.display = "none"; // cierra
+      });
+    }
+  }
+});
+
 </script>
 </body>
 </html>
