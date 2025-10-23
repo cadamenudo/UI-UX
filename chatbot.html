@@ -143,30 +143,28 @@
 <script>
 (function(){
   const els = {};
-  const STORAGE_KEY = 'cm_chat_history_minimal_v3';
+  const STORAGE_KEY = 'cm_chat_history_minimal_v4';
 
-  // Helpers
+  // ===== Helpers =====
   function byId(id){ return document.getElementById(id); }
   function norm(s){ return (s==null?'':String(s)).trim().toLowerCase(); }
   function tokenize(s){
-    // Quita tildes compatible con todos los navegadores
-    return (s||'')
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g,'')  // <— en vez de \p{Diacritic}
+    return (s||'').toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
       .replace(/[^a-z0-9áéíóúñü\s]/gi,' ')
       .split(/\s+/).filter(Boolean);
   }
   function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  // Estado
+  // ===== Estado =====
   const state = { history: [] };
+  let FAQ = [];
+  let catIndex = {};
 
-  // Iniciar cuando DOM listo
+  // ===== Init =====
   window.addEventListener('DOMContentLoaded', init, { once:true });
 
   async function init(){
-    // Cache de elementos
     Object.assign(els, {
       launcher: byId('launcher'), chat: byId('chatWindow'), body: byId('chatBody'),
       input: byId('userInput'), send: byId('sendBtn'), close: byId('closeBtn'),
@@ -185,8 +183,8 @@
     // Herramientas
     els.clear?.addEventListener('click', () => {
       state.history=[]; persist(); els.body.innerHTML='';
-      push('bot','Conversación limpiada. ¿En qué te ayudo ahora?');
-      if(FAQ.length) showTopFAQ();
+      pushHTML('bot','Conversación limpiada. ¿En qué te ayudo ahora?');
+      if(FAQ.length) showWelcomeTopics();
     });
     els.download?.addEventListener('click', () => {
       const blob=new Blob([JSON.stringify(state.history,null,2)],{type:'application/json'});
@@ -195,41 +193,65 @@
     });
     els.email?.addEventListener('click', () => { location.href = buildSupportEmail(); });
 
-    // Cargar FAQ (con tolerancia a errores)
-    let FAQ_raw = [];
+    // Delegación: abrir/cerrar respuestas del acordeón
+    els.body.addEventListener('click', (e)=>{
+      const btn = e.target.closest('[data-toggle="qa"]');
+      if(!btn) return;
+      const id = btn.getAttribute('data-id');
+      const ans = els.body.querySelector(`.ans[data-id="${id}"]`);
+      if(ans){ ans.classList.toggle('open'); }
+    });
+
+    // Carga FAQ
     try{
-      const res = await fetch('./faq_cadamenudo.json?v=4', { cache:'no-store' });
-      FAQ_raw = await res.json();
-    }catch(e){ console.warn('No pude cargar faq_cadamenudo.json', e); }
-    window.FAQ = Array.isArray(FAQ_raw) ? FAQ_raw : [];
+      const res = await fetch('./faq_cadamenudo.json?v=5', { cache:'no-store' });
+      FAQ = await res.json();
+    }catch(e){ console.warn('No pude cargar faq_cadamenudo.json', e); FAQ = []; }
 
-    // Índice de categorías
-    window.catIndex = {};
-    FAQ.forEach(it => { const c=norm(it.category); if(!c) return; (catIndex[c]??=[]).push(it); });
+    // Índice de categorías (y filtro para ocultar las tipo "Sheet1/Hoja1/Sheet..")
+    const isGarbageCat = c => /^sheet\d*$/i.test(c) || /^hoja\d*$/i.test(c) || /^sheet$/i.test(c);
+    catIndex = {};
+    FAQ.forEach(it=>{
+      const cRaw = (it.category||'').trim();
+      if(!cRaw) return;
+      if(isGarbageCat(cRaw)) return;        // <-- oculta "Sheet1" y similares
+      const c = norm(cRaw);
+      (catIndex[c]??=[]).push(it);
+    });
 
-    // Render chips
-    [...new Set(FAQ.map(f => (f.category||'').trim()).filter(Boolean))].forEach(cat=>{
-      const b=document.createElement('button'); b.className='chip'; b.textContent=cat; b.dataset.cat=norm(cat);
-      b.setAttribute('role','button');
-      b.onclick=()=>suggestByCategory(b.dataset.cat, cat);
+    // Chips de categorías (limpias)
+    els.chipbar.innerHTML = '';
+    Object.keys(catIndex).forEach(key=>{
+      const label = Object.values(catIndex[key][0].category || key) ? catIndex[key][0].category : key;
+      const b=document.createElement('button');
+      b.className='chip'; b.textContent=catIndex[key][0].category || key;
+      b.dataset.cat=key;
+      b.onclick=()=> showCategoryPanel(key);
       els.chipbar.appendChild(b);
     });
 
-    // Historial
+    // Historial y bienvenida
     try{
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
       state.history = Array.isArray(saved) ? saved : [];
-      state.history.forEach(m=>renderMsg(m.role,m.text,m.ts,true));
+      state.history.forEach(m=>renderMsg(m.role,m.text,m.ts,true, m.html));
     }catch(_){}
-
     if(state.history.length===0){
-      // Bienvenida personalizada que pediste
-      push('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Aquí te pongo los temas que pueden interesarte 👇');
-      if(FAQ.length) showTopFAQ();
+      pushHTML('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Aquí te pongo los temas que pueden interesarte 👇');
+      showWelcomeTopics();
     }
+
+    // Ajuste automático del logo (no se deforma)
+    document.querySelectorAll('.launcher-logo, .bot-logo').forEach(img=>{
+      img.addEventListener('load', ()=>{
+        const {naturalWidth:w,naturalHeight:h}=img; if(!w||!h) return;
+        const r=w/h; img.style.objectFit='contain'; img.style.background='#fff'; img.style.borderRadius='50%';
+        img.style.padding = r>1.3 ? '8px' : r<0.8 ? '4px' : '5px';
+      });
+    });
   }
 
-  // Manejo envío con seguridad
+  // ===== Envío =====
   function onSendSafe(){
     try{
       const text = (els.input?.value || '').trim();
@@ -243,25 +265,81 @@
     }
   }
 
-  // Core chat
+  // ===== Core =====
   function toggle(open){ if(els.chat) els.chat.style.display = open ? 'grid' : 'none'; }
-  function push(role, text){
-    const m = { role, text, ts:new Date().toISOString() };
+  function push(role, text){ // texto plano
+    const m = { role, text, ts:new Date().toISOString(), html:false };
     state.history.push(m);
-    renderMsg(role, text, m.ts);
+    renderMsg(role, text, m.ts, false, false);
+    persist();
+  }
+  function pushHTML(role, html){ // texto confiable con HTML
+    const m = { role, text: html, ts:new Date().toISOString(), html:true };
+    state.history.push(m);
+    renderMsg(role, html, m.ts, false, true);
     persist();
   }
   function persist(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history)); }catch(_){ } }
-  function renderMsg(role, text, ts, skip){
-    const wrap=document.createElement('div'); wrap.className='msg '+role;
-    const b=document.createElement('div'); b.className='bubble'; b.innerHTML=escapeHtml(text).replace(/\n/g,'<br/>');
+
+  function renderMsg(role, text, ts, skip, isHTML){
+    const wrap=document.createElement('div');
+    wrap.className='msg '+role;
+    const b=document.createElement('div');
+    b.className='bubble';
+    if(isHTML) b.innerHTML = text; else b.innerHTML = escapeHtml(text).replace(/\n/g,'<br/>');
     const meta=document.createElement('span'); meta.className='meta';
     meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date(ts||Date.now()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap);
+    b.appendChild(meta);
+    wrap.appendChild(b);
+    els.body.appendChild(wrap);
     if(!skip) els.body.scrollTop = els.body.scrollHeight;
   }
 
-  // Búsqueda FAQ
+  // ===== Bienvenida: botones de temas =====
+  function showWelcomeTopics(){
+    const topCats = Object.keys(catIndex).slice(0,6);
+    if(!topCats.length) return;
+    const html = `
+      <div class="topic-grid">
+        ${topCats.map(k=>`<button class="topic-btn" data-cat="${k}">${escapeHtml(catIndex[k][0].category)}</button>`).join('')}
+      </div>`;
+    pushHTML('bot', html);
+    // Delegación para esos botones
+    els.body.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.topic-btn');
+      if(btn){ showCategoryPanel(btn.getAttribute('data-cat')); }
+    });
+  }
+
+  // ===== Panel de categoría: lista de preguntas clicables (acordeón) =====
+  function showCategoryPanel(catKey){
+    const items = (catIndex[catKey]||[]).slice(0,20); // muestra las primeras 20 preguntas
+    if(!items.length){
+      push('bot', 'No tengo preguntas en este tema aún.');
+      return;
+    }
+    const catName = catIndex[catKey][0].category;
+
+    const html = `
+      <div class="cat-panel">
+        <div class="cat-title">Tema: ${escapeHtml(catName)}</div>
+        <div class="q-list">
+          ${items.map((it,idx)=>{
+            const id = `${catKey}-${idx}`;
+            return `
+              <div class="q-item">
+                <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
+                <div class="ans" data-id="${id}">
+                  <div class="ans-inner">${it.a}${it.link?`<div class="ans-link"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    pushHTML('bot', html);
+  }
+
+  // ===== Búsqueda directa =====
   function score(qTokens,item){
     const hay=(item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase();
     const set=new Set(tokenize(hay));
@@ -276,37 +354,27 @@
               .sort((a,b)=>b.s-a.s)
               .map(x=>x.i);
   }
+  function handle(text){
+    // Intenciones mínimas
+    if (/(^|\s)(hola|buenas|hey|saludos)(\s|!|$)/i.test(text))
+      return push('bot','¡Hola! ¿Sobre qué tema quieres ayuda? Toca un botón de temas o escribe tu pregunta.');
+
+    const hits = searchFAQ(text);
+    if(hits.length){
+      pushHTML('bot', renderFAQ(hits.slice(0,5)));
+    }else{
+      push('bot','No encontré una respuesta exacta. Prueba con otra palabra o toca un tema.');
+    }
+  }
   function renderFAQ(items){
-    return 'Encontré esto:<div class="faq-suggest">' +
+    return '<div class="faq-suggest">' +
       items.map(it=>`<div class="faq-item"><div class="q">• ${escapeHtml(it.q)}</div><div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div></div>`).join('') +
       '</div>';
   }
 
-  function suggestByCategory(key,label){
-    const k=norm(key||label);
-    let items=(catIndex[k]||[]).slice(0,6);
-    if(items.length===0){
-      items=FAQ.filter(f=>norm(f.category).includes(k) || (f.tags||[]).some(t=>norm(t).includes(k)) || norm(f.q).includes(k)).slice(0,6);
-    }
-    if(items.length===0){ items=searchFAQ(label||key).slice(0,6); }
-    if(items.length) push('bot', `Categoría: <b>${escapeHtml(label||key)}</b><br/>`+renderFAQ(items));
-    else push('bot', `No tengo elementos en la categoría <b>${escapeHtml(label||key)}</b> aún.`);
-  }
-
-  function showTopFAQ(){
-    const cats = [...new Set(FAQ.map(f=>f.category).filter(Boolean))].slice(0,6);
-    if(cats.length){
-      const html = cats.map(cat=>`<div class="faq-item" style="border:none;padding:6px 0;">
-        <div style="color:#3956E8;font-weight:600;">• ${escapeHtml(cat)}</div>
-      </div>`).join('');
-      push('bot', `<div class="faq-suggest">${html}</div>`);
-    }
-    const top = FAQ.slice(0,3);
-    if(top.length) push('bot', renderFAQ(top));
-  }
-
+  // ===== Email soporte =====
   function buildSupportEmail(){
-    const last=state.history.slice(-10).map(m=>`${m.role.toUpperCase()} [${new Date(m.ts).toLocaleString()}]: ${m.text}`).join('\n');
+    const last=state.history.slice(-10).map(m=>`${m.role.toUpperCase()} [${new Date(m.ts).toLocaleString()}]: ${m.text.replace(/<[^>]+>/g,'')}`).join('\n');
     const ua=navigator.userAgent||'', lang=navigator.language||'';
     const body=`Hola equipo técnico,
 
@@ -326,16 +394,32 @@ Datos técnicos:
 Gracias.`;
     return `mailto:tech@cadamenudo.com?subject=${encodeURIComponent('Soporte Chatbot – Cada Menudo')}&body=${encodeURIComponent(body)}`;
   }
-
-  // Ajuste automático del logo (no se deforma)
-  document.querySelectorAll('.launcher-logo, .bot-logo').forEach(img=>{
-    img.addEventListener('load', ()=>{
-      const {naturalWidth:w,naturalHeight:h}=img; if(!w||!h) return;
-      const r=w/h; img.style.objectFit='contain'; img.style.background='#fff'; img.style.borderRadius='50%';
-      img.style.padding = r>1.3 ? '8px' : r<0.8 ? '4px' : '5px';
-    });
-  });
 })();
 </script>
+
+<style>
+/* ===== Estilos para el panel de temas y acordeón ===== */
+.topic-grid{
+  display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;
+}
+.topic-btn{
+  border:1px solid var(--border); background:#fff; color:#374151;
+  padding:8px 12px; border-radius:999px; font-size:12px; cursor:pointer;
+}
+.cat-panel{ border:1px dashed var(--border); background:#fff; border-radius:12px; padding:10px; }
+.cat-title{ font-weight:700; color:#3956E8; margin-bottom:6px; }
+.q-list{ display:flex; flex-direction:column; gap:6px; }
+.q-item{ border:1px solid var(--border); border-radius:10px; background:#fff; }
+.q-btn{
+  width:100%; text-align:left; background:#fff; border:none; cursor:pointer;
+  padding:10px 12px; font-size:14px; color:#0d1320; border-radius:10px;
+}
+.q-btn:hover{ background:#F7F8FB; }
+.ans{ display:none; border-top:1px solid var(--border); }
+.ans.open{ display:block; }
+.ans-inner{ padding:10px 12px; font-size:14px; background:#F9FAFB; border-radius:0 0 10px 10px; }
+.ans-link a{ color:var(--primary); text-decoration:none; }
+</style>
+
 </body>
 </html>
