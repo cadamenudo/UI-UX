@@ -4,7 +4,10 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Chatbot – Cada Menudo</title>
+
+<!-- Tipografía Greycliff CF -->
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+
 <style>
   :root{
     --primary:#3956E8; --secondary:#7459D9; --accent:#E8C239;
@@ -13,30 +16,46 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Greycliff CF",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+
   /* Botón flotante */
   .chat-launcher{
-    position:fixed; right:20px; bottom:20px; width:60px; height:60px; border-radius:50%;
-    background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border:none;
+    position:fixed; right:20px; bottom:20px; width:auto; height:auto; border-radius:50%;
+    background:transparent; color:#fff; border:none; padding:0;
     display:grid; place-items:center; box-shadow:var(--shadow); cursor:pointer; z-index:9999;
   }
-  .chat-launcher span{font-size:26px; line-height:1}
+  .launcher-logo{
+    width:60px; height:60px; border-radius:50%;
+    object-fit:cover; display:block; background:#fff;
+  }
+
   /* Ventana */
   .chat-window{
-    position:fixed; right:20px; bottom:90px; width:360px; max-width:92vw; height:520px; max-height:80vh;
+    position:fixed; right:20px; bottom:90px; width:360px; max-width:92vw; height:560px; max-height:80vh;
     background:#fff; border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow);
-    display:none; grid-template-rows:auto 1fr auto; overflow:hidden; z-index:9999;
+    display:none; grid-template-rows:auto auto 1fr auto auto; overflow:hidden; z-index:9999;
   }
   .chat-header{
     display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--card); border-bottom:1px solid var(--border);
   }
-  .bot-avatar{
-    width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--secondary));
-    display:grid; place-items:center; color:#fff; font-weight:700;
-  }
+  .bot-logo{ width:32px; height:32px; border-radius:50%; object-fit:cover; display:block; }
   .chat-title{font-weight:700}
   .chat-sub{font-size:12px; color:var(--muted); margin-top:-2px}
+
+  .header-actions{
+    margin-left:auto; display:flex; align-items:center; gap:10px;
+  }
+  .header-link{
+    font-size:12px; color:var(--primary); text-decoration:none; border:1px solid var(--border);
+    padding:4px 8px; border-radius:999px; background:#fff;
+  }
+  .close-btn{
+    background:transparent; border:none; font-size:18px; cursor:pointer; padding:4px 6px;
+  }
+
   .chipbar{display:flex; gap:8px; padding:10px 12px; flex-wrap:wrap; border-bottom:1px solid var(--border); background:#fff}
   .chip{border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:12px; cursor:pointer; background:#fff}
+
+  .search-hint{font-size:12px;color:var(--muted);padding:0 16px 10px}
   .chat-body{padding:14px; overflow-y:auto; background:#fff}
   .msg{display:flex; margin:8px 0}
   .msg.bot{justify-content:flex-start}
@@ -48,61 +67,88 @@
   .msg.bot .bubble{background:#f5f7ff; border-color:#dfe4ff}
   .msg.user .bubble{background:#eef2ff; border-color:#dadaff}
   .meta{display:block; color:var(--muted); font-size:11px; margin-top:4px}
-  .quick{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 2px;}
-  .quick button{border:1px solid var(--border); background:#fff; border-radius:999px; padding:6px 10px; font-size:12px; cursor:pointer;}
-  .chat-footer{border-top:1px solid var(--border); background:#fff; padding:8px;}
-  .input-row{display:flex; gap:8px}
-  .input-row input{flex:1; padding:10px 12px; border:1px solid var(--border); border-radius:12px; font-size:14px; outline:none;}
-  .input-row button{padding:10px 12px; border:none; border-radius:12px; background:var(--primary); color:#fff; cursor:pointer; font-weight:600;}
-  .toolbar{display:flex; gap:8px; padding:8px 12px; border-top:1px dashed var(--border); background:#fafafa;}
-  .tool{font-size:12px; color:var(--muted); cursor:pointer; border:1px solid var(--border); padding:4px 8px; border-radius:8px; background:#fff}
-  .hidden{display:none}
-  .search-hint{font-size:12px;color:var(--muted);padding:0 16px 10px}
+
   .faq-suggest{border:1px dashed var(--border); padding:10px; border-radius:10px; background:#fff; margin:8px 0; font-size:13px}
   .faq-suggest a{color:var(--primary); text-decoration:none}
   .faq-item{padding:8px 10px; border:1px solid var(--border); border-radius:10px; margin:8px 0; background:#fff}
   .faq-item .q{font-weight:700; margin-bottom:6px}
   .faq-item .a{font-size:14px}
+
+  .toolbar{
+    display:flex; gap:8px; padding:8px 12px; border-top:1px dashed var(--border); background:#fafafa;
+    align-items:center; flex-wrap:wrap;
+  }
+  .tool{
+    font-size:12px; color:var(--muted); cursor:pointer; border:1px solid var(--border);
+    padding:6px 10px; border-radius:8px; background:#fff
+  }
+
+  .chat-footer{border-top:1px solid var(--border); background:#fff; padding:8px;}
+  .quick{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 8px;}
+  .quick button{border:1px solid var(--border); background:#fff; border-radius:999px; padding:6px 10px; font-size:12px; cursor:pointer;}
+  .input-row{display:flex; gap:8px}
+  .input-row input{flex:1; padding:10px 12px; border:1px solid var(--border); border-radius:12px; font-size:14px; outline:none;}
+  .input-row button{padding:10px 12px; border:none; border-radius:12px; background:var(--primary); color:#fff; cursor:pointer; font-weight:600;}
+
   /* Scrollbar sutil */
   .chat-body::-webkit-scrollbar{width:10px}
   .chat-body::-webkit-scrollbar-thumb{background:#d9defa; border-radius:8px}
+
   /* Modo móvil: full screen */
   @media (max-width:480px){
     .chat-window{right:0; left:0; bottom:0; top:0; width:100vw; height:100vh; max-height:100vh; border-radius:0;}
+    .launcher-logo{ width:56px; height:56px; }
+    .bot-logo{ width:36px; height:36px; }
   }
 </style>
 </head>
 <body>
-<button class="chat-launcher" id="launcher" aria-label="Abrir chat"><span>💬</span></button>
 
+<!-- Botón flotante con logo -->
+<button class="chat-launcher" id="launcher" aria-label="Abrir chat">
+  <img class="launcher-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
+</button>
+
+<!-- Ventana de chat -->
 <section class="chat-window" id="chatWindow" aria-live="polite">
   <header class="chat-header">
-    <div class="bot-avatar">CM</div>
+    <img class="bot-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
     <div>
       <div class="chat-title">Asistente Cada Menudo</div>
-      <div class="chat-sub">Finanzas personales • Emprendimiento</div>
+      <div class="chat-sub">Preguntas frecuentes y ayuda</div>
     </div>
-    <button id="closeBtn" aria-label="Cerrar" style="margin-left:auto;background:transparent;border:none;font-size:18px;cursor:pointer;">✕</button>
+
+    <div class="header-actions">
+      <a class="header-link" href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>
+      <button id="closeBtn" class="close-btn" aria-label="Cerrar">✕</button>
+    </div>
   </header>
 
-  <div class="chipbar" id="chipbar">
-    <!-- Chips de categorías (auto desde FAQ) -->
+  <!-- Chips de categorías (se llenan dinámicamente) -->
+  <div class="chipbar" id="chipbar"></div>
+
+  <!-- Hint -->
+  <div class="search-hint" id="searchHint">
+    Escribe tu pregunta o elige una categoría. Ejemplos: “cuenta”, “transacciones”, “metas”, “planes”.
   </div>
 
-  <div class="search-hint" id="searchHint">Escribe tu pregunta o elige una categoría. Tengo respuestas rápidas en “Reserva”, “DTI casa”, “Retiro”, “Presupuesto”.</div>
+  <!-- Área de mensajes -->
   <main class="chat-body" id="chatBody"></main>
 
+  <!-- Barra de herramientas -->
   <div class="toolbar">
     <button class="tool" id="clearBtn" title="Borrar conversación">🧹 Limpiar</button>
-    <button class="tool" id="downloadBtn" title="Descargar JSON">⬇️ Descargar</button>
+    <button class="tool" id="downloadBtn" title="Descargar conversación (JSON)">⬇️ Descargar</button>
+    <button class="tool" id="emailBtn" title="Enviar un email a soporte">📧 Enviar email a soporte</button>
   </div>
 
+  <!-- Footer -->
   <footer class="chat-footer">
     <div class="quick" id="quickRow">
-      <button data-q="Reserva de emergencia">Reserva de emergencia</button>
-      <button data-q="DTI compra casa">DTI compra casa</button>
-      <button data-q="Retiro">Retiro</button>
-      <button data-q="Presupuesto">Presupuesto</button>
+      <button data-q="Cuenta y registro">Cuenta y registro</button>
+      <button data-q="Transacciones">Transacciones</button>
+      <button data-q="Metas">Metas</button>
+      <button data-q="Planes y precios">Planes y precios</button>
     </div>
     <div class="input-row">
       <input id="userInput" type="text" placeholder="Escribe tu pregunta… (Enter para enviar)" autocomplete="off" />
@@ -112,7 +158,7 @@
 </section>
 
 <script>
-(function(){
+(async function(){
   const els = {
     launcher: document.getElementById('launcher'),
     chat: document.getElementById('chatWindow'),
@@ -122,78 +168,43 @@
     close: document.getElementById('closeBtn'),
     clear: document.getElementById('clearBtn'),
     download: document.getElementById('downloadBtn'),
+    email: document.getElementById('emailBtn'),
     quick: document.getElementById('quickRow'),
     chipbar: document.getElementById('chipbar'),
     hint: document.getElementById('searchHint'),
   };
 
-  const STORAGE_KEY = 'cm_chat_history_v2';
+  const STORAGE_KEY = 'cm_chat_history_v3';
 
-  /* =======================
-     1) TU BASE DE FAQ AQUÍ
-     ======================= */
-  const FAQ = [
-    {
-      category:"Reserva",
-      q:"¿Cómo calculo mi reserva de emergencia?",
-      tags:["reserva","emergencia","fondo de contingencia","emergency fund"],
-      a:"Define tus <b>gastos esenciales mensuales</b> y elige una meta (9, 12, 18 o 24 meses). Compara con tu efectivo/equivalentes. Si tienes superávit, reasigna a deudas, inversión o seguros.",
-      link:"/calc/reserva"
-    },
-    {
-      category:"Compra de casa",
-      q:"¿Cuál es el DTI recomendado para comprar casa?",
-      tags:["dti","hipoteca","compra casa","deuda ingreso"],
-      a:"Usamos <b>DTI ≤ 36%</b> (sobre ingreso neto) y <b>Deuda/Activos ≤ 50%</b>. Si superas uno, no es recomendable. Usa nuestra calculadora para simular.",
-      link:"/calc/compra-casa"
-    },
-    {
-      category:"Retiro",
-      q:"¿Cómo estimo el capital necesario para retiro?",
-      tags:["retiro","jubilación","pensión","retirement"],
-      a:"Partimos de tu edad, % de reemplazo, inflación y tasa de rendimiento. Calculamos capital objetivo y aportes recomendados. Incluye Monte Carlo en la versión avanzada.",
-      link:"/calc/retiro"
-    },
-    {
-      category:"Presupuesto",
-      q:"¿Cuál es una tasa de ahorro saludable?",
-      tags:["presupuesto","ahorro","budget","tasa de ahorro"],
-      a:"Benchmark recomendado: <b>≥ 30%</b> óptimo; 15–29% aceptable; &lt;15% no aceptable. Te ayudamos a identificar rubros para optimizar.",
-      link:"/calc/presupuesto"
-    },
-    // 👉 Pega aquí tus preguntas comunes (de tu Excel/CSV) con este mismo formato.
-  ];
+  /* === 1) Cargar FAQ desde JSON generado del Excel === */
+  let FAQ = [];
+  try{
+    const res = await fetch('./faq_cadamenudo.json?v=1', { cache: 'no-store' });
+    FAQ = await res.json();
+  }catch(e){
+    console.warn('No pude cargar faq_cadamenudo.json; usando arreglo vacío.', e);
+    FAQ = [];
+  }
 
-  /* =========================
-     2) ENDPOINT OPCIONAL (IA)
-     ========================= */
-  const ENDPOINT = ""; // p.ej. "https://api.tu-dominio.com/llm"
-
-  // Intenciones rápidas (reglas)
+  /* === 2) Intenciones básicas (no relacionadas a calculadoras) === */
   const intents = [
     {name:'saludo', match:/(hola|buenas|hey|saludos)/i,
-      reply:()=>"¡Hola! Puedo ayudarte con <b>reserva</b>, <b>DTI casa</b>, <b>retiro</b> o <b>presupuesto</b>. ¿Qué necesitas?"},
-    {name:'reserva', match:/(reserva.*emerg|emergency fund|fondo de contingencia)/i,
-      reply:()=>"Para calcular tu <b>reserva</b>: 1) gastos esenciales mensuales; 2) meta de 9/12/18/24 meses; 3) compara contra efectivo/equivalentes. <a href='/calc/reserva'>Abrir calculadora</a>"},
-    {name:'dti', match:/(dti|compra.*casa|hipoteca|deuda.*ingreso)/i,
-      reply:()=>"Para <b>compra de casa</b>: DTI ≤ 36% e índice Deuda/Activos ≤ 50%. <a href='/calc/compra-casa'>Abrir calculadora</a>"},
-    {name:'retiro', match:/(retiro|jubil|pensión|retirement)/i,
-      reply:()=>"Estimamos capital objetivo, aportes y probabilidad de éxito. <a href='/calc/retiro'>Abrir calculadora</a>"},
-    {name:'presupuesto', match:/(presupuesto|budget|ingresos.*gastos)/i,
-      reply:()=>"Armamos un <b>presupuesto</b> por categorías y meta de ahorro ≥ 30%. <a href='/calc/presupuesto'>Abrir</a>"},
+      reply:()=>"¡Hola! ¿En qué te ayudo? Puedo responder sobre cuenta y registro, transacciones, metas, planes y más."},
+    {name:'privacidad', match:/(privacidad|privacy|datos|data)/i,
+      reply:()=>'Puedes revisar nuestra política aquí: <a href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>'},
+    {name:'soporte', match:/(soporte|ayuda|contacto|email|correo)/i,
+      reply:()=>'Si necesitas soporte técnico, usa el botón “📧 Enviar email a soporte” o escribe a <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>.'},
   ];
 
-  // Estado e historial
+  /* === 3) Estado / Historial === */
   const state = { history: [] };
-
-  // Cargar historial guardado
   try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     state.history = saved;
     saved.forEach(m => renderMsg(m.role, m.text, m.ts, true));
   }catch(e){}
 
-  // Chips de categorías (desde FAQ)
+  /* === 4) Chips por categoría (desde FAQ) === */
   const categories = [...new Set(FAQ.map(f => f.category).filter(Boolean))];
   categories.forEach(cat=>{
     const b = document.createElement('button');
@@ -203,25 +214,27 @@
     els.chipbar.appendChild(b);
   });
 
-  // Mensaje de bienvenida si no hay historial
+  /* === 5) Mensaje de bienvenida (primera vez) === */
   if(state.history.length === 0){
-    push('bot', '¡Hola! Soy tu asistente de Cada Menudo. Pregúntame algo o elige una categoría arriba. También puedes abrir nuestras calculadoras con los botones rápidos. 👇');
-    // Mostrar sugerencias iniciales del FAQ
-    showTopFAQ();
+    push('bot', '¡Hola! Soy tu asistente de Cada Menudo. Pregúntame algo o elige una categoría arriba.');
+    if (FAQ.length) showTopFAQ();
   }
 
-  // Eventos UI
+  /* === 6) Eventos UI === */
   els.launcher.addEventListener('click', () => toggle(true));
   els.close.addEventListener('click', () => toggle(false));
+
   els.send.addEventListener('click', onSend);
   els.input.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ onSend(); }});
+
   els.clear.addEventListener('click', () => {
     state.history = [];
     persist();
     els.body.innerHTML = '';
     push('bot', 'Conversación limpiada. ¿En qué te ayudo ahora?');
-    showTopFAQ();
+    if (FAQ.length) showTopFAQ();
   });
+
   els.download.addEventListener('click', () => {
     const blob = new Blob([JSON.stringify(state.history,null,2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
@@ -229,6 +242,12 @@
     a.href = url; a.download = 'chat-cada-menudo.json';
     a.click(); URL.revokeObjectURL(url);
   });
+
+  els.email.addEventListener('click', () => {
+    const mailto = buildSupportEmail();
+    window.location.href = mailto;
+  });
+
   els.quick.addEventListener('click', (e)=>{
     if(e.target.matches('button[data-q]')){
       els.input.value = e.target.dataset.q;
@@ -271,38 +290,24 @@
   }
   function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  /* ===========================
-     BÚSQUEDA EN FAQ + INTENCIONES
-     =========================== */
+  /* === 7) Manejo: Intenciones -> FAQ -> Fallback === */
   async function handle(text){
-    // 1) intent rules
+    // a) Intenciones
     for (const it of intents){
       if(it.match.test(text)){
         push('bot', it.reply());
         return;
       }
     }
-    // 2) buscar en FAQ
+    // b) FAQ
     const hits = searchFAQ(text);
     if(hits.length){
       const top = hits.slice(0,3);
       push('bot', renderFAQSuggestions(top));
       return;
     }
-    // 3) fallback (opcional) a API
-    if(ENDPOINT){
-      try{
-        const res = await fetch(ENDPOINT, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ message:text })
-        });
-        const data = await res.json();
-        if(data && data.reply){ push('bot', String(data.reply)); return; }
-      }catch(e){}
-    }
-    // 4) Fallback local
-    push('bot', 'No encontré una respuesta exacta. ¿Quieres intentar con otra palabra o abrir una de las calculadoras?');
+    // c) Fallback
+    push('bot', 'No encontré una respuesta exacta. Intenta otra palabra clave o elige una categoría arriba.');
   }
 
   function tokenize(s){
@@ -311,17 +316,14 @@
       .replace(/[^a-z0-9áéíóúñü\s]/gi,' ')
       .split(/\s+/).filter(Boolean);
   }
-
   function score(queryTokens, item){
     const haystack = (item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase();
     const tks = new Set(tokenize(haystack));
     let s = 0;
     for(const qt of queryTokens){ if(tks.has(qt)) s += 1; }
-    // bonus por coincidencia de frase parcial en la pregunta
     if(item.q.toLowerCase().includes(queryTokens.join(' '))) s += 1.5;
     return s;
   }
-
   function searchFAQ(query){
     const qTks = tokenize(query);
     const withScore = FAQ.map(item => ({item, s:score(qTks, item)}))
@@ -331,11 +333,11 @@
   }
 
   function renderFAQSuggestions(items){
-    let html = 'Encontré esto en nuestras guías:<div class="faq-suggest">';
+    let html = 'Esto es lo que encontré:<div class="faq-suggest">';
     html += items.map(it =>
       `<div class="faq-item">
          <div class="q">• ${escapeHtml(it.q)}</div>
-         <div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}">Abrir herramienta</a></div>`:''}</div>
+         <div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div>
        </div>`
     ).join('');
     html += '</div>';
@@ -343,7 +345,7 @@
   }
 
   function suggestByCategory(cat){
-    const items = FAQ.filter(f => f.category===cat).slice(0,5);
+    const items = FAQ.filter(f => f.category===cat).slice(0,6);
     if(items.length){
       push('bot', `Categoría: <b>${escapeHtml(cat)}</b><br/>` + renderFAQSuggestions(items));
     } else {
@@ -358,7 +360,41 @@
     }
   }
 
-  // Abrir cerrado según última interacción
+  /* === 8) Email a soporte (mailto) con contexto === */
+  function buildSupportEmail(){
+    const to = "tech@cadamenudo.com";
+    const subject = encodeURIComponent("Soporte Chatbot – Cada Menudo");
+    // Incluimos últimas ~10 líneas del chat y datos de navegador
+    const last = state.history.slice(-10).map(m => {
+      const t = new Date(m.ts).toLocaleString();
+      return `${m.role.toUpperCase()} [${t}]: ${m.text}`;
+    }).join('\n');
+
+    const ua = navigator.userAgent || '';
+    const lang = navigator.language || '';
+    const bodyText =
+`Hola equipo técnico,
+
+Necesito ayuda con el chatbot de Cada Menudo.
+
+Descripción del problema / pregunta:
+(Escribe aquí…)
+
+Contexto (últimos mensajes):
+${last}
+
+Datos técnicos:
+- URL: ${location.href}
+- Navegador: ${ua}
+- Idioma: ${lang}
+
+Gracias.`;
+
+    const body = encodeURIComponent(bodyText);
+    return `mailto:${to}?subject=${subject}&body=${body}`;
+  }
+
+  /* === 9) Comportamiento de apertura por defecto === */
   toggle(false);
 })();
 </script>
