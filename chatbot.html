@@ -28,7 +28,7 @@
   /* Ventana */
   .chat-window{
     position:fixed; right:20px; bottom:92px; width:360px; max-width:92vw; height:560px; max-height:78vh;
-    display:none; grid-template-rows:auto auto auto 1fr auto auto; /* header, input, chips, body, toolbar, footer */
+    display:none; grid-template-rows:auto auto auto 1fr auto auto;
     background:#fff; border-radius:18px; overflow:hidden; box-shadow:var(--shadow); z-index:9999; border:1px solid var(--border);
   }
 
@@ -38,17 +38,16 @@
   .chat-title{font-weight:700; color:var(--primary); line-height:1}
   .chat-sub{font-size:12px; color:var(--muted); margin-top:2px}
   .header-actions{margin-left:auto; display:flex; gap:8px; align-items:center}
-  .soft-btn{ font-size:12px; color:var(--primary); background:#fff; border:1px solid var(--border); padding:6px 10px; border-radius:999px; cursor:pointer }
   .icon-btn{ background:transparent; border:none; color:#94A3B8; font-size:18px; cursor:pointer; padding:6px }
 
   /* Input arriba */
   .input-top{ padding:10px 12px; border-bottom:1px solid var(--border); background:#fff }
   .input-row{ display:flex; gap:8px }
   .input-row input{ flex:1; padding:12px; border:1px solid var(--border); border-radius:12px; font-size:14px; outline:none; }
-  .input-row input::placeholder{ color:#98A2B3; } /* gris suave */
+  .input-row input::placeholder{ color:#98A2B3; }
   .input-row button{ padding:12px 14px; border:none; border-radius:12px; background:var(--primary); color:#fff; font-weight:700; cursor:pointer }
 
-  /* Chips */
+  /* Categorías */
   .chipbar{display:flex; gap:8px; padding:10px 12px; border-bottom:1px solid var(--border); background:#fff; overflow:auto}
   .chip{border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:12px; background:#fff; color:#374151; white-space:nowrap}
   .chip:active{transform:scale(.98)}
@@ -70,7 +69,7 @@
   .faq-item .a{font-size:14px}
   .faq-suggest a{color:var(--primary); text-decoration:none}
 
-  /* Toolbar (colapsable) */
+  /* Toolbar (oculta) */
   .toolbar{display:none; gap:8px; padding:8px 12px; border-top:1px dashed var(--border); background:#fff}
   .tool{font-size:12px; color:#374151; cursor:pointer; border:1px solid var(--border); padding:6px 10px; border-radius:8px; background:#fff}
 
@@ -109,7 +108,6 @@
       <div class="chat-sub">Ayuda y preguntas frecuentes</div>
     </div>
     <div class="header-actions">
-      <button id="moreBtn" class="soft-btn" title="Más">⋯</button>
       <button id="closeBtn" class="icon-btn" aria-label="Cerrar">✕</button>
     </div>
   </header>
@@ -118,7 +116,7 @@
   <div class="input-top">
     <div class="input-row">
       <input id="userInput" type="text" placeholder="Pregunta" autocomplete="off"/>
-      <button id="sendBtn">Enviar</button>
+      <button id="sendBtn" type="button">Enviar</button>
     </div>
   </div>
 
@@ -143,111 +141,147 @@
 </section>
 
 <script>
-(async function(){
-  const els = {
-    launcher: byId('launcher'), chat: byId('chatWindow'), body: byId('chatBody'),
-    input: byId('userInput'), send: byId('sendBtn'), close: byId('closeBtn'),
-    clear: byId('clearBtn'), download: byId('downloadBtn'), email: byId('emailBtn'),
-    chipbar: byId('chipbar'), toolbar: byId('toolbar'), more: byId('moreBtn'),
-  };
-  const STORAGE_KEY = 'cm_chat_history_minimal_v2';
+(function(){
+  const els = {};
+  const STORAGE_KEY = 'cm_chat_history_minimal_v3';
 
-  /* Cargar FAQ */
-  let FAQ = [];
-  try{
-    const res = await fetch('./faq_cadamenudo.json?v=3', {cache:'no-store'});
-    FAQ = await res.json();
-  }catch(e){ console.warn('No pude cargar faq_cadamenudo.json', e); }
-
-  /* Normalización y categorías tolerantes */
-  const norm = s => (s==null?'':String(s)).trim().toLowerCase();
-  const catIndex = {};
-  FAQ.forEach(it => { const c=norm(it.category); if(!c) return; (catIndex[c]??=[]).push(it); });
-
-  /* Render chips */
-  [...new Set(FAQ.map(f => (f.category||'').trim()).filter(Boolean))].forEach(cat=>{
-    const b=document.createElement('button'); b.className='chip'; b.textContent=cat; b.dataset.cat=norm(cat);
-    b.onclick=()=>suggestByCategory(b.dataset.cat, cat);
-    els.chipbar.appendChild(b);
-  });
-
-  /* Historial / bienvenida */
-const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-saved.forEach(m=>renderMsg(m.role,m.text,m.ts,true));
-
-if (saved.length === 0) {
-  push(
-    'bot',
-    '👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. ' +
-    'Aquí te pongo los temas que pueden interesarte 👇'
-  );
-
-  // Mostrar automáticamente los chips principales (categorías)
-  if (FAQ.length) {
-    const topCats = [...new Set(FAQ.map(f => f.category).filter(Boolean))].slice(0,6);
-    if (topCats.length) {
-      const html = topCats
-        .map(cat => `<div class="faq-item" style="border:none;padding:6px 0;">
-                       <div style="color:#3956E8;font-weight:600;">• ${escapeHtml(cat)}</div>
-                     </div>`)
-        .join('');
-      push('bot', `<div class="faq-suggest">${html}</div>`);
-    }
-  }
-}
-  /* Historial / bienvenida */
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-  saved.forEach(m=>renderMsg(m.role,m.text,m.ts,true));
-  if(saved.length===0){
-    push('bot','¡Hola! Soy tu asistente de Cada Menudo. Pregúntame algo o elige una categoría abajo.');
-    if(FAQ.length) showTopFAQ();
-  }
-
-  /* Eventos UI */
-  els.launcher.onclick=()=>toggle(true);
-  els.close.onclick=()=>toggle(false);
-  els.more.onclick=()=> els.toolbar.style.display = els.toolbar.style.display==='flex' ? 'none' : 'flex';
-  els.send.onclick=onSend;
-  els.input.onkeydown=(e)=>{ if(e.key==='Enter') onSend(); };
-  els.clear.onclick=()=>{ state.history=[]; persist(); els.body.innerHTML=''; push('bot','Conversación limpiada. ¿En qué te ayudo ahora?'); if(FAQ.length) showTopFAQ(); };
-  els.download.onclick=()=>{ const blob=new Blob([JSON.stringify(state.history,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='chat-cada-menudo.json'; a.click(); URL.revokeObjectURL(url); };
-  els.email.onclick=()=>{ location.href=buildSupportEmail(); };
-
-  /* Estado y helpers */
-  const state={history:saved};
+  // Helpers
   function byId(id){ return document.getElementById(id); }
-  function toggle(open){ els.chat.style.display=open?'grid':'none'; }
-  function push(role,text){ const m={role,text,ts:new Date().toISOString()}; state.history.push(m); renderMsg(role,text,m.ts); persist(); }
-  function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history)); }
-  function renderMsg(role,text,ts,skip){ const wrap=document.createElement('div'); wrap.className='msg '+role;
-    const b=document.createElement('div'); b.className='bubble'; b.innerHTML=escapeHtml(text).replace(/\n/g,'<br/>');
-    const meta=document.createElement('span'); meta.className='meta'; meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date(ts||Date.now()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap); if(!skip) els.body.scrollTop=els.body.scrollHeight; }
+  function norm(s){ return (s==null?'':String(s)).trim().toLowerCase(); }
+  function tokenize(s){
+    // Quita tildes compatible con todos los navegadores
+    return (s||'')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')  // <— en vez de \p{Diacritic}
+      .replace(/[^a-z0-9áéíóúñü\s]/gi,' ')
+      .split(/\s+/).filter(Boolean);
+  }
   function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  /* Intenciones mínimas */
-  const intents=[
-    {match:/(^|\s)(hola|buenas|hey|saludos)(\s|!|$)/i, reply:'¡Hola! Puedo ayudarte con cuenta/registro, transacciones, metas y planes.'},
-    {match:/(soporte|ayuda|contacto|email|correo)/i, reply:'Escríbenos a <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a> o usa “📧 Soporte”.'},
-  ];
+  // Estado
+  const state = { history: [] };
 
-  /* Envío */
-  function onSend(){
-    const text=(els.input.value||'').trim(); if(!text) return;
-    push('user', text); els.input.value='';
-    for(const it of intents){ if(it.match.test(text)){ push('bot', it.reply); return; } }
-    const hits=searchFAQ(text);
-    if(hits.length){ push('bot', renderFAQ(hits.slice(0,3))); }
-    else{ push('bot','No encontré una respuesta exacta. Prueba con otra palabra o toca una categoría.'); }
+  // Iniciar cuando DOM listo
+  window.addEventListener('DOMContentLoaded', init, { once:true });
+
+  async function init(){
+    // Cache de elementos
+    Object.assign(els, {
+      launcher: byId('launcher'), chat: byId('chatWindow'), body: byId('chatBody'),
+      input: byId('userInput'), send: byId('sendBtn'), close: byId('closeBtn'),
+      clear: byId('clearBtn'), download: byId('downloadBtn'), email: byId('emailBtn'),
+      chipbar: byId('chipbar'), toolbar: byId('toolbar')
+    });
+
+    // Abrir/cerrar
+    els.launcher?.addEventListener('click', () => toggle(true));
+    els.close?.addEventListener('click', () => toggle(false));
+
+    // Enviar
+    els.send?.addEventListener('click', onSendSafe);
+    els.input?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') onSendSafe(); });
+
+    // Herramientas
+    els.clear?.addEventListener('click', () => {
+      state.history=[]; persist(); els.body.innerHTML='';
+      push('bot','Conversación limpiada. ¿En qué te ayudo ahora?');
+      if(FAQ.length) showTopFAQ();
+    });
+    els.download?.addEventListener('click', () => {
+      const blob=new Blob([JSON.stringify(state.history,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob); const a=document.createElement('a');
+      a.href=url; a.download='chat-cada-menudo.json'; a.click(); URL.revokeObjectURL(url);
+    });
+    els.email?.addEventListener('click', () => { location.href = buildSupportEmail(); });
+
+    // Cargar FAQ (con tolerancia a errores)
+    let FAQ_raw = [];
+    try{
+      const res = await fetch('./faq_cadamenudo.json?v=4', { cache:'no-store' });
+      FAQ_raw = await res.json();
+    }catch(e){ console.warn('No pude cargar faq_cadamenudo.json', e); }
+    window.FAQ = Array.isArray(FAQ_raw) ? FAQ_raw : [];
+
+    // Índice de categorías
+    window.catIndex = {};
+    FAQ.forEach(it => { const c=norm(it.category); if(!c) return; (catIndex[c]??=[]).push(it); });
+
+    // Render chips
+    [...new Set(FAQ.map(f => (f.category||'').trim()).filter(Boolean))].forEach(cat=>{
+      const b=document.createElement('button'); b.className='chip'; b.textContent=cat; b.dataset.cat=norm(cat);
+      b.setAttribute('role','button');
+      b.onclick=()=>suggestByCategory(b.dataset.cat, cat);
+      els.chipbar.appendChild(b);
+    });
+
+    // Historial
+    try{
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+      state.history = Array.isArray(saved) ? saved : [];
+      state.history.forEach(m=>renderMsg(m.role,m.text,m.ts,true));
+    }catch(_){}
+
+    if(state.history.length===0){
+      // Bienvenida personalizada que pediste
+      push('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Aquí te pongo los temas que pueden interesarte 👇');
+      if(FAQ.length) showTopFAQ();
+    }
   }
 
-  /* Búsqueda */
-  function tokenize(s){ return (s||'').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'').replace(/[^a-z0-9áéíóúñü\s]/gi,' ').split(/\s+/).filter(Boolean); }
-  function score(qTokens,item){ const hay=(item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase(); const set=new Set(tokenize(hay)); let s=0; for(const t of qTokens){ if(set.has(t)) s+=1; } if(item.q.toLowerCase().includes(qTokens.join(' '))) s+=1.5; return s; }
-  function searchFAQ(q){ const t=tokenize(q); return FAQ.map(i=>({i,s:score(t,i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i); }
-  function renderFAQ(items){ return 'Encontré esto:<div class="faq-suggest">' + items.map(it=>`<div class="faq-item"><div class="q">• ${escapeHtml(it.q)}</div><div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div></div>`).join('') + '</div>'; }
+  // Manejo envío con seguridad
+  function onSendSafe(){
+    try{
+      const text = (els.input?.value || '').trim();
+      if(!text) return;
+      push('user', text);
+      els.input.value = '';
+      handle(text);
+    }catch(err){
+      console.error(err);
+      push('bot', 'Ups, tuve un problema procesando tu mensaje. Intenta de nuevo por favor.');
+    }
+  }
 
-  /* Categorías tolerantes */
+  // Core chat
+  function toggle(open){ if(els.chat) els.chat.style.display = open ? 'grid' : 'none'; }
+  function push(role, text){
+    const m = { role, text, ts:new Date().toISOString() };
+    state.history.push(m);
+    renderMsg(role, text, m.ts);
+    persist();
+  }
+  function persist(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history)); }catch(_){ } }
+  function renderMsg(role, text, ts, skip){
+    const wrap=document.createElement('div'); wrap.className='msg '+role;
+    const b=document.createElement('div'); b.className='bubble'; b.innerHTML=escapeHtml(text).replace(/\n/g,'<br/>');
+    const meta=document.createElement('span'); meta.className='meta';
+    meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date(ts||Date.now()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap);
+    if(!skip) els.body.scrollTop = els.body.scrollHeight;
+  }
+
+  // Búsqueda FAQ
+  function score(qTokens,item){
+    const hay=(item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase();
+    const set=new Set(tokenize(hay));
+    let s=0; for(const t of qTokens){ if(set.has(t)) s+=1; }
+    if(item.q.toLowerCase().includes(qTokens.join(' '))) s+=1.5;
+    return s;
+  }
+  function searchFAQ(q){
+    const t = tokenize(q);
+    return FAQ.map(i=>({i,s:score(t,i)}))
+              .filter(x=>x.s>0)
+              .sort((a,b)=>b.s-a.s)
+              .map(x=>x.i);
+  }
+  function renderFAQ(items){
+    return 'Encontré esto:<div class="faq-suggest">' +
+      items.map(it=>`<div class="faq-item"><div class="q">• ${escapeHtml(it.q)}</div><div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div></div>`).join('') +
+      '</div>';
+  }
+
   function suggestByCategory(key,label){
     const k=norm(key||label);
     let items=(catIndex[k]||[]).slice(0,6);
@@ -259,9 +293,18 @@ if (saved.length === 0) {
     else push('bot', `No tengo elementos en la categoría <b>${escapeHtml(label||key)}</b> aún.`);
   }
 
-  function showTopFAQ(){ const top=FAQ.slice(0,3); if(top.length) push('bot', renderFAQ(top)); }
+  function showTopFAQ(){
+    const cats = [...new Set(FAQ.map(f=>f.category).filter(Boolean))].slice(0,6);
+    if(cats.length){
+      const html = cats.map(cat=>`<div class="faq-item" style="border:none;padding:6px 0;">
+        <div style="color:#3956E8;font-weight:600;">• ${escapeHtml(cat)}</div>
+      </div>`).join('');
+      push('bot', `<div class="faq-suggest">${html}</div>`);
+    }
+    const top = FAQ.slice(0,3);
+    if(top.length) push('bot', renderFAQ(top));
+  }
 
-  /* Email soporte */
   function buildSupportEmail(){
     const last=state.history.slice(-10).map(m=>`${m.role.toUpperCase()} [${new Date(m.ts).toLocaleString()}]: ${m.text}`).join('\n');
     const ua=navigator.userAgent||'', lang=navigator.language||'';
@@ -284,7 +327,7 @@ Gracias.`;
     return `mailto:tech@cadamenudo.com?subject=${encodeURIComponent('Soporte Chatbot – Cada Menudo')}&body=${encodeURIComponent(body)}`;
   }
 
-  /* Ajuste automático del logo (no se deforma) */
+  // Ajuste automático del logo (no se deforma)
   document.querySelectorAll('.launcher-logo, .bot-logo').forEach(img=>{
     img.addEventListener('load', ()=>{
       const {naturalWidth:w,naturalHeight:h}=img; if(!w||!h) return;
@@ -293,15 +336,6 @@ Gracias.`;
     });
   });
 })();
-
-/* FIX de apertura por si el DOM carga antes/después */
-window.addEventListener("DOMContentLoaded", () => {
-  const launcher = document.getElementById("launcher");
-  const chat = document.getElementById("chatWindow");
-  const closeBtn = document.getElementById("closeBtn");
-  if (launcher && chat) launcher.addEventListener("click", () => chat.style.display = "grid");
-  if (closeBtn && chat) closeBtn.addEventListener("click", () => chat.style.display = "none");
-});
 </script>
 </body>
 </html>
