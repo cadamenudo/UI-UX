@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Chatbot – Cada Menudo</title>
+
+<!-- Fuente Greycliff CF (tu CDN) -->
+<link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+
+<style>
+  :root{
+    --primary:#3956E8; --secondary:#7459D9; --accent:#E8C239;
+    --bg:#ffffff; --text:#0f172a; --muted:#64748B; --border:#E5E7EB;
+    --card:#F8FAFC; --shadow:0 10px 30px rgba(15,23,42,.15);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Greycliff CF",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  /* Botón flotante */
+  .chat-launcher{
+    position:fixed; right:20px; bottom:20px; width:60px; height:60px; border-radius:50%;
+    background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border:none;
+    display:grid; place-items:center; box-shadow:var(--shadow); cursor:pointer; z-index:9999;
+  }
+  .chat-launcher span{font-size:26px; line-height:1}
+  /* Ventana */
+  .chat-window{
+    position:fixed; right:20px; bottom:90px; width:360px; max-width:92vw; height:520px; max-height:75vh;
+    background:#fff; border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow);
+    display:none; grid-template-rows:56px 1fr auto; overflow:hidden; z-index:9999;
+  }
+  .chat-header{
+    display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--card); border-bottom:1px solid var(--border);
+  }
+  .bot-avatar{
+    width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--secondary));
+    display:grid; place-items:center; color:#fff; font-weight:700;
+  }
+  .chat-title{font-weight:700}
+  .chat-sub{font-size:12px; color:var(--muted); margin-top:-2px}
+  .chat-body{
+    padding:14px; overflow-y:auto; background:#fff;
+  }
+  .msg{display:flex; margin:8px 0}
+  .msg.bot{justify-content:flex-start}
+  .msg.user{justify-content:flex-end}
+  .bubble{
+    max-width:75%; padding:10px 12px; border-radius:14px; font-size:14px; line-height:1.35;
+    border:1px solid var(--border); background:#fff;
+  }
+  .msg.bot .bubble{background:#f5f7ff; border-color:#dfe4ff}
+  .msg.user .bubble{background:#eef2ff; border-color:#dadaff}
+  .meta{display:block; color:var(--muted); font-size:11px; margin-top:4px}
+  .quick{
+    display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 2px;
+  }
+  .quick button{
+    border:1px solid var(--border); background:#fff; border-radius:999px; padding:6px 10px; font-size:12px; cursor:pointer;
+  }
+  .chat-footer{
+    border-top:1px solid var(--border); background:#fff; padding:8px;
+  }
+  .input-row{display:flex; gap:8px}
+  .input-row input{
+    flex:1; padding:10px 12px; border:1px solid var(--border); border-radius:12px; font-size:14px; outline:none;
+  }
+  .input-row button{
+    padding:10px 12px; border:none; border-radius:12px; background:var(--primary); color:#fff; cursor:pointer; font-weight:600;
+  }
+  .toolbar{
+    display:flex; gap:8px; padding:8px 12px; border-top:1px dashed var(--border); background:#fafafa;
+  }
+  .tool{font-size:12px; color:var(--muted); cursor:pointer; border:1px solid var(--border); padding:4px 8px; border-radius:8px; background:#fff}
+  .hidden{display:none}
+  /* Scrollbar sutil */
+  .chat-body::-webkit-scrollbar{width:10px}
+  .chat-body::-webkit-scrollbar-thumb{background:#d9defa; border-radius:8px}
+  @media (max-width:480px){
+    .chat-window{right:10px; left:10px; width:auto; height:70vh;}
+  }
+</style>
+</head>
+<body>
+
+<!-- Botón flotante -->
+<button class="chat-launcher" id="launcher" aria-label="Abrir chat">
+  <span>💬</span>
+</button>
+
+<!-- Ventana de chat -->
+<section class="chat-window" id="chatWindow" aria-live="polite">
+  <header class="chat-header">
+    <div class="bot-avatar">CM</div>
+    <div>
+      <div class="chat-title">Asistente Cada Menudo</div>
+      <div class="chat-sub">Finanzas personales • Emprendimiento</div>
+    </div>
+    <button id="closeBtn" aria-label="Cerrar" style="margin-left:auto;background:transparent;border:none;font-size:18px;cursor:pointer;">✕</button>
+  </header>
+
+  <main class="chat-body" id="chatBody"></main>
+
+  <div class="toolbar">
+    <button class="tool" id="clearBtn" title="Borrar conversación">🧹 Limpiar</button>
+    <button class="tool" id="downloadBtn" title="Descargar JSON">⬇️ Descargar</button>
+  </div>
+
+  <footer class="chat-footer">
+    <div class="quick" id="quickRow">
+      <button data-q="Reserva de emergencia">Reserva de emergencia</button>
+      <button data-q="DTI compra casa">DTI compra casa</button>
+      <button data-q="Retiro">Retiro</button>
+      <button data-q="Presupuesto">Presupuesto</button>
+    </div>
+    <div class="input-row">
+      <input id="userInput" type="text" placeholder="Escribe tu pregunta… (Enter para enviar)" autocomplete="off" />
+      <button id="sendBtn">Enviar</button>
+    </div>
+  </footer>
+</section>
+
+<script>
+(function(){
+  const els = {
+    launcher: document.getElementById('launcher'),
+    chat: document.getElementById('chatWindow'),
+    body: document.getElementById('chatBody'),
+    input: document.getElementById('userInput'),
+    send: document.getElementById('sendBtn'),
+    close: document.getElementById('closeBtn'),
+    clear: document.getElementById('clearBtn'),
+    download: document.getElementById('downloadBtn'),
+    quick: document.getElementById('quickRow')
+  };
+
+  const STORAGE_KEY = 'cm_chat_history_v1';
+
+  // Intenciones simples (puedes ampliar fácilmente)
+  const intents = [
+    { 
+      name:'saludo',
+      match: /(hola|buenas|hey|saludos)/i,
+      reply: () => `¡Hola! Soy tu asistente. Puedo ayudarte con **reserva de emergencia**, **DTI para compra de casa**, **retiro** o **presupuesto**. ¿Por dónde empezamos?`
+    },
+    {
+      name:'reserva',
+      match: /(reserva.*emerg|emergency fund|fondo de contingencia)/i,
+      reply: () => (
+        `Para calcular tu **reserva de emergencia**:\n`+
+        `1) Define *gastos esenciales mensuales* (impuestos, seguros, deuda, utilidades, telecom, supermercado, transporte, etc.).\n`+
+        `2) Elige meta de **9, 12, 18 o 24** meses (si tienes dependientes, suele ser mayor).\n`+
+        `3) Compara contra tu efectivo y equivalentes.\n\n`+
+        `¿Quieres un mini-cálculo rápido? Escríbeme: "Gastos esenciales 1800; efectivo 4000; meta 12".`
+      )
+    },
+    {
+      name:'dti',
+      match: /(dti|compra.*casa|hipoteca|deuda.*ingreso)/i,
+      reply: () => (
+        `Para evaluar una **compra de casa** miramos:\n`+
+        `• **DTI** ≤ 36% (sobre ingreso neto).\n`+
+        `• **Deuda/Activos** ≤ 50%.\n`+
+        `Pásame: "ingreso neto mensual", "pagos de deuda mensual" y "pago hipotecario estimado" y te ayudo a calcular.`
+      )
+    },
+    {
+      name:'retiro',
+      match: /(retiro|jubil|pensión|retirement)/i,
+      reply: () => (
+        `Para **retiro**, estimamos capital necesario según edad, ingreso, tasa esperada, inflación y % de reemplazo. `+
+        `Si tienes el ingreso objetivo mensual en retiro y tus ahorros actuales, te doy un estimado rápido.`
+      )
+    },
+    {
+      name:'presupuesto',
+      match: /(presupuesto|budget|ingresos.*gastos)/i,
+      reply: () => (
+        `Te ayudo a montar un **presupuesto** por categorías (ingresos, gastos, ahorro, deuda) y una tasa de ahorro objetivo ≥ 30%. `+
+        `Dime tus ingresos y los principales rubros de gasto y hacemos un borrador.`
+      )
+    },
+    {
+      name:'ayuda',
+      match: /(ayuda|qué puedes hacer|opciones|menu)/i,
+      reply: () => (
+        `Puedo: \n• Calcular reserva de emergencia\n• Estimar DTI para casa\n• Bocetar plan de retiro\n• Armar presupuesto básico\nEscribe una de esas opciones o usa los botones rápidos.`
+      )
+    },
+    {
+      name:'mini_reserva_parser',
+      match: /(gastos.*?(\d+[.,]?\d*))|(efectivo.*?(\d+[.,]?\d*))|(meta.*?(\d+))/i,
+      reply: (text) => tryQuickReserve(text)
+    }
+  ];
+
+  // Mensajes utilitarios
+  const msg = (role, text) => ({ role, text, ts: new Date().toISOString() });
+
+  const state = {
+    history: [],
+  };
+
+  // Cargar historial
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    state.history = saved;
+    saved.forEach(m => renderMsg(m.role, m.text, m.ts, true));
+  } catch(e){}
+
+  // Mensaje de bienvenida si no hay historial
+  if(state.history.length === 0){
+    push('bot', `¡Hola! Soy el asistente de Cada Menudo. Puedo ayudarte con **reserva de emergencia**, **DTI para compra de casa**, **retiro** o **presupuesto**. Elige una opción abajo o escríbeme. 👇`);
+  }
+
+  // Eventos UI
+  els.launcher.addEventListener('click', () => toggle(true));
+  els.close.addEventListener('click', () => toggle(false));
+
+  function toggle(open){
+    els.chat.style.display = open ? 'grid' : 'none';
+  }
+
+  els.send.addEventListener('click', onSend);
+  els.input.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ onSend(); }});
+  els.clear.addEventListener('click', () => {
+    state.history = [];
+    persist();
+    els.body.innerHTML = '';
+    push('bot', 'Conversación limpiada. ¿En qué te ayudo ahora?');
+  });
+  els.download.addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(state.history,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'chat-cada-menudo.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+  els.quick.addEventListener('click', (e)=>{
+    if(e.target.matches('button[data-q]')){
+      els.input.value = e.target.dataset.q;
+      onSend();
+    }
+  });
+
+  function onSend(){
+    const text = (els.input.value || '').trim();
+    if(!text) return;
+    push('user', text);
+    els.input.value = '';
+    handle(text);
+  }
+
+  function push(role, text){
+    const m = msg(role, text);
+    state.history.push(m);
+    renderMsg(role, text, m.ts);
+    persist();
+  }
+
+  function persist(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history));
+  }
+
+  function renderMsg(role, text, ts, skipScroll){
+    const wrap = document.createElement('div');
+    wrap.className = 'msg '+role;
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = sanitize(text).replace(/\n/g,'<br/>');
+    const meta = document.createElement('span');
+    meta.className = 'meta';
+    const time = new Date(ts || Date.now()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    meta.textContent = role==='bot' ? `Asistente • ${time}` : `Tú • ${time}`;
+    bubble.appendChild(meta);
+    wrap.appendChild(bubble);
+    els.body.appendChild(wrap);
+    if(!skipScroll) els.body.scrollTop = els.body.scrollHeight;
+  }
+
+  function sanitize(html){
+    const div = document.createElement('div');
+    div.textContent = html;
+    return div.innerHTML;
+  }
+
+  // Motor de intenciones simple
+  async function handle(text){
+    // 1) Reglas locales
+    for (const it of intents){
+      if(it.match.test(text)){
+        const out = typeof it.reply==='function' ? it.reply(text) : it.reply;
+        if(out) {
+          push('bot', out);
+          return;
+        }
+      }
+    }
+    // 2) Fallback local
+    push('bot', `No estoy seguro de haber entendido. ¿Quieres ver opciones? Escribe "ayuda".`);
+
+    // 3) (Opcional) Envío a API si quieres IA real:
+    // await relayToAPI(text);
+  }
+
+  // Demo de cálculo rápido de reserva (parsing muy flexible)
+  function tryQuickReserve(text){
+    // Buscar números en contexto
+    const findNum = (labelRegex) => {
+      const m = text.match(new RegExp(labelRegex+'[^0-9]*([0-9]+([.,][0-9]+)?)','i'));
+      if(!m) return null;
+      return parseFloat(m[1].replace(',','.'));
+    };
+    const gastos = findNum('(gastos|esenciales|gasto)');
+    const efectivo = findNum('(efectivo|cash|ahorros?)');
+    const meta = findNum('(meta|meses?|objetivo)');
+
+    if(gastos && efectivo && meta){
+      const mesesCubre = efectivo / gastos;
+      const faltante = Math.max(0, (meta - mesesCubre) * gastos);
+      const sobra = Math.max(0, (mesesCubre - meta) * gastos);
+
+      let txt = `📦 **Cálculo rápido de reserva**\n`;
+      txt += `• Gastos esenciales mensuales: **$${fmt(gastos)}**\n`;
+      txt += `• Efectivo/equivalentes: **$${fmt(efectivo)}**\n`;
+      txt += `• Meta: **${meta} meses**\n\n`;
+      txt += `Hoy cubres **${mesesCubre.toFixed(1)} meses**.\n`;
+
+      if(faltante>0){
+        txt += `🔸 Te faltan **$${fmt(faltante)}** para llegar a ${meta} meses.\n`;
+        txt += `Sugerencias: prioriza reducir deuda costosa, revisar seguros, y aumentar ahorro dirigido a la reserva.\n`;
+      } else if(sobra>0){
+        txt += `✅ Tienes **superávit** de **$${fmt(sobra)}** sobre tu meta.\n`;
+        txt += `Idea: reasigna el excedente a **pagar deudas**, **fondos de inversión**, o **reforzar coberturas** (seguros) según tu plan.\n`;
+      } else {
+        txt += `✔️ Estás justo en la meta. Mantén aportes pequeños para compensar inflación y variaciones.\n`;
+      }
+      return txt;
+    }
+    return `Para un cálculo rápido, envíame algo como: "Gastos esenciales 1800; efectivo 4000; meta 12".`;
+  }
+
+  function fmt(n){ return n.toLocaleString(undefined,{maximumFractionDigits:0}); }
+
+  // (Opcional) Conexión futura a API/IA
+  async function relayToAPI(userText){
+    const endpoint = '';// <-- coloca aquí tu endpoint cuando lo tengas
+    if(!endpoint) return;
+    try{
+      // Ejemplo de payload
+      const res = await fetch(endpoint, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ message: userText, history: state.history })
+      });
+      const data = await res.json();
+      if(data && data.reply){
+        push('bot', String(data.reply));
+      }
+    }catch(e){
+      push('bot', 'No pude conectar con el servicio externo ahora mismo.');
+    }
+  }
+
+  // Abrir cerrado según última interacción
+  toggle(false);
+})();
+</script>
+</body>
+</html>
