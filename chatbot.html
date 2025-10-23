@@ -38,7 +38,7 @@
     display:grid; place-items:center;
   }
   .launcher-logo{
-    width:58px; height:58px; border-radius:50%;
+    width:58px; height:58px; border-radius:0%;
     object-fit:cover; background:#3956E8; padding:4px;
   }
 
@@ -58,14 +58,14 @@
     display:flex; align-items:center; gap:12px;
     padding:14px 16px;
     background:linear-gradient(135deg,var(--primary),var(--secondary));
-    color:#fff;
+    color:#3956E8;
   }
   .bot-logo{
     width:36px; height:36px; border-radius:50%;
     object-fit:cover; background:#3956E8; padding:2px;
   }
   .chat-title{font-weight:700; color:#fff;}
-  .chat-sub{font-size:12px; color:#E8C239; margin-top:-2px}
+  .chat-sub{font-size:12px; color:var(--accent); margin-top:-2px}
   .header-actions{margin-left:auto; display:flex; align-items:center; gap:10px;}
   .header-link{
     font-size:12px; color:#fff; text-decoration:none;
@@ -144,6 +144,31 @@
   .chat-body::-webkit-scrollbar{width:10px}
   .chat-body::-webkit-scrollbar-thumb{background:#d9defa; border-radius:8px}
 
+  /* === MODO OSCURO (automático) === */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1020;
+      --text:#f3f4f6;
+      --muted:#9aa4b2;
+      --border:#1f2937;
+      --card:#0f172a;
+      --shadow:0 10px 30px rgba(0,0,0,.45);
+    }
+    .chat-window{ background:#0f172a; border-color:#1f2937; }
+    .chipbar, .chat-footer, .toolbar{ background:#0f172a; border-color:#1f2937; }
+    .chip{ background:#111827; border-color:#1f2937; color:#e5e7eb; }
+    .search-hint{ color:#9aa4b2; }
+    .chat-body{ background:#0f172a; }
+    .bubble{ background:#0b1326; border-color:#1f2937; color:#e5e7eb; }
+    .msg.bot .bubble{ background:#0e1a33; border-color:#1f2937; }
+    .msg.user .bubble{ background:#132043; border-color:#1f2937; }
+    .faq-item{ background:#0b1326; border-color:#1f2937; }
+    .faq-suggest a{ color:#9fb0ff; }
+    .tool{ background:#0b1326; border-color:#1f2937; color:#cbd5e1; }
+    .input-row input{ background:#0b1326; border-color:#1f2937; color:#e5e7eb; }
+    .input-row button{ background:var(--primary); }
+  }
+
   /* === MÓVIL FULL SCREEN === */
   @media (max-width:480px){
     .chat-window{
@@ -154,7 +179,6 @@
     .bot-logo{width:40px; height:40px;}
   }
 </style>
-
 </head>
 <body>
 
@@ -169,6 +193,7 @@
     <img class="bot-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
     <div>
       <div class="chat-title">ChinChin Bot</div>
+      <div class="chat-sub">Preguntas frecuentes • Soporte</div>
     </div>
 
     <div class="header-actions">
@@ -182,7 +207,7 @@
 
   <!-- Hint -->
   <div class="search-hint" id="searchHint">
-    Escribe tu pregunta o elige una categoría. Ejemplos: “cuenta”, “transacciones”, “metas”, “planes”.
+    Escribe tu pregunta o elige una categoría. Ejemplos: “Cuenta y registro”, “Transacciones”, “Metas”, “Planes y precios”.
   </div>
 
   <!-- Área de mensajes -->
@@ -227,7 +252,7 @@
     hint: document.getElementById('searchHint'),
   };
 
-  const STORAGE_KEY = 'cm_chat_history_v3';
+  const STORAGE_KEY = 'cm_chat_history_v4';
 
   /* === 1) Cargar FAQ desde JSON generado del Excel === */
   let FAQ = [];
@@ -239,9 +264,19 @@
     FAQ = [];
   }
 
-  /* === 2) Intenciones básicas (no relacionadas a calculadoras) === */
+  /* === 2) Utilidades de normalización (para FIX de categorías) === */
+  const norm = (s) => (s==null?'':String(s)).trim().toLowerCase();
+  const catIndex = {};
+  FAQ.forEach(it=>{
+    const c = norm(it.category);
+    if(!c) return;
+    if(!catIndex[c]) catIndex[c] = [];
+    catIndex[c].push(it);
+  });
+
+  /* === 3) Intenciones básicas === */
   const intents = [
-    {name:'saludo', match:/(hola|buenas|hey|saludos)/i,
+    {name:'saludo', match:/(^|\s)(hola|buenas|hey|saludos)(\s|!|$)/i,
       reply:()=>"¡Hola! ¿En qué te ayudo? Puedo responder sobre cuenta y registro, transacciones, metas, planes y más."},
     {name:'privacidad', match:/(privacidad|privacy|datos|data)/i,
       reply:()=>'Puedes revisar nuestra política aquí: <a href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>'},
@@ -249,7 +284,7 @@
       reply:()=>'Si necesitas soporte técnico, usa el botón “📧 Enviar email a soporte” o escribe a <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>.'},
   ];
 
-  /* === 3) Estado / Historial === */
+  /* === 4) Estado / Historial === */
   const state = { history: [] };
   try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -257,23 +292,24 @@
     saved.forEach(m => renderMsg(m.role, m.text, m.ts, true));
   }catch(e){}
 
-  /* === 4) Chips por categoría (desde FAQ) === */
-  const categories = [...new Set(FAQ.map(f => f.category).filter(Boolean))];
-  categories.forEach(cat=>{
+  /* === 5) Chips por categoría (desde FAQ) === */
+  const uniqueCats = [...new Set(FAQ.map(f => (f.category||'').trim()).filter(Boolean))];
+  uniqueCats.forEach(cat=>{
     const b = document.createElement('button');
     b.className = 'chip';
     b.textContent = cat;
-    b.addEventListener('click', ()=> suggestByCategory(cat));
+    b.dataset.cat = norm(cat); // clave normalizada
+    b.addEventListener('click', (ev)=> suggestByCategory(ev.currentTarget.dataset.cat, cat));
     els.chipbar.appendChild(b);
   });
 
-  /* === 5) Mensaje de bienvenida (primera vez) === */
+  /* === 6) Mensaje de bienvenida (primera vez) === */
   if(state.history.length === 0){
     push('bot', '¡Hola! Soy tu asistente de Cada Menudo. Pregúntame algo o elige una categoría arriba.');
     if (FAQ.length) showTopFAQ();
   }
 
-  /* === 6) Eventos UI === */
+  /* === 7) Eventos UI === */
   els.launcher.addEventListener('click', () => toggle(true));
   els.close.addEventListener('click', () => toggle(false));
 
@@ -343,7 +379,7 @@
   }
   function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  /* === 7) Manejo: Intenciones -> FAQ -> Fallback === */
+  /* === 8) Manejo: Intenciones -> FAQ -> Fallback === */
   async function handle(text){
     // a) Intenciones
     for (const it of intents){
@@ -397,12 +433,29 @@
     return html;
   }
 
-  function suggestByCategory(cat){
-    const items = FAQ.filter(f => f.category===cat).slice(0,6);
+  /* === 9) FIX categorías: búsqueda tolerante + fallback === */
+  function suggestByCategory(catKey, originalLabel){
+    const key = norm(catKey||originalLabel);
+    let items = (catIndex[key]||[]).slice(0,6);
+
+    // si no hubo coincidencia exacta, probar por inclusión en category, tags o pregunta
+    if(items.length === 0){
+      items = FAQ.filter(f =>
+        norm(f.category).includes(key) ||
+        (f.tags||[]).some(t => norm(t).includes(key)) ||
+        norm(f.q).includes(key)
+      ).slice(0,6);
+    }
+
+    // si aún vacío, usa el motor de búsqueda general como último recurso
+    if(items.length === 0){
+      items = searchFAQ(originalLabel||catKey).slice(0,6);
+    }
+
     if(items.length){
-      push('bot', `Categoría: <b>${escapeHtml(cat)}</b><br/>` + renderFAQSuggestions(items));
+      push('bot', `Categoría: <b>${escapeHtml(originalLabel||catKey)}</b><br/>` + renderFAQSuggestions(items));
     } else {
-      push('bot', `No tengo elementos en la categoría <b>${escapeHtml(cat)}</b> aún.`);
+      push('bot', `No tengo elementos en la categoría <b>${escapeHtml(originalLabel||catKey)}</b> aún.`);
     }
   }
 
@@ -413,11 +466,10 @@
     }
   }
 
-  /* === 8) Email a soporte (mailto) con contexto === */
+  /* === 10) Email a soporte (mailto) con contexto === */
   function buildSupportEmail(){
     const to = "tech@cadamenudo.com";
     const subject = encodeURIComponent("Soporte Chatbot – Cada Menudo");
-    // Incluimos últimas ~10 líneas del chat y datos de navegador
     const last = state.history.slice(-10).map(m => {
       const t = new Date(m.ts).toLocaleString();
       return `${m.role.toUpperCase()} [${t}]: ${m.text}`;
@@ -447,7 +499,7 @@ Gracias.`;
     return `mailto:${to}?subject=${subject}&body=${body}`;
   }
 
-  /* === 9) Comportamiento de apertura por defecto === */
+  /* === 11) Comportamiento de apertura por defecto === */
   toggle(false);
 })();
 </script>
