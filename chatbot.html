@@ -3,256 +3,130 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Chatbot – Cada Menudo</title>
-
-<!-- Tipografía Greycliff CF -->
+<title>Chatbot – Cada Menudo (Minimal)</title>
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
 
 <style>
   :root{
-    --primary:#3956E8;
-    --secondary:#7459D9;
-    --accent:#E8C239;
-    --bg:#ffffff;
-    --text:#0f172a;
-    --muted:#64748B;
-    --border:#E5E7EB;
-    --card:#F8FAFC;
-    --shadow:0 10px 30px rgba(15,23,42,.15);
+    --primary:#3956E8; --secondary:#7459D9; --accent:#E8C239;
+    --bg:#ffffff; --text:#0d1320; --muted:#6b7280; --border:#E6E8F0; --shadow:0 8px 28px rgba(15,23,42,.12);
+    --bot:#F3F6FF; --user:#F7F8FB;
   }
   *{box-sizing:border-box}
-  html,body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:"Greycliff CF",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  }
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Greycliff CF",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 
-  /* === BOTÓN FLOTANTE === */
+  /* Botón flotante: azul sólido, isotipo blanco centrado */
   .chat-launcher{
-    position:fixed; right:20px; bottom:20px;
-    border:none; padding:0; cursor:pointer;
-    width:68px; height:68px; border-radius:50%;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
-    box-shadow:var(--shadow); z-index:9999;
-    display:grid; place-items:center;
+    position:fixed; right:20px; bottom:20px; width:64px; height:64px; border-radius:50%;
+    border:none; background:var(--primary); color:#fff; display:grid; place-items:center;
+    box-shadow:var(--shadow); cursor:pointer; z-index:9999;
   }
   .launcher-logo{
-    width:58px; height:58px; border-radius:50%;
-    object-fit:cover; background:#fff; padding:4px;
+    width:38px; height:38px; border-radius:50%; background:#fff; padding:6px; object-fit:contain;
   }
 
-  /* === VENTANA DEL CHAT === */
+  /* Ventana */
   .chat-window{
-    position:fixed; right:20px; bottom:90px;
-    width:360px; max-width:92vw; height:560px; max-height:80vh;
-    background:#fff; border-radius:16px;
-    box-shadow:var(--shadow);
-    display:none; grid-template-rows:auto auto 1fr auto auto;
-    overflow:hidden; z-index:9999;
-    border:1px solid var(--border);
+    position:fixed; right:20px; bottom:92px; width:360px; max-width:92vw; height:540px; max-height:78vh;
+    display:none; grid-template-rows:auto auto 1fr auto; background:#fff; border-radius:18px; overflow:hidden;
+    box-shadow:var(--shadow); z-index:9999; border:1px solid var(--border);
   }
 
-  /* === HEADER === */
+  /* Header minimal: blanco, solo isotipo + texto + acciones sutiles */
   .chat-header{
-    display:flex; align-items:center; gap:12px;
-    padding:14px 16px;
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
-    color:#fff;
+    display:flex; align-items:center; gap:12px; padding:12px 14px; background:#fff; border-bottom:1px solid var(--border);
   }
-  .bot-logo{
-    width:36px; height:36px; border-radius:50%;
-    object-fit:cover; background:#fff; padding:2px;
+  .bot-logo{ width:32px; height:32px; border-radius:50%; background:#fff; padding:4px; object-fit:contain; }
+  .chat-title{font-weight:700; color:var(--primary); line-height:1}
+  .chat-sub{font-size:12px; color:var(--muted); margin-top:2px}
+  .header-actions{margin-left:auto; display:flex; gap:8px; align-items:center}
+  .soft-btn{
+    font-size:12px; color:var(--primary); background:#fff; border:1px solid var(--border); padding:6px 10px;
+    border-radius:999px; cursor:pointer;
   }
-  .chat-title{font-weight:700; color:#fff;}
-  .chat-sub{font-size:12px; color:var(--accent); margin-top:-2px}
-  .header-actions{margin-left:auto; display:flex; align-items:center; gap:10px;}
-  .header-link{
-    font-size:12px; color:#fff; text-decoration:none;
-    border:1px solid rgba(255,255,255,.5);
-    padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.15);
-  }
-  .header-link:hover{background:rgba(255,255,255,.3);}
-  .close-btn{
-    background:transparent; border:none; color:#fff;
-    font-size:18px; cursor:pointer; padding:4px 6px;
-  }
+  .icon-btn{ background:transparent; border:none; color:#94A3B8; font-size:18px; cursor:pointer; padding:6px; }
 
-  /* === CHIPS Y BODY === */
-  .chipbar{
-    display:flex; gap:8px; padding:10px 12px;
-    flex-wrap:wrap; border-bottom:1px solid var(--border);
-    background:#fff;
-  }
-  .chip{
-    border:1px solid var(--border);
-    padding:6px 10px; border-radius:999px;
-    font-size:12px; cursor:pointer; background:#fff;
-  }
+  /* Chips y hint */
+  .chipbar{display:flex; gap:8px; padding:10px 12px; border-bottom:1px solid var(--border); background:#fff; overflow:auto;}
+  .chip{border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:12px; background:#fff; color:#374151; white-space:nowrap;}
+  .chip:active{transform:scale(.98)}
 
-  .search-hint{font-size:12px;color:var(--muted);padding:0 16px 10px}
-  .chat-body{padding:14px; overflow-y:auto; background:#fff}
+  /* Cuerpo de chat */
+  .chat-body{padding:14px; overflow:auto; background:#fff}
   .msg{display:flex; margin:8px 0}
   .msg.bot{justify-content:flex-start}
   .msg.user{justify-content:flex-end}
   .bubble{
-    max-width:75%; padding:10px 12px; border-radius:14px;
-    font-size:14px; line-height:1.35; border:1px solid var(--border); background:#fff;
+    max-width:78%; padding:10px 12px; border-radius:14px; font-size:14px; line-height:1.35; border:1px solid var(--border);
   }
-  .msg.bot .bubble{background:#f5f7ff; border-color:#dfe4ff}
-  .msg.user .bubble{background:#eef2ff; border-color:#dadaff}
-  .meta{display:block; color:var(--muted); font-size:11px; margin-top:4px}
+  .msg.bot .bubble{background:var(--bot)}
+  .msg.user .bubble{background:var(--user)}
+  .meta{display:block; color:#9AA4B2; font-size:11px; margin-top:4px}
 
-  .faq-suggest{border:1px dashed var(--border); padding:10px; border-radius:10px; background:#fff; margin:8px 0; font-size:13px}
-  .faq-suggest a{color:var(--primary); text-decoration:none}
+  /* Sugerencias FAQ dentro del chat */
+  .faq-suggest{border:1px dashed var(--border); padding:10px; border-radius:12px; background:#fff; margin:8px 0; font-size:13px}
   .faq-item{padding:8px 10px; border:1px solid var(--border); border-radius:10px; margin:8px 0; background:#fff}
   .faq-item .q{font-weight:700; margin-bottom:6px}
   .faq-item .a{font-size:14px}
+  .faq-suggest a{color:var(--primary); text-decoration:none}
 
-  /* === TOOLBAR === */
-  .toolbar{
-    display:flex; gap:8px; padding:8px 12px;
-    border-top:1px dashed var(--border);
-    background:#f9fafb; align-items:center; flex-wrap:wrap;
-  }
-  .tool{
-    font-size:12px; color:var(--muted); cursor:pointer;
-    border:1px solid var(--border); padding:6px 10px;
-    border-radius:8px; background:#fff;
-  }
-
-  /* === FOOTER === */
-  .chat-footer{border-top:1px solid var(--border); background:#fff; padding:8px;}
-  .quick{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 8px;}
-  .quick button{
-    border:1px solid var(--border); background:#fff;
-    border-radius:999px; padding:6px 10px; font-size:12px; cursor:pointer;
-  }
-  .quick button:hover{background:#f2f4ff}
+  /* Footer minimal */
+  .chat-footer{border-top:1px solid var(--border); background:#fff; padding:10px}
+  .quick{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 8px}
+  .quick button{border:1px solid var(--border); background:#fff; border-radius:999px; padding:6px 10px; font-size:12px; color:#374151; cursor:pointer}
   .input-row{display:flex; gap:8px}
-  .input-row input{
-    flex:1; padding:10px 12px; border:1px solid var(--border);
-    border-radius:12px; font-size:14px; outline:none;
-  }
-  .input-row button{
-    padding:10px 12px; border:none; border-radius:12px;
-    background:var(--primary); color:#fff; cursor:pointer; font-weight:600;
-  }
-  .input-row button:hover{background:var(--secondary)}
+  .input-row input{flex:1; padding:12px; border:1px solid var(--border); border-radius:12px; font-size:14px; outline:none}
+  .input-row button{padding:12px 14px; border:none; border-radius:12px; background:var(--primary); color:#fff; font-weight:700; cursor:pointer}
 
-  /* === SCROLLBAR === */
-  .chat-body::-webkit-scrollbar{width:10px}
-  .chat-body::-webkit-scrollbar-thumb{background:#d9defa; border-radius:8px}
+  /* Toolbar colapsable (menos ruido) */
+  .toolbar{display:none; gap:8px; padding:8px 12px; border-top:1px dashed var(--border); background:#fff}
+  .tool{font-size:12px; color:#374151; cursor:pointer; border:1px solid var(--border); padding:6px 10px; border-radius:8px; background:#fff}
 
-  /* === MODO OSCURO (automático) === */
+  /* Dark mode automático */
   @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#0b1020;
-      --text:#f3f4f6;
-      --muted:#9aa4b2;
-      --border:#1f2937;
-      --card:#0f172a;
-      --shadow:0 10px 30px rgba(0,0,0,.45);
-    }
-    .chat-window{ background:#0f172a; border-color:#1f2937; }
-    .chipbar, .chat-footer, .toolbar{ background:#0f172a; border-color:#1f2937; }
-    .chip{ background:#111827; border-color:#1f2937; color:#e5e7eb; }
-    .search-hint{ color:#9aa4b2; }
-    .chat-body{ background:#0f172a; }
-    .bubble{ background:#0b1326; border-color:#1f2937; color:#e5e7eb; }
-    .msg.bot .bubble{ background:#0e1a33; border-color:#1f2937; }
-    .msg.user .bubble{ background:#132043; border-color:#1f2937; }
-    .faq-item{ background:#0b1326; border-color:#1f2937; }
-    .faq-suggest a{ color:#9fb0ff; }
-    .tool{ background:#0b1326; border-color:#1f2937; color:#cbd5e1; }
-    .input-row input{ background:#0b1326; border-color:#1f2937; color:#e5e7eb; }
-    .input-row button{ background:var(--primary); }
+    :root{ --bg:#0b1020; --text:#E5E7EB; --muted:#9aa4b2; --border:#1f2937; --bot:#0e1830; --user:#0b1326; }
+    .chat-window{ background:#0f172a; border-color:var(--border) }
+    .chat-header, .chipbar, .chat-footer, .toolbar{ background:#0f172a; border-color:var(--border) }
+    .chip, .quick button, .input-row input, .tool{ background:#0b1326; border-color:var(--border); color:#e5e7eb }
+    .faq-item{ background:#0b1326; border-color:var(--border) }
+    .faq-suggest a{ color:#9fb0ff }
   }
 
-  /* === MÓVIL FULL SCREEN === */
   @media (max-width:480px){
-    .chat-window{
-      right:0; left:0; bottom:0; top:0;
-      width:100vw; height:100vh; max-height:100vh; border-radius:0;
-    }
-    .launcher-logo{width:56px; height:56px;}
-    .bot-logo{width:40px; height:40px;}
+    .chat-window{ right:0; left:0; bottom:0; top:0; width:100vw; height:100vh; max-height:100vh; border-radius:0; }
   }
 </style>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const logos = document.querySelectorAll(".launcher-logo, .bot-logo");
-
-  logos.forEach(img => {
-    img.addEventListener("load", () => {
-      const { naturalWidth: w, naturalHeight: h } = img;
-      if (!w || !h) return;
-
-      const ratio = w / h;
-      const isWide = ratio > 1.3;
-      const isTall = ratio < 0.8;
-
-      // Estilo base
-      img.style.objectFit = "contain";
-      img.style.background = "#fff";
-      img.style.borderRadius = "50%";
-      img.style.transition = "all 0.3s ease";
-
-      // Ajuste de padding dinámico según proporción
-      if (isWide) {
-        img.style.padding = "8px"; // logos horizontales → más colchón
-      } else if (isTall) {
-        img.style.padding = "4px"; // logos verticales → menos
-      } else {
-        img.style.padding = "5px"; // casi cuadrado
-      }
-    });
-  });
-});
-</script>
-
 </head>
 <body>
 
-<!-- Botón flotante con logo -->
 <button class="chat-launcher" id="launcher" aria-label="Abrir chat">
   <img class="launcher-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
 </button>
 
-<!-- Ventana de chat -->
 <section class="chat-window" id="chatWindow" aria-live="polite">
   <header class="chat-header">
     <img class="bot-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
     <div>
       <div class="chat-title">ChinChin Bot</div>
-      <div class="chat-sub">Preguntas frecuentes • Soporte</div>
+      <div class="chat-sub">Ayuda y preguntas frecuentes</div>
     </div>
-
     <div class="header-actions">
-      <a class="header-link" href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>
-      <button id="closeBtn" class="close-btn" aria-label="Cerrar">✕</button>
+      <a class="soft-btn" href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>
+      <button id="moreBtn" class="soft-btn" title="Más">⋯</button>
+      <button id="closeBtn" class="icon-btn" aria-label="Cerrar">✕</button>
     </div>
   </header>
 
-  <!-- Chips de categorías (se llenan dinámicamente) -->
   <div class="chipbar" id="chipbar"></div>
 
-  <!-- Hint -->
-  <div class="search-hint" id="searchHint">
-    Escribe tu pregunta o elige una categoría. Ejemplos: “Cuenta y registro”, “Transacciones”, “Metas”, “Planes y precios”.
-  </div>
-
-  <!-- Área de mensajes -->
   <main class="chat-body" id="chatBody"></main>
 
-  <!-- Barra de herramientas -->
-  <div class="toolbar">
-    <button class="tool" id="clearBtn" title="Borrar conversación">🧹 Limpiar</button>
-    <button class="tool" id="downloadBtn" title="Descargar conversación (JSON)">⬇️ Descargar</button>
-    <button class="tool" id="emailBtn" title="Enviar un email a soporte">📧 Enviar email a soporte</button>
+  <div class="toolbar" id="toolbar">
+    <button class="tool" id="clearBtn">🧹 Limpiar</button>
+    <button class="tool" id="downloadBtn">⬇️ Descargar</button>
+    <button class="tool" id="emailBtn">📧 Soporte</button>
   </div>
 
-  <!-- Footer -->
   <footer class="chat-footer">
     <div class="quick" id="quickRow">
       <button data-q="Cuenta y registro">Cuenta y registro</button>
@@ -261,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <button data-q="Planes y precios">Planes y precios</button>
     </div>
     <div class="input-row">
-      <input id="userInput" type="text" placeholder="Escribe tu pregunta… (Enter para enviar)" autocomplete="off" />
+      <input id="userInput" type="text" placeholder="Escribe tu pregunta… (Enter para enviar)" autocomplete="off"/>
       <button id="sendBtn">Enviar</button>
     </div>
   </footer>
@@ -270,247 +144,98 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 (async function(){
   const els = {
-    launcher: document.getElementById('launcher'),
-    chat: document.getElementById('chatWindow'),
-    body: document.getElementById('chatBody'),
-    input: document.getElementById('userInput'),
-    send: document.getElementById('sendBtn'),
-    close: document.getElementById('closeBtn'),
-    clear: document.getElementById('clearBtn'),
-    download: document.getElementById('downloadBtn'),
-    email: document.getElementById('emailBtn'),
-    quick: document.getElementById('quickRow'),
-    chipbar: document.getElementById('chipbar'),
-    hint: document.getElementById('searchHint'),
+    launcher: byId('launcher'), chat: byId('chatWindow'), body: byId('chatBody'),
+    input: byId('userInput'), send: byId('sendBtn'), close: byId('closeBtn'),
+    clear: byId('clearBtn'), download: byId('downloadBtn'), email: byId('emailBtn'),
+    quick: byId('quickRow'), chipbar: byId('chipbar'), toolbar: byId('toolbar'),
+    more: byId('moreBtn'),
   };
+  const STORAGE_KEY = 'cm_chat_history_minimal_v1';
 
-  const STORAGE_KEY = 'cm_chat_history_v4';
-
-  /* === 1) Cargar FAQ desde JSON generado del Excel === */
+  // Cargar FAQ
   let FAQ = [];
   try{
-    const res = await fetch('./faq_cadamenudo.json?v=1', { cache: 'no-store' });
+    const res = await fetch('./faq_cadamenudo.json?v=2', {cache:'no-store'});
     FAQ = await res.json();
-  }catch(e){
-    console.warn('No pude cargar faq_cadamenudo.json; usando arreglo vacío.', e);
-    FAQ = [];
-  }
+  }catch(e){ console.warn('No pude cargar faq_cadamenudo.json', e); }
 
-  /* === 2) Utilidades de normalización (para FIX de categorías) === */
-  const norm = (s) => (s==null?'':String(s)).trim().toLowerCase();
+  // Normalización y categorías
+  const norm = s => (s==null?'':String(s)).trim().toLowerCase();
   const catIndex = {};
-  FAQ.forEach(it=>{
-    const c = norm(it.category);
-    if(!c) return;
-    if(!catIndex[c]) catIndex[c] = [];
-    catIndex[c].push(it);
-  });
+  FAQ.forEach(it => { const c=norm(it.category); if(!c) return; (catIndex[c]??=[]).push(it); });
 
-  /* === 3) Intenciones básicas === */
-  const intents = [
-    {name:'saludo', match:/(^|\s)(hola|buenas|hey|saludos)(\s|!|$)/i,
-      reply:()=>"¡Hola! ¿En qué te ayudo? Puedo responder sobre cuenta y registro, transacciones, metas, planes y más."},
-    {name:'privacidad', match:/(privacidad|privacy|datos|data)/i,
-      reply:()=>'Puedes revisar nuestra política aquí: <a href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>'},
-    {name:'soporte', match:/(soporte|ayuda|contacto|email|correo)/i,
-      reply:()=>'Si necesitas soporte técnico, usa el botón “📧 Enviar email a soporte” o escribe a <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>.'},
-  ];
-
-  /* === 4) Estado / Historial === */
-  const state = { history: [] };
-  try{
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    state.history = saved;
-    saved.forEach(m => renderMsg(m.role, m.text, m.ts, true));
-  }catch(e){}
-
-  /* === 5) Chips por categoría (desde FAQ) === */
-  const uniqueCats = [...new Set(FAQ.map(f => (f.category||'').trim()).filter(Boolean))];
-  uniqueCats.forEach(cat=>{
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.textContent = cat;
-    b.dataset.cat = norm(cat); // clave normalizada
-    b.addEventListener('click', (ev)=> suggestByCategory(ev.currentTarget.dataset.cat, cat));
+  // Chips
+  [...new Set(FAQ.map(f => (f.category||'').trim()).filter(Boolean))].forEach(cat=>{
+    const b=document.createElement('button'); b.className='chip'; b.textContent=cat; b.dataset.cat=norm(cat);
+    b.onclick=()=>suggestByCategory(b.dataset.cat, cat);
     els.chipbar.appendChild(b);
   });
 
-  /* === 6) Mensaje de bienvenida (primera vez) === */
-  if(state.history.length === 0){
-    push('bot', '¡Hola! Soy tu asistente de Cada Menudo. Pregúntame algo o elige una categoría arriba.');
-    if (FAQ.length) showTopFAQ();
+  // Bienvenida
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+  saved.forEach(m=>renderMsg(m.role,m.text,m.ts,true));
+  if(saved.length===0){
+    push('bot','¡Hola! Soy tu asistente de Cada Menudo. Pregúntame algo o elige una categoría arriba.');
+    if(FAQ.length) showTopFAQ();
   }
 
-  /* === 7) Eventos UI === */
-  els.launcher.addEventListener('click', () => toggle(true));
-  els.close.addEventListener('click', () => toggle(false));
+  // Eventos
+  els.launcher.onclick=()=>toggle(true);
+  els.close.onclick=()=>toggle(false);
+  els.more.onclick=()=> els.toolbar.style.display = els.toolbar.style.display==='flex' ? 'none' : 'flex';
+  els.send.onclick=onSend;
+  els.input.onkeydown=(e)=>{ if(e.key==='Enter') onSend(); };
+  els.quick.addEventListener('click', (e)=>{ if(e.target.matches('button[data-q]')){ els.input.value=e.target.dataset.q; onSend(); }});
+  els.clear.onclick=()=>{ state.history=[]; persist(); els.body.innerHTML=''; push('bot','Conversación limpiada. ¿En qué te ayudo ahora?'); if(FAQ.length) showTopFAQ(); };
+  els.download.onclick=()=>{ const blob=new Blob([JSON.stringify(state.history,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='chat-cada-menudo.json'; a.click(); URL.revokeObjectURL(url); };
+  els.email.onclick=()=>{ location.href=buildSupportEmail(); };
 
-  els.send.addEventListener('click', onSend);
-  els.input.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ onSend(); }});
-
-  els.clear.addEventListener('click', () => {
-    state.history = [];
-    persist();
-    els.body.innerHTML = '';
-    push('bot', 'Conversación limpiada. ¿En qué te ayudo ahora?');
-    if (FAQ.length) showTopFAQ();
-  });
-
-  els.download.addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(state.history,null,2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'chat-cada-menudo.json';
-    a.click(); URL.revokeObjectURL(url);
-  });
-
-  els.email.addEventListener('click', () => {
-    const mailto = buildSupportEmail();
-    window.location.href = mailto;
-  });
-
-  els.quick.addEventListener('click', (e)=>{
-    if(e.target.matches('button[data-q]')){
-      els.input.value = e.target.dataset.q;
-      onSend();
-    }
-  });
-
-  function toggle(open){ els.chat.style.display = open ? 'grid' : 'none'; }
-
-  function onSend(){
-    const text = (els.input.value || '').trim();
-    if(!text) return;
-    push('user', text);
-    els.input.value = '';
-    handle(text);
-  }
-
-  function push(role, text){
-    const m = { role, text, ts:new Date().toISOString() };
-    state.history.push(m);
-    renderMsg(role, text, m.ts);
-    persist();
-  }
+  // Estado
+  const state={history:saved};
+  function byId(id){ return document.getElementById(id); }
+  function toggle(open){ els.chat.style.display=open?'grid':'none'; }
+  function push(role,text){ const m={role,text,ts:new Date().toISOString()}; state.history.push(m); renderMsg(role,text,m.ts); persist(); }
   function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history)); }
-
-  function renderMsg(role, text, ts, skipScroll){
-    const wrap = document.createElement('div');
-    wrap.className = 'msg '+role;
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.innerHTML = escapeHtml(text).replace(/\n/g,'<br/>');
-    const meta = document.createElement('span');
-    meta.className = 'meta';
-    const time = new Date(ts || Date.now()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    meta.textContent = role==='bot' ? `Asistente • ${time}` : `Tú • ${time}`;
-    bubble.appendChild(meta);
-    wrap.appendChild(bubble);
-    els.body.appendChild(wrap);
-    if(!skipScroll) els.body.scrollTop = els.body.scrollHeight;
-  }
+  function renderMsg(role,text,ts,skip){ const wrap=document.createElement('div'); wrap.className='msg '+role;
+    const b=document.createElement('div'); b.className='bubble'; b.innerHTML=escapeHtml(text).replace(/\n/g,'<br/>');
+    const meta=document.createElement('span'); meta.className='meta'; meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date(ts||Date.now()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap); if(!skip) els.body.scrollTop=els.body.scrollHeight; }
   function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  /* === 8) Manejo: Intenciones -> FAQ -> Fallback === */
-  async function handle(text){
-    // a) Intenciones
-    for (const it of intents){
-      if(it.match.test(text)){
-        push('bot', it.reply());
-        return;
-      }
-    }
-    // b) FAQ
-    const hits = searchFAQ(text);
-    if(hits.length){
-      const top = hits.slice(0,3);
-      push('bot', renderFAQSuggestions(top));
-      return;
-    }
-    // c) Fallback
-    push('bot', 'No encontré una respuesta exacta. Intenta otra palabra clave o elige una categoría arriba.');
+  // Manejo
+  const intents=[
+    {match:/(^|\s)(hola|buenas|hey|saludos)(\s|!|$)/i, reply:'¡Hola! Puedo ayudarte con cuenta/registro, transacciones, metas y planes.'},
+    {match:/(privacidad|privacy|datos|data)/i, reply:'Nuestra política: <a href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>'},
+    {match:/(soporte|ayuda|contacto|email|correo)/i, reply:'Usa el botón “📧 Soporte” o escribe a <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>.'},
+  ];
+
+  function onSend(){
+    const text=(els.input.value||'').trim(); if(!text) return;
+    push('user', text); els.input.value='';
+    // Intenciones
+    for(const it of intents){ if(it.match.test(text)){ push('bot', it.reply); return; } }
+    // Búsqueda FAQ
+    const hits=searchFAQ(text);
+    if(hits.length){ push('bot', renderFAQ(hits.slice(0,3))); }
+    else{ push('bot','No encontré una respuesta exacta. Prueba con otra palabra o elige una categoría.'); }
   }
 
-  function tokenize(s){
-    return (s||'').toLowerCase()
-      .normalize('NFD').replace(/\p{Diacritic}/gu,'')
-      .replace(/[^a-z0-9áéíóúñü\s]/gi,' ')
-      .split(/\s+/).filter(Boolean);
-  }
-  function score(queryTokens, item){
-    const haystack = (item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase();
-    const tks = new Set(tokenize(haystack));
-    let s = 0;
-    for(const qt of queryTokens){ if(tks.has(qt)) s += 1; }
-    if(item.q.toLowerCase().includes(queryTokens.join(' '))) s += 1.5;
-    return s;
-  }
-  function searchFAQ(query){
-    const qTks = tokenize(query);
-    const withScore = FAQ.map(item => ({item, s:score(qTks, item)}))
-                         .filter(x => x.s>0)
-                         .sort((a,b)=>b.s-a.s);
-    return withScore.map(x=>x.item);
-  }
+  function tokenize(s){ return (s||'').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'').replace(/[^a-z0-9áéíóúñü\s]/gi,' ').split(/\s+/).filter(Boolean); }
+  function score(qTokens,item){ const hay=(item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase(); const set=new Set(tokenize(hay)); let s=0; for(const t of qTokens){ if(set.has(t)) s+=1; } if(item.q.toLowerCase().includes(qTokens.join(' '))) s+=1.5; return s; }
+  function searchFAQ(q){ const t=tokenize(q); return FAQ.map(i=>({i,s:score(t,i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i); }
+  function renderFAQ(items){ return 'Encontré esto:<div class="faq-suggest">' + items.map(it=>`<div class="faq-item"><div class="q">• ${escapeHtml(it.q)}</div><div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div></div>`).join('') + '</div>'; }
+  function suggestByCategory(key,label){ const k=norm(key||label); let items=(catIndex[k]||[]).slice(0,6);
+    if(items.length===0){ items=FAQ.filter(f=>norm(f.category).includes(k) || (f.tags||[]).some(t=>norm(t).includes(k)) || norm(f.q).includes(k)).slice(0,6); }
+    if(items.length===0){ items=searchFAQ(label||key).slice(0,6); }
+    if(items.length) push('bot', `Categoría: <b>${escapeHtml(label||key)}</b><br/>`+renderFAQ(items));
+    else push('bot', `No tengo elementos en la categoría <b>${escapeHtml(label||key)}</b> aún.`); }
 
-  function renderFAQSuggestions(items){
-    let html = 'Esto es lo que encontré:<div class="faq-suggest">';
-    html += items.map(it =>
-      `<div class="faq-item">
-         <div class="q">• ${escapeHtml(it.q)}</div>
-         <div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div>
-       </div>`
-    ).join('');
-    html += '</div>';
-    return html;
-  }
+  function showTopFAQ(){ const top=FAQ.slice(0,3); if(top.length) push('bot', renderFAQ(top)); }
 
-  /* === 9) FIX categorías: búsqueda tolerante + fallback === */
-  function suggestByCategory(catKey, originalLabel){
-    const key = norm(catKey||originalLabel);
-    let items = (catIndex[key]||[]).slice(0,6);
-
-    // si no hubo coincidencia exacta, probar por inclusión en category, tags o pregunta
-    if(items.length === 0){
-      items = FAQ.filter(f =>
-        norm(f.category).includes(key) ||
-        (f.tags||[]).some(t => norm(t).includes(key)) ||
-        norm(f.q).includes(key)
-      ).slice(0,6);
-    }
-
-    // si aún vacío, usa el motor de búsqueda general como último recurso
-    if(items.length === 0){
-      items = searchFAQ(originalLabel||catKey).slice(0,6);
-    }
-
-    if(items.length){
-      push('bot', `Categoría: <b>${escapeHtml(originalLabel||catKey)}</b><br/>` + renderFAQSuggestions(items));
-    } else {
-      push('bot', `No tengo elementos en la categoría <b>${escapeHtml(originalLabel||catKey)}</b> aún.`);
-    }
-  }
-
-  function showTopFAQ(){
-    const top = FAQ.slice(0,3);
-    if(top.length){
-      push('bot', renderFAQSuggestions(top));
-    }
-  }
-
-  /* === 10) Email a soporte (mailto) con contexto === */
   function buildSupportEmail(){
-    const to = "tech@cadamenudo.com";
-    const subject = encodeURIComponent("Soporte Chatbot – Cada Menudo");
-    const last = state.history.slice(-10).map(m => {
-      const t = new Date(m.ts).toLocaleString();
-      return `${m.role.toUpperCase()} [${t}]: ${m.text}`;
-    }).join('\n');
-
-    const ua = navigator.userAgent || '';
-    const lang = navigator.language || '';
-    const bodyText =
-`Hola equipo técnico,
+    const last=state.history.slice(-10).map(m=>`${m.role.toUpperCase()} [${new Date(m.ts).toLocaleString()}]: ${m.text}`).join('\n');
+    const ua=navigator.userAgent||'', lang=navigator.language||'';
+    const body=`Hola equipo técnico,
 
 Necesito ayuda con el chatbot de Cada Menudo.
 
@@ -526,14 +251,19 @@ Datos técnicos:
 - Idioma: ${lang}
 
 Gracias.`;
-
-    const body = encodeURIComponent(bodyText);
-    return `mailto:${to}?subject=${subject}&body=${body}`;
+    return `mailto:tech@cadamenudo.com?subject=${encodeURIComponent('Soporte Chatbot – Cada Menudo')}&body=${encodeURIComponent(body)}`;
   }
 
-  /* === 11) Comportamiento de apertura por defecto === */
-  toggle(false);
+  // Ajuste automático del logo (no se deforma)
+  document.querySelectorAll('.launcher-logo, .bot-logo').forEach(img=>{
+    img.addEventListener('load', ()=>{
+      const {naturalWidth:w,naturalHeight:h}=img; if(!w||!h) return;
+      const r=w/h; img.style.objectFit='contain'; img.style.background='#fff'; img.style.borderRadius='50%';
+      img.style.padding = r>1.3 ? '8px' : r<0.8 ? '4px' : '5px';
+    });
+  });
 })();
 </script>
 </body>
 </html>
+
