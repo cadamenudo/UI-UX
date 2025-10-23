@@ -1,0 +1,326 @@
+[
+  {
+    "category": "Sheet1",
+    "q": "¿Cada Menudo ofrece prueba gratuita?",
+    "a": "Sí. Tienes un período de 14 días gratis para probar la app sin compromiso.",
+    "tags": [
+      "¿cada",
+      "menudo",
+      "ofrece",
+      "prueba",
+      "gratuita"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cuál es la fórmula que usa Cada Menudo?",
+    "a": "Presupuesto de balance cero: Ingreso = Gastos + Ahorro. Si no cuadra, estás en déficit.",
+    "tags": [
+      "¿cuál",
+      "fórmula",
+      "cada",
+      "menudo"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cuánto cuesta Cada Menudo?",
+    "a": "El Plan Básico cuesta $4.99 al mes. Si eliges pagar de forma mensual, al año serían $59.88. Con el Plan Anual, pagas solo $41.99 al año, lo que representa un 30% de descuento frente al plan mensual.",
+    "tags": [
+      "¿cuánto",
+      "cuesta",
+      "cada",
+      "menudo"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo cancelo mi suscripción?",
+    "a": "Puedes cancelar en cualquier momento desde Perfil → Suscripción y Pago. Mantendrás acceso hasta el final del período pagado.",
+    "tags": [
+      "¿cómo",
+      "cancelo",
+      "suscripción"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo cancelo mi suscripción?",
+    "a": "Puedes cancelar en cualquier momento desde Perfil → Suscripción y Pago. Mantendrás acceso hasta el final del período que ya pagaste.",
+    "tags": [
+      "¿cómo",
+      "cancelo",
+      "suscripción"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo creo una meta de ahorro?",
+    "a": "En 'Metas', toca Nueva Meta, ponle nombre, monto y guarda. Puedes ordenar prioridades y ver el progreso en gráficos.",
+    "tags": [
+      "¿cómo",
+      "creo",
+      "meta",
+      "ahorro"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo me registro en Cada Menudo?",
+    "a": "Solo necesitas tu nombre, correo y contraseña. Es rápido, gratis y puedes hacerlo desde cualquier dispositivo.",
+    "tags": [
+      "¿cómo",
+      "registro",
+      "cada",
+      "menudo"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo registro una transacción?",
+    "a": "En 'Nueva Transacción': ingresa monto, categoría, fecha, lugar, comentario y opcionalmente una foto del recibo.",
+    "tags": [
+      "¿cómo",
+      "registro",
+      "transacción"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo se dividen los ingresos en Cada Menudo?",
+    "a": "En tres categorías: 1. Ingreso por trabajo (salario, propinas, bonos). 2. Ingreso pasivo (rentas, dividendos, pensión). 3. Ganancia de capital (venta de inversiones o bienes con ganancia).",
+    "tags": [
+      "¿cómo",
+      "dividen",
+      "ingresos",
+      "cada",
+      "menudo"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo se registra el ahorro?",
+    "a": "Como una transacción más, dentro de la categoría Ahorro. Es un gasto hacia tu 'yo futuro'.",
+    "tags": [
+      "¿cómo",
+      "registra",
+      "ahorro"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Cómo sé si mi suscripción está cancelada?",
+    "a": "En la sección Perfil → Suscripción y Pago verás el estado actualizado y la fecha exacta en la que termina tu acceso.",
+    "tags": [
+      "¿cómo",
+      "suscripción",
+      "está",
+      "cancelada"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Por qué dividir los ingresos en tres categorías?",
+    "a": "Para que identifiques de dónde proviene tu dinero y midas tu diversificación. Lo ideal es no depender solo del salario.",
+    "tags": [
+      "¿por",
+      "dividir",
+      "ingresos",
+      "tres",
+      "categorías"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Por qué es importante usar Cada Menudo?",
+    "a": "Porque la falta de claridad financiera genera estrés y te impide crecer. Con Cada Menudo sabes hacia dónde va tu dinero, construyes metas y das pasos hacia tu libertad financiera.",
+    "tags": [
+      "¿por",
+      "importante",
+      "usar",
+      "cada",
+      "menudo"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Puedo cambiar entre plan mensual y anual?",
+    "a": "Sí. En la sección de Suscripción y Pago puedes pasar de mensual a anual (o viceversa) cuando quieras.",
+    "tags": [
+      "¿puedo",
+      "cambiar",
+      "plan",
+      "mensual",
+      "anual"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Puedo editar o eliminar una transacción?",
+    "a": "Sí, en el historial de Transacciones puedes corregir con el botón azul o borrar con el botón rojo.",
+    "tags": [
+      "¿puedo",
+      "editar",
+      "eliminar",
+      "transacción"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Puedo volver a suscribirme después de cancelar?",
+    "a": "Sí, puedes reactivar tu suscripción en cualquier momento desde tu perfil, eligiendo mensual o anual.",
+    "tags": [
+      "¿puedo",
+      "volver",
+      "suscribirme",
+      "después",
+      "cancelar"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué datos puedo modificar en mi perfil?",
+    "a": "Puedes actualizar nombre, email, contraseña y preferencias de uso en la sección Perfil.",
+    "tags": [
+      "¿qué",
+      "datos",
+      "puedo",
+      "modificar",
+      "perfil"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué es Cada Menudo?",
+    "a": "Cada Menudo es una aplicación web que te ayuda a organizar tus ingresos, gastos y ahorros. Te permite registrar todo, visualizar gráficos claros, planificar metas y aprender hábitos financieros. El objetivo es aumentar tu ahorro y tu claridad financiera paso a paso.",
+    "tags": [
+      "¿qué",
+      "cada",
+      "menudo"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué es una transacción en Cada Menudo?",
+    "a": "Cualquier ingreso, gasto o ahorro que registres.",
+    "tags": [
+      "¿qué",
+      "transacción",
+      "cada",
+      "menudo"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué pasa cuando cumplo una meta?",
+    "a": "La meta aparece en verde y se muestra tu progreso en el resumen anual.",
+    "tags": [
+      "¿qué",
+      "pasa",
+      "cumplo",
+      "meta"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué pasa después de la prueba gratuita?",
+    "a": "Si no cancelas antes de que terminen los 14 días, se te cobrará automáticamente el plan que seleccionaste (mensual o anual).",
+    "tags": [
+      "¿qué",
+      "pasa",
+      "después",
+      "prueba",
+      "gratuita"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué pasa si cancelo antes de los 14 días?",
+    "a": "Si cancelas durante el período de prueba gratuito, no se te cobrará nada. Tu tarjeta no recibirá ningún cargo.",
+    "tags": [
+      "¿qué",
+      "pasa",
+      "cancelo",
+      "días"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué pasa si cancelo antes de que termine el mes o el año?",
+    "a": "Aunque canceles antes, seguirás teniendo acceso hasta el último día de tu período pagado. No se hacen reembolsos parciales.",
+    "tags": [
+      "¿qué",
+      "pasa",
+      "cancelo",
+      "termine"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué pasa si cancelo durante la prueba gratuita?",
+    "a": "Si cancelas dentro de los 14 días de prueba, no se te cobrará nada.",
+    "tags": [
+      "¿qué",
+      "pasa",
+      "cancelo",
+      "durante",
+      "prueba",
+      "gratuita"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué pasa si elimino mi cuenta sin cancelar la suscripción?",
+    "a": "Primero debes cancelar la suscripción. Eliminar la cuenta no detiene automáticamente los cobros.",
+    "tags": [
+      "¿qué",
+      "pasa",
+      "elimino",
+      "cuenta",
+      "cancelar",
+      "suscripción"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué secciones tiene el menú principal?",
+    "a": "Tablero, Transacciones, Nueva Transacción, Metas, Buscador, Categorías, Videos, Perfil y Suscripción.",
+    "tags": [
+      "¿qué",
+      "secciones",
+      "menú",
+      "principal"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué significan los colores en el tablero?",
+    "a": "Verde: superávit real (sobrante). Amarillo: estás al límite. Rojo: déficit o ahorro ficticio.",
+    "tags": [
+      "¿qué",
+      "significan",
+      "colores",
+      "tablero"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Qué veo en el Tablero?",
+    "a": "Un resumen de ingresos, gastos y ahorro; alertas de colores; gráficos de metas; línea de ingresos vs gastos y donas de distribución.",
+    "tags": [
+      "¿qué",
+      "tablero"
+    ]
+  },
+  {
+    "category": "Sheet1",
+    "q": "¿Recibo un reembolso si cancelo a mitad del mes o del año?",
+    "a": "No. Los pagos no son reembolsables. Mantienes acceso hasta que termine el ciclo de facturación.",
+    "tags": [
+      "¿recibo",
+      "reembolso",
+      "cancelo",
+      "mitad"
+    ]
+  }
+]
