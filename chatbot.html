@@ -172,6 +172,30 @@
   });
 
   /* Historial / bienvenida */
+const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+saved.forEach(m=>renderMsg(m.role,m.text,m.ts,true));
+
+if (saved.length === 0) {
+  push(
+    'bot',
+    '👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. ' +
+    'Aquí te pongo los temas que pueden interesarte 👇'
+  );
+
+  // Mostrar automáticamente los chips principales (categorías)
+  if (FAQ.length) {
+    const topCats = [...new Set(FAQ.map(f => f.category).filter(Boolean))].slice(0,6);
+    if (topCats.length) {
+      const html = topCats
+        .map(cat => `<div class="faq-item" style="border:none;padding:6px 0;">
+                       <div style="color:#3956E8;font-weight:600;">• ${escapeHtml(cat)}</div>
+                     </div>`)
+        .join('');
+      push('bot', `<div class="faq-suggest">${html}</div>`);
+    }
+  }
+}
+  /* Historial / bienvenida */
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
   saved.forEach(m=>renderMsg(m.role,m.text,m.ts,true));
   if(saved.length===0){
