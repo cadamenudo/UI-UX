@@ -35,7 +35,6 @@
   .kpi{background:#fff;border:1px solid var(--border);border-radius:12px;padding:.9rem}
   .kpi .label{font-size:.8rem;color:var(--muted)}
   .kpi .value{font-weight:700;font-size:1.15rem;margin-top:.2rem}
-  /* Alto fijo para charts */
   .chart-box{position:relative;width:100%;height:260px;overflow:hidden;}
   .chart-box>canvas{width:100% !important;height:100% !important;}
   table{width:100%;border-collapse:collapse;font-size:.92rem}
@@ -358,21 +357,17 @@ const mockApi = (()=> {
       const len = range==='30d'?30 : range==='90d'?13 : 12;
 
       if(path==='/overview'){
-        // series
         const usuarios=series(len,4000,0.05,0.1);
         const ingresos=series(len,8000,0.06,0.12);
-        // funnel top
         const visitas=Math.round(15000+rnd(-1500,1500));
         const registros=Math.round(visitas*0.6);
         const conexiones=Math.round(registros*0.5);
 
-        // planes (2 o 3 pagos)
         const PAID_PLANS=['Premium','Plus','Pro'];
         const nPaid = Math.random()<0.5?2:3;
         const paid = PAID_PLANS.slice(0,nPaid);
         const plans = ['Free', ...paid];
 
-        // conversiones desde free a cada plan pago
         const convByPlan = {};
         let totalConv=0;
         paid.forEach((p,i)=>{
@@ -381,7 +376,6 @@ const mockApi = (()=> {
           totalConv += r;
         });
 
-        // distribución de usuarios por plan (PBY)
         const lastU = usuarios[usuarios.length-1];
         const pFree = 1 - Math.min(0.9, totalConv + 0.1);
         const planBreakdown = { Free: pFree };
@@ -390,7 +384,6 @@ const mockApi = (()=> {
           planBreakdown[p] = +( (1-pFree) * w ).toFixed(3);
         });
 
-        // funnel combinado: [Visitas, Registros, Conexiones, ...conv a planes]
         const convCounts = paid.map(p=> Math.round(registros * convByPlan[p]));
         const funnelCombined = [visitas, registros, conexiones, ...convCounts];
 
@@ -485,84 +478,98 @@ function upsertChart(id,type,data,extraOpts={}){
   }catch(e){ /* no rompas UI */ }
 }
 
-/* ===== Helper geo selects por sección ===== */
+/* ===== Helper geo selectors ROBUSTO ===== */
 async function setupGeoSelectors(prefix, defaults){
-  // prefix: 'o' overview, 'u' usuarios, 'm' marketing, 'f' finanzas, 'a' analytics
-  const sel = {
-    country: document.getElementById(`${prefix}CountrySel`),
-    state: document.getElementById(`${prefix}StateSel`),
-    city: document.getElementById(`${prefix}CitySel`)
-  };
   const keyMap = {o:'overview', u:'usuarios', m:'marketing', f:'finanzas', a:'analytics'};
   const k = keyMap[prefix];
+  const sel = {
+    country: document.getElementById(`${prefix}CountrySel`),
+    state:   document.getElementById(`${prefix}StateSel`),
+    city:    document.getElementById(`${prefix}CitySel`)
+  };
 
   const geo = await mockApi.get('/geo', {
     country: geoSelMap[k].country || defaults?.country,
-    state: geoSelMap[k].state || defaults?.state,
-    city: geoSelMap[k].city || defaults?.city,
+    state:   geoSelMap[k].state   || defaults?.state,
+    city:    geoSelMap[k].city    || defaults?.city,
     fallbackCountry: 'US'
   });
 
-  // Países
+  // Si los selects aún no existen (sección oculta), solo persiste y devuelve geo.
+  if(!sel.country || !sel.state || !sel.city){
+    geoSelMap[k] = { country: geo.selected.country, state: geo.selected.state, city: geo.selected.city };
+    return geo;
+  }
+
+  // Render opciones
   sel.country.innerHTML = Object.keys(geo.GEO).map(c=>`<option value="${c}">${c}</option>`).join('');
   sel.country.value = geo.selected.country;
 
-  // Estados
   const states = Object.keys(geo.GEO[geo.selected.country]);
   sel.state.innerHTML = states.map(s=>`<option value="${s}">${s}</option>`).join('');
   sel.state.value = geo.selected.state;
 
-  // Ciudades
   const cities = Object.keys(geo.GEO[geo.selected.country][geo.selected.state]);
   sel.city.innerHTML = cities.map(c=>`<option value="${c}">${c}</option>`).join('');
   sel.city.value = geo.selected.city;
 
-  // Persistimos
   geoSelMap[k] = { country: geo.selected.country, state: geo.selected.state, city: geo.selected.city };
 
-  // Listeners
-  sel.country.onchange = async ()=>{
-    const g = await mockApi.get('/geo', { country: sel.country.value });
-    sel.state.innerHTML = Object.keys(g.GEO[sel.country.value]).map(s=>`<option value="${s}">${s}</option>`).join('');
-    sel.state.value = Object.keys(g.GEO[sel.country.value])[0];
-    sel.city.innerHTML = Object.keys(g.GEO[sel.country.value][sel.state.value]).map(c=>`<option value="${c}">${c}</option>`).join('');
-    sel.city.value = Object.keys(g.GEO[sel.country.value][sel.state.value])[0];
-    geoSelMap[k] = { country: sel.country.value, state: sel.state.value, city: sel.city.value };
-    await reloadSection(k);
-  };
-  sel.state.onchange = async ()=>{
-    const g = await mockApi.get('/geo', { country: sel.country.value, state: sel.state.value });
-    sel.city.innerHTML = Object.keys(g.GEO[sel.country.value][sel.state.value]).map(c=>`<option value="${c}">${c}</option>`).join('');
-    sel.city.value = Object.keys(g.GEO[sel.country.value][sel.state.value])[0];
-    geoSelMap[k] = { country: sel.country.value, state: sel.state.value, city: sel.city.value };
-    await reloadSection(k);
-  };
-  sel.city.onchange = async ()=>{
-    geoSelMap[k] = { country: sel.country.value, state: sel.state.value, city: sel.city.value };
-    await reloadSection(k);
-  };
+  if(!sel.country._bound){
+    sel.country._bound = true;
+    sel.country.onchange = async ()=>{
+      const g = await mockApi.get('/geo', { country: sel.country.value });
+      sel.state.innerHTML = Object.keys(g.GEO[sel.country.value]).map(s=>`<option value="${s}">${s}</option>`).join('');
+      sel.state.value = Object.keys(g.GEO[sel.country.value])[0];
+      sel.city.innerHTML = Object.keys(g.GEO[sel.country.value][sel.state.value]).map(c=>`<option value="${c}">${c}</option>`).join('');
+      sel.city.value = Object.keys(g.GEO[sel.country.value][sel.state.value])[0];
+      geoSelMap[k] = { country: sel.country.value, state: sel.state.value, city: sel.city.value };
+      await reloadSection(k);
+    };
+  }
+  if(!sel.state._bound){
+    sel.state._bound = true;
+    sel.state.onchange = async ()=>{
+      const g = await mockApi.get('/geo', { country: sel.country.value, state: sel.state.value });
+      sel.city.innerHTML = Object.keys(g.GEO[sel.country.value][sel.state.value]).map(c=>`<option value="${c}">${c}</option>`).join('');
+      sel.city.value = Object.keys(g.GEO[sel.country.value][sel.state.value])[0];
+      geoSelMap[k] = { country: sel.country.value, state: sel.state.value, city: sel.city.value };
+      await reloadSection(k);
+    };
+  }
+  if(!sel.city._bound){
+    sel.city._bound = true;
+    sel.city.onchange = async ()=>{
+      geoSelMap[k] = { country: sel.country.value, state: sel.state.value, city: sel.city.value };
+      await reloadSection(k);
+    };
+  }
 
-  return geo; // devolvemos el geo actual
+  return geo;
 }
 
-/* ===== Peso geo para segmentar (simulación) ===== */
+/* ===== Peso geo SEGURO ===== */
 function geoWeight(geo){
-  const countryTotal = Object.values(geo.countryAgg).reduce((a,b)=>a+b,0) || 1;
-  const cityTotal = geo.cityAgg[geo.selected.city] || 1;
-  const w = (cityTotal / countryTotal);
-  return Math.max(0.05, Math.min(w, 1.2));
+  try{
+    const countryTotal = Object.values(geo.countryAgg||{}).reduce((a,b)=>a+b,0) || 1;
+    const cityTotal = (geo.cityAgg && geo.cityAgg[geo.selected.city]) ? geo.cityAgg[geo.selected.city] : countryTotal;
+    const w = cityTotal / countryTotal;
+    return Math.max(0.05, Math.min(w, 1.2));
+  }catch(_){
+    return 0.2;
+  }
 }
-function scaleArray(arr, w){ return arr.map(v=> Math.round(v*w)); }
+function scaleArray(arr, w){ return (arr||[]).map(v=> Math.round((+v||0)*w)); }
 
 /* ===== Toggle Embudo Abs/% ===== */
 function setFunnelMode(btn){
   document.querySelectorAll('.funnelToggle').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  state.overviewFunnel = btn.dataset.mode; // 'abs' | 'pct'
+  state.overviewFunnel = btn.dataset.mode;
   reloadSection('overview');
 }
 
-/* ===== Navegación ===== */
+/* ===== Navegación (forzar reload de sección) ===== */
 function mostrar(id, el){
   if(asideEl.classList.contains('open')){ asideEl.classList.remove('open'); overlayEl.classList.remove('show'); overlayEl.setAttribute('aria-hidden','true'); }
   document.querySelectorAll('main section').forEach(s=>s.style.display='none');
@@ -570,169 +577,158 @@ function mostrar(id, el){
   sec.style.display = (id==='overview'||id==='usuarios'||id==='tickets'||id==='marketing'||id==='finanzas'||id==='analytics')? 'grid':'block';
   document.querySelectorAll('aside button').forEach(b=>b.classList.remove('active'));
   if(el) el.classList.add('active');
+
+  // reintenta cargar la sección (por si los selects antes no existían)
+  reloadSection(id);
+
   setTimeout(()=>{ ensureCanvasWrappers(); Object.values(charts).forEach(ch=>{ try{ ch.resize(); }catch(_){}}); }, 0);
 }
 
 /* ===== Loaders ===== */
 async function loadOverview(){
-  // Geo del overview
   const geo = await setupGeoSelectors('o', {country:'US'});
   const w = geoWeight(geo);
-
-  // Datos base
   const base = await mockApi.get('/overview', state);
 
-  // Escalamos por segmento
   const usuariosScaled = scaleArray(base.usuarios, w);
   const ingresosScaled = scaleArray(base.ingresos, w);
 
-  // KPIs
   document.getElementById('kpiUsuariosActivos').textContent=fmt.num(Math.round(usuariosScaled[usuariosScaled.length-1]*0.72));
   document.getElementById('kpiMRR').textContent=fmt.money(ingresosScaled[ingresosScaled.length-1]);
   document.getElementById('kpiChurn').textContent=fmt.pct(base.kpis.churn);
 
-  // F2P principal (Premium si existe)
   const mainPaid = base.paid.includes('Premium') ? 'Premium' : base.paid[0];
   const f2p = base.convByPlan[mainPaid] || 0;
   document.getElementById('kpiConversion').textContent=fmt.pct(f2p);
 
-  // PBY KPI
   const pbyText = ['Free', ...base.paid].map(p=>`${p} ${((base.planBreakdown[p]||0)*100).toFixed(0)}%`).join(' • ');
   document.getElementById('kpiPlanBreakdown').textContent=pbyText;
 
-  // Charts UA/MRR
-  upsertChart('usuariosChart','line',{labels:base.labels,datasets:[{label:`UA (${geo.selected.country}/${geo.selected.state}/${geo.selected.city})`,data:usuariosScaled,tension:.3,borderWidth:2}]});
-  upsertChart('ingresosChart','bar',{labels:base.labels,datasets:[{label:`MRR (${geo.selected.city})`,data:ingresosScaled,borderWidth:1}]});
+  upsertChart('usuariosChart','line',{labels:base.labels,datasets:[{label:`UA (${geo.selected?.country}/${geo.selected?.state}/${geo.selected?.city})`,data:usuariosScaled,tension:.3,borderWidth:2}]});
+  upsertChart('ingresosChart','bar',{labels:base.labels,datasets:[{label:`MRR (${geo.selected?.city})`,data:ingresosScaled,borderWidth:1}]});
 
-  // Embudo: labels dinámicas
   const labels = ['Visitas','Registros','Conexiones', ...base.paid];
   const funnelAbs = scaleArray(base.funnelCombined, w);
 
   let funnelData = funnelAbs.slice();
   let extraOpts = { scales:{ y:{ beginAtZero:true } } };
-  let dsLabel = `F2P & Pagos (${geo.selected.city}) – Abs`;
+  let dsLabel = `F2P & Pagos (${geo.selected?.city}) – Abs`;
 
   if(state.overviewFunnel==='pct'){
-    const registros = funnelAbs[1] || 1; // base 100%
+    const registros = funnelAbs[1] || 1;
     funnelData = funnelAbs.map(v=> Math.round((v / registros) * 100));
-    dsLabel = `F2P & Pagos (${geo.selected.city}) – % sobre Registros`;
+    dsLabel = `F2P & Pagos (${geo.selected?.city}) – % sobre Registros`;
     extraOpts = {
       scales:{
-        y:{
-          beginAtZero:true,
-          ticks:{ callback:(val)=> val + '%' }
-        }
+        y:{ beginAtZero:true, ticks:{ callback:(val)=> val + '%' } }
       },
-      plugins:{
-        tooltip:{
-          callbacks:{
-            label:(ctx)=> `${ctx.dataset.label}: ${ctx.parsed.y}%`
-          }
-        }
-      }
+      plugins:{ tooltip:{ callbacks:{ label:(ctx)=> `${ctx.dataset.label}: ${ctx.parsed.y}%` } } }
     };
   }
 
-  upsertChart('conversionChart','bar',{
-    labels,
-    datasets:[{label: dsLabel, data: funnelData}]
-  }, extraOpts);
+  upsertChart('conversionChart','bar',{ labels, datasets:[{label: dsLabel, data: funnelData}] }, extraOpts);
 }
 
 /* === USUARIOS === */
 async function loadUsers(){
   const geo = await setupGeoSelectors('u');
-  // vistas geo
-  upsertChart('usuariosPais','doughnut',{labels:Object.keys(geo.countryAgg),datasets:[{label:'Usuarios',data:Object.values(geo.countryAgg)}]});
-  upsertChart('estadosChart','bar',{labels:Object.keys(geo.stateAgg),datasets:[{label:`Estados de ${geo.selected.country}`,data:Object.values(geo.stateAgg)}]});
-  upsertChart('ciudadesChart','bar',{labels:Object.keys(geo.cityAgg),datasets:[{label:`Ciudades de ${geo.selected.state}`,data:Object.values(geo.cityAgg)}]});
+  upsertChart('usuariosPais','doughnut',{labels:Object.keys(geo.countryAgg||{}),datasets:[{label:'Usuarios',data:Object.values(geo.countryAgg||{})}]});
+  upsertChart('estadosChart','bar',{labels:Object.keys(geo.stateAgg||{}),datasets:[{label:`Estados de ${geo.selected?.country||'-'}`,data:Object.values(geo.stateAgg||{})}]});
+  upsertChart('ciudadesChart','bar',{labels:Object.keys(geo.cityAgg||{}),datasets:[{label:`Ciudades de ${geo.selected?.state||'-'}`,data:Object.values(geo.cityAgg||{})}]});
 
-  // planes + tabla (demo)
   const users = await mockApi.get('/users', state);
-  upsertChart('planesChart','pie',{labels:Object.keys(users.planes),datasets:[{label:'Planes',data:Object.values(users.planes)}]});
+  upsertChart('planesChart','pie',{labels:Object.keys(users.planes||{}),datasets:[{label:'Planes',data:Object.values(users.planes||{})}]});
 
   const tbody = document.querySelector('#tablaUsuarios tbody');
-  const cities = Object.keys(geo.cityAgg);
-  const randomCity = ()=> cities[Math.floor(Math.random()*cities.length)];
-  const rows = users.tabla.map(u=>{
-    const c = geo.selected.country, s = geo.selected.state, city = randomCity();
+  const cities = Object.keys(geo.cityAgg||{});
+  const randomCity = ()=> cities.length? cities[Math.floor(Math.random()*cities.length)] : '-';
+  const rows = (users.tabla||[]).map(u=>{
+    const c = geo.selected?.country||'-', s = geo.selected?.state||'-', city = randomCity();
     return `<tr><td>${u.nombre}</td><td>${c}</td><td>${s}</td><td>${city}</td><td>${u.plan}</td><td>${u.ultimo}</td></tr>`;
   });
-  tbody.innerHTML = rows.join('');
+  tbody.innerHTML = rows.join('') || `<tr><td colspan="6" class="muted">Sin datos</td></tr>`;
 }
 
-/* === MARKETING === */
+/* === MARKETING (robusto) === */
 async function loadMarketing(){
-  const geo = await setupGeoSelectors('m', {country:'US'});
-  const w = geoWeight(geo);
-  const base = await mockApi.get('/marketing', state);
+  try{
+    const geo = await setupGeoSelectors('m', {country:'US'});
+    const w = geoWeight(geo);
+    const base = await mockApi.get('/marketing', state);
 
-  const fuentesScaled = Object.fromEntries(Object.entries(base.fuentes).map(([k,v])=>[k,Math.round(v*w)]));
-  const openScaled = scaleArray(base.email.open, w);
-  const clickScaled = scaleArray(base.email.click, w);
+    const fuentesScaled = Object.fromEntries(Object.entries(base.fuentes||{}).map(([k,v])=>[k,Math.round((+v||0)*w)]));
+    const openScaled  = scaleArray(base.email?.open,  w);
+    const clickScaled = scaleArray(base.email?.click, w);
 
-  upsertChart('fuentesChart','bar',{ labels:Object.keys(fuentesScaled), datasets:[{label:`Usuarios Nuevos (${geo.selected.country}/${geo.selected.state}/${geo.selected.city})`, data:Object.values(fuentesScaled)}] });
-  upsertChart('emailChart','line',{ labels:base.labels, datasets:[ {label:`Open % (${geo.selected.city})`, data:openScaled}, {label:`Click % (${geo.selected.city})`, data:clickScaled} ] });
+    upsertChart('fuentesChart','bar',{ labels:Object.keys(fuentesScaled), datasets:[{label:`Usuarios Nuevos (${geo.selected?.country}/${geo.selected?.state}/${geo.selected?.city})`, data:Object.values(fuentesScaled)}] });
+    upsertChart('emailChart','line',{ labels:base.labels||[], datasets:[ {label:`Open % (${geo.selected?.city})`, data:openScaled}, {label:`Click % (${geo.selected?.city})`, data:clickScaled} ] });
+  }catch(_){}
 }
 
-/* === FINANZAS === */
+/* === FINANZAS (robusto) === */
 async function loadFinance(){
-  const geo = await setupGeoSelectors('f', {country:'US'});
-  const w = geoWeight(geo);
-  const base = await mockApi.get('/finance', state);
+  try{
+    const geo = await setupGeoSelectors('f', {country:'US'});
+    const w = geoWeight(geo);
+    const base = await mockApi.get('/finance', state);
 
-  const mrrScaled = scaleArray(base.mrr, w);
+    const mrrScaled = scaleArray(base.mrr, w);
 
-  upsertChart('mrrChart','line',{
-    labels:base.labels,
-    datasets:[
-      {label:`MRR (${geo.selected.country}/${geo.selected.state}/${geo.selected.city})`, data:mrrScaled},
-      {label:'Churn %', data:base.churn.map(x=>+(x*100).toFixed(2)), yAxisID:'y1'}
-    ]
-  },{ scales:{ y:{ beginAtZero:true }, y1:{ position:'right', beginAtZero:true } }});
+    upsertChart('mrrChart','line',{
+      labels:base.labels||[],
+      datasets:[
+        {label:`MRR (${geo.selected?.country}/${geo.selected?.state}/${geo.selected?.city})`, data:mrrScaled},
+        {label:'Churn %', data:(base.churn||[]).map(x=>+(x*100).toFixed(2)), yAxisID:'y1'}
+      ]
+    },{ scales:{ y:{ beginAtZero:true }, y1:{ position:'right', beginAtZero:true } }});
 
-  upsertChart('unitChart','bar',{ labels:['Q1','Q2','Q3','Q4','Q5','Q6'], datasets:[
-    {label:'CAC ($)', data:base.unit.cac},
-    {label:'LTV ($)', data:base.unit.ltv},
-    {label:'CPU ($)', data:base.unit.cpu}
-  ]});
+    upsertChart('unitChart','bar',{ labels:['Q1','Q2','Q3','Q4','Q5','Q6'], datasets:[
+      {label:'CAC ($)', data:base.unit?.cac||[]},
+      {label:'LTV ($)', data:base.unit?.ltv||[]},
+      {label:'CPU ($)', data:base.unit?.cpu||[]}
+    ]});
+  }catch(_){}
 }
 
-/* === ANALYTICS === */
+/* === ANALYTICS (robusto) === */
 async function loadAnalytics(){
-  const geo = await setupGeoSelectors('a', {country:'US'});
-  const base = await mockApi.get('/analytics', state);
+  try{
+    const geo = await setupGeoSelectors('a', {country:'US'});
+    const base = await mockApi.get('/analytics', state);
 
-  const geoShare = geoWeight(geo);
-  const f = 0.85 + Math.min(geoShare, 1)*0.3;
+    const geoShare = geoWeight(geo);
+    const f = 0.85 + Math.min(geoShare, 1)*0.3;
 
-  const ind = {
-    ingreso_prom: Math.round(base.indicadores.ingreso_prom * f),
-    gasto_prom: Math.round(base.indicadores.gasto_prom * f),
-    ahorro_prom: Math.round(base.indicadores.ahorro_prom * f),
-    dti_prom: +(base.indicadores.dti_prom * (2 - f)).toFixed(2),
-    reserva_meses: +(base.indicadores.reserva_meses * (0.9 + (f-0.85))).toFixed(1)
-  };
+    const ind = {
+      ingreso_prom: Math.round((base.indicadores?.ingreso_prom||3000) * f),
+      gasto_prom:   Math.round((base.indicadores?.gasto_prom||2500)   * f),
+      ahorro_prom:  Math.round((base.indicadores?.ahorro_prom||500)   * f),
+      dti_prom:     +(((base.indicadores?.dti_prom)||0.3) * (2 - f)).toFixed(2),
+      reserva_meses:+(((base.indicadores?.reserva_meses)||2.5) * (0.9 + (f-0.85))).toFixed(1)
+    };
 
-  upsertChart('indicadoresChart','radar',{
-    labels:['Ingreso prom','Gasto prom','Ahorro prom','DTI prom','Reserva (meses)'],
-    datasets:[{label:`Promedios (${geo.selected.city})`, data:[ind.ingreso_prom, ind.gasto_prom, ind.ahorro_prom, +(ind.dti_prom*100).toFixed(1), ind.reserva_meses]}]
-  });
+    upsertChart('indicadoresChart','radar',{
+      labels:['Ingreso prom','Gasto prom','Ahorro prom','DTI prom','Reserva (meses)'],
+      datasets:[{label:`Promedios (${geo.selected?.city||'-'})`, data:[ind.ingreso_prom, ind.gasto_prom, ind.ahorro_prom, +(ind.dti_prom*100).toFixed(1), ind.reserva_meses]}]
+    });
 
-  const data0 = base.cohort.data.map(r=> Math.round(r[0]*geoShare));
-  const data1 = base.cohort.data.map(r=> Math.round(r[1]*geoShare));
-  const data2 = base.cohort.data.map(r=> Math.round(r[2]*geoShare));
-  const data3 = base.cohort.data.map(r=> Math.round(r[3]*geoShare));
+    const labels = base.cohort?.labels || [];
+    const d = base.cohort?.data || [];
+    const data0 = d.map(r=> Math.round((r[0]||0)*geoShare));
+    const data1 = d.map(r=> Math.round((r[1]||0)*geoShare));
+    const data2 = d.map(r=> Math.round((r[2]||0)*geoShare));
+    const data3 = d.map(r=> Math.round((r[3]||0)*geoShare));
 
-  upsertChart('cohortChart','bar',{
-    labels:base.cohort.labels,
-    datasets:[
-      {label:`Mes 0 (${geo.selected.city})`, data:data0},
-      {label:'Mes 1', data:data1},
-      {label:'Mes 2', data:data2},
-      {label:'Mes 3', data:data3},
-    ]
-  });
+    upsertChart('cohortChart','bar',{
+      labels,
+      datasets:[
+        {label:`Mes 0 (${geo.selected?.city||'-'})`, data:data0},
+        {label:'Mes 1', data:data1},
+        {label:'Mes 2', data:data2},
+        {label:'Mes 3', data:data3},
+      ]
+    });
+  }catch(_){}
 }
 
 /* ===== Control de rango / país global ===== */
@@ -750,7 +746,7 @@ async function reloadSection(key){
 
 async function refreshAll(){
   ensureCanvasWrappers();
-  await Promise.all([
+  await Promise.allSettled([
     loadOverview(),
     loadUsers(),
     loadSupport(),
@@ -762,6 +758,13 @@ async function refreshAll(){
 
 let refreshTimer;
 function startAutoRefresh(){ if(refreshTimer) clearInterval(refreshTimer); refreshTimer=setInterval(refreshAll,20000); }
+
+/* === SOPORTE === */
+async function loadSupport(){
+  const {tickets,tabla}= await mockApi.get('/support', state);
+  upsertChart('ticketsChart','bar',{labels:Object.keys(tickets),datasets:[{label:'Tickets',data:Object.values(tickets)}]});
+  const tbody=document.querySelector('#tablaTickets tbody'); tbody.innerHTML= (tabla||[]).map(t=>`<tr><td>${t.id}</td><td>${t.categoria}</td><td>${t.estado}</td><td>${t.horas}h</td></tr>`).join('');
+}
 
 document.addEventListener('DOMContentLoaded', async ()=>{
   ensureCanvasWrappers();
