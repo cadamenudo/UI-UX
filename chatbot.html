@@ -15,41 +15,43 @@
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Greycliff CF",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 
-/* Launcher (botón flotante) */
-.chat-launcher{
-  position:fixed; right:20px; bottom:20px;
-  width:80px; height:80px;            /* tamaño cómodo */
-  border-radius:50%;
-  border:none; background:var(--primary); color:#fff;
-  display:grid; place-items:center;
-  box-shadow:var(--shadow); cursor:pointer;
-  z-index:9999;                       /* debajo de la ventana */
-}
-.launcher-logo{
-  width:56px; height:56px;            /* menor que el botón */
-  box-sizing:border-box;              /* padding incluido */
-  border-radius:50%;
-  background:#fff; padding:8px;
-  object-fit:contain;
-  pointer-events:none;                /* no bloquea el click */
-}
+  /* Launcher (botón flotante) */
+  .chat-launcher{
+    position:fixed; right:20px; bottom:20px;
+    width:80px; height:80px;
+    border-radius:50%;
+    border:none; background:var(--primary); color:#fff;
+    display:grid; place-items:center;
+    box-shadow:var(--shadow); cursor:pointer;
+    z-index:9999;  /* debajo de la ventana */
+  }
+  .launcher-logo{
+    width:56px; height:56px;
+    box-sizing:border-box;
+    border-radius:50%;
+    background:#fff; padding:8px;
+    object-fit:contain;
+    pointer-events:none; /* no bloquea el click */
+  }
 
-/* Ventana del chat (por encima del launcher) */
-.chat-window{
-  position:fixed; right:20px; bottom:92px;
-  width:360px; max-width:92vw; height:560px; max-height:78vh;
-  display:none; grid-template-rows:auto auto 1fr auto auto;
-  background:#fff; border-radius:18px; overflow:hidden;
-  box-shadow:var(--shadow);
-  z-index:10001;                      /* <— clave */
-  border:1px solid var(--border);
-}
+  /* Ventana del chat (por encima del launcher) */
+  .chat-window{
+    position:fixed; right:20px; bottom:92px;
+    width:360px; max-width:92vw; height:560px; max-height:78vh;
+    display:none; /* toggle => grid */
+    grid-template-rows:auto auto 1fr auto auto;
+    background:#fff; border-radius:18px; overflow:hidden;
+    box-shadow:var(--shadow);
+    z-index:10001; /* clave */
+    border:1px solid var(--border);
+  }
 
-/* Header: vuelve a tamaño normal para evitar solapes */
-.bot-logo{
-  width:40px; height:40px;            /* antes 96px */
-  border-radius:50%; background:#fff; padding:4px; object-fit:contain;
-}
+  /* Header */
+  .chat-header{ display:flex; align-items:center; gap:12px; padding:12px 14px; background:#fff; border-bottom:1px solid var(--border) }
+  .bot-logo{ width:40px; height:40px; border-radius:50%; background:#fff; padding:4px; object-fit:contain }
+  .chat-title{font-weight:700; color:#3956E8;}
+  .header-actions{margin-left:auto}
+  .icon-btn{ background:transparent; border:none; color:#94A3B8; font-size:18px; cursor:pointer; padding:6px }
 
   /* Input */
   .input-top{ padding:10px 12px; border-bottom:1px solid var(--border); background:#fff }
@@ -93,6 +95,11 @@
   .chat-footer{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; border-top:1px solid var(--border); background:#fff }
   .privacy-link{ font-size:12px; color:#8A93A6; text-decoration:none }
   .privacy-link:hover{ color:#6B7280; text-decoration:underline }
+
+  /* Móvil: full screen */
+  @media (max-width:480px){
+    .chat-window{ right:0; left:0; bottom:0; top:0; width:100vw; height:100vh; max-height:100vh; border-radius:0 }
+  }
 </style>
 </head>
 <body>
@@ -136,7 +143,6 @@
   const norm = s => (s==null?'':String(s)).trim().toLowerCase();
   const tokenize = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9áéíóúñü\s]/gi,' ').split(/\s+/).filter(Boolean);
 
-  /* Orden oficial de temas */
   const CATEGORY_ORDER = [
     "Misión y propósito","Registro y cuenta","Navegación principal","Transacciones","Ingresos","Ahorro y metas",
     "Alertas de colores","Suscripción y pagos","Pagos y facturación","Personalización","Soporte y educación","Disponibilidad",
@@ -153,8 +159,8 @@
     "hábitos":"Hábitos financieros","historia y origen":"Historia y origen (Xavier Serbia)","origen e historia":"Historia y origen (Xavier Serbia)"
   };
 
-  let FAQ = [];      // [{q,a,category}]
-  let catIndex = {}; // {cat:[items]}
+  let FAQ = [];
+  let catIndex = {};
 
   window.addEventListener('DOMContentLoaded', init);
 
@@ -166,8 +172,12 @@
     });
 
     // Abrir/cerrar
-    els.launcher.addEventListener('click', ()=>{ toggle(true); setTimeout(()=>els.input.focus(),50); });
-    els.close.addEventListener('click', ()=> toggle(false));
+    els.launcher.addEventListener('click', (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      toggle(true);
+      setTimeout(()=>{ try{ els.input && els.input.focus(); }catch(_){} }, 50);
+    });
+    els.close.addEventListener('click', (e)=>{ e.preventDefault(); toggle(false); });
 
     // Enviar
     els.send.addEventListener('click', onSend);
@@ -183,19 +193,19 @@
     els.clear.addEventListener('click', clearChat);
     els.email.addEventListener('click', ()=> window.location.href = buildSupportEmail());
 
-    // 🔑 Delegación de clics (temas y acordeón) — AHORA DENTRO DE init()
+    // Delegación de clics (temas y acordeón)
     els.chat.addEventListener('click', (e)=>{
       const t = e.target.closest('.topic-btn');
       if(t){ showCategoryPanel(t.getAttribute('data-cat')); return; }
       const q = e.target.closest('[data-toggle="qa"]');
       if(q){
         const id=q.getAttribute('data-id');
-        const ans=els.chat.querySelector(`.ans[data-id="${id}"]`);
+        const ans=els.chat.querySelector('.ans[data-id="'+id+'"]');
         if(ans) ans.classList.toggle('open');
       }
     });
 
-    // Cargar JSON
+    // Cargar JSON (si falla, seguimos con 0 items)
     try{
       const res = await fetch('./faq_cadamenudo.json?v=10', {cache:'no-store'});
       FAQ = await res.json();
@@ -209,7 +219,10 @@
     showTopics();
   }
 
-  function toggle(open){ els.chat.style.display=open?'grid':'none'; }
+  function toggle(open){
+    if(!els.chat) return;
+    els.chat.style.display = open ? 'grid' : 'none';
+  }
 
   function buildCategoryIndex(){
     const buckets={}; CATEGORY_ORDER.forEach(c=>buckets[c]=[]);
@@ -223,36 +236,40 @@
   }
 
   function showTopics(){
-    const html = `
-      <div class="topic-grid">
-        ${CATEGORY_ORDER.map(k=> `<button class="topic-btn" data-cat="${escapeHtml(k)}">${escapeHtml(k)}</button>`).join('')}
-      </div>`;
+    const html =
+      '<div class="topic-grid">' +
+        CATEGORY_ORDER.map(k=> '<button class="topic-btn" data-cat="'+escapeHtml(k)+'">'+escapeHtml(k)+'</button>').join('') +
+      '</div>';
     pushHTML('bot', html);
   }
 
   function showCategoryPanel(cat){
     const seen=new Set();
     const items=(catIndex[cat]||[]).filter(it=>{
-      const k=it.q.toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true;
+      const k=String(it.q||'').toLowerCase();
+      if(seen.has(k)) return false;
+      seen.add(k);
+      return true;
     }).slice(0,40);
 
-    const html = `
-      <div class="cat-panel">
-        <div class="cat-title">Tema: ${escapeHtml(cat)}</div>
-        ${items.length?`
-        <div class="q-list">
-          ${items.map((it,idx)=>{
-            const id=\`${norm(cat)}-\${idx}\`;
-            return `
-              <div class="q-item">
-                <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
-                <div class="ans" data-id="${id}">
-                  <div class="ans-inner">${escapeHtml(it.a)}</div>
-                </div>
-              </div>`;
-          }).join('')}
-        </div>`:`<div class="q-empty">Aún no hay preguntas en este tema.</div>`}
-      </div>`;
+    const list = items.length
+      ? '<div class="q-list">' + items.map((it,idx)=>{
+          const id = norm(cat) + '-' + idx; /* sin backticks anidados */
+          return (
+            '<div class="q-item">'+
+              '<button class="q-btn" data-toggle="qa" data-id="'+id+'">• '+escapeHtml(it.q)+'</button>'+
+              '<div class="ans" data-id="'+id+'"><div class="ans-inner">'+escapeHtml(it.a)+'</div></div>'+
+            '</div>'
+          );
+        }).join('') + '</div>'
+      : '<div class="q-empty">Aún no hay preguntas en este tema.</div>';
+
+    const html =
+      '<div class="cat-panel">'+
+        '<div class="cat-title">Tema: '+escapeHtml(cat)+'</div>'+
+        list+
+      '</div>';
+
     pushHTML('bot', html);
   }
 
@@ -278,20 +295,21 @@
     const hitsRaw=searchFAQ(text), seen=new Set();
     const hits=hitsRaw.filter(it=>{ const k=(it.q||'').trim().toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; });
     if(hits.length){
-      const html = `
-        <div class="cat-panel">
-          <div class="cat-title">Resultados</div>
-          <div class="q-list">
-            ${hits.slice(0,10).map((it,idx)=>{
-              const id=\`search-\${idx}\`;
-              return `
-                <div class="q-item">
-                  <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
-                  <div class="ans" data-id="${id}"><div class="ans-inner">${escapeHtml(it.a)}</div></div>
-                </div>`;
-            }).join('')}
-          </div>
-        </div>`;
+      const html =
+        '<div class="cat-panel">'+
+          '<div class="cat-title">Resultados</div>'+
+          '<div class="q-list">'+
+            hits.slice(0,10).map((it,idx)=>{
+              const id = 'search-' + idx; /* sin backticks anidados */
+              return (
+                '<div class="q-item">'+
+                  '<button class="q-btn" data-toggle="qa" data-id="'+id+'">• '+escapeHtml(it.q)+'</button>'+
+                  '<div class="ans" data-id="'+id+'"><div class="ans-inner">'+escapeHtml(it.a)+'</div></div>'+
+                '</div>'
+              );
+            }).join('')+
+          '</div>'+
+        '</div>';
       pushHTML('bot', html);
     }else{
       push('bot','No encontré una respuesta exacta. Toca un tema de la lista o escribe otra palabra clave.');
@@ -319,8 +337,8 @@
   }
 
   function buildSupportEmail(){
-    const body=`Hola equipo técnico,%0D%0A%0D%0ANecesito ayuda con el chatbot de Cada Menudo.%0D%0A%0D%0ADescripción del problema:%0D%0A(Escribe aquí…)%0D%0A%0D%0A---%0D%0AEnviado desde el chatbot de Cada Menudo.`;
-    return `mailto:tech@cadamenudo.com?subject=Soporte%20Chatbot%20Cada%20Menudo&body=${body}`;
+    const body='Hola equipo técnico,%0D%0A%0D%0ANecesito ayuda con el chatbot de Cada Menudo.%0D%0A%0D%0ADescripción del problema:%0D%0A(Escribe aquí…)%0D%0A%0D%0A---%0D%0AEnviado desde el chatbot de Cada Menudo.';
+    return 'mailto:tech@cadamenudo.com?subject=Soporte%20Chatbot%20Cada%20Menudo&body='+body;
   }
 })();
 </script>
