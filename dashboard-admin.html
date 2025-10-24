@@ -120,13 +120,44 @@
         <div class="card"><h3>Embudo de Conversión</h3><canvas id="conversionChart"></canvas></div>
       </section>
 
-      <!-- Usuarios -->
+      <!-- Usuarios (ACTUALIZADO CON GEO) -->
       <section id="usuarios" class="dashboard-grid" style="display:none;">
-        <div class="card"><h3>Distribución por País</h3><canvas id="usuariosPais"></canvas></div>
-        <div class="card"><h3>Planes</h3><canvas id="planesChart"></canvas></div>
+        <div class="card" style="grid-column:1/-1">
+          <h3>Segmentación geográfica</h3>
+          <div class="filters" style="margin-top:.5rem">
+            <label for="countrySel"><strong>País:</strong></label>
+            <select id="countrySel"></select>
+            <label for="stateSel" style="margin-left:.5rem"><strong>Estado/Provincia:</strong></label>
+            <select id="stateSel"></select>
+          </div>
+        </div>
+
         <div class="card">
+          <h3>Usuarios por País (vista general)</h3>
+          <canvas id="usuariosPais"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>Usuarios por Estado</h3>
+          <canvas id="estadosChart"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>Usuarios por Ciudad</h3>
+          <canvas id="ciudadesChart"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>Planes</h3>
+          <canvas id="planesChart"></canvas>
+        </div>
+
+        <div class="card" style="grid-column:1/-1;">
           <h3>Top Usuarios (demo)</h3>
-          <table id="tablaUsuarios"><thead><tr><th>Usuario</th><th>País</th><th>Plan</th><th>Último login</th></tr></thead><tbody></tbody></table>
+          <table id="tablaUsuarios">
+            <thead><tr><th>Usuario</th><th>País</th><th>Estado</th><th>Ciudad</th><th>Plan</th><th>Último login</th></tr></thead>
+            <tbody></tbody>
+          </table>
         </div>
       </section>
 
@@ -209,7 +240,12 @@ function ensureCanvasWrappers(){
   });
 }
 
-/* ===== Mock API (sin .at) ===== */
+/* ===== Estado filtros ===== */
+const state={ range:'30d', country:'all' };
+// selección geográfica dependiente (demo)
+const geoSel = { country: null, state: null };
+
+/* ===== Mock API (sin .at) con /geo ===== */
 const mockApi = (()=> {
   let seed=42;
   const rnd=(min=0,max=1)=>{ seed=(seed*1664525+1013904223)%4294967296; return min+(seed/4294967296)*(max-min); };
@@ -236,6 +272,51 @@ const mockApi = (()=> {
         const planes={ 'Básico':Math.round(rnd(6000,12000)), 'Premium':Math.round(rnd(800,2500)) };
         const tabla=Array.from({length:8}).map((_,i)=>({ nombre:`usuario_${1000+i}`, pais:pick(COUNTRIES), plan:pick(PLANS), ultimo:diasAtras(Math.round(rnd(0,15))) }));
         res({dist,planes,tabla});
+      }
+      else if(path==='/geo'){
+        const GEO = {
+          US: {
+            'California': { 'Los Angeles': Math.round(rnd(400,1200)), 'San Francisco': Math.round(rnd(200,700)), 'San Diego': Math.round(rnd(180,600)) },
+            'Texas':      { 'Houston': Math.round(rnd(300,900)), 'Dallas': Math.round(rnd(250,800)), 'Austin': Math.round(rnd(180,650)) },
+            'Florida':    { 'Miami': Math.round(rnd(260,850)), 'Orlando': Math.round(rnd(180,600)), 'Tampa': Math.round(rnd(150,520)) }
+          },
+          PR: {
+            'San Juan':   { 'Hato Rey': Math.round(rnd(80,250)), 'Santurce': Math.round(rnd(70,220)), 'Río Piedras': Math.round(rnd(60,200)) },
+            'Bayamón':    { 'Bayamón': Math.round(rnd(70,210)) },
+            'Carolina':   { 'Carolina': Math.round(rnd(60,190)) }
+          },
+          PA: {
+            'Panamá':     { 'Ciudad de Panamá': Math.round(rnd(120,380)), 'San Miguelito': Math.round(rnd(80,260)) },
+            'Colón':      { 'Colón': Math.round(rnd(60,180)) }
+          }
+        };
+
+        const countries = Object.keys(GEO);
+        const country = (params.country && GEO[params.country]) ? params.country : (geoSel.country || countries[0]);
+        const states = Object.keys(GEO[country]);
+        const stateName = (params.state && GEO[country][params.state]) ? params.state : (geoSel.state || states[0]);
+
+        // agregados por país
+        const countryAgg = {};
+        for(const c of Object.keys(GEO)){
+          let sum = 0;
+          for(const st of Object.keys(GEO[c])){
+            for(const city of Object.keys(GEO[c][st])) sum += GEO[c][st][city];
+          }
+          countryAgg[c] = sum;
+        }
+
+        // agregados por estado del país seleccionado
+        const stateAgg = {};
+        for(const st of Object.keys(GEO[country])){
+          let sum = 0;
+          for(const city of Object.keys(GEO[country][st])) sum += GEO[country][st][city];
+          stateAgg[st] = sum;
+        }
+
+        const cityAgg = GEO[country][stateName];
+
+        res({ GEO, countryAgg, stateAgg, cityAgg, selected: { country, state: stateName } });
       }
       else if(path==='/support'){
         const tickets={ Abierto:Math.round(rnd(12,35)), Pendiente:Math.round(rnd(5,18)), Resuelto:Math.round(rnd(80,160)) };
@@ -267,11 +348,6 @@ const mockApi = (()=> {
   return { get };
 })();
 
-/* ===== Estado filtros ===== */
-const state={ range:'30d', country:'all' };
-function setRange(btn){ document.querySelectorAll('.chip[data-range]').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); state.range=btn.dataset.range; refreshAll(); }
-function setCountry(btn){ document.querySelectorAll('.chip[data-country]').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); state.country=btn.dataset.country; refreshAll(); }
-
 /* ===== Charts ===== */
 const charts={};
 const baseOpts={ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true}} };
@@ -295,6 +371,61 @@ function mostrar(id, el){
   setTimeout(()=>{ ensureCanvasWrappers(); Object.values(charts).forEach(ch=>{ try{ ch.resize(); }catch(_){}}); }, 0);
 }
 
+/* ===== Geografía: selects y gráficos ===== */
+function populateGeoSelectors(geo){
+  const countrySel = document.getElementById('countrySel');
+  const stateSel = document.getElementById('stateSel');
+
+  const countries = Object.keys(geo.GEO);
+  countrySel.innerHTML = countries.map(c => `<option value="${c}">${c}</option>`).join('');
+  countrySel.value = geo.selected.country;
+
+  const states = Object.keys(geo.GEO[geo.selected.country]);
+  stateSel.innerHTML = states.map(s => `<option value="${s}">${s}</option>`).join('');
+  stateSel.value = geo.selected.state;
+
+  geoSel.country = geo.selected.country;
+  geoSel.state = geo.selected.state;
+
+  countrySel.onchange = async (e)=>{
+    geoSel.country = e.target.value;
+    const fresh = await mockApi.get('/geo', { country: geoSel.country });
+    const freshStates = Object.keys(fresh.GEO[geoSel.country]);
+    stateSel.innerHTML = freshStates.map(s => `<option value="${s}">${s}</option>`).join('');
+    geoSel.state = fresh.selected.state;
+    stateSel.value = geoSel.state;
+    renderGeoCharts(fresh);
+    refreshUsersTableGeo();
+  };
+  stateSel.onchange = async (e)=>{
+    geoSel.state = e.target.value;
+    const fresh = await mockApi.get('/geo', { country: geoSel.country, state: geoSel.state });
+    renderGeoCharts(fresh);
+    refreshUsersTableGeo();
+  };
+}
+
+function renderGeoCharts(geo){
+  upsertChart('usuariosPais','doughnut',{
+    labels:Object.keys(geo.countryAgg),
+    datasets:[{ label:'Usuarios', data:Object.values(geo.countryAgg) }]
+  });
+
+  upsertChart('estadosChart','bar',{
+    labels:Object.keys(geo.stateAgg),
+    datasets:[{ label:`Estados de ${geo.selected.country}`, data:Object.values(geo.stateAgg) }]
+  });
+
+  upsertChart('ciudadesChart','bar',{
+    labels:Object.keys(geo.cityAgg),
+    datasets:[{ label:`Ciudades de ${geo.selected.state}`, data:Object.values(geo.cityAgg) }]
+  });
+}
+
+/* ===== Estado, rangos y país global ===== */
+function setRange(btn){ document.querySelectorAll('.chip[data-range]').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); state.range=btn.dataset.range; refreshAll(); }
+function setCountry(btn){ document.querySelectorAll('.chip[data-country]').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); state.country=btn.dataset.country; refreshAll(); }
+
 /* ===== Loaders ===== */
 async function loadOverview(){
   const {usuarios, ingresos, funnel, kpis, labels}= await mockApi.get('/overview', state);
@@ -306,12 +437,62 @@ async function loadOverview(){
   upsertChart('ingresosChart','bar',{labels,datasets:[{label:'Ingresos',data:ingresos,borderWidth:1}]});
   upsertChart('conversionChart','bar',{labels:['Visitas','Registros','Conexiones','Premium'],datasets:[{label:'Embudo',data:funnel}]});
 }
+
 async function loadUsers(){
-  const {dist,planes,tabla}= await mockApi.get('/users', state);
-  upsertChart('usuariosPais','doughnut',{labels:Object.keys(dist),datasets:[{label:'Usuarios',data:Object.values(dist)}]});
-  upsertChart('planesChart','pie',{labels:Object.keys(planes),datasets:[{label:'Planes',data:Object.values(planes)}]});
-  const tbody=document.querySelector('#tablaUsuarios tbody'); tbody.innerHTML= tabla.map(u=>`<tr><td>${u.nombre}</td><td>${u.pais}</td><td>${u.plan}</td><td>${u.ultimo}</td></tr>`).join('');
+  // 1) Geografía jerárquica
+  const geo = await mockApi.get('/geo', { country: geoSel.country, state: geoSel.state });
+  populateGeoSelectors(geo);
+  renderGeoCharts(geo);
+
+  // 2) Planes + tabla (demo)
+  const { planes, tabla } = await mockApi.get('/users', state);
+
+  upsertChart('planesChart','pie',{
+    labels:Object.keys(planes),
+    datasets:[{label:'Planes', data:Object.values(planes)}]
+  });
+
+  // 3) Tabla demo enriquecida con estado/ciudad
+  const tbody = document.querySelector('#tablaUsuarios tbody');
+
+  function randomCityFrom(country, stateName){
+    const cities = Object.keys(geo.GEO[country][stateName]);
+    return cities[Math.floor(Math.random()*cities.length)];
+  }
+
+  const rows = tabla.map(u=>{
+    const userCountry = geo.GEO[u.pais] ? u.pais : geo.selected.country;
+    const stateNames = Object.keys(geo.GEO[userCountry]);
+    const userState = stateNames[Math.floor(Math.random()*stateNames.length)];
+    const userCity = randomCityFrom(userCountry, userState);
+    return `<tr><td>${u.nombre}</td><td>${userCountry}</td><td>${userState}</td><td>${userCity}</td><td>${u.plan}</td><td>${u.ultimo}</td></tr>`;
+  });
+
+  tbody.innerHTML = rows.join('');
 }
+
+async function refreshUsersTableGeo(){
+  const { tabla } = await mockApi.get('/users', state);
+  const geo = await mockApi.get('/geo', { country: geoSel.country, state: geoSel.state });
+
+  const tbody = document.querySelector('#tablaUsuarios tbody');
+
+  function randomCityFrom(country, stateName){
+    const cities = Object.keys(geo.GEO[country][stateName]);
+    return cities[Math.floor(Math.random()*cities.length)];
+  }
+
+  const rows = tabla.map(u=>{
+    const userCountry = geo.GEO[u.pais] ? u.pais : geoSel.country;
+    const stateNames = Object.keys(geo.GEO[userCountry]);
+    const userState = stateNames[Math.floor(Math.random()*stateNames.length)];
+    const userCity = randomCityFrom(userCountry, userState);
+    return `<tr><td>${u.nombre}</td><td>${userCountry}</td><td>${userState}</td><td>${userCity}</td><td>${u.plan}</td><td>${u.ultimo}</td></tr>`;
+  });
+
+  tbody.innerHTML = rows.join('');
+}
+
 async function loadSupport(){
   const {tickets,tabla}= await mockApi.get('/support', state);
   upsertChart('ticketsChart','bar',{labels:Object.keys(tickets),datasets:[{label:'Tickets',data:Object.values(tickets)}]});
@@ -344,7 +525,6 @@ function startAutoRefresh(){ if(refreshTimer) clearInterval(refreshTimer); refre
 /* Start */
 document.addEventListener('DOMContentLoaded', ()=>{
   ensureCanvasWrappers();
-  // El overview ya está visible en HTML; aun así, dispara primer render:
   refreshAll();
   startAutoRefresh();
 });
