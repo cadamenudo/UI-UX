@@ -8,27 +8,25 @@
 
 <style>
   :root{
-    --primary:#3956E8; --secondary:#7459D9; --accent:#E8C239;
-    --bg:#ffffff; --text:#0d1320; --muted:#6b7280; --border:#E6E8F0; --shadow:0 8px 28px rgba(15,23,42,.12);
+    --primary:#3956E8; --secondary:#7459D9; --bg:#ffffff; --text:#0d1320;
+    --muted:#6b7280; --border:#E6E8F0; --shadow:0 8px 28px rgba(15,23,42,.12);
     --bot:#F3F6FF; --user:#F7F8FB;
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Greycliff CF",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 
-  /* Botón flotante */
+  /* Launcher */
   .chat-launcher{
     position:fixed; right:20px; bottom:20px; width:64px; height:64px; border-radius:50%;
     border:none; background:var(--primary); color:#fff; display:grid; place-items:center;
     box-shadow:var(--shadow); cursor:pointer; z-index:9999;
   }
-  .launcher-logo{
-    width:38px; height:38px; border-radius:50%; background:#fff; padding:6px; object-fit:contain;
-  }
+  .launcher-logo{ width:38px; height:38px; border-radius:50%; background:#fff; padding:6px; object-fit:contain; }
 
-  /* Ventana */
+  /* Window */
   .chat-window{
     position:fixed; right:20px; bottom:92px; width:360px; max-width:92vw; height:560px; max-height:78vh;
-    display:none; grid-template-rows:auto auto auto 1fr auto auto;
+    display:none; grid-template-rows:auto auto 1fr auto auto;
     background:#fff; border-radius:18px; overflow:hidden; box-shadow:var(--shadow); z-index:9999; border:1px solid var(--border);
   }
 
@@ -39,14 +37,14 @@
   .header-actions{margin-left:auto}
   .icon-btn{ background:transparent; border:none; color:#94A3B8; font-size:18px; cursor:pointer; padding:6px }
 
-  /* Input arriba */
+  /* Input */
   .input-top{ padding:10px 12px; border-bottom:1px solid var(--border); background:#fff }
   .input-row{ display:flex; gap:8px }
   .input-row input{ flex:1; padding:12px; border:1px solid var(--border); border-radius:12px; font-size:14px; outline:none; }
   .input-row input::placeholder{ color:#98A2B3; }
   .input-row button{ padding:12px 14px; border:none; border-radius:12px; background:var(--primary); color:#fff; font-weight:700; cursor:pointer }
 
-  /* Cuerpo */
+  /* Body */
   .chat-body{padding:14px; overflow:auto; background:#fff}
   .msg{display:flex; margin:8px 0}
   .msg.bot{justify-content:flex-start}
@@ -56,7 +54,7 @@
   .msg.user .bubble{background:var(--user)}
   .meta{display:block; color:#9AA4B2; font-size:11px; margin-top:4px}
 
-  /* Botones de temas y acordeón */
+  /* Temas + acordeón */
   .topic-grid{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
   .topic-btn{ border:1px solid var(--border); background:#fff; color:#374151; padding:8px 12px; border-radius:999px; font-size:12px; cursor:pointer; }
   .cat-panel{ border:1px dashed var(--border); background:#fff; border-radius:12px; padding:10px; }
@@ -68,23 +66,20 @@
   .ans{ display:none; border-top:1px solid var(--border); }
   .ans.open{ display:block; }
   .ans-inner{ padding:10px 12px; font-size:14px; background:#F9FAFB; border-radius:0 0 10px 10px; }
+  .q-empty{ padding:10px 12px; font-size:14px; color:#6b7280; background:#F9FAFB; border-radius:8px; }
 
-  /* Toolbar visible */
+  /* Toolbar discreta */
   .toolbar{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    padding:10px 12px;
-    border-top:1px dashed var(--border);
-    background:#fff;
+    display:flex; justify-content:flex-end; align-items:center; gap:12px;
+    padding:6px 10px; border-top:1px solid var(--border); background:#fff;
   }
-  .tool{font-size:12px; color:#374151; cursor:pointer; border:1px solid var(--border); padding:6px 10px; border-radius:8px; background:#fff}
+  .tool{ background:none; border:none; color:#8a93a6; font-size:12px; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+  .tool:hover{ color:#4b5563; }
 
   /* Footer */
   .chat-footer{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; border-top:1px solid var(--border); background:#fff }
   .privacy-link{ font-size:12px; color:#8A93A6; text-decoration:none }
   .privacy-link:hover{ color:#6B7280; text-decoration:underline }
-
 </style>
 </head>
 <body>
@@ -123,9 +118,31 @@
 <script>
 (function(){
   const els = {};
-  const STORAGE_KEY = 'cm_chat_history_v3';
+  const STORAGE_KEY = 'cm_chat_history_topics_v4';
   const byId = id => document.getElementById(id);
   const escapeHtml = s => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
+  const norm = s => (s==null?'':String(s)).trim().toLowerCase();
+  const tokenize = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9áéíóúñü\s]/gi,' ').split(/\s+/).filter(Boolean);
+
+  /* Orden oficial de temas */
+  const CATEGORY_ORDER = [
+    "Misión y propósito","Registro y cuenta","Navegación principal","Transacciones","Ingresos","Ahorro y metas",
+    "Alertas de colores","Suscripción y pagos","Pagos y facturación","Personalización","Soporte y educación","Disponibilidad",
+    "Hábitos financieros","Funcionalidades principales","Recibos y facturas","Seguridad y privacidad","Soporte extendido",
+    "Roadmap / Plan Premium","Educación financiera y filosofía","Historia y origen (Xavier Serbia)","Datos y descargas"
+  ];
+  const CATEGORY_ALIASES = {
+    "cuenta y registro":"Registro y cuenta","registro":"Registro y cuenta","cuenta":"Registro y cuenta",
+    "navegación":"Navegación principal","pagos":"Pagos y facturación","facturación":"Pagos y facturación",
+    "seguridad":"Seguridad y privacidad","privacidad":"Seguridad y privacidad",
+    "roadmap":"Roadmap / Plan Premium","plan premium":"Roadmap / Plan Premium",
+    "recibos":"Recibos y facturas","facturas":"Recibos y facturas",
+    "features":"Funcionalidades principales","funcionalidades":"Funcionalidades principales",
+    "hábitos":"Hábitos financieros","historia y origen":"Historia y origen (Xavier Serbia)","origen e historia":"Historia y origen (Xavier Serbia)"
+  };
+
+  let FAQ = [];           // [{q,a,category}]
+  let catIndex = {};      // {cat:[items]}
 
   window.addEventListener('DOMContentLoaded', init);
 
@@ -136,51 +153,159 @@
       clear: byId('clearBtn'), email: byId('emailBtn')
     });
 
+    // UI
     els.launcher.addEventListener('click', ()=>{ toggle(true); setTimeout(()=>els.input.focus(),50); });
-    els.close.addEventListener('click', ()=>toggle(false));
+    els.close.addEventListener('click', ()=> toggle(false));
     els.send.addEventListener('click', onSend);
-    els.input.addEventListener('keydown', e=>{ if(e.key==='Enter') onSend(); });
+    els.input.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){
+        const v=(els.input.value||'').trim();
+        if(!v){ showTopics(); return; }
+        onSend();
+      }
+    });
     els.clear.addEventListener('click', clearChat);
     els.email.addEventListener('click', ()=> window.location.href = buildSupportEmail());
 
-    pushHTML('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Pregúntame algo o escribe <b>“limpiar”</b> para reiniciar el chat.');
+    // Cargar JSON
+    try{
+      const res = await fetch('./faq_cadamenudo.json?v=10', {cache:'no-store'});
+      FAQ = await res.json();
+    }catch(e){ FAQ = []; }
+
+    buildCategoryIndex();
+
+    // Historial (solo visual; no persistimos ahora para simplicidad)
+    els.body.innerHTML='';
+    pushHTML('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Toca un tema para empezar 👇<br><small>Tip: escribe <b>“limpiar”</b> para reiniciar</small>');
+    showTopics();
   }
 
   function toggle(open){ els.chat.style.display=open?'grid':'none'; }
 
+  /* Categorías -> índice */
+  function buildCategoryIndex(){
+    const buckets={};
+    CATEGORY_ORDER.forEach(c=>buckets[c]=[]);
+    FAQ.forEach(it=>{
+      let raw=(it.category||'').trim();
+      const n=norm(raw);
+      if(CATEGORY_ALIASES[n]) raw=CATEGORY_ALIASES[n];
+      const match = CATEGORY_ORDER.find(x=> norm(x)===norm(raw)) || "Funcionalidades principales";
+      buckets[match].push({q:String(it.q||'').trim(), a:String(it.a||'').trim(), category:match, link:it.link});
+    });
+    catIndex=buckets;
+  }
+
+  /* Render: bienvenida temas */
+  function showTopics(){
+    const html = `
+      <div class="topic-grid">
+        ${CATEGORY_ORDER.map(k=> `<button class="topic-btn" data-cat="${escapeHtml(k)}">${escapeHtml(k)}</button>`).join('')}
+      </div>`;
+    pushHTML('bot', html);
+  }
+
+  /* Delegación clicks en body */
+  els?.body?.addEventListener?.('click',(e)=>{
+    const t=e.target.closest('.topic-btn');
+    if(t){ showCategoryPanel(t.getAttribute('data-cat')); return; }
+    const q=e.target.closest('[data-toggle="qa"]');
+    if(q){
+      const id=q.getAttribute('data-id');
+      const ans=els.body.querySelector(`.ans[data-id="${id}"]`);
+      if(ans) ans.classList.toggle('open');
+    }
+  });
+
+  function showCategoryPanel(cat){
+    // De-dup por pregunta
+    const seen=new Set();
+    const items=(catIndex[cat]||[]).filter(it=>{
+      const k=it.q.toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true;
+    }).slice(0,40);
+
+    const html = `
+      <div class="cat-panel">
+        <div class="cat-title">Tema: ${escapeHtml(cat)}</div>
+        ${items.length?`
+        <div class="q-list">
+          ${items.map((it,idx)=>{
+            const id=`${norm(cat)}-${idx}`;
+            return `
+              <div class="q-item">
+                <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
+                <div class="ans" data-id="${id}">
+                  <div class="ans-inner">${escapeHtml(it.a)}</div>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>`:`<div class="q-empty">Aún no hay preguntas en este tema.</div>`}
+      </div>`;
+    pushHTML('bot', html);
+  }
+
+  /* Búsqueda libre */
+  function score(qTokens,item){
+    const hay=(item.q+' '+item.category).toLowerCase();
+    const set=new Set(tokenize(hay)); let s=0; qTokens.forEach(t=>{ if(set.has(t)) s++; });
+    if(item.q.toLowerCase().includes(qTokens.join(' '))) s+=1.5;
+    return s;
+  }
+  function searchFAQ(q){
+    const t=tokenize(q);
+    return FAQ.map(i=>({i,s:score(t,i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i);
+  }
+
+  /* Envío */
+  function onSend(){
+    const text=(els.input.value||'').trim(); if(!text) return;
+    push('user', text); els.input.value='';
+
+    if (/^(limpiar|borrar|reiniciar|reset)$/i.test(text)) { clearChat(); return; }
+    if (/^(email|correo|soporte|contacto)$/i.test(text)) { window.location.href=buildSupportEmail(); push('bot','Abriendo correo para soporte… ✉️'); return; }
+
+    const hitsRaw=searchFAQ(text), seen=new Set();
+    const hits=hitsRaw.filter(it=>{ const k=(it.q||'').trim().toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; });
+    if(hits.length){
+      const html = `
+        <div class="cat-panel">
+          <div class="cat-title">Resultados</div>
+          <div class="q-list">
+            ${hits.slice(0,10).map((it,idx)=>{
+              const id=`search-${idx}`;
+              return `
+                <div class="q-item">
+                  <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
+                  <div class="ans" data-id="${id}"><div class="ans-inner">${escapeHtml(it.a)}</div></div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+      pushHTML('bot', html);
+    }else{
+      push('bot','No encontré una respuesta exacta. Toca un tema de la lista o escribe otra palabra clave.');
+      showTopics();
+    }
+  }
+
+  /* Render helpers (sin persistencia para evitar “crecer” en la vista) */
   function push(role,text){ renderMsg(role,text,false,false); }
   function pushHTML(role,html){ renderMsg(role,html,false,true); }
-
   function renderMsg(role,text,skip,isHTML){
     const wrap=document.createElement('div'); wrap.className='msg '+role;
     const b=document.createElement('div'); b.className='bubble';
     if(isHTML) b.innerHTML=text; else b.innerHTML=escapeHtml(text).replace(/\n/g,'<br/>');
     const meta=document.createElement('span'); meta.className='meta';
-    meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
     b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap);
-    if(!skip) els.body.scrollTop = els.body.scrollHeight;
-  }
-
-  function onSend(){
-    const text=(els.input.value||'').trim(); if(!text) return;
-    push('user', text); els.input.value='';
-
-    // 🧹 Comando limpiar
-    if (/^(limpiar|borrar|reiniciar|reset)$/i.test(text)) { clearChat(); return; }
-
-    // 📧 Comando email
-    if (/^(email|correo|soporte|contacto)$/i.test(text)) {
-      window.location.href = buildSupportEmail();
-      push('bot','Abriendo correo para soporte técnico... ✉️');
-      return;
-    }
-
-    push('bot','No encontré esa pregunta. Escribe "soporte" si necesitas ayuda por correo.');
+    if(!skip) els.body.scrollTop=els.body.scrollHeight;
   }
 
   function clearChat(){
     els.body.innerHTML='';
     pushHTML('bot','Conversación limpiada. ¿En qué te ayudo ahora?');
+    showTopics();
   }
 
   function buildSupportEmail(){
