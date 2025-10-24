@@ -1,326 +1,70 @@
 [
-  {
-    "category": "Sheet1",
-    "q": "¿Cada Menudo ofrece prueba gratuita?",
-    "a": "Sí. Tienes un período de 14 días gratis para probar la app sin compromiso.",
-    "tags": [
-      "¿cada",
-      "menudo",
-      "ofrece",
-      "prueba",
-      "gratuita"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cuál es la fórmula que usa Cada Menudo?",
-    "a": "Presupuesto de balance cero: Ingreso = Gastos + Ahorro. Si no cuadra, estás en déficit.",
-    "tags": [
-      "¿cuál",
-      "fórmula",
-      "cada",
-      "menudo"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cuánto cuesta Cada Menudo?",
-    "a": "El Plan Básico cuesta $4.99 al mes. Si eliges pagar de forma mensual, al año serían $59.88. Con el Plan Anual, pagas solo $41.99 al año, lo que representa un 30% de descuento frente al plan mensual.",
-    "tags": [
-      "¿cuánto",
-      "cuesta",
-      "cada",
-      "menudo"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo cancelo mi suscripción?",
-    "a": "Puedes cancelar en cualquier momento desde Perfil → Suscripción y Pago. Mantendrás acceso hasta el final del período pagado.",
-    "tags": [
-      "¿cómo",
-      "cancelo",
-      "suscripción"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo cancelo mi suscripción?",
-    "a": "Puedes cancelar en cualquier momento desde Perfil → Suscripción y Pago. Mantendrás acceso hasta el final del período que ya pagaste.",
-    "tags": [
-      "¿cómo",
-      "cancelo",
-      "suscripción"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo creo una meta de ahorro?",
-    "a": "En 'Metas', toca Nueva Meta, ponle nombre, monto y guarda. Puedes ordenar prioridades y ver el progreso en gráficos.",
-    "tags": [
-      "¿cómo",
-      "creo",
-      "meta",
-      "ahorro"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo me registro en Cada Menudo?",
-    "a": "Solo necesitas tu nombre, correo y contraseña. Es rápido, gratis y puedes hacerlo desde cualquier dispositivo.",
-    "tags": [
-      "¿cómo",
-      "registro",
-      "cada",
-      "menudo"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo registro una transacción?",
-    "a": "En 'Nueva Transacción': ingresa monto, categoría, fecha, lugar, comentario y opcionalmente una foto del recibo.",
-    "tags": [
-      "¿cómo",
-      "registro",
-      "transacción"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo se dividen los ingresos en Cada Menudo?",
-    "a": "En tres categorías: 1. Ingreso por trabajo (salario, propinas, bonos). 2. Ingreso pasivo (rentas, dividendos, pensión). 3. Ganancia de capital (venta de inversiones o bienes con ganancia).",
-    "tags": [
-      "¿cómo",
-      "dividen",
-      "ingresos",
-      "cada",
-      "menudo"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo se registra el ahorro?",
-    "a": "Como una transacción más, dentro de la categoría Ahorro. Es un gasto hacia tu 'yo futuro'.",
-    "tags": [
-      "¿cómo",
-      "registra",
-      "ahorro"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Cómo sé si mi suscripción está cancelada?",
-    "a": "En la sección Perfil → Suscripción y Pago verás el estado actualizado y la fecha exacta en la que termina tu acceso.",
-    "tags": [
-      "¿cómo",
-      "suscripción",
-      "está",
-      "cancelada"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Por qué dividir los ingresos en tres categorías?",
-    "a": "Para que identifiques de dónde proviene tu dinero y midas tu diversificación. Lo ideal es no depender solo del salario.",
-    "tags": [
-      "¿por",
-      "dividir",
-      "ingresos",
-      "tres",
-      "categorías"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Por qué es importante usar Cada Menudo?",
-    "a": "Porque la falta de claridad financiera genera estrés y te impide crecer. Con Cada Menudo sabes hacia dónde va tu dinero, construyes metas y das pasos hacia tu libertad financiera.",
-    "tags": [
-      "¿por",
-      "importante",
-      "usar",
-      "cada",
-      "menudo"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Puedo cambiar entre plan mensual y anual?",
-    "a": "Sí. En la sección de Suscripción y Pago puedes pasar de mensual a anual (o viceversa) cuando quieras.",
-    "tags": [
-      "¿puedo",
-      "cambiar",
-      "plan",
-      "mensual",
-      "anual"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Puedo editar o eliminar una transacción?",
-    "a": "Sí, en el historial de Transacciones puedes corregir con el botón azul o borrar con el botón rojo.",
-    "tags": [
-      "¿puedo",
-      "editar",
-      "eliminar",
-      "transacción"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Puedo volver a suscribirme después de cancelar?",
-    "a": "Sí, puedes reactivar tu suscripción en cualquier momento desde tu perfil, eligiendo mensual o anual.",
-    "tags": [
-      "¿puedo",
-      "volver",
-      "suscribirme",
-      "después",
-      "cancelar"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué datos puedo modificar en mi perfil?",
-    "a": "Puedes actualizar nombre, email, contraseña y preferencias de uso en la sección Perfil.",
-    "tags": [
-      "¿qué",
-      "datos",
-      "puedo",
-      "modificar",
-      "perfil"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué es Cada Menudo?",
-    "a": "Cada Menudo es una aplicación web que te ayuda a organizar tus ingresos, gastos y ahorros. Te permite registrar todo, visualizar gráficos claros, planificar metas y aprender hábitos financieros. El objetivo es aumentar tu ahorro y tu claridad financiera paso a paso.",
-    "tags": [
-      "¿qué",
-      "cada",
-      "menudo"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué es una transacción en Cada Menudo?",
-    "a": "Cualquier ingreso, gasto o ahorro que registres.",
-    "tags": [
-      "¿qué",
-      "transacción",
-      "cada",
-      "menudo"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué pasa cuando cumplo una meta?",
-    "a": "La meta aparece en verde y se muestra tu progreso en el resumen anual.",
-    "tags": [
-      "¿qué",
-      "pasa",
-      "cumplo",
-      "meta"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué pasa después de la prueba gratuita?",
-    "a": "Si no cancelas antes de que terminen los 14 días, se te cobrará automáticamente el plan que seleccionaste (mensual o anual).",
-    "tags": [
-      "¿qué",
-      "pasa",
-      "después",
-      "prueba",
-      "gratuita"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué pasa si cancelo antes de los 14 días?",
-    "a": "Si cancelas durante el período de prueba gratuito, no se te cobrará nada. Tu tarjeta no recibirá ningún cargo.",
-    "tags": [
-      "¿qué",
-      "pasa",
-      "cancelo",
-      "días"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué pasa si cancelo antes de que termine el mes o el año?",
-    "a": "Aunque canceles antes, seguirás teniendo acceso hasta el último día de tu período pagado. No se hacen reembolsos parciales.",
-    "tags": [
-      "¿qué",
-      "pasa",
-      "cancelo",
-      "termine"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué pasa si cancelo durante la prueba gratuita?",
-    "a": "Si cancelas dentro de los 14 días de prueba, no se te cobrará nada.",
-    "tags": [
-      "¿qué",
-      "pasa",
-      "cancelo",
-      "durante",
-      "prueba",
-      "gratuita"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué pasa si elimino mi cuenta sin cancelar la suscripción?",
-    "a": "Primero debes cancelar la suscripción. Eliminar la cuenta no detiene automáticamente los cobros.",
-    "tags": [
-      "¿qué",
-      "pasa",
-      "elimino",
-      "cuenta",
-      "cancelar",
-      "suscripción"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué secciones tiene el menú principal?",
-    "a": "Tablero, Transacciones, Nueva Transacción, Metas, Buscador, Categorías, Videos, Perfil y Suscripción.",
-    "tags": [
-      "¿qué",
-      "secciones",
-      "menú",
-      "principal"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué significan los colores en el tablero?",
-    "a": "Verde: superávit real (sobrante). Amarillo: estás al límite. Rojo: déficit o ahorro ficticio.",
-    "tags": [
-      "¿qué",
-      "significan",
-      "colores",
-      "tablero"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Qué veo en el Tablero?",
-    "a": "Un resumen de ingresos, gastos y ahorro; alertas de colores; gráficos de metas; línea de ingresos vs gastos y donas de distribución.",
-    "tags": [
-      "¿qué",
-      "tablero"
-    ]
-  },
-  {
-    "category": "Sheet1",
-    "q": "¿Recibo un reembolso si cancelo a mitad del mes o del año?",
-    "a": "No. Los pagos no son reembolsables. Mantienes acceso hasta que termine el ciclo de facturación.",
-    "tags": [
-      "¿recibo",
-      "reembolso",
-      "cancelo",
-      "mitad"
-    ]
-  }
+  {"q":"¿Qué es Cada Menudo?","a":"Cada Menudo es una aplicación web que te ayuda a organizar tus ingresos, gastos y ahorros. Te permite registrar todo, visualizar gráficos claros, planificar metas y aprender hábitos financieros. El objetivo es aumentar tu ahorro y tu claridad financiera paso a paso.","category":"Misión y propósito"},
+  {"q":"¿Por qué es importante usar Cada Menudo?","a":"Porque la falta de claridad financiera genera estrés y te impide crecer. Con Cada Menudo sabes hacia dónde va tu dinero, construyes metas y das pasos hacia tu libertad financiera.","category":"Misión y propósito"},
+
+  {"q":"¿Cómo me registro en Cada Menudo?","a":"Solo necesitas tu nombre, correo y contraseña. Es rápido, gratis y puedes hacerlo desde cualquier dispositivo.","category":"Registro y cuenta"},
+  {"q":"¿Qué datos puedo modificar en mi perfil?","a":"Puedes actualizar nombre, email, contraseña y preferencias de uso en la sección Perfil.","category":"Registro y cuenta"},
+
+  {"q":"¿Qué secciones tiene el menú principal?","a":"Tablero, Transacciones, Nueva Transacción, Metas, Buscador, Categorías, Videos, Perfil y Suscripción.","category":"Navegación principal"},
+  {"q":"¿Qué veo en el Tablero?","a":"Un resumen de ingresos, gastos y ahorro; alertas de colores; gráficos de metas; línea de ingresos vs gastos y donas de distribución.","category":"Navegación principal"},
+
+  {"q":"¿Qué es una transacción en Cada Menudo?","a":"Cualquier ingreso, gasto o ahorro que registres.","category":"Transacciones"},
+  {"q":"¿Cómo registro una transacción?","a":"En “Nueva Transacción”: ingresa monto, categoría, fecha, lugar, comentario y opcionalmente una foto del recibo.","category":"Transacciones"},
+  {"q":"¿Puedo editar o eliminar una transacción?","a":"Sí, en el historial de Transacciones puedes corregir con el botón azul o borrar con el botón rojo.","category":"Transacciones"},
+
+  {"q":"¿Cómo se dividen los ingresos en Cada Menudo?","a":"En tres categorías: Ingreso por trabajo, Ingreso pasivo y Ganancia de capital.","category":"Ingresos"},
+  {"q":"¿Por qué dividir los ingresos en tres categorías?","a":"Para que identifiques de dónde proviene tu dinero y midas tu diversificación. Lo ideal es no depender solo del salario.","category":"Ingresos"},
+
+  {"q":"¿Cómo se registra el ahorro?","a":"Como una transacción más, dentro de la categoría Ahorro. Es un gasto hacia tu “yo futuro”.","category":"Ahorro y metas"},
+  {"q":"¿Cómo creo una meta de ahorro?","a":"En “Metas”, toca Nueva Meta, ponle nombre, monto y guarda. Puedes ordenar prioridades y ver el progreso en gráficos.","category":"Ahorro y metas"},
+  {"q":"¿Qué pasa cuando cumplo una meta?","a":"La meta aparece en verde y se muestra tu progreso en el resumen anual.","category":"Ahorro y metas"},
+
+  {"q":"¿Qué significan los colores en el tablero?","a":"Verde: superávit real. Amarillo: estás al límite. Rojo: déficit o ahorro ficticio.","category":"Alertas de colores"},
+  {"q":"¿Cuál es la fórmula que usa Cada Menudo?","a":"Presupuesto de balance cero: Ingreso = Gastos + Ahorro. Si no cuadra, estás en déficit.","category":"Alertas de colores"},
+
+  {"q":"¿Cuánto cuesta Cada Menudo?","a":"El Plan Básico cuesta $4.99 al mes o $41.99 al año (30% de descuento).","category":"Suscripción y pagos"},
+  {"q":"¿Cada Menudo ofrece prueba gratuita?","a":"Sí. Tienes 14 días gratis para probar la app sin compromiso.","category":"Suscripción y pagos"},
+  {"q":"¿Cómo cancelo mi suscripción?","a":"Desde Perfil → Suscripción y Pago. Mantendrás acceso hasta el final del período pagado.","category":"Suscripción y pagos"},
+  {"q":"¿Puedo cambiar entre plan mensual y anual?","a":"Sí, desde la misma sección puedes cambiar cuando quieras.","category":"Suscripción y pagos"},
+
+  {"q":"¿Qué son las categorías en Cada Menudo?","a":"Son grupos de ingresos, gastos y ahorro. Puedes crear subcategorías, editar nombres y programar recurrencias.","category":"Personalización"},
+  {"q":"¿Puedo programar pagos o ingresos fijos?","a":"Sí, con recurrencias (mensual, quincenal, anual). Se registran automáticamente.","category":"Personalización"},
+
+  {"q":"¿Cada Menudo ofrece tutoriales?","a":"Sí, en la sección Videos hay guías paso a paso y consejos financieros.","category":"Soporte y educación"},
+  {"q":"¿Cómo contacto al soporte de Cada Menudo?","a":"Desde la app en la sección Contacto o por correo: soporte@cadamenudo.com.","category":"Soporte y educación"},
+
+  {"q":"¿Dónde puedo usar Cada Menudo?","a":"En cualquier país 🌎. Todas las funciones manuales están disponibles globalmente.","category":"Disponibilidad"},
+  {"q":"¿La app tiene conexión bancaria?","a":"No todavía, está en desarrollo. Por ahora todo se ingresa manualmente.","category":"Disponibilidad"},
+
+  {"q":"¿Qué hábitos recomienda Cada Menudo?","a":"Registrar todas las transacciones y revisar tu tablero al menos cada 1–2 días.","category":"Hábitos financieros"},
+  {"q":"¿Por qué ayuda Cada Menudo a reducir el estrés financiero?","a":"Porque te da claridad sobre tus ingresos, gastos y ahorro, evitando sorpresas al final del mes.","category":"Hábitos financieros"},
+
+  {"q":"¿Qué puedo hacer con Cada Menudo?","a":"Registrar ingresos, gastos, ahorro; crear metas; ver reportes; programar recurrencias y guardar recibos con foto.","category":"Funcionalidades principales"},
+  {"q":"¿Puedo usar Cada Menudo en mi celular y computadora?","a":"Sí, funciona desde tu móvil, tablet o computadora, siempre sincronizada en la nube.","category":"Funcionalidades principales"},
+  {"q":"¿Cada Menudo solo sirve para ahorrar?","a":"No, también te ayuda a planificar gastos, ver superávit o déficit y entender tus finanzas.","category":"Funcionalidades principales"},
+
+  {"q":"¿Puedo guardar recibos o facturas en la app?","a":"Sí. Cada vez que registras una transacción puedes tomar una foto del recibo y guardarla.","category":"Recibos y facturas"},
+  {"q":"¿Puedo descargar mis recibos o facturas?","a":"Sí, podrás descargar los recibos registrados.","category":"Recibos y facturas"},
+
+  {"q":"¿Mis datos están seguros en Cada Menudo?","a":"Sí. Usamos protocolos de seguridad avanzados con encriptación y estándares internacionales.","category":"Seguridad y privacidad"},
+  {"q":"¿Puedo eliminar mi cuenta y mis datos?","a":"Sí, desde tu Perfil puedes solicitar la eliminación completa e irreversible de tu cuenta.","category":"Seguridad y privacidad"},
+  {"q":"¿Cumplen con normas legales de privacidad?","a":"Sí, seguimos las regulaciones de EE. UU. y Puerto Rico.","category":"Seguridad y privacidad"},
+
+  {"q":"¿Cada Menudo tiene soporte humano o solo chatbot?","a":"Tenemos soporte híbrido: chatbot 24/7 y atención humana en horario laboral.","category":"Soporte extendido"},
+  {"q":"¿Cómo contacto con un asesor humano de soporte?","a":"Desde la sección Contacto o escribiendo a soporte@cadamenudo.com.","category":"Soporte extendido"},
+
+  {"q":"¿Qué funciones están en desarrollo?","a":"Conexión bancaria automática, sincronización entre dispositivos y reportes avanzados.","category":"Roadmap / Plan Premium"},
+  {"q":"¿Qué diferencia tendrá el Plan Premium del Básico?","a":"El Premium incluirá conexión bancaria vía Plaid, reportes avanzados y funciones exclusivas.","category":"Roadmap / Plan Premium"},
+  {"q":"¿Cuándo estará disponible el Plan Premium?","a":"Aún sin fecha oficial, priorizamos que el Básico funcione perfectamente.","category":"Roadmap / Plan Premium"},
+
+  {"q":"¿Cada Menudo también enseña educación financiera?","a":"Sí, incluye videos y consejos para mejorar tus hábitos financieros.","category":"Educación financiera y filosofía"},
+  {"q":"¿Cuál es la filosofía de Cada Menudo?","a":"Claridad financiera, disciplina de ahorro y construcción de riqueza.","category":"Educación financiera y filosofía"},
+  {"q":"¿Por qué registrar todo?","a":"Porque sin registro no hay control ni metas cumplidas.","category":"Educación financiera y filosofía"},
+
+  {"q":"¿Quién creó la app Cada Menudo?","a":"Cada Menudo fue creada por Xavier Serbia.","category":"Historia y origen (Xavier Serbia)"},
+  {"q":"¿Por qué Xavier Serbia decidió crear Cada Menudo?","a":"Nació de su experiencia personal registrando gastos manualmente durante años.","category":"Historia y origen (Xavier Serbia)"},
+  {"q":"¿Cómo conecta la historia personal con la misión de la app?","a":"Cada Menudo nació para dar claridad financiera a los hispanos con una app práctica.","category":"Historia y origen (Xavier Serbia)"},
+
+  {"q":"¿Puedo descargar toda mi información?","a":"Estamos trabajando en habilitar descargas en formatos Excel, CSV y PDF.","category":"Datos y descargas"},
+  {"q":"¿Qué pasa si cierro mi cuenta?","a":"Puedes eliminar todos tus datos o conservarlos si planeas volver más adelante.","category":"Datos y descargas"}
 ]
