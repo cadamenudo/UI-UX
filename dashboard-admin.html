@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Admin Dashboard – Cada Menudo (Demo + Mobile)</title>
+<title>Admin Dashboard – Cada Menudo (Demo + Mobile + Fix Charts)</title>
 
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -67,7 +67,18 @@
   .kpi{background:#fff;border:1px solid var(--border); border-radius:12px; padding:.9rem}
   .kpi .label{font-size:.8rem;color:var(--muted)}
   .kpi .value{font-weight:700;font-size:1.15rem;margin-top:.2rem}
-  canvas{width:100%;height:220px;}
+
+  /* ⚠️ FIX: contenedor con altura fija para gráficos (evita crecimiento infinito) */
+  .chart-box{
+    position: relative;
+    width: 100%;
+    height: 260px;        /* ajusta 220–320px si deseas */
+    overflow: hidden;
+  }
+  .chart-box > canvas{
+    width: 100% !important;
+    height: 100% !important;
+  }
 
   /* Tablas */
   table{width:100%; border-collapse:collapse; font-size:.92rem}
@@ -81,10 +92,16 @@
   }
   #overlay.show{display:block;}
 
+  /* Hot zone para swipe (borde izquierdo) */
+  #edgeZone{
+    position:fixed; inset:0 auto 0 0; width:22px; height:100vh;
+    z-index:24; display:none; /* invisible */
+  }
+
   /* --------- Responsive Mobile --------- */
   @media (max-width: 800px){
     #menuBtn{display:inline-block;}
-    .container{grid-template-columns:1fr;} /* Sidebar se va off-canvas */
+    .container{grid-template-columns:1fr;} /* Sidebar off-canvas */
     aside{
       position:fixed; left:-280px; top:64px; bottom:0; width:260px;
       height:auto; box-shadow:0 12px 30px rgba(15,23,42,.18); z-index:26;
@@ -97,9 +114,10 @@
     .kpi .value{font-size:1rem;}
     section.dashboard-grid{grid-template-columns:1fr;} /* una columna */
     .card{padding:.9rem;}
+    #edgeZone{display:block;}
   }
 
-  /* Un pelín más compacto en pantallas muy pequeñas */
+  /* Aún más compacto */
   @media (max-width: 380px){
     header{padding:.8rem 1rem;}
     .pill{display:none;}
@@ -123,6 +141,8 @@
 
   <!-- Overlay (mobile) -->
   <div id="overlay" aria-hidden="true"></div>
+  <!-- Hot zone para swipe desde el borde izquierdo -->
+  <div id="edgeZone" aria-hidden="true"></div>
 
   <div class="container">
     <aside aria-label="Menú lateral">
@@ -139,344 +159,4 @@
     </aside>
 
     <main>
-      <!-- Filtros -->
-      <div class="filters" id="filters">
-        <span>Rango:</span>
-        <button class="chip active" data-range="30d" onclick="setRange(this)">30d</button>
-        <button class="chip" data-range="90d" onclick="setRange(this)">90d</button>
-        <button class="chip" data-range="365d" onclick="setRange(this)">365d</button>
-        <span style="margin-left:.5rem">País:</span>
-        <button class="chip active" data-country="all" onclick="setCountry(this)">Todos</button>
-        <button class="chip" data-country="US" onclick="setCountry(this)">US</button>
-        <button class="chip" data-country="PR" onclick="setCountry(this)">PR</button>
-        <button class="chip" data-country="PA" onclick="setCountry(this)">PA</button>
-      </div>
-
-      <!-- Resumen General -->
-      <section id="overview" class="dashboard-grid">
-        <div class="card">
-          <div class="kpis">
-            <div class="kpi">
-              <div class="label">Usuarios Activos</div>
-              <div class="value" id="kpiUsuariosActivos">—</div>
-            </div>
-            <div class="kpi">
-              <div class="label">MRR</div>
-              <div class="value" id="kpiMRR">—</div>
-            </div>
-            <div class="kpi">
-              <div class="label">Churn</div>
-              <div class="value" id="kpiChurn">—</div>
-            </div>
-            <div class="kpi">
-              <div class="label">Free → Premium</div>
-              <div class="value" id="kpiConversion">—</div>
-            </div>
-          </div>
-          <h3>Crecimiento de Usuarios</h3>
-          <canvas id="usuariosChart" aria-label="Crecimiento de usuarios" role="img"></canvas>
-        </div>
-        <div class="card">
-          <h3>Ingresos Mensuales</h3>
-          <canvas id="ingresosChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Embudo de Conversión</h3>
-          <canvas id="conversionChart"></canvas>
-        </div>
-      </section>
-
-      <!-- Usuarios -->
-      <section id="usuarios" class="dashboard-grid" style="display:none;">
-        <div class="card">
-          <h3>Distribución por País</h3>
-          <canvas id="usuariosPais"></canvas>
-        </div>
-        <div class="card">
-          <h3>Planes</h3>
-          <canvas id="planesChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Top Usuarios (demo)</h3>
-          <table id="tablaUsuarios">
-            <thead><tr><th>Usuario</th><th>País</th><th>Plan</th><th>Último login</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Soporte -->
-      <section id="tickets" class="dashboard-grid" style="display:none;">
-        <div class="card">
-          <h3>Tickets por Estado</h3>
-          <canvas id="ticketsChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Últimos Tickets (demo)</h3>
-          <table id="tablaTickets">
-            <thead><tr><th>ID</th><th>Categoría</th><th>Estado</th><th>Tiempo abierto</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Marketing -->
-      <section id="marketing" class="dashboard-grid" style="display:none;">
-        <div class="card">
-          <h3>Usuarios por Fuente</h3>
-          <canvas id="fuentesChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Email: Open / Click</h3>
-          <canvas id="emailChart"></canvas>
-        </div>
-      </section>
-
-      <!-- Finanzas -->
-      <section id="finanzas" class="dashboard-grid" style="display:none;">
-        <div class="card">
-          <h3>MRR vs Churn</h3>
-          <canvas id="mrrChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Unit Economics</h3>
-          <canvas id="unitChart"></canvas>
-        </div>
-      </section>
-
-      <!-- Analytics -->
-      <section id="analytics" class="dashboard-grid" style="display:none;">
-        <div class="card">
-          <h3>Indicadores Financieros Promedio</h3>
-          <canvas id="indicadoresChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Cohortes por Mes de Registro</h3>
-          <canvas id="cohortChart"></canvas>
-        </div>
-      </section>
-
-      <!-- Config -->
-      <section id="config" style="display:none;">
-        <div class="card">
-          <h3>Integraciones</h3>
-          <p>Simulando: Plaid, SendGrid/Mailchimp, Render API, Backups.</p>
-          <p class="muted">Para producción: reemplaza <code>mockApi.get()</code> por <code>fetch()</code> hacia tus endpoints.</p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-<script>
-/* ====== Formato ====== */
-const fmt = {
-  money:(n)=> n==null ? '—' :
-    new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n),
-  pct:(n)=> n==null ? '—' : (n*100).toFixed(1)+'%',
-  num:(n)=> n==null ? '—' : new Intl.NumberFormat('en-US').format(n)
-};
-
-/* ====== Overlay + Sidebar (mobile) ====== */
-const asideEl = document.querySelector('aside');
-const overlayEl = document.getElementById('overlay');
-document.getElementById('menuBtn').addEventListener('click', ()=>{
-  const open = asideEl.classList.toggle('open');
-  overlayEl.classList.toggle('show', open);
-  overlayEl.setAttribute('aria-hidden', String(!open));
-});
-overlayEl.addEventListener('click', ()=>{
-  asideEl.classList.remove('open');
-  overlayEl.classList.remove('show');
-  overlayEl.setAttribute('aria-hidden','true');
-});
-
-/* ====== Mock API ====== */
-const mockApi = (() => {
-  let seed = 42;
-  const rnd = (min=0,max=1)=>{ seed = (seed * 1664525 + 1013904223) % 4294967296; return min + (seed/4294967296) * (max-min); };
-  const pick = (arr)=> arr[Math.floor(rnd(0,arr.length))];
-  const series = (len, base, drift=0.03, vol=0.08) => {
-    const out=[]; let v=base;
-    for(let i=0;i<len;i++){ v = Math.max(0, v*(1+drift + (rnd(-vol,vol)))); out.push(Math.round(v)); }
-    return out;
-  };
-  const COUNTRIES = ['US','PR','PA','MX','CO'];
-  const SOURCES = ['Orgánico','Referido','Social','Email','Webinar'];
-  const PLANS = ['Básico','Premium'];
-
-  const get = (path, params={}) => new Promise(res=>{
-    setTimeout(()=>{
-      const range = params.range || '30d';
-      const len = range==='30d'? 30 : range==='90d'? 13 : 12;
-
-      if(path==='/overview'){
-        const usuarios = series(len, 4000, 0.05, 0.1);
-        const ingresos = series(len, 8000, 0.06, 0.12);
-        const funnel = [10000, 6200, 3100, 720];
-        const kpis = {
-          activos: Math.round(usuarios.at(-1)*0.72),
-          mrr: Math.round(ingresos.at(-1)),
-          churn: +(0.025 + rnd(-0.01,0.01)).toFixed(3),
-          conv: +(funnel[3]/funnel[1]).toFixed(3)
-        };
-        res({usuarios, ingresos, funnel, kpis, labels:genLabels(len, range)});
-      }
-      else if(path==='/users'){
-        const dist = Object.fromEntries(COUNTRIES.map(c => [c, Math.round(rnd(200, 4000))]));
-        const planes = { 'Básico': Math.round(rnd(6000,12000)), 'Premium': Math.round(rnd(800,2500)) };
-        const tabla = Array.from({length:8}).map((_,i)=>({
-          nombre:`usuario_${1000+i}`,
-          pais: pick(COUNTRIES),
-          plan: pick(PLANS),
-          ultimo: diasAtras(Math.round(rnd(0,15)))
-        }));
-        res({dist, planes, tabla});
-      }
-      else if(path==='/support'){
-        const tickets = { Abierto: Math.round(rnd(12,35)), Pendiente: Math.round(rnd(5,18)), Resuelto: Math.round(rnd(80,160)) };
-        const tabla = Array.from({length:10}).map((_,i)=>({
-          id: 'T-'+Math.round(rnd(10000,99999)),
-          categoria: pick(['Plaid','Cuenta','Errores','Pagos']),
-          estado: pick(['Abierto','Pendiente','Resuelto']),
-          horas: Math.round(rnd(1,72))
-        }));
-        res({tickets, tabla});
-      }
-      else if(path==='/marketing'){
-        const fuentes = Object.fromEntries(SOURCES.map(s => [s, Math.round(rnd(200, 3500))]));
-        const email = {
-          open: series(6, 22, 0, 0.3).map(v=>Math.min(60, Math.max(15, Math.round(v)))),
-          click: series(6, 4, 0, 0.25).map(v=>Math.min(15, Math.max(2, Math.round(v))))
-        };
-        res({fuentes, email, labels:['Ene','Feb','Mar','Abr','May','Jun']});
-      }
-      else if(path==='/finance'){
-        const mrr = series(12, 9000, 0.05, 0.1);
-        const churn = Array.from({length:12}).map(()=> +(0.02 + rnd(-0.008,0.012)).toFixed(3));
-        const unit = {
-          cac: Array.from({length:6}).map(()=> Math.round(rnd(3,8)*10)),
-          ltv: Array.from({length:6}).map(()=> Math.round(rnd(180,350))),
-          cpu: Array.from({length:6}).map(()=> Math.round(rnd(1.2,3.5)*10))
-        };
-        res({mrr, churn, unit, labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']});
-      }
-      else if(path==='/analytics'){
-        const indicadores = {
-          ingreso_prom: +rnd(2600, 4800).toFixed(0),
-          gasto_prom: +rnd(2100, 3600).toFixed(0),
-          ahorro_prom: +rnd(200, 700).toFixed(0),
-          dti_prom: +(rnd(0.22,0.38)).toFixed(2),
-          reserva_meses: +(rnd(1.5, 4.2)).toFixed(1)
-        };
-        const cohort = {
-          labels:['Abr','May','Jun','Jul','Ago','Sep'],
-          data:[ [100,72,61,55], [120,80,69,60], [150,92,74,66], [130,90,70,62], [160,110,88,71], [200,144,120,96] ]
-        };
-        res({indicadores, cohort});
-      }
-      else res({});
-    }, 280 + Math.random()*300);
-  });
-
-  const genLabels = (len, range) => {
-    if(range==='30d') return Array.from({length:len}, (_,i)=>`D${i+1}`);
-    if(range==='90d') return Array.from({length:len}, (_,i)=>`Sem ${i+1}`);
-    return ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'].slice(0,len);
-  };
-  const diasAtras = (d)=> `${d}d ago`;
-
-  return { get };
-})();
-
-/* ====== Estado filtros ====== */
-const state = { range:'30d', country:'all' };
-function setRange(btn){
-  document.querySelectorAll('.chip[data-range]').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active'); state.range = btn.dataset.range; refreshAll();
-}
-function setCountry(btn){
-  document.querySelectorAll('.chip[data-country]').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active'); state.country = btn.dataset.country; refreshAll();
-}
-
-/* ====== Navegación ====== */
-function mostrar(id, el){
-  // Cierra el sidebar si está abierto (mobile) al cambiar de sección
-  if(asideEl.classList.contains('open')){
-    asideEl.classList.remove('open');
-    overlayEl.classList.remove('show');
-    overlayEl.setAttribute('aria-hidden','true');
-  }
-  document.querySelectorAll('main section').forEach(s=>s.style.display='none');
-  document.getElementById(id).style.display = (id==='overview' || id==='usuarios' || id==='tickets' || id==='marketing' || id==='finanzas' || id==='analytics') ? 'grid' : 'block';
-  document.querySelectorAll('aside button').forEach(b=>b.classList.remove('active'));
-  if(el) el.classList.add('active');
-}
-
-/* ====== Charts ====== */
-const charts = {};
-const baseOpts = { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true}} };
-
-function upsertChart(id, type, data, extraOpts={}){
-  const ctx = document.getElementById(id);
-  if(!ctx) return;
-  if(charts[id]){ charts[id].data = data; charts[id].update(); return; }
-  charts[id] = new Chart(ctx, { type, data, options: { ...baseOpts, ...extraOpts }});
-}
-
-/* ====== Loaders por sección ====== */
-async function loadOverview(){
-  const {usuarios, ingresos, funnel, kpis, labels} = await mockApi.get('/overview', state);
-  document.getElementById('kpiUsuariosActivos').textContent = fmt.num(kpis.activos);
-  document.getElementById('kpiMRR').textContent = fmt.money(kpis.mrr);
-  document.getElementById('kpiChurn').textContent = fmt.pct(kpis.churn);
-  document.getElementById('kpiConversion').textContent = fmt.pct(kpis.conv);
-
-  upsertChart('usuariosChart','line',{ labels, datasets:[{label:'Usuarios', data:usuarios, tension:.3, borderWidth:2}] });
-  upsertChart('ingresosChart','bar',{ labels, datasets:[{label:'Ingresos', data:ingresos, borderWidth:1}] });
-  upsertChart('conversionChart','bar',{ labels:['Visitas','Registros','Conexiones','Premium'], datasets:[{label:'Embudo', data:funnel}] });
-}
-async function loadUsers(){
-  const {dist, planes, tabla} = await mockApi.get('/users', state);
-  upsertChart('usuariosPais','doughnut',{ labels:Object.keys(dist), datasets:[{label:'Usuarios', data:Object.values(dist)}] });
-  upsertChart('planesChart','pie',{ labels:Object.keys(planes), datasets:[{label:'Planes', data:Object.values(planes)}] });
-  const tbody = document.querySelector('#tablaUsuarios tbody');
-  tbody.innerHTML = tabla.map(u => `<tr><td>${u.nombre}</td><td>${u.pais}</td><td>${u.plan}</td><td>${u.ultimo}</td></tr>`).join('');
-}
-async function loadSupport(){
-  const {tickets, tabla} = await mockApi.get('/support', state);
-  upsertChart('ticketsChart','bar',{ labels:Object.keys(tickets), datasets:[{label:'Tickets', data:Object.values(tickets)}] });
-  const tbody = document.querySelector('#tablaTickets tbody');
-  tbody.innerHTML = tabla.map(t => `<tr><td>${t.id}</td><td>${t.categoria}</td><td>${t.estado}</td><td>${t.horas}h</td></tr>`).join('');
-}
-async function loadMarketing(){
-  const {fuentes, email, labels} = await mockApi.get('/marketing', state);
-  upsertChart('fuentesChart','bar',{ labels:Object.keys(fuentes), datasets:[{label:'Usuarios Nuevos', data:Object.values(fuentes)}] });
-  upsertChart('emailChart','line',{ labels, datasets:[ {label:'Open %', data:email.open}, {label:'Click %', data:email.click} ] });
-}
-async function loadFinance(){
-  const {mrr, churn, unit, labels} = await mockApi.get('/finance', state);
-  upsertChart('mrrChart','line',{ labels, datasets:[ {label:'MRR', data:mrr}, {label:'Churn %', data:churn.map(x=>+(x*100).toFixed(2)), yAxisID:'y1'} ] }, { scales:{ y:{ beginAtZero:true }, y1:{ position:'right', beginAtZero:true } }});
-  upsertChart('unitChart','bar',{ labels:['Q1','Q2','Q3','Q4','Q5','Q6'], datasets:[ {label:'CAC ($)', data:unit.cac}, {label:'LTV ($)', data:unit.ltv}, {label:'CPU ($)', data:unit.cpu} ] });
-}
-async function loadAnalytics(){
-  const {indicadores, cohort} = await mockApi.get('/analytics', state);
-  upsertChart('indicadoresChart','radar',{ labels:['Ingreso prom','Gasto prom','Ahorro prom','DTI prom','Reserva (meses)'], datasets:[{label:'Promedios', data:[indicadores.ingreso_prom, indicadores.gasto_prom, indicadores.ahorro_prom, +(indicadores.dti_prom*100).toFixed(1), indicadores.reserva_meses]}] });
-  upsertChart('cohortChart','bar',{ labels:cohort.labels, datasets:[ {label:'Mes 0', data:cohort.data.map(r=>r[0])}, {label:'Mes 1', data:cohort.data.map(r=>r[1])}, {label:'Mes 2', data:cohort.data.map(r=>r[2])}, {label:'Mes 3', data:cohort.data.map(r=>r[3])} ] });
-}
-
-/* ====== Refresh general ====== */
-async function refreshAll(){
-  await Promise.all([ loadOverview(), loadUsers(), loadSupport(), loadMarketing(), loadFinance(), loadAnalytics() ]);
-}
-/* Auto-refresh demo cada 20s */
-setInterval(refreshAll, 20000);
-
-/* Start */
-document.addEventListener('DOMContentLoaded', () => {
-  mostrar('overview');
-  refreshAll();
-});
-</script>
-</body>
-</html>
+      <!
