@@ -104,7 +104,7 @@
         <button class="chip" data-country="PA" onclick="setCountry(this)">PA</button>
       </div>
 
-      <!-- Resumen General (ACTUALIZADO) -->
+      <!-- Resumen General (ACTUALIZADO + Toggle Abs/%) -->
       <section id="overview" class="dashboard-grid">
         <div class="card" style="grid-column:1/-1">
           <h3>Segmentación geográfica</h3>
@@ -148,7 +148,15 @@
 
         <div class="card"><h3>Ingresos Mensuales (MRR)</h3><canvas id="ingresosChart"></canvas></div>
 
-        <div class="card"><h3>Embudo de Conversión (F2P & Pagos)</h3><canvas id="conversionChart"></canvas></div>
+        <div class="card">
+          <div class="filters" style="margin:0 0 .5rem 0">
+            <span><strong>Modo embudo:</strong></span>
+            <button class="chip funnelToggle active" data-mode="abs" onclick="setFunnelMode(this)">Abs</button>
+            <button class="chip funnelToggle" data-mode="pct" onclick="setFunnelMode(this)">%</button>
+          </div>
+          <h3>Embudo de Conversión (F2P & Pagos)</h3>
+          <canvas id="conversionChart"></canvas>
+        </div>
       </section>
 
       <!-- Usuarios (con País/Estado/Ciudad) -->
@@ -325,7 +333,7 @@ overlayEl.addEventListener('touchstart',e=>{ if(innerWidth>800) return; const t=
 overlayEl.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-touchStartX, dy=Math.abs(t.clientY-touchStartY); if(dy>MAX_DRIFT) return; if(dx<SWIPE_CLOSE && asideEl.classList.contains('open')) closeSidebar(); },{passive:true});
 
 /* ===== Estado global ===== */
-const state={ range:'30d', country:'all' };
+const state={ range:'30d', country:'all', overviewFunnel:'abs' };
 
 /* Selección geo por sección */
 const geoSelMap = {
@@ -350,7 +358,7 @@ const mockApi = (()=> {
       const len = range==='30d'?30 : range==='90d'?13 : 12;
 
       if(path==='/overview'){
-        // base time series
+        // series
         const usuarios=series(len,4000,0.05,0.1);
         const ingresos=series(len,8000,0.06,0.12);
         // funnel top
@@ -372,33 +380,28 @@ const mockApi = (()=> {
           convByPlan[p]= +r.toFixed(3);
           totalConv += r;
         });
+
         // distribución de usuarios por plan (PBY)
         const lastU = usuarios[usuarios.length-1];
-        const pFree = 1 - Math.min(0.9, totalConv + 0.1); // que Free sea mayormente dominante
+        const pFree = 1 - Math.min(0.9, totalConv + 0.1);
         const planBreakdown = { Free: pFree };
         paid.forEach(p=>{
           const w = convByPlan[p] / totalConv;
           planBreakdown[p] = +( (1-pFree) * w ).toFixed(3);
         });
 
-        // funnel combinado para chart: [Visitas, Registros, Conexiones, ...pagos]
+        // funnel combinado: [Visitas, Registros, Conexiones, ...conv a planes]
         const convCounts = paid.map(p=> Math.round(registros * convByPlan[p]));
         const funnelCombined = [visitas, registros, conexiones, ...convCounts];
 
-        // KPIs
         const kpis={
           activos: Math.round(lastU*0.72),
           mrr: Math.round(ingresos[ingresos.length-1]),
           churn:+(0.025+rnd(-0.01,0.01)).toFixed(3),
-          f2p:+(convByPlan[paid[0]] || 0).toFixed(3) // mostramos F2P "principal" (Premium) en el KPI
+          f2p:+(convByPlan[paid.includes('Premium')?'Premium':paid[0]] || 0).toFixed(3)
         };
 
-        res({
-          usuarios, ingresos, labels:genLabels(len,range),
-          plans, paid, convByPlan, funnelCombined,
-          planBreakdown,
-          kpis
-        });
+        res({usuarios, ingresos, labels:genLabels(len,range), plans, paid, convByPlan, funnelCombined, planBreakdown, kpis});
       }
       else if(path==='/users'){
         const dist=Object.fromEntries(COUNTRIES.map(c=>[c,Math.round(rnd(200,4000))]));
@@ -477,7 +480,7 @@ function upsertChart(id,type,data,extraOpts={}){
   const el=document.getElementById(id);
   if(!el) return;
   try{
-    if(charts[id]){ charts[id].data=data; charts[id].update(); }
+    if(charts[id]){ charts[id].data=data; charts[id].options={...baseOpts,...extraOpts}; charts[id].update(); }
     else{ charts[id]= new Chart(el,{ type, data, options:{...baseOpts,...extraOpts} }); }
   }catch(e){ /* no rompas UI */ }
 }
@@ -551,6 +554,14 @@ function geoWeight(geo){
 }
 function scaleArray(arr, w){ return arr.map(v=> Math.round(v*w)); }
 
+/* ===== Toggle Embudo Abs/% ===== */
+function setFunnelMode(btn){
+  document.querySelectorAll('.funnelToggle').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.overviewFunnel = btn.dataset.mode; // 'abs' | 'pct'
+  reloadSection('overview');
+}
+
 /* ===== Navegación ===== */
 function mostrar(id, el){
   if(asideEl.classList.contains('open')){ asideEl.classList.remove('open'); overlayEl.classList.remove('show'); overlayEl.setAttribute('aria-hidden','true'); }
@@ -575,36 +586,57 @@ async function loadOverview(){
   const usuariosScaled = scaleArray(base.usuarios, w);
   const ingresosScaled = scaleArray(base.ingresos, w);
 
-  // KPIs (con abreviaturas ya en UI)
+  // KPIs
   document.getElementById('kpiUsuariosActivos').textContent=fmt.num(Math.round(usuariosScaled[usuariosScaled.length-1]*0.72));
   document.getElementById('kpiMRR').textContent=fmt.money(ingresosScaled[ingresosScaled.length-1]);
   document.getElementById('kpiChurn').textContent=fmt.pct(base.kpis.churn);
 
-  // F2P principal (usamos Premium si existe, si no el primer plan pago)
+  // F2P principal (Premium si existe)
   const mainPaid = base.paid.includes('Premium') ? 'Premium' : base.paid[0];
   const f2p = base.convByPlan[mainPaid] || 0;
   document.getElementById('kpiConversion').textContent=fmt.pct(f2p);
 
-  // Plan Breakdown KPI como texto “Free 78% • Premium 17% • Plus 5%”
-  const pbyText = ['Free', ...base.paid].map(p=>{
-    const pct = (base.planBreakdown[p]*100)||0;
-    return `${p} ${pct.toFixed(0)}%`;
-  }).join(' • ');
+  // PBY KPI
+  const pbyText = ['Free', ...base.paid].map(p=>`${p} ${((base.planBreakdown[p]||0)*100).toFixed(0)}%`).join(' • ');
   document.getElementById('kpiPlanBreakdown').textContent=pbyText;
 
-  // Charts
+  // Charts UA/MRR
   upsertChart('usuariosChart','line',{labels:base.labels,datasets:[{label:`UA (${geo.selected.country}/${geo.selected.state}/${geo.selected.city})`,data:usuariosScaled,tension:.3,borderWidth:2}]});
   upsertChart('ingresosChart','bar',{labels:base.labels,datasets:[{label:`MRR (${geo.selected.city})`,data:ingresosScaled,borderWidth:1}]});
 
-  // Embudo combinado: [Visitas, Registros, Conexiones, ...paidPlans]
-  const topStages = ['Visitas','Registros','Conexiones'];
-  const labels = [...topStages, ...base.paid]; // pagas dinámicas
-  const funnelScaled = scaleArray(base.funnelCombined, w);
+  // Embudo: labels dinámicas
+  const labels = ['Visitas','Registros','Conexiones', ...base.paid];
+  const funnelAbs = scaleArray(base.funnelCombined, w);
+
+  let funnelData = funnelAbs.slice();
+  let extraOpts = { scales:{ y:{ beginAtZero:true } } };
+  let dsLabel = `F2P & Pagos (${geo.selected.city}) – Abs`;
+
+  if(state.overviewFunnel==='pct'){
+    const registros = funnelAbs[1] || 1; // base 100%
+    funnelData = funnelAbs.map(v=> Math.round((v / registros) * 100));
+    dsLabel = `F2P & Pagos (${geo.selected.city}) – % sobre Registros`;
+    extraOpts = {
+      scales:{
+        y:{
+          beginAtZero:true,
+          ticks:{ callback:(val)=> val + '%' }
+        }
+      },
+      plugins:{
+        tooltip:{
+          callbacks:{
+            label:(ctx)=> `${ctx.dataset.label}: ${ctx.parsed.y}%`
+          }
+        }
+      }
+    };
+  }
 
   upsertChart('conversionChart','bar',{
     labels,
-    datasets:[{label:`F2P & Pagos (${geo.selected.city})`, data:funnelScaled}]
-  });
+    datasets:[{label: dsLabel, data: funnelData}]
+  }, extraOpts);
 }
 
 /* === USUARIOS === */
