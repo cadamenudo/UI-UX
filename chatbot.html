@@ -110,7 +110,7 @@
 <!-- Ventana de chat -->
 <section class="chat-window" id="chatWindow" aria-live="polite">
   <header class="chat-header">
-    <img class="bot-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
+    <img class="bot-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20blue%20w-name.png" alt="Cada Menudo"/>
     <div>
       <div class="chat-title">ChinChin Bot</div>
       <div class="chat-sub">Ayuda y preguntas frecuentes</div>
@@ -250,7 +250,7 @@
 
     // Cargar FAQ
     try{
-      const res = await fetch('./faq_cadamenudo.json?v=8', {cache:'no-store'});
+      const res = await fetch('./faq_cadamenudo.json?v=10', {cache:'no-store'});
       FAQ = await res.json();
     }catch{ FAQ = []; }
 
