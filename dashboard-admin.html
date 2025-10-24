@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Admin Dashboard – Cada Menudo (Geo Segment en Todas las Secciones)</title>
+<title>Admin Dashboard – Cada Menudo (Geo + Usuario)</title>
 
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -63,6 +63,8 @@
     .kpi .label{font-size:.75rem;}
   }
   .sr-only{position:absolute;clip:rect(0 0 0 0);clip-path:inset(50%);height:1px;width:1px;overflow:hidden;white-space:nowrap;border:0;padding:0;margin:-1px;}
+  .muted{color:var(--muted)}
+  input[type="search"]{padding:.5rem .7rem;border:1px solid var(--border);border-radius:10px;min-width:220px;}
 </style>
 </head>
 
@@ -82,6 +84,7 @@
         <h2>Secciones</h2>
         <button class="active" onclick="mostrar('overview', this)">🏠 Resumen General</button>
         <button onclick="mostrar('usuarios', this)">👥 Usuarios</button>
+        <button onclick="mostrar('user', this)">👤 Usuario</button>
         <button onclick="mostrar('tickets', this)">💬 Soporte</button>
         <button onclick="mostrar('marketing', this)">📈 Marketing</button>
         <button onclick="mostrar('finanzas', this)">💰 Finanzas</button>
@@ -103,7 +106,7 @@
         <button class="chip" data-country="PA" onclick="setCountry(this)">PA</button>
       </div>
 
-      <!-- Resumen General (ACTUALIZADO + Toggle Abs/%) -->
+      <!-- Resumen General -->
       <section id="overview" class="dashboard-grid">
         <div class="card" style="grid-column:1/-1">
           <h3>Segmentación geográfica</h3>
@@ -119,28 +122,12 @@
 
         <div class="card">
           <div class="kpis">
-            <div class="kpi">
-              <div class="label"><strong>UA</strong> – Usuarios Activos</div>
-              <div class="value" id="kpiUsuariosActivos">—</div>
-            </div>
-            <div class="kpi">
-              <div class="label"><strong>MRR</strong> – Monthly Recurring Revenue</div>
-              <div class="value" id="kpiMRR">—</div>
-            </div>
-            <div class="kpi">
-              <div class="label"><strong>CH</strong> – Churn</div>
-              <div class="value" id="kpiChurn">—</div>
-            </div>
-            <div class="kpi">
-              <div class="label"><strong>F2P</strong> – Free → Premium</div>
-              <div class="value" id="kpiConversion">—</div>
-            </div>
-            <div class="kpi">
-              <div class="label"><strong>PBY</strong> – Plan Breakdown</div>
-              <div class="value" id="kpiPlanBreakdown">—</div>
-            </div>
+            <div class="kpi"><div class="label"><strong>UA</strong> – Usuarios Activos</div><div class="value" id="kpiUsuariosActivos">—</div></div>
+            <div class="kpi"><div class="label"><strong>MRR</strong> – Monthly Recurring Revenue</div><div class="value" id="kpiMRR">—</div></div>
+            <div class="kpi"><div class="label"><strong>CH</strong> – Churn</div><div class="value" id="kpiChurn">—</div></div>
+            <div class="kpi"><div class="label"><strong>F2P</strong> – Free → Premium</div><div class="value" id="kpiConversion">—</div></div>
+            <div class="kpi"><div class="label"><strong>PBY</strong> – Plan Breakdown</div><div class="value" id="kpiPlanBreakdown">—</div></div>
           </div>
-
           <h3>Crecimiento de Usuarios (UA)</h3>
           <canvas id="usuariosChart" aria-label="Crecimiento de usuarios" role="img"></canvas>
         </div>
@@ -158,7 +145,7 @@
         </div>
       </section>
 
-      <!-- Usuarios (con País/Estado/Ciudad) -->
+      <!-- Usuarios (Geo) -->
       <section id="usuarios" class="dashboard-grid" style="display:none;">
         <div class="card" style="grid-column:1/-1">
           <h3>Segmentación geográfica</h3>
@@ -172,25 +159,10 @@
           </div>
         </div>
 
-        <div class="card">
-          <h3>Usuarios por País (vista general)</h3>
-          <canvas id="usuariosPais"></canvas>
-        </div>
-
-        <div class="card">
-          <h3>Usuarios por Estado</h3>
-          <canvas id="estadosChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h3>Usuarios por Ciudad</h3>
-          <canvas id="ciudadesChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h3>Planes</h3>
-          <canvas id="planesChart"></canvas>
-        </div>
+        <div class="card"><h3>Usuarios por País (vista general)</h3><canvas id="usuariosPais"></canvas></div>
+        <div class="card"><h3>Usuarios por Estado</h3><canvas id="estadosChart"></canvas></div>
+        <div class="card"><h3>Usuarios por Ciudad</h3><canvas id="ciudadesChart"></canvas></div>
+        <div class="card"><h3>Planes</h3><canvas id="planesChart"></canvas></div>
 
         <div class="card" style="grid-column:1/-1;">
           <h3>Top Usuarios (demo)</h3>
@@ -198,6 +170,51 @@
             <thead><tr><th>Usuario</th><th>País</th><th>Estado</th><th>Ciudad</th><th>Plan</th><th>Último login</th></tr></thead>
             <tbody></tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- 👤 Usuario (Resumen financiero agregado) -->
+      <section id="user" class="dashboard-grid" style="display:none;">
+        <div class="card" style="grid-column:1/-1;display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+          <h3 style="margin:0">Buscar usuario</h3>
+          <input id="userSearch" type="search" placeholder="usuario_1001, email@dominio, ID..." />
+          <button class="chip" id="userSearchBtn">Buscar</button>
+          <span id="userSearchInfo" class="muted">Demo: escribe o deja vacío para ver un ejemplo</span>
+        </div>
+
+        <div class="card" id="userAggFinanceCard" style="grid-column:1/-1">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap">
+            <h3 style="margin:0">Resumen financiero (agregado)</h3>
+            <div>
+              <span class="pill" title="Datos agregados, sin transacciones">🔒 Solo agregados</span>
+              <span id="consentBadge" class="pill" title="Estado de consentimiento del usuario">⏳ Verificando consentimiento…</span>
+            </div>
+          </div>
+
+          <div class="kpis" style="margin-top:.75rem">
+            <div class="kpi"><div class="label">Ingreso (último mes)</div><div class="value" id="uIncLast">—</div></div>
+            <div class="kpi"><div class="label">Gasto (último mes)</div><div class="value" id="uExpLast">—</div></div>
+            <div class="kpi"><div class="label">Ahorro (último mes)</div><div class="value" id="uSavLast">—</div></div>
+            <div class="kpi"><div class="label">Ahorro % (último mes)</div><div class="value" id="uSavRateLast">—</div></div>
+          </div>
+
+          <div class="filters" style="gap:.5rem">
+            <label><strong>Rango:</strong></label>
+            <select id="uAggRange">
+              <option value="3">3m</option>
+              <option value="6">6m</option>
+              <option value="12" selected>12m</option>
+            </select>
+            <label style="margin-left:.5rem"><input type="checkbox" id="uIncludeBank" checked> Incluir bancos conectados</label>
+            <button class="chip" id="uAggRefreshBtn">Actualizar</button>
+          </div>
+
+          <canvas id="userAggFinanceChart"></canvas>
+
+          <div style="margin-top:.5rem;display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="chip" id="uRequestDetailBtn" title="Requiere rol y justificación">🔍 Solicitar detalle</button>
+            <button class="chip" id="uExportBtn">⬇️ Exportar resumen (CSV)</button>
+          </div>
         </div>
       </section>
 
@@ -215,15 +232,8 @@
           </div>
         </div>
 
-        <div class="card">
-          <h3>Usuarios por Fuente (segmentado)</h3>
-          <canvas id="fuentesChart"></canvas>
-        </div>
-
-        <div class="card">
-          <h3>Email: Open / Click (segmentado)</h3>
-          <canvas id="emailChart"></canvas>
-        </div>
+        <div class="card"><h3>Usuarios por Fuente (segmentado)</h3><canvas id="fuentesChart"></canvas></div>
+        <div class="card"><h3>Email: Open / Click (segmentado)</h3><canvas id="emailChart"></canvas></div>
       </section>
 
       <!-- Finanzas -->
@@ -240,14 +250,8 @@
           </div>
         </div>
 
-        <div class="card">
-          <h3>MRR vs Churn (segmentado)</h3>
-          <canvas id="mrrChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Unit Economics</h3>
-          <canvas id="unitChart"></canvas>
-        </div>
+        <div class="card"><h3>MRR vs Churn (segmentado)</h3><canvas id="mrrChart"></canvas></div>
+        <div class="card"><h3>Unit Economics</h3><canvas id="unitChart"></canvas></div>
       </section>
 
       <!-- Analytics -->
@@ -264,14 +268,8 @@
           </div>
         </div>
 
-        <div class="card">
-          <h3>Indicadores Financieros Promedio (segmentado)</h3>
-          <canvas id="indicadoresChart"></canvas>
-        </div>
-        <div class="card">
-          <h3>Cohortes por Mes de Registro (segmentado)</h3>
-          <canvas id="cohortChart"></canvas>
-        </div>
+        <div class="card"><h3>Indicadores Financieros Promedio (segmentado)</h3><canvas id="indicadoresChart"></canvas></div>
+        <div class="card"><h3>Cohortes por Mes de Registro (segmentado)</h3><canvas id="cohortChart"></canvas></div>
       </section>
 
       <!-- Soporte -->
@@ -371,7 +369,7 @@ const mockApi = (()=> {
         const convByPlan = {};
         let totalConv=0;
         paid.forEach((p,i)=>{
-          const r = 0.03 + i*0.02 + Math.random()*0.03; // 3%–8%
+          const r = 0.03 + i*0.02 + Math.random()*0.03;
           convByPlan[p]= +r.toFixed(3);
           totalConv += r;
         });
@@ -457,6 +455,29 @@ const mockApi = (()=> {
         const cohort={ labels:['Abr','May','Jun','Jul','Ago','Sep'], data:[[100,72,61,55],[120,80,69,60],[150,92,74,66],[130,90,70,62],[160,110,88,71],[200,144,120,96]] };
         res({indicadores,cohort});
       }
+      /* ===== NUEVO: Resumen financiero agregado por usuario ===== */
+      else if(path==='/user-agg'){
+        const months = Math.max(3, Math.min(24, +(params.months||12)));
+        const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+        const today = new Date();
+        const seq = Array.from({length:months}, (_,i)=> {
+          const d = new Date(today.getFullYear(), today.getMonth()- (months-1-i), 1);
+          return labels[d.getMonth()]+' '+String(d.getFullYear()).slice(-2);
+        });
+
+        const consent = Math.random() < 0.85;
+        const bankLinked = Math.random() < 0.75;
+        const includeBank = !(params.includeBank===false);
+
+        const baseIncome = (!includeBank || !consent || !bankLinked) ? 1600 : 2600;
+        const baseExpense= (!includeBank || !consent || !bankLinked) ? 1300 : 2100;
+
+        const income = seq.map(()=> Math.round(baseIncome * (0.9 + Math.random()*0.4)));
+        const expense= seq.map(()=> Math.round(baseExpense * (0.9 + Math.random()*0.35)));
+        const saving = income.map((v,i)=> Math.max(0, v - expense[i]));
+
+        res({ consent, bankLinked, labels: seq, income, expense, saving });
+      }
       else res({});
     }, 240 + Math.random()*300);
   });
@@ -478,7 +499,7 @@ function upsertChart(id,type,data,extraOpts={}){
   }catch(e){ /* no rompas UI */ }
 }
 
-/* ===== Helper geo selectors ROBUSTO ===== */
+/* ===== Helper geo selectors ===== */
 async function setupGeoSelectors(prefix, defaults){
   const keyMap = {o:'overview', u:'usuarios', m:'marketing', f:'finanzas', a:'analytics'};
   const k = keyMap[prefix];
@@ -495,13 +516,11 @@ async function setupGeoSelectors(prefix, defaults){
     fallbackCountry: 'US'
   });
 
-  // Si los selects aún no existen (sección oculta), solo persiste y devuelve geo.
   if(!sel.country || !sel.state || !sel.city){
     geoSelMap[k] = { country: geo.selected.country, state: geo.selected.state, city: geo.selected.city };
     return geo;
   }
 
-  // Render opciones
   sel.country.innerHTML = Object.keys(geo.GEO).map(c=>`<option value="${c}">${c}</option>`).join('');
   sel.country.value = geo.selected.country;
 
@@ -548,16 +567,14 @@ async function setupGeoSelectors(prefix, defaults){
   return geo;
 }
 
-/* ===== Peso geo SEGURO ===== */
+/* ===== Peso geo ===== */
 function geoWeight(geo){
   try{
     const countryTotal = Object.values(geo.countryAgg||{}).reduce((a,b)=>a+b,0) || 1;
     const cityTotal = (geo.cityAgg && geo.cityAgg[geo.selected.city]) ? geo.cityAgg[geo.selected.city] : countryTotal;
     const w = cityTotal / countryTotal;
     return Math.max(0.05, Math.min(w, 1.2));
-  }catch(_){
-    return 0.2;
-  }
+  }catch(_){ return 0.2; }
 }
 function scaleArray(arr, w){ return (arr||[]).map(v=> Math.round((+v||0)*w)); }
 
@@ -569,18 +586,16 @@ function setFunnelMode(btn){
   reloadSection('overview');
 }
 
-/* ===== Navegación (forzar reload de sección) ===== */
+/* ===== Navegación ===== */
 function mostrar(id, el){
   if(asideEl.classList.contains('open')){ asideEl.classList.remove('open'); overlayEl.classList.remove('show'); overlayEl.setAttribute('aria-hidden','true'); }
   document.querySelectorAll('main section').forEach(s=>s.style.display='none');
   const sec=document.getElementById(id);
-  sec.style.display = (id==='overview'||id==='usuarios'||id==='tickets'||id==='marketing'||id==='finanzas'||id==='analytics')? 'grid':'block';
+  sec.style.display = (id==='overview'||id==='usuarios'||id==='user'||id==='tickets'||id==='marketing'||id==='finanzas'||id==='analytics')? 'grid':'block';
   document.querySelectorAll('aside button').forEach(b=>b.classList.remove('active'));
   if(el) el.classList.add('active');
 
-  // reintenta cargar la sección (por si los selects antes no existían)
   reloadSection(id);
-
   setTimeout(()=>{ ensureCanvasWrappers(); Object.values(charts).forEach(ch=>{ try{ ch.resize(); }catch(_){}}); }, 0);
 }
 
@@ -619,17 +634,14 @@ async function loadOverview(){
     funnelData = funnelAbs.map(v=> Math.round((v / registros) * 100));
     dsLabel = `F2P & Pagos (${geo.selected?.city}) – % sobre Registros`;
     extraOpts = {
-      scales:{
-        y:{ beginAtZero:true, ticks:{ callback:(val)=> val + '%' } }
-      },
+      scales:{ y:{ beginAtZero:true, ticks:{ callback:(val)=> val + '%' } } },
       plugins:{ tooltip:{ callbacks:{ label:(ctx)=> `${ctx.dataset.label}: ${ctx.parsed.y}%` } } }
     };
   }
-
   upsertChart('conversionChart','bar',{ labels, datasets:[{label: dsLabel, data: funnelData}] }, extraOpts);
 }
 
-/* === USUARIOS === */
+/* === USUARIOS (geo) === */
 async function loadUsers(){
   const geo = await setupGeoSelectors('u');
   upsertChart('usuariosPais','doughnut',{labels:Object.keys(geo.countryAgg||{}),datasets:[{label:'Usuarios',data:Object.values(geo.countryAgg||{})}]});
@@ -647,6 +659,89 @@ async function loadUsers(){
     return `<tr><td>${u.nombre}</td><td>${c}</td><td>${s}</td><td>${city}</td><td>${u.plan}</td><td>${u.ultimo}</td></tr>`;
   });
   tbody.innerHTML = rows.join('') || `<tr><td colspan="6" class="muted">Sin datos</td></tr>`;
+}
+
+/* === 👤 USUARIO: Resumen financiero agregado === */
+async function loadUserAggregates(opts={}){
+  const months = +(document.getElementById('uAggRange')?.value || 12);
+  const includeBank = !!document.getElementById('uIncludeBank')?.checked;
+
+  const agg = await mockApi.get('/user-agg', {
+    months,
+    includeBank,
+    userId: opts.userId || (document.getElementById('userSearch')?.value || 'demo')
+  });
+
+  const lastIdx = agg.income.length - 1;
+  const inc = agg.income[lastIdx]||0, exp = agg.expense[lastIdx]||0, sav = Math.max(0, inc-exp);
+  document.getElementById('uIncLast').textContent = fmt.money(inc);
+  document.getElementById('uExpLast').textContent = fmt.money(exp);
+  document.getElementById('uSavLast').textContent = fmt.money(sav);
+  document.getElementById('uSavRateLast').textContent = inc ? Math.round((sav/inc)*100) + '%' : '—';
+
+  const badge = document.getElementById('consentBadge');
+  if(agg.consent && agg.bankLinked){
+    badge.textContent = '✅ Consentimiento activo';
+    badge.style.background = '#e7f7ee';
+  }else if(agg.consent && !agg.bankLinked){
+    badge.textContent = '⚠️ Consentido, sin bancos conectados';
+    badge.style.background = '#fff3cd';
+  }else{
+    badge.textContent = '⛔ Sin consentimiento';
+    badge.style.background = '#fde2e1';
+  }
+
+  upsertChart('userAggFinanceChart','bar',{
+    labels: agg.labels,
+    datasets:[
+      {label:'Ingreso', data: agg.income},
+      {label:'Gasto', data: agg.expense},
+      {type:'line', label:'Ahorro', data: agg.saving, borderWidth:2, tension:.25}
+    ]
+  },{ scales:{ y:{ beginAtZero:true } }});
+}
+
+function exportUserAggCSV(){
+  const ch = charts['userAggFinanceChart'];
+  if(!ch) return;
+  const labels = ch.data.labels || [];
+  const inc = (ch.data.datasets[0]?.data)||[];
+  const exp = (ch.data.datasets[1]?.data)||[];
+  const sav = (ch.data.datasets[2]?.data)||[];
+  let csv = 'Periodo,Ingreso,Gasto,Ahorro\n';
+  labels.forEach((l,i)=>{ csv += `${l},${inc[i]||0},${exp[i]||0},${sav[i]||0}\n`; });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'resumen_financiero_usuario.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function bindUserAggEvents(){
+  const r = document.getElementById('uAggRange');
+  const b = document.getElementById('uIncludeBank');
+  const btn = document.getElementById('uAggRefreshBtn');
+  const req = document.getElementById('uRequestDetailBtn');
+  const exp = document.getElementById('uExportBtn');
+  const sBtn = document.getElementById('userSearchBtn');
+  const sInp = document.getElementById('userSearch');
+
+  if(r){ r.onchange = ()=> loadUserAggregates(); }
+  if(b){ b.onchange = ()=> loadUserAggregates(); }
+  if(btn){ btn.onclick = ()=> loadUserAggregates(); }
+  if(req){ req.onclick = ()=> alert('Solicitud de detalle enviada (demo). Requiere rol y justificación.'); }
+  if(exp){ exp.onclick = ()=> exportUserAggCSV(); }
+  if(sBtn){ sBtn.onclick = ()=> loadUserAggregates({ userId: sInp?.value }); }
+  if(sInp){
+    sInp.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); loadUserAggregates({ userId: sInp.value }); }});
+  }
+}
+
+async function loadUserView(){
+  // En este demo, solo inicializamos eventos y cargamos datos con el valor del buscador
+  bindUserAggEvents();
+  await loadUserAggregates({});
 }
 
 /* === MARKETING (robusto) === */
@@ -719,15 +814,12 @@ async function loadAnalytics(){
     const data2 = d.map(r=> Math.round((r[2]||0)*geoShare));
     const data3 = d.map(r=> Math.round((r[3]||0)*geoShare));
 
-    upsertChart('cohortChart','bar',{
-      labels,
-      datasets:[
-        {label:`Mes 0 (${geo.selected?.city||'-'})`, data:data0},
-        {label:'Mes 1', data:data1},
-        {label:'Mes 2', data:data2},
-        {label:'Mes 3', data:data3},
-      ]
-    });
+    upsertChart('cohortChart','bar',{ labels, datasets:[
+      {label:`Mes 0 (${geo.selected?.city||'-'})`, data:data0},
+      {label:'Mes 1', data:data1},
+      {label:'Mes 2', data:data2},
+      {label:'Mes 3', data:data3},
+    ]});
   }catch(_){}
 }
 
@@ -739,6 +831,7 @@ function setCountry(btn){ document.querySelectorAll('.chip[data-country]').forEa
 async function reloadSection(key){
   if(key==='overview')      await loadOverview();
   else if(key==='usuarios') await loadUsers();
+  else if(key==='user')     await loadUserView();
   else if(key==='marketing') await loadMarketing();
   else if(key==='finanzas')  await loadFinance();
   else if(key==='analytics') await loadAnalytics();
@@ -753,6 +846,7 @@ async function refreshAll(){
     loadMarketing(),
     loadFinance(),
     loadAnalytics()
+    // 'user' se carga al entrar a la sección (para evitar tocar DOM inexistente)
   ]);
 }
 
