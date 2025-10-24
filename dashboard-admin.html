@@ -3,128 +3,66 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Admin Dashboard – Cada Menudo (Demo + Mobile + Fix Charts)</title>
+<title>Admin Dashboard – Cada Menudo (Compat + Mobile)</title>
 
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-  :root{
-    --primary:#3956E8; --secondary:#7459D9; --accent:#E8C239;
+  :root{ --primary:#3956E8; --secondary:#7459D9; --accent:#E8C239;
     --bg:#ffffff; --text:#0f172a; --muted:#64748B; --border:#e5e7eb;
-    --soft:#f5f7ff; --shadow:0 4px 14px rgba(15,23,42,.08);
-  }
+    --soft:#f5f7ff; --shadow:0 4px 14px rgba(15,23,42,.08); }
   *{box-sizing:border-box}
   body{margin:0;font-family:"Greycliff CF",system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text);}
-
-  /* Header */
-  header{
-    background:var(--primary);color:white;padding:1rem 1.25rem;
-    display:flex;gap:.75rem;justify-content:space-between;align-items:center;
-    box-shadow:0 4px 10px rgba(0,0,0,.1); position:sticky; top:0; z-index:30;
-  }
+  header{background:var(--primary);color:#fff;padding:1rem 1.25rem;display:flex;gap:.75rem;justify-content:space-between;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:30;}
   header h1{font-size:1.1rem;margin:0}
   .top-actions{display:flex;gap:.75rem;align-items:center;}
-  .pill{background:rgba(255,255,255,.12); padding:.4rem .7rem; border-radius:999px; font-size:.85rem}
-  /* Botón hamburguesa (oculto en desktop, visible en mobile) */
-  #menuBtn{
-    display:none; background:none; border:none; color:#fff; font-size:1.5rem; line-height:1; cursor:pointer;
-  }
-
-  /* Layout base */
-  .container{display:grid;grid-template-columns:260px 1fr; min-height:100vh;}
-  aside{
-    background:#f9faff;border-right:1px solid var(--border);
-    padding:1rem;display:flex;flex-direction:column;gap:1rem; position:sticky; top:64px; height:calc(100vh - 64px);
-  }
+  .pill{background:rgba(255,255,255,.12);padding:.4rem .7rem;border-radius:999px;font-size:.85rem}
+  #menuBtn{display:none;background:none;border:none;color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;}
+  .container{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+  aside{background:#f9faff;border-right:1px solid var(--border);padding:1rem;display:flex;flex-direction:column;gap:1rem;position:sticky;top:64px;height:calc(100vh - 64px);}
   aside h2{font-size:.8rem;color:var(--muted);text-transform:uppercase;margin:.25rem 0 .5rem}
-  aside button{
-    background:none;border:none;text-align:left;
-    padding:.6rem .9rem;border-radius:10px;cursor:pointer;
-    color:var(--text);font-size:.95rem;
-  }
-  aside button.active, aside button:hover{background:var(--primary);color:white;}
-
-  main{padding:1.25rem 1.5rem;overflow-y:auto; -webkit-overflow-scrolling:touch;}
-
-  .filters{
-    display:flex;gap:.75rem;align-items:center;margin:0 0 1rem 0; flex-wrap:wrap;
-  }
-  .filters .chip{
-    border:1px solid var(--border); background:var(--soft); color:#202636; padding:.45rem .7rem; border-radius:999px; font-size:.85rem; cursor:pointer;
-  }
+  aside button{background:none;border:none;text-align:left;padding:.6rem .9rem;border-radius:10px;cursor:pointer;color:var(--text);font-size:.95rem;}
+  aside button.active, aside button:hover{background:var(--primary);color:#fff;}
+  main{padding:1.25rem 1.5rem;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .filters{display:flex;gap:.75rem;align-items:center;margin:0 0 1rem 0;flex-wrap:wrap;}
+  .filters .chip{border:1px solid var(--border);background:var(--soft);color:#202636;padding:.45rem .7rem;border-radius:999px;font-size:.85rem;cursor:pointer;}
   .filters .chip.active{border-color:var(--primary)}
-
-  section.dashboard-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:1.2rem;
-  }
-  .card{
-    background:white;padding:1rem;border-radius:12px;box-shadow:var(--shadow);
-  }
+  section.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;}
+  .card{background:#fff;padding:1rem;border-radius:12px;box-shadow:var(--shadow);}
   .card h3{margin:.2rem 0 .6rem;color:#1d2450;font-size:1rem}
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.8rem; margin-bottom:1rem}
-  .kpi{background:#fff;border:1px solid var(--border); border-radius:12px; padding:.9rem}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin-bottom:1rem}
+  .kpi{background:#fff;border:1px solid var(--border);border-radius:12px;padding:.9rem}
   .kpi .label{font-size:.8rem;color:var(--muted)}
   .kpi .value{font-weight:700;font-size:1.15rem;margin-top:.2rem}
-
-  /* ⚠️ FIX: contenedor con altura fija para gráficos (evita crecimiento infinito) */
-  .chart-box{
-    position: relative;
-    width: 100%;
-    height: 260px;        /* ajusta 220–320px si deseas */
-    overflow: hidden;
-  }
-  .chart-box > canvas{
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  /* Tablas */
-  table{width:100%; border-collapse:collapse; font-size:.92rem}
-  th, td{padding:.6rem .5rem; border-bottom:1px solid #eef0f4; text-align:left;}
-  th{color:#4b5563; font-weight:600; background:#fafbff}
-
-  /* Overlay para mobile (tapar fondo cuando sidebar abierto) */
-  #overlay{
-    position:fixed; inset:0; background:rgba(3,10,28,.35); backdrop-filter:saturate(120%) blur(2px);
-    display:none; z-index:25;
-  }
+  /* Alto fijo para charts */
+  .chart-box{position:relative;width:100%;height:260px;overflow:hidden;}
+  .chart-box>canvas{width:100% !important;height:100% !important;}
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  th,td{padding:.6rem .5rem;border-bottom:1px solid #eef0f4;text-align:left;}
+  th{color:#4b5563;font-weight:600;background:#fafbff}
+  #overlay{position:fixed;inset:0;background:rgba(3,10,28,.35);backdrop-filter:saturate(120%) blur(2px);display:none;z-index:25;}
   #overlay.show{display:block;}
-
-  /* Hot zone para swipe (borde izquierdo) */
-  #edgeZone{
-    position:fixed; inset:0 auto 0 0; width:22px; height:100vh;
-    z-index:24; display:none; /* invisible */
-  }
-
-  /* --------- Responsive Mobile --------- */
-  @media (max-width: 800px){
+  #edgeZone{position:fixed;inset:0 auto 0 0;width:22px;height:100vh;z-index:24;display:none;}
+  @media (max-width:800px){
     #menuBtn{display:inline-block;}
-    .container{grid-template-columns:1fr;} /* Sidebar off-canvas */
-    aside{
-      position:fixed; left:-280px; top:64px; bottom:0; width:260px;
-      height:auto; box-shadow:0 12px 30px rgba(15,23,42,.18); z-index:26;
-      transition:left .28s ease;
-    }
+    .container{grid-template-columns:1fr;}
+    aside{position:fixed;left:-280px;top:64px;bottom:0;width:260px;height:auto;box-shadow:0 12px 30px rgba(15,23,42,.18);z-index:26;transition:left .28s ease;}
     aside.open{left:0;}
     main{padding:1rem;}
     header h1{font-size:1rem;}
     .filters{gap:.45rem;}
     .kpi .value{font-size:1rem;}
-    section.dashboard-grid{grid-template-columns:1fr;} /* una columna */
+    section.dashboard-grid{grid-template-columns:1fr;}
     .card{padding:.9rem;}
     #edgeZone{display:block;}
   }
-
-  /* Aún más compacto */
-  @media (max-width: 380px){
+  @media (max-width:380px){
     header{padding:.8rem 1rem;}
     .pill{display:none;}
     .kpi{padding:.7rem;}
     .kpi .label{font-size:.75rem;}
   }
-
   .sr-only{position:absolute;clip:rect(0 0 0 0);clip-path:inset(50%);height:1px;width:1px;overflow:hidden;white-space:nowrap;border:0;padding:0;margin:-1px;}
 </style>
 </head>
@@ -133,15 +71,10 @@
   <header>
     <button id="menuBtn" aria-label="Abrir menú">☰</button>
     <h1>📊 Panel Administrativo – Cada Menudo</h1>
-    <div class="top-actions">
-      <span class="pill">👤 Admin</span>
-      <span class="pill">⚙️ Configuración</span>
-    </div>
+    <div class="top-actions"><span class="pill">👤 Admin</span><span class="pill">⚙️ Configuración</span></div>
   </header>
 
-  <!-- Overlay (mobile) -->
   <div id="overlay" aria-hidden="true"></div>
-  <!-- Hot zone para swipe desde el borde izquierdo -->
   <div id="edgeZone" aria-hidden="true"></div>
 
   <div class="container">
@@ -159,4 +92,262 @@
     </aside>
 
     <main>
-      <!
+      <div class="filters" id="filters">
+        <span>Rango:</span>
+        <button class="chip active" data-range="30d" onclick="setRange(this)">30d</button>
+        <button class="chip" data-range="90d" onclick="setRange(this)">90d</button>
+        <button class="chip" data-range="365d" onclick="setRange(this)">365d</button>
+        <span style="margin-left:.5rem">País:</span>
+        <button class="chip active" data-country="all" onclick="setCountry(this)">Todos</button>
+        <button class="chip" data-country="US" onclick="setCountry(this)">US</button>
+        <button class="chip" data-country="PR" onclick="setCountry(this)">PR</button>
+        <button class="chip" data-country="PA" onclick="setCountry(this)">PA</button>
+      </div>
+
+      <!-- Resumen General (visible por defecto) -->
+      <section id="overview" class="dashboard-grid">
+        <div class="card">
+          <div class="kpis">
+            <div class="kpi"><div class="label">Usuarios Activos</div><div class="value" id="kpiUsuariosActivos">—</div></div>
+            <div class="kpi"><div class="label">MRR</div><div class="value" id="kpiMRR">—</div></div>
+            <div class="kpi"><div class="label">Churn</div><div class="value" id="kpiChurn">—</div></div>
+            <div class="kpi"><div class="label">Free → Premium</div><div class="value" id="kpiConversion">—</div></div>
+          </div>
+          <h3>Crecimiento de Usuarios</h3>
+          <canvas id="usuariosChart" aria-label="Crecimiento de usuarios" role="img"></canvas>
+        </div>
+        <div class="card"><h3>Ingresos Mensuales</h3><canvas id="ingresosChart"></canvas></div>
+        <div class="card"><h3>Embudo de Conversión</h3><canvas id="conversionChart"></canvas></div>
+      </section>
+
+      <!-- Usuarios -->
+      <section id="usuarios" class="dashboard-grid" style="display:none;">
+        <div class="card"><h3>Distribución por País</h3><canvas id="usuariosPais"></canvas></div>
+        <div class="card"><h3>Planes</h3><canvas id="planesChart"></canvas></div>
+        <div class="card">
+          <h3>Top Usuarios (demo)</h3>
+          <table id="tablaUsuarios"><thead><tr><th>Usuario</th><th>País</th><th>Plan</th><th>Último login</th></tr></thead><tbody></tbody></table>
+        </div>
+      </section>
+
+      <!-- Soporte -->
+      <section id="tickets" class="dashboard-grid" style="display:none;">
+        <div class="card"><h3>Tickets por Estado</h3><canvas id="ticketsChart"></canvas></div>
+        <div class="card">
+          <h3>Últimos Tickets (demo)</h3>
+          <table id="tablaTickets"><thead><tr><th>ID</th><th>Categoría</th><th>Estado</th><th>Tiempo abierto</th></tr></thead><tbody></tbody></table>
+        </div>
+      </section>
+
+      <!-- Marketing -->
+      <section id="marketing" class="dashboard-grid" style="display:none;">
+        <div class="card"><h3>Usuarios por Fuente</h3><canvas id="fuentesChart"></canvas></div>
+        <div class="card"><h3>Email: Open / Click</h3><canvas id="emailChart"></canvas></div>
+      </section>
+
+      <!-- Finanzas -->
+      <section id="finanzas" class="dashboard-grid" style="display:none;">
+        <div class="card"><h3>MRR vs Churn</h3><canvas id="mrrChart"></canvas></div>
+        <div class="card"><h3>Unit Economics</h3><canvas id="unitChart"></canvas></div>
+      </section>
+
+      <!-- Analytics -->
+      <section id="analytics" class="dashboard-grid" style="display:none;">
+        <div class="card"><h3>Indicadores Financieros Promedio</h3><canvas id="indicadoresChart"></canvas></div>
+        <div class="card"><h3>Cohortes por Mes de Registro</h3><canvas id="cohortChart"></canvas></div>
+      </section>
+
+      <!-- Config -->
+      <section id="config" style="display:none;">
+        <div class="card">
+          <h3>Integraciones</h3>
+          <p>Simulando: Plaid, SendGrid/Mailchimp, Render API, Backups.</p>
+          <p class="muted">Para producción: reemplaza <code>mockApi.get()</code> por <code>fetch()</code> hacia tus endpoints.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+/* ===== Formato ===== */
+const fmt = {
+  money:n=> n==null ? '—' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n),
+  pct:n=> n==null ? '—' : (n*100).toFixed(1)+'%',
+  num:n=> n==null ? '—' : new Intl.NumberFormat('en-US').format(n)
+};
+
+/* ===== Sidebar / Overlay ===== */
+const asideEl = document.querySelector('aside');
+const overlayEl = document.getElementById('overlay');
+document.getElementById('menuBtn').addEventListener('click', ()=>{
+  const open = asideEl.classList.toggle('open');
+  overlayEl.classList.toggle('show', open);
+  overlayEl.setAttribute('aria-hidden', String(!open));
+});
+overlayEl.addEventListener('click', ()=>{ asideEl.classList.remove('open'); overlayEl.classList.remove('show'); overlayEl.setAttribute('aria-hidden','true'); });
+
+/* ===== Swipe (mobile) ===== */
+const edgeZone = document.getElementById('edgeZone');
+let touchStartX=0,touchStartY=0, asideStartX=0, asideStartY=0;
+const SWIPE_OPEN=50, SWIPE_CLOSE=-50, MAX_DRIFT=30;
+function openSidebar(){ asideEl.classList.add('open'); overlayEl.classList.add('show'); overlayEl.setAttribute('aria-hidden','false'); }
+function closeSidebar(){ asideEl.classList.remove('open'); overlayEl.classList.remove('show'); overlayEl.setAttribute('aria-hidden','true'); }
+edgeZone.addEventListener('touchstart',e=>{ if(innerWidth>800) return; const t=e.touches[0]; touchStartX=t.clientX; touchStartY=t.clientY; },{passive:true});
+edgeZone.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-touchStartX, dy=Math.abs(t.clientY-touchStartY); if(dy>MAX_DRIFT) return; if(dx>SWIPE_OPEN && !asideEl.classList.contains('open')) openSidebar(); },{passive:true});
+asideEl.addEventListener('touchstart',e=>{ if(innerWidth>800) return; const t=e.touches[0]; asideStartX=t.clientX; asideStartY=t.clientY; },{passive:true});
+asideEl.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-asideStartX, dy=Math.abs(t.clientY-asideStartY); if(dy>MAX_DRIFT) return; if(dx<SWIPE_CLOSE && asideEl.classList.contains('open')) closeSidebar(); },{passive:true});
+overlayEl.addEventListener('touchstart',e=>{ if(innerWidth>800) return; const t=e.touches[0]; touchStartX=t.clientX; touchStartY=t.clientY; },{passive:true});
+overlayEl.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-touchStartX, dy=Math.abs(t.clientY-touchStartY); if(dy>MAX_DRIFT) return; if(dx<SWIPE_CLOSE && asideEl.classList.contains('open')) closeSidebar(); },{passive:true});
+
+/* ===== FIX: envolver canvases con altura fija ===== */
+function ensureCanvasWrappers(){
+  document.querySelectorAll('canvas').forEach(cv=>{
+    if(!cv.parentElement || !cv.parentElement.classList.contains('chart-box')){
+      const box=document.createElement('div'); box.className='chart-box';
+      cv.parentNode.insertBefore(box, cv); box.appendChild(cv);
+    }
+  });
+}
+
+/* ===== Mock API (sin .at) ===== */
+const mockApi = (()=> {
+  let seed=42;
+  const rnd=(min=0,max=1)=>{ seed=(seed*1664525+1013904223)%4294967296; return min+(seed/4294967296)*(max-min); };
+  const pick=arr=> arr[Math.floor(rnd(0,arr.length))];
+  const series=(len,base,drift=0.03,vol=0.08)=>{ const out=[]; let v=base; for(let i=0;i<len;i++){ v=Math.max(0,v*(1+drift + (rnd(-vol,vol)))); out.push(Math.round(v)); } return out; };
+  const COUNTRIES=['US','PR','PA','MX','CO'], SOURCES=['Orgánico','Referido','Social','Email','Webinar'], PLANS=['Básico','Premium'];
+
+  const get=(path,params={})=> new Promise(res=>{
+    setTimeout(()=>{
+      const range=params.range||'30d';
+      const len = range==='30d'?30 : range==='90d'?13 : 12;
+
+      if(path==='/overview'){
+        const usuarios=series(len,4000,0.05,0.1);
+        const ingresos=series(len,8000,0.06,0.12);
+        const funnel=[10000,6200,3100,720];
+        const lastUsuarios = usuarios[usuarios.length-1];
+        const lastIngresos = ingresos[ingresos.length-1];
+        const kpis={ activos: Math.round(lastUsuarios*0.72), mrr: Math.round(lastIngresos), churn:+(0.025+rnd(-0.01,0.01)).toFixed(3), conv:+(funnel[3]/funnel[1]).toFixed(3) };
+        res({usuarios, ingresos, funnel, kpis, labels:genLabels(len,range)});
+      }
+      else if(path==='/users'){
+        const dist=Object.fromEntries(COUNTRIES.map(c=>[c,Math.round(rnd(200,4000))]));
+        const planes={ 'Básico':Math.round(rnd(6000,12000)), 'Premium':Math.round(rnd(800,2500)) };
+        const tabla=Array.from({length:8}).map((_,i)=>({ nombre:`usuario_${1000+i}`, pais:pick(COUNTRIES), plan:pick(PLANS), ultimo:diasAtras(Math.round(rnd(0,15))) }));
+        res({dist,planes,tabla});
+      }
+      else if(path==='/support'){
+        const tickets={ Abierto:Math.round(rnd(12,35)), Pendiente:Math.round(rnd(5,18)), Resuelto:Math.round(rnd(80,160)) };
+        const tabla=Array.from({length:10}).map(_=>({ id:'T-'+Math.round(rnd(10000,99999)), categoria:pick(['Plaid','Cuenta','Errores','Pagos']), estado:pick(['Abierto','Pendiente','Resuelto']), horas:Math.round(rnd(1,72)) }));
+        res({tickets,tabla});
+      }
+      else if(path==='/marketing'){
+        const fuentes=Object.fromEntries(SOURCES.map(s=>[s,Math.round(rnd(200,3500))]));
+        const email={ open:series(6,22,0,0.3).map(v=>Math.min(60,Math.max(15,Math.round(v)))), click:series(6,4,0,0.25).map(v=>Math.min(15,Math.max(2,Math.round(v)))) };
+        res({fuentes,email,labels:['Ene','Feb','Mar','Abr','May','Jun']});
+      }
+      else if(path==='/finance'){
+        const mrr=series(12,9000,0.05,0.1);
+        const churn=Array.from({length:12}).map(()=>+(0.02+rnd(-0.008,0.012)).toFixed(3));
+        const unit={ cac:Array.from({length:6}).map(()=>Math.round(rnd(3,8)*10)), ltv:Array.from({length:6}).map(()=>Math.round(rnd(180,350))), cpu:Array.from({length:6}).map(()=>Math.round(rnd(1.2,3.5)*10)) };
+        res({mrr,churn,unit,labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']});
+      }
+      else if(path==='/analytics'){
+        const indicadores={ ingreso_prom:+rnd(2600,4800).toFixed(0), gasto_prom:+rnd(2100,3600).toFixed(0), ahorro_prom:+rnd(200,700).toFixed(0), dti_prom:+(rnd(0.22,0.38)).toFixed(2), reserva_meses:+(rnd(1.5,4.2)).toFixed(1) };
+        const cohort={ labels:['Abr','May','Jun','Jul','Ago','Sep'], data:[[100,72,61,55],[120,80,69,60],[150,92,74,66],[130,90,70,62],[160,110,88,71],[200,144,120,96]] };
+        res({indicadores,cohort});
+      }
+      else res({});
+    }, 280 + Math.random()*300);
+  });
+
+  const genLabels=(len,range)=> range==='30d'? Array.from({length:len},(_,i)=>`D${i+1}`) : range==='90d'? Array.from({length:len},(_,i)=>`Sem ${i+1}`) : ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'].slice(0,len);
+  const diasAtras=d=> `${d}d ago`;
+  return { get };
+})();
+
+/* ===== Estado filtros ===== */
+const state={ range:'30d', country:'all' };
+function setRange(btn){ document.querySelectorAll('.chip[data-range]').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); state.range=btn.dataset.range; refreshAll(); }
+function setCountry(btn){ document.querySelectorAll('.chip[data-country]').forEach(c=>c.classList.remove('active')); btn.classList.add('active'); state.country=btn.dataset.country; refreshAll(); }
+
+/* ===== Charts ===== */
+const charts={};
+const baseOpts={ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true}} };
+function upsertChart(id,type,data,extraOpts={}){
+  const el=document.getElementById(id);
+  if(!el) return;
+  try{
+    if(charts[id]){ charts[id].data=data; charts[id].update(); }
+    else{ charts[id]= new Chart(el,{ type, data, options:{...baseOpts,...extraOpts} }); }
+  }catch(e){ /* si Chart falla, no rompas UI */ }
+}
+
+/* ===== Navegación (con resize fix) ===== */
+function mostrar(id, el){
+  if(asideEl.classList.contains('open')){ asideEl.classList.remove('open'); overlayEl.classList.remove('show'); overlayEl.setAttribute('aria-hidden','true'); }
+  document.querySelectorAll('main section').forEach(s=>s.style.display='none');
+  const sec=document.getElementById(id);
+  sec.style.display = (id==='overview'||id==='usuarios'||id==='tickets'||id==='marketing'||id==='finanzas'||id==='analytics')? 'grid':'block';
+  document.querySelectorAll('aside button').forEach(b=>b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  setTimeout(()=>{ ensureCanvasWrappers(); Object.values(charts).forEach(ch=>{ try{ ch.resize(); }catch(_){}}); }, 0);
+}
+
+/* ===== Loaders ===== */
+async function loadOverview(){
+  const {usuarios, ingresos, funnel, kpis, labels}= await mockApi.get('/overview', state);
+  document.getElementById('kpiUsuariosActivos').textContent=fmt.num(kpis.activos);
+  document.getElementById('kpiMRR').textContent=fmt.money(kpis.mrr);
+  document.getElementById('kpiChurn').textContent=fmt.pct(kpis.churn);
+  document.getElementById('kpiConversion').textContent=fmt.pct(kpis.conv);
+  upsertChart('usuariosChart','line',{labels,datasets:[{label:'Usuarios',data:usuarios,tension:.3,borderWidth:2}]});
+  upsertChart('ingresosChart','bar',{labels,datasets:[{label:'Ingresos',data:ingresos,borderWidth:1}]});
+  upsertChart('conversionChart','bar',{labels:['Visitas','Registros','Conexiones','Premium'],datasets:[{label:'Embudo',data:funnel}]});
+}
+async function loadUsers(){
+  const {dist,planes,tabla}= await mockApi.get('/users', state);
+  upsertChart('usuariosPais','doughnut',{labels:Object.keys(dist),datasets:[{label:'Usuarios',data:Object.values(dist)}]});
+  upsertChart('planesChart','pie',{labels:Object.keys(planes),datasets:[{label:'Planes',data:Object.values(planes)}]});
+  const tbody=document.querySelector('#tablaUsuarios tbody'); tbody.innerHTML= tabla.map(u=>`<tr><td>${u.nombre}</td><td>${u.pais}</td><td>${u.plan}</td><td>${u.ultimo}</td></tr>`).join('');
+}
+async function loadSupport(){
+  const {tickets,tabla}= await mockApi.get('/support', state);
+  upsertChart('ticketsChart','bar',{labels:Object.keys(tickets),datasets:[{label:'Tickets',data:Object.values(tickets)}]});
+  const tbody=document.querySelector('#tablaTickets tbody'); tbody.innerHTML= tabla.map(t=>`<tr><td>${t.id}</td><td>${t.categoria}</td><td>${t.estado}</td><td>${t.horas}h</td></tr>`).join('');
+}
+async function loadMarketing(){
+  const {fuentes,email,labels}= await mockApi.get('/marketing', state);
+  upsertChart('fuentesChart','bar',{labels:Object.keys(fuentes),datasets:[{label:'Usuarios Nuevos',data:Object.values(fuentes)}]});
+  upsertChart('emailChart','line',{labels,datasets:[{label:'Open %',data:email.open},{label:'Click %',data:email.click}]});
+}
+async function loadFinance(){
+  const {mrr,churn,unit,labels}= await mockApi.get('/finance', state);
+  upsertChart('mrrChart','line',{labels,datasets:[{label:'MRR',data:mrr},{label:'Churn %',data:churn.map(x=>+(x*100).toFixed(2)),yAxisID:'y1'}]},{scales:{y:{beginAtZero:true},y1:{position:'right',beginAtZero:true}}});
+  upsertChart('unitChart','bar',{labels:['Q1','Q2','Q3','Q4','Q5','Q6'],datasets:[{label:'CAC ($)',data:unit.cac},{label:'LTV ($)',data:unit.ltv},{label:'CPU ($)',data:unit.cpu}]});
+}
+async function loadAnalytics(){
+  const {indicadores,cohort}= await mockApi.get('/analytics', state);
+  upsertChart('indicadoresChart','radar',{labels:['Ingreso prom','Gasto prom','Ahorro prom','DTI prom','Reserva (meses)'],datasets:[{label:'Promedios',data:[indicadores.ingreso_prom,indicadores.gasto_prom,indicadores.ahorro_prom,+(indicadores.dti_prom*100).toFixed(1),indicadores.reserva_meses]}]});
+  upsertChart('cohortChart','bar',{labels:cohort.labels,datasets:[{label:'Mes 0',data:cohort.data.map(r=>r[0])},{label:'Mes 1',data:cohort.data.map(r=>r[1])},{label:'Mes 2',data:cohort.data.map(r=>r[2])},{label:'Mes 3',data:cohort.data.map(r=>r[3])}]});
+}
+
+/* ===== Refresh ===== */
+async function refreshAll(){
+  ensureCanvasWrappers();
+  await Promise.all([loadOverview(),loadUsers(),loadSupport(),loadMarketing(),loadFinance(),loadAnalytics()]);
+}
+let refreshTimer;
+function startAutoRefresh(){ if(refreshTimer) clearInterval(refreshTimer); refreshTimer=setInterval(refreshAll,20000); }
+
+/* Start */
+document.addEventListener('DOMContentLoaded', ()=>{
+  ensureCanvasWrappers();
+  // El overview ya está visible en HTML; aun así, dispara primer render:
+  refreshAll();
+  startAutoRefresh();
+});
+</script>
+</body>
+</html>
