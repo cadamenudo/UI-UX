@@ -173,7 +173,7 @@
         </div>
       </section>
 
-      <!-- 👤 Usuario (Resumen financiero agregado) -->
+      <!-- 👤 Usuario (Resumen financiero agregado + categorías) -->
       <section id="user" class="dashboard-grid" style="display:none;">
         <div class="card" style="grid-column:1/-1;display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
           <h3 style="margin:0">Buscar usuario</h3>
@@ -216,6 +216,40 @@
             <button class="chip" id="uExportBtn">⬇️ Exportar resumen (CSV)</button>
           </div>
         </div>
+
+        <!-- Nueva tarjeta: Distribución por categoría (agregada / anonimizada) -->
+        <div class="card" id="userCatsCard" style="grid-column:1/-1">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap">
+            <h3 style="margin:0">Distribución por Categoría (agregada / anonimizada)</h3>
+            <div class="filters" style="gap:.5rem;margin:0">
+              <label><strong>Unidad:</strong></label>
+              <select id="uCatUnit">
+                <option value="$" selected>$</option>
+                <option value="%">%</option>
+              </select>
+              <label style="margin-left:.5rem"><input type="checkbox" id="uCatAnon" /> Anonimizar (solo %)</label>
+              <button class="chip" id="uCatRefreshBtn">Actualizar</button>
+              <button class="chip" id="uCatExportBtn">⬇️ Exportar (CSV)</button>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-top:.5rem">
+            <div style="flex:1;min-width:300px">
+              <h4>💵 Ingresos</h4>
+              <canvas id="uCatIncome"></canvas>
+            </div>
+            <div style="flex:1;min-width:300px">
+              <h4>💸 Gastos</h4>
+              <canvas id="uCatExpense"></canvas>
+            </div>
+            <div style="flex:1;min-width:300px">
+              <h4>💰 Ahorros</h4>
+              <canvas id="uCatSaving"></canvas>
+            </div>
+          </div>
+          <p class="muted" style="margin-top:.5rem">Nota: Visualización agregada; no se muestran transacciones ni nombres de comercios.</p>
+        </div>
+
       </section>
 
       <!-- Marketing -->
@@ -325,9 +359,9 @@ function closeSidebar(){ asideEl.classList.remove('open'); overlayEl.classList.r
 edgeZone.addEventListener('touchstart',e=>{ if(innerWidth>800) return; const t=e.touches[0]; touchStartX=t.clientX; touchStartY=t.clientY; },{passive:true});
 edgeZone.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-touchStartX, dy=Math.abs(t.clientY-touchStartY); if(dy>MAX_DRIFT) return; if(dx>SWIPE_OPEN && !asideEl.classList.contains('open')) openSidebar(); },{passive:true});
 asideEl.addEventListener('touchstart',e=>{ if(innerWidth>800) return; const t=e.touches[0]; asideStartX=t.clientX; asideStartY=t.clientY; },{passive:true});
-asideEl.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-asideStartX, dy=Math.abs(t.clientY-asideStartY); if(dy>MAX_DRIFT) return; if(dx<SWIPE_CLOSE && asideEl.classList.contains('open')) closeSidebar(); },{passive:true});
+asideEl.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-asideStartX; const dy=Math.abs(t.clientY-asideStartY); if(dy>MAX_DRIFT) return; if(dx<SWIPE_CLOSE && asideEl.classList.contains('open')) closeSidebar(); },{passive:true});
 overlayEl.addEventListener('touchstart',e=>{ if(innerWidth>800) return; const t=e.touches[0]; touchStartX=t.clientX; touchStartY=t.clientY; },{passive:true});
-overlayEl.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-touchStartX, dy=Math.abs(t.clientY-touchStartY); if(dy>MAX_DRIFT) return; if(dx<SWIPE_CLOSE && asideEl.classList.contains('open')) closeSidebar(); },{passive:true});
+overlayEl.addEventListener('touchmove',e=>{ if(innerWidth>800) return; const t=e.touches[0]; const dx=t.clientX-touchStartX; const dy=Math.abs(t.clientY-touchStartY); if(dy>MAX_DRIFT) return; if(dx<SWIPE_CLOSE && asideEl.classList.contains('open')) closeSidebar(); },{passive:true});
 
 /* ===== Estado global ===== */
 const state={ range:'30d', country:'all', overviewFunnel:'abs' };
@@ -477,6 +511,19 @@ const mockApi = (()=> {
         const saving = income.map((v,i)=> Math.max(0, v - expense[i]));
 
         res({ consent, bankLinked, labels: seq, income, expense, saving });
+      }
+      /* ===== NUEVO: Distribución por categoría (agregada / anonimizada) ===== */
+      else if(path==='/user-cats'){
+        // Mocks agregados (ningún detalle por transacción/merchant)
+        const income = { 'Sueldo':1800, 'Negocio/Freelance':450, 'Intereses/Bonos':120, 'Otros':80 };
+        const expense= { 'Vivienda':700, 'Alimentación':520, 'Seguros':260, 'Transporte':210, 'Servicios':180, 'Entretenimiento':120, 'Otros':410 };
+        const saving = { 'Ahorro Vista':240, 'Retiro':160, 'Inversiones':80, 'Otros':40 };
+
+        // Permite variar por usuario (demo)
+        const factor = (String(params.userId||'').length % 3)*0.05 + 0.95;
+        const scale = obj => Object.fromEntries(Object.entries(obj).map(([k,v])=>[k, Math.round(v*factor)]));
+
+        res({ income: scale(income), expense: scale(expense), saving: scale(saving) });
       }
       else res({});
     }, 240 + Math.random()*300);
@@ -701,6 +748,50 @@ async function loadUserAggregates(opts={}){
   },{ scales:{ y:{ beginAtZero:true } }});
 }
 
+/* === 👤 USUARIO: Distribución por Categoría (agregada/anonimizada) === */
+function objToPercent(obj){
+  const total = Object.values(obj||{}).reduce((a,b)=>a+(+b||0),0) || 1;
+  return Object.fromEntries(Object.entries(obj||{}).map(([k,v])=>[k, +( (v/total)*100 ).toFixed(1)]));
+}
+
+async function loadUserCats(opts={}){
+  const unitSel = document.getElementById('uCatUnit');
+  const anonChk = document.getElementById('uCatAnon');
+  const unit = unitSel?.value || '$';
+  const anonymize = !!anonChk?.checked;
+
+  const uid = opts.userId || (document.getElementById('userSearch')?.value || 'demo');
+  const cats = await mockApi.get('/user-cats', { userId: uid });
+
+  // Si está activada la anonimización, forzamos % (no montos)
+  const usePercent = anonymize || unit === '%';
+
+  const inData = usePercent ? objToPercent(cats.income)  : cats.income;
+  const exData = usePercent ? objToPercent(cats.expense) : cats.expense;
+  const svData = usePercent ? objToPercent(cats.saving)  : cats.saving;
+
+  const suffix = usePercent ? '%' : '$';
+  const tooltipFmt = (ctx)=> {
+    const raw = ctx.raw ?? 0;
+    return `${ctx.label}: ${usePercent ? raw+'%' : fmt.money(raw)}`;
+  };
+
+  upsertChart('uCatIncome', 'doughnut', {
+    labels: Object.keys(inData),
+    datasets:[{label:`Ingresos (${suffix})`, data:Object.values(inData)}]
+  }, { plugins:{ tooltip:{ callbacks:{ label: tooltipFmt } } }});
+
+  upsertChart('uCatExpense', 'doughnut', {
+    labels: Object.keys(exData),
+    datasets:[{label:`Gastos (${suffix})`, data:Object.values(exData)}]
+  }, { plugins:{ tooltip:{ callbacks:{ label: tooltipFmt } } }});
+
+  upsertChart('uCatSaving', 'doughnut', {
+    labels: Object.keys(svData),
+    datasets:[{label:`Ahorros (${suffix})`, data:Object.values(svData)}]
+  }, { plugins:{ tooltip:{ callbacks:{ label: tooltipFmt } } }});
+}
+
 function exportUserAggCSV(){
   const ch = charts['userAggFinanceChart'];
   if(!ch) return;
@@ -718,6 +809,33 @@ function exportUserAggCSV(){
   URL.revokeObjectURL(url);
 }
 
+function exportUserCatsCSV(){
+  const incChart = charts['uCatIncome'];
+  const expChart = charts['uCatExpense'];
+  const savChart = charts['uCatSaving'];
+  if(!incChart || !expChart || !savChart) return;
+
+  function chartToRows(chart, title){
+    const labels = chart.data.labels || [];
+    const data = (chart.data.datasets?.[0]?.data)||[];
+    const rows = [`\n${title}`,'Categoría,Valor'];
+    labels.forEach((l,i)=>{ rows.push(`${l},${data[i]||0}`); });
+    return rows.join('\n');
+    }
+
+  let csv = 'Distribución por Categoría (Unidad actual en gráfico)\n';
+  csv += chartToRows(incChart, 'Ingresos');
+  csv += chartToRows(expChart, 'Gastos');
+  csv += chartToRows(savChart, 'Ahorros');
+
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'distribucion_categorias_usuario.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function bindUserAggEvents(){
   const r = document.getElementById('uAggRange');
   const b = document.getElementById('uIncludeBank');
@@ -727,21 +845,41 @@ function bindUserAggEvents(){
   const sBtn = document.getElementById('userSearchBtn');
   const sInp = document.getElementById('userSearch');
 
-  if(r){ r.onchange = ()=> loadUserAggregates(); }
-  if(b){ b.onchange = ()=> loadUserAggregates(); }
-  if(btn){ btn.onclick = ()=> loadUserAggregates(); }
+  if(r){ r.onchange = ()=> loadUserAggregates({ userId: sInp?.value }); }
+  if(b){ b.onchange = ()=> loadUserAggregates({ userId: sInp?.value }); }
+  if(btn){ btn.onclick = ()=> loadUserAggregates({ userId: sInp?.value }); }
   if(req){ req.onclick = ()=> alert('Solicitud de detalle enviada (demo). Requiere rol y justificación.'); }
   if(exp){ exp.onclick = ()=> exportUserAggCSV(); }
-  if(sBtn){ sBtn.onclick = ()=> loadUserAggregates({ userId: sInp?.value }); }
+  if(sBtn){ sBtn.onclick = ()=> { loadUserAggregates({ userId: sInp?.value }); loadUserCats({ userId: sInp?.value }); }; }
   if(sInp){
-    sInp.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); loadUserAggregates({ userId: sInp.value }); }});
+    sInp.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); loadUserAggregates({ userId: sInp.value }); loadUserCats({ userId: sInp.value }); }});
   }
 }
 
+function bindUserCatsEvents(){
+  const unitSel = document.getElementById('uCatUnit');
+  const anonChk = document.getElementById('uCatAnon');
+  const refBtn  = document.getElementById('uCatRefreshBtn');
+  const expBtn  = document.getElementById('uCatExportBtn');
+  const sInp    = document.getElementById('userSearch');
+
+  if(unitSel){ unitSel.onchange = ()=> loadUserCats({ userId: sInp?.value }); }
+  if(anonChk){ anonChk.onchange = ()=> { 
+      // Si anonimizamos, forzamos selector a %
+      const sel = document.getElementById('uCatUnit');
+      if(anonChk.checked && sel){ sel.value = '%'; }
+      loadUserCats({ userId: sInp?.value });
+    }; 
+  }
+  if(refBtn){ refBtn.onclick = ()=> loadUserCats({ userId: sInp?.value }); }
+  if(expBtn){ expBtn.onclick = ()=> exportUserCatsCSV(); }
+}
+
 async function loadUserView(){
-  // En este demo, solo inicializamos eventos y cargamos datos con el valor del buscador
   bindUserAggEvents();
+  bindUserCatsEvents();
   await loadUserAggregates({});
+  await loadUserCats({});
 }
 
 /* === MARKETING (robusto) === */
@@ -846,7 +984,7 @@ async function refreshAll(){
     loadMarketing(),
     loadFinance(),
     loadAnalytics()
-    // 'user' se carga al entrar a la sección (para evitar tocar DOM inexistente)
+    // 'user' se carga al entrar a la sección
   ]);
 }
 
