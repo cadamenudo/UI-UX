@@ -28,15 +28,14 @@
   /* Ventana */
   .chat-window{
     position:fixed; right:20px; bottom:92px; width:360px; max-width:92vw; height:560px; max-height:78vh;
-    display:none; grid-template-rows:auto auto auto 1fr auto auto; /* header, input, (chips opcional), body, toolbar, footer */
+    display:none; grid-template-rows:auto auto auto 1fr auto auto;
     background:#fff; border-radius:18px; overflow:hidden; box-shadow:var(--shadow); z-index:9999; border:1px solid var(--border);
   }
 
   /* Header */
   .chat-header{ display:flex; align-items:center; gap:12px; padding:12px 14px; background:#fff; border-bottom:1px solid var(--border) }
   .bot-logo{ width:32px; height:32px; border-radius:50%; background:#fff; padding:4px; object-fit:contain }
-  .chat-title{font-weight:700; color:var(--primary); line-height:1}
-  .chat-sub{font-size:12px; color:var(--muted); margin-top:2px}
+  .chat-title{font-weight:700; color:var(--primary);}
   .header-actions{margin-left:auto}
   .icon-btn{ background:transparent; border:none; color:#94A3B8; font-size:18px; cursor:pointer; padding:6px }
 
@@ -46,10 +45,6 @@
   .input-row input{ flex:1; padding:12px; border:1px solid var(--border); border-radius:12px; font-size:14px; outline:none; }
   .input-row input::placeholder{ color:#98A2B3; }
   .input-row button{ padding:12px 14px; border:none; border-radius:12px; background:var(--primary); color:#fff; font-weight:700; cursor:pointer }
-
-  /* Chips (OPCIONAL: ocultos por defecto) */
-  .chipbar{display:none; gap:8px; padding:10px 12px; border-bottom:1px solid var(--border); background:#fff; overflow:auto}
-  .chip{border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:12px; background:#fff; color:#374151; white-space:nowrap}
 
   /* Cuerpo */
   .chat-body{padding:14px; overflow:auto; background:#fff}
@@ -61,7 +56,7 @@
   .msg.user .bubble{background:var(--user)}
   .meta{display:block; color:#9AA4B2; font-size:11px; margin-top:4px}
 
-  /* Sugerencias/temas y acordeón */
+  /* Botones de temas y acordeón */
   .topic-grid{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
   .topic-btn{ border:1px solid var(--border); background:#fff; color:#374151; padding:8px 12px; border-radius:999px; font-size:12px; cursor:pointer; }
   .cat-panel{ border:1px dashed var(--border); background:#fff; border-radius:12px; padding:10px; }
@@ -73,53 +68,38 @@
   .ans{ display:none; border-top:1px solid var(--border); }
   .ans.open{ display:block; }
   .ans-inner{ padding:10px 12px; font-size:14px; background:#F9FAFB; border-radius:0 0 10px 10px; }
-  .q-empty{ padding:10px 12px; font-size:14px; color:#6b7280; background:#F9FAFB; border-radius:8px; }
-  .ans-link a{ color:var(--primary); text-decoration:none; }
 
-  /* Toolbar y footer */
-  .toolbar{display:none; gap:8px; padding:8px 12px; border-top:1px dashed var(--border); background:#fff}
+  /* Toolbar visible */
+  .toolbar{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    padding:10px 12px;
+    border-top:1px dashed var(--border);
+    background:#fff;
+  }
   .tool{font-size:12px; color:#374151; cursor:pointer; border:1px solid var(--border); padding:6px 10px; border-radius:8px; background:#fff}
+
+  /* Footer */
   .chat-footer{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; border-top:1px solid var(--border); background:#fff }
   .privacy-link{ font-size:12px; color:#8A93A6; text-decoration:none }
   .privacy-link:hover{ color:#6B7280; text-decoration:underline }
 
-  /* Dark mode */
-  @media (prefers-color-scheme: dark){
-    :root{ --bg:#0b1020; --text:#E5E7EB; --muted:#9aa4b2; --border:#1f2937; --bot:#0e1830; --user:#0b1326; }
-    .chat-window{ background:#0f172a; border-color:var(--border) }
-    .chat-header, .input-top, .chipbar, .chat-footer, .toolbar{ background:#0f172a; border-color:var(--border) }
-    .chip, .tool{ background:#0b1326; border-color:var(--border); color:#e5e7eb }
-    .q-item{ background:#0b1326; border-color:var(--border) }
-    .ans-inner{ background:#0b1326 }
-    .q-btn{ color:#e5e7eb }
-    .privacy-link{ color:#9aa4b2 }
-  }
-
-  @media (max-width:480px){
-    .chat-window{ right:0; left:0; bottom:0; top:0; width:100vw; height:100vh; max-height:100vh; border-radius:0 }
-  }
 </style>
 </head>
 <body>
 
-<!-- Botón flotante -->
 <button class="chat-launcher" id="launcher" aria-label="Abrir chat">
   <img class="launcher-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20blue%20w-name.png" alt="Cada Menudo"/>
 </button>
 
-<!-- Ventana de chat -->
 <section class="chat-window" id="chatWindow" aria-live="polite">
   <header class="chat-header">
     <img class="bot-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20blue%20w-name.png" alt="Cada Menudo"/>
-    <div>
-      <div class="chat-title">ChinChin Bot</div>
-    </div>
-    <div class="header-actions">
-      <button id="closeBtn" class="icon-btn" aria-label="Cerrar">✕</button>
-    </div>
+    <div><div class="chat-title">ChinChin Bot</div></div>
+    <div class="header-actions"><button id="closeBtn" class="icon-btn" aria-label="Cerrar">✕</button></div>
   </header>
 
-  <!-- Input arriba -->
   <div class="input-top">
     <div class="input-row">
       <input id="userInput" type="text" placeholder="Pregunta" autocomplete="off"/>
@@ -127,20 +107,13 @@
     </div>
   </div>
 
-  <!-- Chips (ocultos por CSS, los dejamos por si luego quieres mostrarlos) -->
-  <div class="chipbar" id="chipbar"></div>
-
-  <!-- Conversación -->
   <main class="chat-body" id="chatBody"></main>
 
-  <!-- Herramientas (colapsadas) -->
   <div class="toolbar" id="toolbar">
     <button class="tool" id="clearBtn">🧹 Limpiar</button>
-    <button class="tool" id="downloadBtn">⬇️ Descargar</button>
     <button class="tool" id="emailBtn">📧 Soporte</button>
   </div>
 
-  <!-- Footer -->
   <footer class="chat-footer">
     <a class="privacy-link" href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>
     <div style="font-size:12px; color:#8A93A6;">Cada Menudo</div>
@@ -150,286 +123,69 @@
 <script>
 (function(){
   const els = {};
-  const STORAGE_KEY = 'cm_chat_history_minimal_topics_v3';
-
-  /* ===== Temas oficiales en tu orden ===== */
-  const CATEGORY_ORDER = [
-    "Misión y propósito",
-    "Registro y cuenta",
-    "Navegación principal",
-    "Transacciones",
-    "Ingresos",
-    "Ahorro y metas",
-    "Alertas de colores",
-    "Suscripción y pagos",
-    "Pagos y facturación",
-    "Personalización",
-    "Soporte y educación",
-    "Disponibilidad",
-    "Hábitos financieros",
-    "Funcionalidades principales",
-    "Recibos y facturas",
-    "Seguridad y privacidad",
-    "Soporte extendido",
-    "Roadmap / Plan Premium",
-    "Educación financiera y filosofía",
-    "Historia y origen (Xavier Serbia)",
-    "Datos y descargas"
-  ];
-
-  /* Aliases para mapear categorías del Excel a tus temas */
-  const CATEGORY_ALIASES = {
-    "cuenta y registro":"Registro y cuenta",
-    "registro":"Registro y cuenta",
-    "cuenta":"Registro y cuenta",
-    "navegación":"Navegación principal",
-    "suscripción y pagos (con prueba gratis, cancelación y reembolsos)":"Suscripción y pagos",
-    "pagos":"Pagos y facturación",
-    "facturación":"Pagos y facturación",
-    "seguridad":"Seguridad y privacidad",
-    "privacidad":"Seguridad y privacidad",
-    "educación financiera":"Educación financiera y filosofía",
-    "filosofía":"Educación financiera y filosofía",
-    "roadmap":"Roadmap / Plan Premium",
-    "plan premium":"Roadmap / Plan Premium",
-    "recibos":"Recibos y facturas",
-    "facturas":"Recibos y facturas",
-    "features":"Funcionalidades principales",
-    "funcionalidades":"Funcionalidades principales",
-    "hábitos":"Hábitos financieros",
-    "origen e historia":"Historia y origen (Xavier Serbia)",
-    "historia y origen":"Historia y origen (Xavier Serbia)"
-  };
-
-  // Helpers
+  const STORAGE_KEY = 'cm_chat_history_v3';
   const byId = id => document.getElementById(id);
-  const norm = s => (s==null?'':String(s)).trim().toLowerCase();
   const escapeHtml = s => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
-  const tokenize = s => (s||'').toLowerCase().normalize('NFD')
-      .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9áéíóúñü\s]/gi,' ')
-      .split(/\s+/).filter(Boolean);
 
-  // Estado
-  const state = { history: [] };
-  let FAQ = [];
-  let catIndex = {}; // { "Etiqueta oficial": [items] }
-
-  window.addEventListener('DOMContentLoaded', init, {once:true});
+  window.addEventListener('DOMContentLoaded', init);
 
   async function init(){
     Object.assign(els, {
       launcher: byId('launcher'), chat: byId('chatWindow'), body: byId('chatBody'),
       input: byId('userInput'), send: byId('sendBtn'), close: byId('closeBtn'),
-      clear: byId('clearBtn'), download: byId('downloadBtn'), email: byId('emailBtn'),
-      chipbar: byId('chipbar'), toolbar: byId('toolbar')
+      clear: byId('clearBtn'), email: byId('emailBtn')
     });
 
-    // Abrir/cerrar
-    els.launcher?.addEventListener('click', ()=> toggle(true));
-    els.close?.addEventListener('click', ()=> toggle(false));
+    els.launcher.addEventListener('click', ()=>{ toggle(true); setTimeout(()=>els.input.focus(),50); });
+    els.close.addEventListener('click', ()=>toggle(false));
+    els.send.addEventListener('click', onSend);
+    els.input.addEventListener('keydown', e=>{ if(e.key==='Enter') onSend(); });
+    els.clear.addEventListener('click', clearChat);
+    els.email.addEventListener('click', ()=> window.location.href = buildSupportEmail());
 
-    // Envío
-    els.send?.addEventListener('click', onSend);
-    els.input?.addEventListener('keydown', e=>{ if(e.key==='Enter') onSend(); });
-
-    // Herramientas
-    els.clear?.addEventListener('click', ()=>{ state.history=[]; persist(); els.body.innerHTML='';
-      pushHTML('bot','Conversación limpiada. ¿En qué te ayudo ahora?'); showWelcomeTopics(); });
-    els.download?.addEventListener('click', ()=>{ const blob=new Blob([JSON.stringify(state.history,null,2)],{type:'application/json'});
-      const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='chat-cada-menudo.json'; a.click(); URL.revokeObjectURL(url); });
-    els.email?.addEventListener('click', ()=>{ location.href = buildSupportEmail(); });
-
-    // Delegación: acordeón y botones de temas
-    els.body.addEventListener('click', (e)=>{
-      const qbtn = e.target.closest('[data-toggle="qa"]');
-      if(qbtn){ const id=qbtn.getAttribute('data-id'); const ans=els.body.querySelector(`.ans[data-id="${id}"]`); if(ans){ ans.classList.toggle('open'); } return; }
-      const tbtn = e.target.closest('.topic-btn');
-      if(tbtn){ showCategoryPanel(tbtn.getAttribute('data-cat')); }
-    });
-
-    // Cargar FAQ
-    try{
-      const res = await fetch('./faq_cadamenudo.json?v=10', {cache:'no-store'});
-      FAQ = await res.json();
-    }catch{ FAQ = []; }
-
-    buildCategoryIndex();
-
-    // (Opcional) también crear chips arriba con las mismas categorías
-    els.chipbar.innerHTML = '';
-    CATEGORY_ORDER.forEach(label=>{
-      const b=document.createElement('button'); b.className='chip'; b.textContent=label; b.dataset.cat=label;
-      b.onclick=()=> showCategoryPanel(label);
-      // si quieres mostrarlos, quita display:none en CSS
-      els.chipbar.appendChild(b);
-    });
-
-    // Historial
-    try{
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-      state.history = Array.isArray(saved)?saved:[];
-      state.history.forEach(m=>renderMsg(m.role,m.text,m.ts,true,m.html));
-    }catch{}
-
-    if(state.history.length===0){
-      pushHTML('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Aquí te pongo los temas que pueden interesarte 👇');
-      showWelcomeTopics();
-    }
-
-    // Ajuste del logo (no se deforma)
-    document.querySelectorAll('.launcher-logo, .bot-logo').forEach(img=>{
-      img.addEventListener('load', ()=>{
-        const w=img.naturalWidth, h=img.naturalHeight; if(!w||!h) return;
-        const r=w/h; img.style.objectFit='contain'; img.style.background='#fff'; img.style.borderRadius='50%';
-        img.style.padding = r>1.3 ? '8px' : r<0.8 ? '4px' : '5px';
-      });
-    });
+    pushHTML('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Pregúntame algo o escribe <b>“limpiar”</b> para reiniciar el chat.');
   }
 
-  /* Construir índice de categorías según tu orden + aliases; con fallback si no hay categorías */
-  function buildCategoryIndex(){
-    const isGarbage = c => /^sheet\d*$/i.test(c) || /^hoja\d*$/i.test(c) || /^sheet$/i.test(c);
-    const buckets = {};
-    CATEGORY_ORDER.forEach(label => buckets[label] = []);
+  function toggle(open){ els.chat.style.display=open?'grid':'none'; }
 
-    FAQ.forEach(item=>{
-      let raw = (item.category||'').trim();
-      if(!raw || isGarbage(raw)) raw = '';
-      let key = raw;
+  function push(role,text){ renderMsg(role,text,false,false); }
+  function pushHTML(role,html){ renderMsg(role,html,false,true); }
 
-      const n = norm(raw);
-      if (CATEGORY_ALIASES[n]) key = CATEGORY_ALIASES[n];
-
-      if (CATEGORY_ORDER.includes(key)){
-        buckets[key].push({...item, category:key});
-        return;
-      }
-      const tryKey = CATEGORY_ORDER.find(of=> norm(of)===norm(key) || norm(of).includes(norm(key)) || norm(key).includes(norm(of)));
-      if(tryKey){
-        buckets[tryKey].push({...item, category:tryKey});
-        return;
-      }
-      // Último recurso
-      buckets["Funcionalidades principales"].push({...item, category:"Funcionalidades principales"});
-    });
-
-    // Si absolutamente todos quedaron vacíos y hay FAQ, crea "Preguntas frecuentes"
-    const allEmpty = CATEGORY_ORDER.every(l => (buckets[l]||[]).length===0);
-    if(allEmpty && FAQ.length){
-      catIndex = { "Preguntas frecuentes": FAQ.map(it=>({...it, category:"Preguntas frecuentes"})) };
-      // Mostrar solo ese tema en bienvenida
-      return;
-    }
-    catIndex = buckets;
-  }
-
-  /* Bienvenida: botones de temas en tu orden */
-  function showWelcomeTopics(){
-    const keys = Object.keys(catIndex).length===1 && catIndex["Preguntas frecuentes"]
-      ? ["Preguntas frecuentes"]
-      : CATEGORY_ORDER;
-    const html = `
-      <div class="topic-grid">
-        ${keys.map(k=>`<button class="topic-btn" data-cat="${escapeHtml(k)}">${escapeHtml(k)}</button>`).join('')}
-      </div>`;
-    pushHTML('bot', html);
-  }
-
-  /* Panel de una categoría (acordeón de preguntas) */
-  function showCategoryPanel(catLabel){
-    const items = (catIndex[catLabel]||[]).slice(0,30);
-    const html = `
-      <div class="cat-panel">
-        <div class="cat-title">Tema: ${escapeHtml(catLabel)}</div>
-        ${items.length ? `
-        <div class="q-list">
-          ${items.map((it,idx)=> {
-            const id = `${norm(catLabel)}-${idx}`;
-            return `
-              <div class="q-item">
-                <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
-                <div class="ans" data-id="${id}">
-                  <div class="ans-inner">${it.a}${it.link?`<div class="ans-link"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div>
-                </div>
-              </div>`;
-          }).join('')}
-        </div>` : `
-        <div class="q-empty">Próximamente agregaremos preguntas para este tema.</div>`}
-      </div>`;
-    pushHTML('bot', html);
-  }
-
-  /* Búsqueda libre */
-  function score(qTokens,item){
-    const hay=(item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase();
-    const set=new Set(tokenize(hay));
-    let s=0; for(const t of qTokens){ if(set.has(t)) s+=1; }
-    if(item.q.toLowerCase().includes(qTokens.join(' '))) s+=1.5;
-    return s;
-  }
-  function searchFAQ(q){
-    const t=tokenize(q);
-    return FAQ.map(i=>({i,s:score(t,i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i);
+  function renderMsg(role,text,skip,isHTML){
+    const wrap=document.createElement('div'); wrap.className='msg '+role;
+    const b=document.createElement('div'); b.className='bubble';
+    if(isHTML) b.innerHTML=text; else b.innerHTML=escapeHtml(text).replace(/\n/g,'<br/>');
+    const meta=document.createElement('span'); meta.className='meta';
+    meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap);
+    if(!skip) els.body.scrollTop = els.body.scrollHeight;
   }
 
   function onSend(){
-    const text=(els.input?.value||'').trim(); if(!text) return;
+    const text=(els.input.value||'').trim(); if(!text) return;
     push('user', text); els.input.value='';
-    const hits = searchFAQ(text);
-    if(hits.length){
-      const html = '<div class="cat-panel"><div class="cat-title">Resultados</div>' +
-        '<div class="q-list">' +
-        hits.slice(0,10).map((it,idx)=>{
-          const id='search-'+idx;
-          return `
-            <div class="q-item">
-              <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
-              <div class="ans" data-id="${id}">
-                <div class="ans-inner">${it.a}${it.link?`<div class="ans-link"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div>
-              </div>
-            </div>`;
-        }).join('') + '</div></div>';
-      pushHTML('bot', html);
-    }else{
-      push('bot','No encontré una respuesta exacta. Prueba con otra palabra o toca un tema.');
+
+    // 🧹 Comando limpiar
+    if (/^(limpiar|borrar|reiniciar|reset)$/i.test(text)) { clearChat(); return; }
+
+    // 📧 Comando email
+    if (/^(email|correo|soporte|contacto)$/i.test(text)) {
+      window.location.href = buildSupportEmail();
+      push('bot','Abriendo correo para soporte técnico... ✉️');
+      return;
     }
+
+    push('bot','No encontré esa pregunta. Escribe "soporte" si necesitas ayuda por correo.');
   }
 
-  /* Core push/render/persist */
-  function toggle(open){ const el=els.chat; if(el) el.style.display=open?'grid':'none'; }
-  function push(role,text){ const m={role,text,ts:new Date().toISOString(),html:false}; state.history.push(m); renderMsg(role,text,m.ts,false,false); persist(); }
-  function pushHTML(role,html){ const m={role,text:html,ts:new Date().toISOString(),html:true}; state.history.push(m); renderMsg(role,html,m.ts,false,true); persist(); }
-  function persist(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history)); }catch{} }
-  function renderMsg(role,text,ts,skip,isHTML){
-    const wrap=document.createElement('div'); wrap.className='msg '+role;
-    const b=document.createElement('div'); b.className='bubble';
-    if(isHTML) b.innerHTML=text; else b.innerHTML = escapeHtml(text).replace(/\n/g,'<br/>');
-    const meta=document.createElement('span'); meta.className='meta';
-    meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date(ts||Date.now()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap); if(!skip) els.body.scrollTop=els.body.scrollHeight;
+  function clearChat(){
+    els.body.innerHTML='';
+    pushHTML('bot','Conversación limpiada. ¿En qué te ayudo ahora?');
   }
 
-  /* Email soporte */
   function buildSupportEmail(){
-    const last=state.history.slice(-10).map(m=>`${m.role.toUpperCase()} [${new Date(m.ts).toLocaleString()}]: ${m.text.replace(/<[^>]+>/g,'')}`).join('\n');
-    const ua=navigator.userAgent||'', lang=navigator.language||'';
-    const body=`Hola equipo técnico,
-
-Necesito ayuda con el chatbot de Cada Menudo.
-
-Descripción del problema / pregunta:
-(Escribe aquí…)
-
-Contexto (últimos mensajes):
-${last}
-
-Datos técnicos:
-- URL: ${location.href}
-- Navegador: ${ua}
-- Idioma: ${lang}
-
-Gracias.`;
-    return `mailto:tech@cadamenudo.com?subject=${encodeURIComponent('Soporte Chatbot – Cada Menudo')}&body=${encodeURIComponent(body)}`;
+    const body=`Hola equipo técnico,%0D%0A%0D%0ANecesito ayuda con el chatbot de Cada Menudo.%0D%0A%0D%0ADescripción del problema:%0D%0A(Escribe aquí…)%0D%0A%0D%0A---%0D%0AEnviado desde el chatbot de Cada Menudo.`;
+    return `mailto:tech@cadamenudo.com?subject=Soporte%20Chatbot%20Cada%20Menudo&body=${body}`;
   }
 })();
 </script>
