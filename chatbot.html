@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Chatbot – Cada Menudo (Minimal)</title>
+<title>Chatbot – Cada Menudo</title>
 <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
 
 <style>
@@ -28,7 +28,7 @@
   /* Ventana */
   .chat-window{
     position:fixed; right:20px; bottom:92px; width:360px; max-width:92vw; height:560px; max-height:78vh;
-    display:none; grid-template-rows:auto auto auto 1fr auto auto;
+    display:none; grid-template-rows:auto auto auto 1fr auto auto; /* header, input, (chips opcional), body, toolbar, footer */
     background:#fff; border-radius:18px; overflow:hidden; box-shadow:var(--shadow); z-index:9999; border:1px solid var(--border);
   }
 
@@ -37,7 +37,7 @@
   .bot-logo{ width:32px; height:32px; border-radius:50%; background:#fff; padding:4px; object-fit:contain }
   .chat-title{font-weight:700; color:var(--primary); line-height:1}
   .chat-sub{font-size:12px; color:var(--muted); margin-top:2px}
-  .header-actions{margin-left:auto; display:flex; gap:8px; align-items:center}
+  .header-actions{margin-left:auto}
   .icon-btn{ background:transparent; border:none; color:#94A3B8; font-size:18px; cursor:pointer; padding:6px }
 
   /* Input arriba */
@@ -47,10 +47,9 @@
   .input-row input::placeholder{ color:#98A2B3; }
   .input-row button{ padding:12px 14px; border:none; border-radius:12px; background:var(--primary); color:#fff; font-weight:700; cursor:pointer }
 
-  /* Categorías */
-  .chipbar{display:flex; gap:8px; padding:10px 12px; border-bottom:1px solid var(--border); background:#fff; overflow:auto}
+  /* Chips (OPCIONAL: ocultos por defecto) */
+  .chipbar{display:none; gap:8px; padding:10px 12px; border-bottom:1px solid var(--border); background:#fff; overflow:auto}
   .chip{border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:12px; background:#fff; color:#374151; white-space:nowrap}
-  .chip:active{transform:scale(.98)}
 
   /* Cuerpo */
   .chat-body{padding:14px; overflow:auto; background:#fff}
@@ -62,18 +61,24 @@
   .msg.user .bubble{background:var(--user)}
   .meta{display:block; color:#9AA4B2; font-size:11px; margin-top:4px}
 
-  /* Sugerencias FAQ */
-  .faq-suggest{border:1px dashed var(--border); padding:10px; border-radius:12px; background:#fff; margin:8px 0; font-size:13px}
-  .faq-item{padding:8px 10px; border:1px solid var(--border); border-radius:10px; margin:8px 0; background:#fff}
-  .faq-item .q{font-weight:700; margin-bottom:6px}
-  .faq-item .a{font-size:14px}
-  .faq-suggest a{color:var(--primary); text-decoration:none}
+  /* Sugerencias/temas y acordeón */
+  .topic-grid{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+  .topic-btn{ border:1px solid var(--border); background:#fff; color:#374151; padding:8px 12px; border-radius:999px; font-size:12px; cursor:pointer; }
+  .cat-panel{ border:1px dashed var(--border); background:#fff; border-radius:12px; padding:10px; }
+  .cat-title{ font-weight:700; color:#3956E8; margin-bottom:6px; }
+  .q-list{ display:flex; flex-direction:column; gap:6px; }
+  .q-item{ border:1px solid var(--border); border-radius:10px; background:#fff; }
+  .q-btn{ width:100%; text-align:left; background:#fff; border:none; cursor:pointer; padding:10px 12px; font-size:14px; color:#0d1320; border-radius:10px; }
+  .q-btn:hover{ background:#F7F8FB; }
+  .ans{ display:none; border-top:1px solid var(--border); }
+  .ans.open{ display:block; }
+  .ans-inner{ padding:10px 12px; font-size:14px; background:#F9FAFB; border-radius:0 0 10px 10px; }
+  .q-empty{ padding:10px 12px; font-size:14px; color:#6b7280; background:#F9FAFB; border-radius:8px; }
+  .ans-link a{ color:var(--primary); text-decoration:none; }
 
-  /* Toolbar (oculta) */
+  /* Toolbar y footer */
   .toolbar{display:none; gap:8px; padding:8px 12px; border-top:1px dashed var(--border); background:#fff}
   .tool{font-size:12px; color:#374151; cursor:pointer; border:1px solid var(--border); padding:6px 10px; border-radius:8px; background:#fff}
-
-  /* Footer discreto */
   .chat-footer{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; border-top:1px solid var(--border); background:#fff }
   .privacy-link{ font-size:12px; color:#8A93A6; text-decoration:none }
   .privacy-link:hover{ color:#6B7280; text-decoration:underline }
@@ -84,9 +89,10 @@
     .chat-window{ background:#0f172a; border-color:var(--border) }
     .chat-header, .input-top, .chipbar, .chat-footer, .toolbar{ background:#0f172a; border-color:var(--border) }
     .chip, .tool{ background:#0b1326; border-color:var(--border); color:#e5e7eb }
-    .faq-item{ background:#0b1326; border-color:var(--border) }
-    .faq-suggest a{ color:#9fb0ff }
-    .input-row input{ background:#0b1326; border-color:var(--border); color:#e5e7eb }
+    .q-item{ background:#0b1326; border-color:var(--border) }
+    .ans-inner{ background:#0b1326 }
+    .q-btn{ color:#e5e7eb }
+    .privacy-link{ color:#9aa4b2 }
   }
 
   @media (max-width:480px){
@@ -96,10 +102,12 @@
 </head>
 <body>
 
+<!-- Botón flotante -->
 <button class="chat-launcher" id="launcher" aria-label="Abrir chat">
   <img class="launcher-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
 </button>
 
+<!-- Ventana de chat -->
 <section class="chat-window" id="chatWindow" aria-live="polite">
   <header class="chat-header">
     <img class="bot-logo" src="https://cadamenudo.github.io/UI-UX/isotopo%20w-name.png" alt="Cada Menudo"/>
@@ -112,7 +120,7 @@
     </div>
   </header>
 
-  <!-- INPUT ARRIBA -->
+  <!-- Input arriba -->
   <div class="input-top">
     <div class="input-row">
       <input id="userInput" type="text" placeholder="Pregunta" autocomplete="off"/>
@@ -120,20 +128,20 @@
     </div>
   </div>
 
-  <!-- Categorías -->
+  <!-- Chips (ocultos por CSS, los dejamos por si luego quieres mostrarlos) -->
   <div class="chipbar" id="chipbar"></div>
 
   <!-- Conversación -->
   <main class="chat-body" id="chatBody"></main>
 
-  <!-- Herramientas -->
+  <!-- Herramientas (colapsadas) -->
   <div class="toolbar" id="toolbar">
     <button class="tool" id="clearBtn">🧹 Limpiar</button>
     <button class="tool" id="downloadBtn">⬇️ Descargar</button>
     <button class="tool" id="emailBtn">📧 Soporte</button>
   </div>
 
-  <!-- Footer discreto -->
+  <!-- Footer -->
   <footer class="chat-footer">
     <a class="privacy-link" href="/privacidad.html" target="_blank" rel="noopener">Privacidad</a>
     <div style="font-size:12px; color:#8A93A6;">Cada Menudo</div>
@@ -143,26 +151,71 @@
 <script>
 (function(){
   const els = {};
-  const STORAGE_KEY = 'cm_chat_history_minimal_v4';
+  const STORAGE_KEY = 'cm_chat_history_minimal_topics_v3';
 
-  // ===== Helpers =====
-  function byId(id){ return document.getElementById(id); }
-  function norm(s){ return (s==null?'':String(s)).trim().toLowerCase(); }
-  function tokenize(s){
-    return (s||'').toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/[^a-z0-9áéíóúñü\s]/gi,' ')
+  /* ===== Temas oficiales en tu orden ===== */
+  const CATEGORY_ORDER = [
+    "Misión y propósito",
+    "Registro y cuenta",
+    "Navegación principal",
+    "Transacciones",
+    "Ingresos",
+    "Ahorro y metas",
+    "Alertas de colores",
+    "Suscripción y pagos",
+    "Pagos y facturación",
+    "Personalización",
+    "Soporte y educación",
+    "Disponibilidad",
+    "Hábitos financieros",
+    "Funcionalidades principales",
+    "Recibos y facturas",
+    "Seguridad y privacidad",
+    "Soporte extendido",
+    "Roadmap / Plan Premium",
+    "Educación financiera y filosofía",
+    "Historia y origen (Xavier Serbia)",
+    "Datos y descargas"
+  ];
+
+  /* Aliases para mapear categorías del Excel a tus temas */
+  const CATEGORY_ALIASES = {
+    "cuenta y registro":"Registro y cuenta",
+    "registro":"Registro y cuenta",
+    "cuenta":"Registro y cuenta",
+    "navegación":"Navegación principal",
+    "suscripción y pagos (con prueba gratis, cancelación y reembolsos)":"Suscripción y pagos",
+    "pagos":"Pagos y facturación",
+    "facturación":"Pagos y facturación",
+    "seguridad":"Seguridad y privacidad",
+    "privacidad":"Seguridad y privacidad",
+    "educación financiera":"Educación financiera y filosofía",
+    "filosofía":"Educación financiera y filosofía",
+    "roadmap":"Roadmap / Plan Premium",
+    "plan premium":"Roadmap / Plan Premium",
+    "recibos":"Recibos y facturas",
+    "facturas":"Recibos y facturas",
+    "features":"Funcionalidades principales",
+    "funcionalidades":"Funcionalidades principales",
+    "hábitos":"Hábitos financieros",
+    "origen e historia":"Historia y origen (Xavier Serbia)",
+    "historia y origen":"Historia y origen (Xavier Serbia)"
+  };
+
+  // Helpers
+  const byId = id => document.getElementById(id);
+  const norm = s => (s==null?'':String(s)).trim().toLowerCase();
+  const escapeHtml = s => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
+  const tokenize = s => (s||'').toLowerCase().normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9áéíóúñü\s]/gi,' ')
       .split(/\s+/).filter(Boolean);
-  }
-  function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  // ===== Estado =====
+  // Estado
   const state = { history: [] };
   let FAQ = [];
-  let catIndex = {};
+  let catIndex = {}; // { "Etiqueta oficial": [items] }
 
-  // ===== Init =====
-  window.addEventListener('DOMContentLoaded', init, { once:true });
+  window.addEventListener('DOMContentLoaded', init, {once:true});
 
   async function init(){
     Object.assign(els, {
@@ -173,159 +226,126 @@
     });
 
     // Abrir/cerrar
-    els.launcher?.addEventListener('click', () => toggle(true));
-    els.close?.addEventListener('click', () => toggle(false));
+    els.launcher?.addEventListener('click', ()=> toggle(true));
+    els.close?.addEventListener('click', ()=> toggle(false));
 
-    // Enviar
-    els.send?.addEventListener('click', onSendSafe);
-    els.input?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') onSendSafe(); });
+    // Envío
+    els.send?.addEventListener('click', onSend);
+    els.input?.addEventListener('keydown', e=>{ if(e.key==='Enter') onSend(); });
 
     // Herramientas
-    els.clear?.addEventListener('click', () => {
-      state.history=[]; persist(); els.body.innerHTML='';
-      pushHTML('bot','Conversación limpiada. ¿En qué te ayudo ahora?');
-      if(FAQ.length) showWelcomeTopics();
-    });
-    els.download?.addEventListener('click', () => {
-      const blob=new Blob([JSON.stringify(state.history,null,2)],{type:'application/json'});
-      const url=URL.createObjectURL(blob); const a=document.createElement('a');
-      a.href=url; a.download='chat-cada-menudo.json'; a.click(); URL.revokeObjectURL(url);
-    });
-    els.email?.addEventListener('click', () => { location.href = buildSupportEmail(); });
+    els.clear?.addEventListener('click', ()=>{ state.history=[]; persist(); els.body.innerHTML='';
+      pushHTML('bot','Conversación limpiada. ¿En qué te ayudo ahora?'); showWelcomeTopics(); });
+    els.download?.addEventListener('click', ()=>{ const blob=new Blob([JSON.stringify(state.history,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='chat-cada-menudo.json'; a.click(); URL.revokeObjectURL(url); });
+    els.email?.addEventListener('click', ()=>{ location.href = buildSupportEmail(); });
 
-    // Delegación: abrir/cerrar respuestas del acordeón
+    // Delegación: acordeón y botones de temas
     els.body.addEventListener('click', (e)=>{
-      const btn = e.target.closest('[data-toggle="qa"]');
-      if(!btn) return;
-      const id = btn.getAttribute('data-id');
-      const ans = els.body.querySelector(`.ans[data-id="${id}"]`);
-      if(ans){ ans.classList.toggle('open'); }
+      const qbtn = e.target.closest('[data-toggle="qa"]');
+      if(qbtn){ const id=qbtn.getAttribute('data-id'); const ans=els.body.querySelector(`.ans[data-id="${id}"]`); if(ans){ ans.classList.toggle('open'); } return; }
+      const tbtn = e.target.closest('.topic-btn');
+      if(tbtn){ showCategoryPanel(tbtn.getAttribute('data-cat')); }
     });
 
-    // Carga FAQ
+    // Cargar FAQ
     try{
-      const res = await fetch('./faq_cadamenudo.json?v=5', { cache:'no-store' });
+      const res = await fetch('./faq_cadamenudo.json?v=8', {cache:'no-store'});
       FAQ = await res.json();
-    }catch(e){ console.warn('No pude cargar faq_cadamenudo.json', e); FAQ = []; }
+    }catch{ FAQ = []; }
 
-    // Índice de categorías (y filtro para ocultar las tipo "Sheet1/Hoja1/Sheet..")
-    const isGarbageCat = c => /^sheet\d*$/i.test(c) || /^hoja\d*$/i.test(c) || /^sheet$/i.test(c);
-    catIndex = {};
-    FAQ.forEach(it=>{
-      const cRaw = (it.category||'').trim();
-      if(!cRaw) return;
-      if(isGarbageCat(cRaw)) return;        // <-- oculta "Sheet1" y similares
-      const c = norm(cRaw);
-      (catIndex[c]??=[]).push(it);
-    });
+    buildCategoryIndex();
 
-    // Chips de categorías (limpias)
+    // (Opcional) también crear chips arriba con las mismas categorías
     els.chipbar.innerHTML = '';
-    Object.keys(catIndex).forEach(key=>{
-      const label = Object.values(catIndex[key][0].category || key) ? catIndex[key][0].category : key;
-      const b=document.createElement('button');
-      b.className='chip'; b.textContent=catIndex[key][0].category || key;
-      b.dataset.cat=key;
-      b.onclick=()=> showCategoryPanel(key);
+    CATEGORY_ORDER.forEach(label=>{
+      const b=document.createElement('button'); b.className='chip'; b.textContent=label; b.dataset.cat=label;
+      b.onclick=()=> showCategoryPanel(label);
+      // si quieres mostrarlos, quita display:none en CSS
       els.chipbar.appendChild(b);
     });
 
-    // Historial y bienvenida
+    // Historial
     try{
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-      state.history = Array.isArray(saved) ? saved : [];
-      state.history.forEach(m=>renderMsg(m.role,m.text,m.ts,true, m.html));
-    }catch(_){}
+      state.history = Array.isArray(saved)?saved:[];
+      state.history.forEach(m=>renderMsg(m.role,m.text,m.ts,true,m.html));
+    }catch{}
+
     if(state.history.length===0){
       pushHTML('bot','👋 Hola, soy <b>Chin Chin</b>, tu chatbot de Cada Menudo. Aquí te pongo los temas que pueden interesarte 👇');
       showWelcomeTopics();
     }
 
-    // Ajuste automático del logo (no se deforma)
+    // Ajuste del logo (no se deforma)
     document.querySelectorAll('.launcher-logo, .bot-logo').forEach(img=>{
       img.addEventListener('load', ()=>{
-        const {naturalWidth:w,naturalHeight:h}=img; if(!w||!h) return;
+        const w=img.naturalWidth, h=img.naturalHeight; if(!w||!h) return;
         const r=w/h; img.style.objectFit='contain'; img.style.background='#fff'; img.style.borderRadius='50%';
         img.style.padding = r>1.3 ? '8px' : r<0.8 ? '4px' : '5px';
       });
     });
   }
 
-  // ===== Envío =====
-  function onSendSafe(){
-    try{
-      const text = (els.input?.value || '').trim();
-      if(!text) return;
-      push('user', text);
-      els.input.value = '';
-      handle(text);
-    }catch(err){
-      console.error(err);
-      push('bot', 'Ups, tuve un problema procesando tu mensaje. Intenta de nuevo por favor.');
-    }
-  }
+  /* Construir índice de categorías según tu orden + aliases; con fallback si no hay categorías */
+  function buildCategoryIndex(){
+    const isGarbage = c => /^sheet\d*$/i.test(c) || /^hoja\d*$/i.test(c) || /^sheet$/i.test(c);
+    const buckets = {};
+    CATEGORY_ORDER.forEach(label => buckets[label] = []);
 
-  // ===== Core =====
-  function toggle(open){ if(els.chat) els.chat.style.display = open ? 'grid' : 'none'; }
-  function push(role, text){ // texto plano
-    const m = { role, text, ts:new Date().toISOString(), html:false };
-    state.history.push(m);
-    renderMsg(role, text, m.ts, false, false);
-    persist();
-  }
-  function pushHTML(role, html){ // texto confiable con HTML
-    const m = { role, text: html, ts:new Date().toISOString(), html:true };
-    state.history.push(m);
-    renderMsg(role, html, m.ts, false, true);
-    persist();
-  }
-  function persist(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history)); }catch(_){ } }
+    FAQ.forEach(item=>{
+      let raw = (item.category||'').trim();
+      if(!raw || isGarbage(raw)) raw = '';
+      let key = raw;
 
-  function renderMsg(role, text, ts, skip, isHTML){
-    const wrap=document.createElement('div');
-    wrap.className='msg '+role;
-    const b=document.createElement('div');
-    b.className='bubble';
-    if(isHTML) b.innerHTML = text; else b.innerHTML = escapeHtml(text).replace(/\n/g,'<br/>');
-    const meta=document.createElement('span'); meta.className='meta';
-    meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date(ts||Date.now()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    b.appendChild(meta);
-    wrap.appendChild(b);
-    els.body.appendChild(wrap);
-    if(!skip) els.body.scrollTop = els.body.scrollHeight;
-  }
+      const n = norm(raw);
+      if (CATEGORY_ALIASES[n]) key = CATEGORY_ALIASES[n];
 
-  // ===== Bienvenida: botones de temas =====
-  function showWelcomeTopics(){
-    const topCats = Object.keys(catIndex).slice(0,6);
-    if(!topCats.length) return;
-    const html = `
-      <div class="topic-grid">
-        ${topCats.map(k=>`<button class="topic-btn" data-cat="${k}">${escapeHtml(catIndex[k][0].category)}</button>`).join('')}
-      </div>`;
-    pushHTML('bot', html);
-    // Delegación para esos botones
-    els.body.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.topic-btn');
-      if(btn){ showCategoryPanel(btn.getAttribute('data-cat')); }
+      if (CATEGORY_ORDER.includes(key)){
+        buckets[key].push({...item, category:key});
+        return;
+      }
+      const tryKey = CATEGORY_ORDER.find(of=> norm(of)===norm(key) || norm(of).includes(norm(key)) || norm(key).includes(norm(of)));
+      if(tryKey){
+        buckets[tryKey].push({...item, category:tryKey});
+        return;
+      }
+      // Último recurso
+      buckets["Funcionalidades principales"].push({...item, category:"Funcionalidades principales"});
     });
-  }
 
-  // ===== Panel de categoría: lista de preguntas clicables (acordeón) =====
-  function showCategoryPanel(catKey){
-    const items = (catIndex[catKey]||[]).slice(0,20); // muestra las primeras 20 preguntas
-    if(!items.length){
-      push('bot', 'No tengo preguntas en este tema aún.');
+    // Si absolutamente todos quedaron vacíos y hay FAQ, crea "Preguntas frecuentes"
+    const allEmpty = CATEGORY_ORDER.every(l => (buckets[l]||[]).length===0);
+    if(allEmpty && FAQ.length){
+      catIndex = { "Preguntas frecuentes": FAQ.map(it=>({...it, category:"Preguntas frecuentes"})) };
+      // Mostrar solo ese tema en bienvenida
       return;
     }
-    const catName = catIndex[catKey][0].category;
+    catIndex = buckets;
+  }
 
+  /* Bienvenida: botones de temas en tu orden */
+  function showWelcomeTopics(){
+    const keys = Object.keys(catIndex).length===1 && catIndex["Preguntas frecuentes"]
+      ? ["Preguntas frecuentes"]
+      : CATEGORY_ORDER;
+    const html = `
+      <div class="topic-grid">
+        ${keys.map(k=>`<button class="topic-btn" data-cat="${escapeHtml(k)}">${escapeHtml(k)}</button>`).join('')}
+      </div>`;
+    pushHTML('bot', html);
+  }
+
+  /* Panel de una categoría (acordeón de preguntas) */
+  function showCategoryPanel(catLabel){
+    const items = (catIndex[catLabel]||[]).slice(0,30);
     const html = `
       <div class="cat-panel">
-        <div class="cat-title">Tema: ${escapeHtml(catName)}</div>
+        <div class="cat-title">Tema: ${escapeHtml(catLabel)}</div>
+        ${items.length ? `
         <div class="q-list">
-          ${items.map((it,idx)=>{
-            const id = `${catKey}-${idx}`;
+          ${items.map((it,idx)=> {
+            const id = `${norm(catLabel)}-${idx}`;
             return `
               <div class="q-item">
                 <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
@@ -334,12 +354,13 @@
                 </div>
               </div>`;
           }).join('')}
-        </div>
+        </div>` : `
+        <div class="q-empty">Próximamente agregaremos preguntas para este tema.</div>`}
       </div>`;
     pushHTML('bot', html);
   }
 
-  // ===== Búsqueda directa =====
+  /* Búsqueda libre */
   function score(qTokens,item){
     const hay=(item.q+' '+(item.tags||[]).join(' ')+' '+(item.category||'')).toLowerCase();
     const set=new Set(tokenize(hay));
@@ -348,31 +369,48 @@
     return s;
   }
   function searchFAQ(q){
-    const t = tokenize(q);
-    return FAQ.map(i=>({i,s:score(t,i)}))
-              .filter(x=>x.s>0)
-              .sort((a,b)=>b.s-a.s)
-              .map(x=>x.i);
+    const t=tokenize(q);
+    return FAQ.map(i=>({i,s:score(t,i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i);
   }
-  function handle(text){
-    // Intenciones mínimas
-    if (/(^|\s)(hola|buenas|hey|saludos)(\s|!|$)/i.test(text))
-      return push('bot','¡Hola! ¿Sobre qué tema quieres ayuda? Toca un botón de temas o escribe tu pregunta.');
 
+  function onSend(){
+    const text=(els.input?.value||'').trim(); if(!text) return;
+    push('user', text); els.input.value='';
     const hits = searchFAQ(text);
     if(hits.length){
-      pushHTML('bot', renderFAQ(hits.slice(0,5)));
+      const html = '<div class="cat-panel"><div class="cat-title">Resultados</div>' +
+        '<div class="q-list">' +
+        hits.slice(0,10).map((it,idx)=>{
+          const id='search-'+idx;
+          return `
+            <div class="q-item">
+              <button class="q-btn" data-toggle="qa" data-id="${id}">• ${escapeHtml(it.q)}</button>
+              <div class="ans" data-id="${id}">
+                <div class="ans-inner">${it.a}${it.link?`<div class="ans-link"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div>
+              </div>
+            </div>`;
+        }).join('') + '</div></div>';
+      pushHTML('bot', html);
     }else{
       push('bot','No encontré una respuesta exacta. Prueba con otra palabra o toca un tema.');
     }
   }
-  function renderFAQ(items){
-    return '<div class="faq-suggest">' +
-      items.map(it=>`<div class="faq-item"><div class="q">• ${escapeHtml(it.q)}</div><div class="a">${it.a}${it.link?`<div style="margin-top:6px;"><a href="${it.link}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div></div>`).join('') +
-      '</div>';
+
+  /* Core push/render/persist */
+  function toggle(open){ const el=els.chat; if(el) el.style.display=open?'grid':'none'; }
+  function push(role,text){ const m={role,text,ts:new Date().toISOString(),html:false}; state.history.push(m); renderMsg(role,text,m.ts,false,false); persist(); }
+  function pushHTML(role,html){ const m={role,text:html,ts:new Date().toISOString(),html:true}; state.history.push(m); renderMsg(role,html,m.ts,false,true); persist(); }
+  function persist(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history)); }catch{} }
+  function renderMsg(role,text,ts,skip,isHTML){
+    const wrap=document.createElement('div'); wrap.className='msg '+role;
+    const b=document.createElement('div'); b.className='bubble';
+    if(isHTML) b.innerHTML=text; else b.innerHTML = escapeHtml(text).replace(/\n/g,'<br/>');
+    const meta=document.createElement('span'); meta.className='meta';
+    meta.textContent=(role==='bot'?'Asistente':'Tú')+' • '+new Date(ts||Date.now()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    b.appendChild(meta); wrap.appendChild(b); els.body.appendChild(wrap); if(!skip) els.body.scrollTop=els.body.scrollHeight;
   }
 
-  // ===== Email soporte =====
+  /* Email soporte */
   function buildSupportEmail(){
     const last=state.history.slice(-10).map(m=>`${m.role.toUpperCase()} [${new Date(m.ts).toLocaleString()}]: ${m.text.replace(/<[^>]+>/g,'')}`).join('\n');
     const ua=navigator.userAgent||'', lang=navigator.language||'';
@@ -396,30 +434,5 @@ Gracias.`;
   }
 })();
 </script>
-
-<style>
-/* ===== Estilos para el panel de temas y acordeón ===== */
-.topic-grid{
-  display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;
-}
-.topic-btn{
-  border:1px solid var(--border); background:#fff; color:#374151;
-  padding:8px 12px; border-radius:999px; font-size:12px; cursor:pointer;
-}
-.cat-panel{ border:1px dashed var(--border); background:#fff; border-radius:12px; padding:10px; }
-.cat-title{ font-weight:700; color:#3956E8; margin-bottom:6px; }
-.q-list{ display:flex; flex-direction:column; gap:6px; }
-.q-item{ border:1px solid var(--border); border-radius:10px; background:#fff; }
-.q-btn{
-  width:100%; text-align:left; background:#fff; border:none; cursor:pointer;
-  padding:10px 12px; font-size:14px; color:#0d1320; border-radius:10px;
-}
-.q-btn:hover{ background:#F7F8FB; }
-.ans{ display:none; border-top:1px solid var(--border); }
-.ans.open{ display:block; }
-.ans-inner{ padding:10px 12px; font-size:14px; background:#F9FAFB; border-radius:0 0 10px 10px; }
-.ans-link a{ color:var(--primary); text-decoration:none; }
-</style>
-
 </body>
 </html>
