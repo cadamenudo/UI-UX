@@ -1,256 +1,226 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pantalla de Videos | CadaMenudo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Categorías de Video</title>
+
   <style>
+    :root {
+      --primary: #3956E8;
+      --secondary: #7459D9;
+      --accent: #E8C239;
+      --text: #0f172a;
+      --muted: #64748B;
+      --bg: #ffffff;
+    }
+
     body {
-      font-family: 'Nunito', sans-serif;
-      background: #FAFBFF;
-      color: #0F172A;
+      font-family: "Greycliff CF", system-ui, sans-serif;
+      background: var(--bg);
       margin: 0;
       padding: 2rem;
-    }
-
-    .pantalla-videos h2 {
-      font-size: 1.75rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .subtitulo {
-      color: #64748B;
-      margin-bottom: 1.5rem;
-    }
-
-    .video-principal {
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      cursor: pointer;
-      margin-bottom: 2rem;
-    }
-
-    .video-principal img {
-      width: 100%;
-      display: block;
-    }
-
-    .info-video {
-      padding: 1rem;
-    }
-
-    .info-video p {
-      margin: 0.5rem 0 0;
-      font-size: 0.95rem;
-      color: #334155;
+      color: var(--text);
     }
 
     .seccion-video {
-      margin-bottom: 1rem;
+      border-radius: 12px;
+      background: #f8fafc;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
     }
 
     .seccion-video button {
-      width: 100%;
-      background: #fff;
-      border: none;
-      border-radius: 12px;
-      padding: 1rem;
-      font-weight: bold;
-      font-size: 1rem;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      all: unset;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-weight: 700;
+      padding: 1rem 1.25rem;
+      width: 100%;
       cursor: pointer;
     }
 
-    .seccion-video button .flecha {
-      transition: transform 0.3s;
-      margin-left: auto;
+    .seccion-video button::after {
+      content: "▾";
+      transition: transform 0.3s ease;
       font-size: 1.25rem;
     }
 
-    .seccion-video.open button .flecha {
-      transform: rotate(90deg);
+    .seccion-video.open button::after {
+      transform: rotate(180deg);
     }
 
     .lista-oculta {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.4s ease-in-out;
-      padding: 0;
-      margin: 0;
-      list-style: none;
+      padding: 0 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
     }
 
     .seccion-video.open .lista-oculta {
       max-height: 1000px;
+      padding-bottom: 1rem;
     }
 
-    .lista-oculta li {
-      padding: 0;
-      margin: 0;
-    }
-
-    .video-principal.small {
-      margin-top: 1rem;
-      border-radius: 12px;
-    }
-
-    .video-principal.small .info-video {
-      padding: 0.5rem 1rem 1rem;
-    }
-
-    #videoModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    #videoOverlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    #videoFrameWrapper {
-      position: relative;
-      width: 90%;
-      max-width: 800px;
-      aspect-ratio: 16/9;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-      z-index: 1000;
-    }
-
-    #videoFrame {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    #cerrarBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .video-card {
       background: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      font-size: 1.25rem;
+      border-radius: 16px;
+      overflow: hidden;
       cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .video-card:hover {
+      transform: scale(1.01);
+    }
+
+    .thumbnail {
+      position: relative;
+    }
+
+    .thumbnail img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .check-overlay {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: #10b981;
+      color: white;
+      font-size: 1.2rem;
+      padding: 4px 8px;
+      border-radius: 50%;
+      display: none;
+    }
+
+    .video-card.terminado .check-overlay {
+      display: block;
+    }
+
+    .video-info {
+      padding: 0.75rem;
+    }
+
+    .video-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0 0 4px;
+    }
+
+    .video-duracion {
+      color: var(--muted);
+      font-size: 0.875rem;
+      margin: 0;
     }
   </style>
 </head>
+
 <body>
-  <div class="pantalla-videos">
-    <h2>¡Bienvenido, Frank!</h2>
-    <p class="subtitulo">¿A dónde quieres ir hoy?</p>
 
-    <!-- Secciones de videos -->
-    <div class="seccion-video open">
-      <button onclick="toggleLista(this)">
-        Cada Menudo 101 <span class="flecha">›</span>
-      </button>
-      <ul class="lista-oculta">
-        <li>
-          <div class="video-principal small" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-            <div class="info-video">
-              <strong>El ABC de CadaMenudo</strong>
-              <p>4:00</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+  <!-- Categoría 1 -->
+  <div class="seccion-video">
+    <button onclick="toggleLista(this)">Metas</button>
+    <ul class="lista-oculta">
+      <li class="video-card" onclick="marcarTerminado(this)">
+        <div class="thumbnail">
+          <img src="https://via.placeholder.com/400x200.png?text=Video+1" alt="Video 1">
+          <div class="check-overlay">✓</div>
+        </div>
+        <div class="video-info">
+          <p class="video-title">Cómo usar las metas</p>
+          <p class="video-duracion">3 min</p>
+        </div>
+      </li>
 
-    <div class="seccion-video">
-      <button onclick="toggleLista(this)">
-        Metas <span class="flecha">›</span>
-      </button>
-      <ul class="lista-oculta">
-        <li>
-          <div class="video-principal small" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-            <div class="info-video">
-              <strong>Cómo utilizar las metas de ahorro</strong>
-              <p>4:00</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+      <li class="video-card" onclick="marcarTerminado(this)">
+        <div class="thumbnail">
+          <img src="https://via.placeholder.com/400x200.png?text=Video+2" alt="Video 2">
+          <div class="check-overlay">✓</div>
+        </div>
+        <div class="video-info">
+          <p class="video-title">Crear metas SMART</p>
+          <p class="video-duracion">4 min</p>
+        </div>
+      </li>
 
-    <div class="seccion-video">
-      <button onclick="toggleLista(this)">
-        Transacciones <span class="flecha">›</span>
-      </button>
-      <ul class="lista-oculta">
-        <li>
-          <div class="video-principal small" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-            <div class="info-video">
-              <strong>¿Cómo registro una transacción?</strong>
-              <p>4:00</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+      <li class="video-card" onclick="marcarTerminado(this)">
+        <div class="thumbnail">
+          <img src="https://via.placeholder.com/400x200.png?text=Video+3" alt="Video 3">
+          <div class="check-overlay">✓</div>
+        </div>
+        <div class="video-info">
+          <p class="video-title">Seguimiento de progreso</p>
+          <p class="video-duracion">5 min</p>
+        </div>
+      </li>
+    </ul>
   </div>
 
-  <!-- Modal para mostrar video -->
-  <div id="videoModal" style="display:none">
-    <div id="videoOverlay" onclick="cerrarModal()"></div>
-    <div id="videoFrameWrapper">
-      <button id="cerrarBtn" onclick="cerrarModal()">×</button>
-      <iframe id="videoFrame" src="" allowfullscreen></iframe>
-    </div>
+  <!-- Categoría 2 -->
+  <div class="seccion-video">
+    <button onclick="toggleLista(this)">Ahorro y Gastos</button>
+    <ul class="lista-oculta">
+      <li class="video-card" onclick="marcarTerminado(this)">
+        <div class="thumbnail">
+          <img src="https://via.placeholder.com/400x200.png?text=Video+4" alt="Video 4">
+          <div class="check-overlay">✓</div>
+        </div>
+        <div class="video-info">
+          <p class="video-title">Cómo presupuestar</p>
+          <p class="video-duracion">4 min</p>
+        </div>
+      </li>
+
+      <li class="video-card" onclick="marcarTerminado(this)">
+        <div class="thumbnail">
+          <img src="https://via.placeholder.com/400x200.png?text=Video+5" alt="Video 5">
+          <div class="check-overlay">✓</div>
+        </div>
+        <div class="video-info">
+          <p class="video-title">Control de gastos</p>
+          <p class="video-duracion">3 min</p>
+        </div>
+      </li>
+
+      <li class="video-card" onclick="marcarTerminado(this)">
+        <div class="thumbnail">
+          <img src="https://via.placeholder.com/400x200.png?text=Video+6" alt="Video 6">
+          <div class="check-overlay">✓</div>
+        </div>
+        <div class="video-info">
+          <p class="video-title">Ahorro automático</p>
+          <p class="video-duracion">2 min</p>
+        </div>
+      </li>
+    </ul>
   </div>
 
   <script>
-    function abrirVideoVimeo(url) {
-      const modal = document.getElementById('videoModal');
-      const iframe = document.getElementById('videoFrame');
-      iframe.src = url + '?autoplay=1';
-      modal.style.display = 'flex';
-    }
-
-    function cerrarModal() {
-      const modal = document.getElementById('videoModal');
-      const iframe = document.getElementById('videoFrame');
-      iframe.src = '';
-      modal.style.display = 'none';
-    }
-
     function toggleLista(button) {
-      const todas = document.querySelectorAll('.seccion-video');
-      const seccionActual = button.parentElement;
-      const yaAbierta = seccionActual.classList.contains('open');
+      const secciones = document.querySelectorAll('.seccion-video');
+      const actual = button.parentElement;
+      const yaAbierta = actual.classList.contains('open');
 
-      todas.forEach(seccion => {
-        seccion.classList.remove('open');
-      });
+      secciones.forEach(seccion => seccion.classList.remove('open'));
 
       if (!yaAbierta) {
-        seccionActual.classList.add('open');
+        actual.classList.add('open');
       }
     }
+
+    function marcarTerminado(elemento) {
+      elemento.classList.toggle('terminado');
+    }
   </script>
+
 </body>
 </html>
