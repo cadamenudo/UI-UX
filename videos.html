@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pantalla de Videos | CadaMenudo</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Nunito', sans-serif;
@@ -13,6 +12,11 @@
       color: #0F172A;
       margin: 0;
       padding: 2rem;
+    }
+
+    .pantalla-videos {
+      max-width: 700px;
+      margin: auto;
     }
 
     .pantalla-videos h2 {
@@ -39,38 +43,34 @@
       display: block;
     }
 
-.video-item {
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  margin-left: 0;     /* 👈 clave */
-  margin-right: 0;    /* 👈 clave */
-}
+    .video-item {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
 
+    .video-item img {
+      width: 100%;
+      display: block;
+      border-radius: 16px 16px 0 0;
+    }
 
-.video-item img {
-  width: 100%;
-  display: block;
-  border-radius: 16px 16px 0 0;
-}
+    .titulo-video {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #000;
+      font-family: 'Greycliff CF', sans-serif;
+      padding: 0.75rem 1rem 0 1rem;
+    }
 
-.video-item .titulo-video {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #000;
-  font-family: 'Greycliff CF', sans-serif;
-  padding: 0.75rem 1rem 0 1rem;
-}
-
-.video-item .tiempo-video {
-  font-size: 0.875rem;
-  color: #64748B;
-  padding: 0 1rem 1rem 1rem;
-}
-
+    .tiempo-video {
+      font-size: 0.875rem;
+      color: #64748B;
+      padding: 0 1rem 1rem 1rem;
+    }
 
     .info-video {
       padding: 1rem;
@@ -101,88 +101,88 @@
       cursor: pointer;
     }
 
-.seccion-video button::after {
-  content: "\25BC"; /* flechita ▼ */
-  font-size: 1rem;
-  transition: transform 0.3s;
-  margin-left: auto; /* asegúrate de que la flecha se alinee a la derecha */
-}
+    .seccion-video button::after {
+      content: ">";
+      font-size: 1.2rem;
+      color: #64748B;
+      transition: transform 0.3s;
+      transform: rotate(90deg); /* > apunta hacia abajo */
+    }
 
-.seccion-video.open button::after {
-  transform: rotate(180deg); /* gira la flecha hacia arriba */
-}
+    .seccion-video.open button::after {
+      transform: rotate(180deg); /* > apunta hacia arriba */
+    }
 
-/* Animación de apertura/cierre de secciones */
-.lista-oculta {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease-in-out;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
+    .lista-oculta {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
 
-.seccion-video.open .lista-oculta {
-  max-height: 1000px; /* suficientemente grande para mostrar el contenido */
-}
+    .seccion-video.open .lista-oculta {
+      max-height: 1000px;
+    }
 
-.lista-oculta li {
-  padding: 0;
-  margin: 0;
-}
+    .lista-oculta li {
+      padding: 0;
+      margin: 0;
+    }
 
-.lista-oculta li:hover {
-  text-decoration: underline;
-}
-#videoModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
+    .lista-oculta li:hover {
+      text-decoration: underline;
+    }
 
-#videoOverlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-}
+    #videoModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
 
-#videoFrameWrapper {
-  position: relative;
-  width: 90%;
-  max-width: 800px;
-  aspect-ratio: 16/9;
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  z-index: 1000;
-}
+    #videoOverlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
 
-#videoFrame {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+    #videoFrameWrapper {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 1000;
+    }
 
-#cerrarBtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 1.25rem;
-  cursor: pointer;
-}
+    #videoFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
+    #cerrarBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -190,7 +190,7 @@
     <h2>¡Bienvenido, Frank!</h2>
     <p class="subtitulo">¿A dónde quieres ir hoy?</p>
 
-    <!-- Videos destacados -->
+    <!-- VIDEO DESTACADO -->
     <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
       <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="La misión de CadaMenudo" />
       <div class="info-video">
@@ -199,191 +199,150 @@
       </div>
     </div>
 
-    <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="Construir el hábito" />
-      <div class="info-video">
-        <strong>Construir el hábito</strong>
-        <p>4:00</p>
-      </div>
+    <!-- SECCIONES ACORDEÓN -->
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Cada Menudo 101</button>
+      <ul class="lista-oculta">
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">El ABC de CadaMenudo</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">Cómo arranco a usar CadaMenudo</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">Qué son los mensajes de colores con alertas</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+      </ul>
     </div>
 
-    <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-      <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="Por qué cada menudo cuenta" />
-      <div class="info-video">
-        <strong>¿Por qué cada menudo cuenta?</strong>
-        <p>4:00</p>
-      </div>
+    <!-- METAS -->
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Metas</button>
+      <ul class="lista-oculta">
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">Cómo utilizar las metas de ahorro</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+      </ul>
     </div>
 
-<!-- Secciones -->
-<div class="seccion-video">
-  <button onclick="toggleLista(this)">Cada Menudo 101</button>
-  <ul class="lista-oculta">
-    <li onclick="abrirVideo('https://url.video4')">
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">El ABC de CadaMenudo</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-    <li onclick="abrirVideo('https://url.video5')">
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">Cómo arranco a usar CadaMenudo</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-    <li onclick="abrirVideo('https://url.video6')">
-     <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">Qué son los mensajes de colores con alertas</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
+    <!-- AHORRO Y GASTOS -->
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Ahorro y Gastos</button>
+      <ul class="lista-oculta">
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">Cómo saber cuánto ahorras y gastas</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">¿Cómo registro el ahorro?</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">¿Cómo registro la contribución al retiro?</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-<div class="seccion-video">
-  <button onclick="toggleLista(this)">Metas</button>
-  <ul class="lista-oculta">
-    <li onclick="abrirVideo('https://url.video7')">
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">Cómo utilizar las metas de ahorro</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
+    <!-- TRANSACCIONES -->
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Transacciones</button>
+      <ul class="lista-oculta">
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">¿Cómo registro una transacción?</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">¿Cómo hago seguimiento de transacciones?</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-<div class="seccion-video">
-  <button onclick="toggleLista(this)">Ahorro y Gastos</button>
-  <ul class="lista-oculta">
-    <li>
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">Cómo saber cuánto ahorras y gastas con CadaMenudo</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">¿Cómo registro el ahorro?</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">¿Cómo registro la contribución al retiro?</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
-
-<div class="seccion-video">
-  <button onclick="toggleLista(this)">Transacciones</button>
-  <ul class="lista-oculta">
-    <li>
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">¿Cómo registro una transacción?</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">¿Cómo realizar un seguimiento de las transacciones?</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
-
-<div class="seccion-video">
-  <button onclick="toggleLista(this)">Categorías</button>
-  <ul class="lista-oculta">
-    <li>
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">¿Cómo usar las categorías en CadaMenudo?</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
-        <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
-        <div>
-          <div class="titulo-video">¿Por qué los ingresos se dividen en tres categorías?</div>
-          <div class="tiempo-video">4:00</div>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
-<!-- Modal de video -->
-<div id="videoModal" style="display:none">
-  <div id="videoOverlay" onclick="cerrarModal()"></div>
-  <div id="videoFrameWrapper">
-    <button id="cerrarBtn" onclick="cerrarModal()">×</button>
-    <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    <!-- CATEGORÍAS -->
+    <div class="seccion-video">
+      <button onclick="toggleLista(this)">Categorías</button>
+      <ul class="lista-oculta">
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">¿Cómo usar las categorías?</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+        <li>
+          <div class="video-principal" onclick="abrirVideoVimeo('https://player.vimeo.com/video/1106275385')">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/thumbnails/thumbnail1.png" alt="thumb">
+            <div class="titulo-video">¿Por qué los ingresos se dividen en tres tipos?</div>
+            <div class="tiempo-video">4:00</div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
-<script>
 
-function abrirVideoVimeo(url) {
-  const modal = document.getElementById('videoModal');
-  const iframe = document.getElementById('videoFrame');
-  iframe.src = url + '?autoplay=1';
-  modal.style.display = 'flex';
-}
+  <!-- MODAL -->
+  <div id="videoModal" style="display:none">
+    <div id="videoOverlay" onclick="cerrarModal()"></div>
+    <div id="videoFrameWrapper">
+      <button id="cerrarBtn" onclick="cerrarModal()">×</button>
+      <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    </div>
+  </div>
 
-function cerrarModal() {
-  const modal = document.getElementById('videoModal');
-  const iframe = document.getElementById('videoFrame');
-  iframe.src = '';
-  modal.style.display = 'none';
-}
+  <script>
+    function abrirVideoVimeo(url) {
+      const modal = document.getElementById('videoModal');
+      const iframe = document.getElementById('videoFrame');
+      iframe.src = url + '?autoplay=1';
+      modal.style.display = 'flex';
+    }
 
-function toggleLista(button) {
-  const todas = document.querySelectorAll('.seccion-video');
-  const seccionActual = button.parentElement;
-  const yaAbierta = seccionActual.classList.contains('open');
+    function cerrarModal() {
+      const modal = document.getElementById('videoModal');
+      const iframe = document.getElementById('videoFrame');
+      iframe.src = '';
+      modal.style.display = 'none';
+    }
 
-  // Cierra todas las secciones
-  todas.forEach(seccion => {
-    seccion.classList.remove('open');
-  });
+    function toggleLista(button) {
+      const seccion = button.closest('.seccion-video');
+      const abierta = seccion.classList.contains('open');
 
-  // Si no estaba abierta, ábrela
-  if (!yaAbierta) {
-    seccionActual.classList.add('open');
-  }
-}
-</script>
-
+      document.querySelectorAll('.seccion-video').forEach(s => s.classList.remove('open'));
+      if (!abierta) seccion.classList.add('open');
+    }
+  </script>
 </body>
 </html>
