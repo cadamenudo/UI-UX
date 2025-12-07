@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presupuesto – Móvil</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+  body {
+    font-family: Nunito, sans-serif;
+    background: #F6F7FF;
+    padding: 16px;
+    margin: 0;
+  }
+
+  /* HEADER */
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .toggle {
+    background: white;
+    border-radius: 999px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    border: 1px solid #E5E7EB;
+  }
+
+  .toggle span {
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .toggle .active {
+    background: #E8ECFF;
+    color: #3956E8;
+    font-weight: 700;
+  }
+
+  .select-month {
+    background: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #E5E7EB;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    width: 100px;
+  }
+
+  /* DONUT CARD */
+  .card {
+    background: white;
+    padding: 16px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .total {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  #donut {
+    width: 100%;
+    max-width: 260px;
+    height: 260px;
+    margin: 0 auto;
+  }
+
+  /* ACCORDION */
+  .section {
+    background: white;
+    padding: 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+
+  .section-header {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.95rem;
+  }
+
+  .add-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: #3956E8;
+    color: white;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* BOTTOM TOTALS */
+  .totals {
+    margin-top: 20px;
+    background: white;
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .totals .row {
+    font-weight: 600;
+  }
+
+  /* Primary button */
+  .save {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    background: #7459D9;
+    color: white;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="top">
+  <h1>Presupuesto</h1>
+  <div class="toggle">
+    <span class="active">Mensual</span>
+    <span>Anual</span>
+  </div>
+</div>
+
+<select class="select-month">
+  <option>Enero</option>
+  <option>Febrero</option>
+  <option>Marzo</option>
+</select>
+
+<div class="card">
+  <div class="total">$2,450.00</div>
+  <canvas id="donut"></canvas>
+</div>
+
+<!-- INGRESOS -->
+<div class="section">
+  <div class="section-header">Ingresos</div>
+
+  <div class="row"><span>Salario</span><span>$3200</span></div>
+  <div class="row"><span>Bonos</span><span>$150</span></div>
+
+  <button class="add-btn">+ Añadir</button>
+</div>
+
+<!-- GASTOS -->
+<div class="section">
+  <div class="section-header">Gastos</div>
+
+  <div class="row"><span>Vivienda</span><span>$950</span></div>
+  <div class="row"><span>Alimentación</span><span>$450</span></div>
+  <div class="row"><span>Transporte</span><span>$160</span></div>
+
+  <button class="add-btn">+ Añadir</button>
+</div>
+
+<!-- AHORRO -->
+<div class="section">
+  <div class="section-header">Ahorro</div>
+
+  <div class="row"><span>Emergencia</span><span>$200</span></div>
+  <div class="row"><span>Inversión</span><span>$150</span></div>
+
+  <button class="add-btn">+ Añadir</button>
+</div>
+
+<!-- TOTALS -->
+<div class="totals">
+  <div class="row"><span>Ingresos</span><span>$3,350.00</span></div>
+  <div class="row"><span>Gastos</span><span>$1,560.00</span></div>
+  <div class="row"><span>Ahorro</span><span>$350.00</span></div>
+</div>
+
+<button class="save">Guardar presupuesto</button>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // DONUT DEMO
+  const ctx = document.getElementById('donut');
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Vivienda', 'Alimentación', 'Transporte', 'Otros'],
+      datasets: [{
+        data: [950, 450, 160, 440],
+        backgroundColor: ['#3956E8','#7459D9','#E8C239','#64748B']
+      }]
+    },
+    options: {
+      cutout: '65%',
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
