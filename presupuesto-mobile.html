@@ -119,7 +119,7 @@
       color: var(--cm-muted);
     }
 
-    /* Cards base */
+    /* Cards */
     .cm-card {
       background: var(--cm-card-bg);
       border-radius: var(--radius-card);
@@ -153,7 +153,7 @@
       cursor: pointer;
     }
 
-    /* Bloques presupuesto */
+    /* Lista presupuesto */
     .budget-list {
       display: flex;
       flex-direction: column;
@@ -227,7 +227,7 @@
       font-weight: 700;
     }
 
-    /* Presupuesto vs real: banner */
+    /* Banner comparativo */
     .cm-banner {
       margin-top: 16px;
       padding: 12px 14px;
@@ -262,7 +262,7 @@
       color: var(--cm-danger-text);
     }
 
-    /* comparativo totales */
+    /* Totales comparativos */
     .cmp-totales {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -291,7 +291,14 @@
       font-weight: 700;
     }
 
-    /* gráfico barras */
+    /* Toggle área comparativo */
+    .cm-area-toggle {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Gráfico */
     .cm-chart-container {
       margin-top: 14px;
       border-radius: 12px;
@@ -306,7 +313,7 @@
       height: 200px;
     }
 
-    /* Desviaciones top */
+    /* Desviaciones */
     .cm-desv-card {
       margin-top: 14px;
       border-radius: 12px;
@@ -474,7 +481,6 @@
       </p>
     </header>
 
-    <!-- BLOQUES DE PRESUPUESTO -->
     <!-- INGRESOS -->
     <section class="cm-card">
       <div class="cm-card-header">
@@ -552,17 +558,24 @@
         </div>
       </div>
 
-      <!-- Gráfico barras verticales -->
+      <!-- Navegador por área -->
+      <div class="cm-area-toggle">
+        <div class="cm-segment">
+          <button type="button" id="btnAreaGastos" class="active" data-btn-area="gastos">Gastos</button>
+          <button type="button" id="btnAreaIngresos" data-btn-area="ingresos">Ingresos</button>
+          <button type="button" id="btnAreaAhorro" data-btn-area="ahorro">Ahorro</button>
+        </div>
+      </div>
+
+      <!-- Gráfico barras -->
       <div class="cm-chart-container">
         <canvas id="comparativoChart"></canvas>
       </div>
 
-      <!-- Desviaciones top -->
+      <!-- Desviaciones top (solo gastos) -->
       <div class="cm-desv-card">
         <h3>Desviaciones principales (gastos)</h3>
-        <div id="listaDesviaciones">
-          <!-- se llena por JS -->
-        </div>
+        <div id="listaDesviaciones"></div>
       </div>
     </section>
   </main>
@@ -601,9 +614,8 @@
 
   <script>
     // ================================
-    //   DATA BASE: CATEGORÍAS DESKTOP
+    //   DATA BASE: CATEGORÍAS
     // ================================
-
     const categoriasIngresos = {
       "Pago por trabajo": [
         "Salario",
@@ -654,14 +666,12 @@
       "Otros": ["Donaciones planificadas", "Proyectos personales", "Fondo de libertad financiera"]
     };
 
-    // Presupuesto en memoria
     const presupuesto = {
       ingresos: [],
       gastos: [],
       ahorro: []
     };
 
-    // Datos demo "reales" para el comparativo (ejemplo)
     const realDemo = {
       ingresos: 4200,
       gastosPorCategoria: {
@@ -673,15 +683,20 @@
       ahorro: 480
     };
 
-    let tipoPresupuesto = "mensual"; // o "anual"
+    let tipoPresupuesto = "mensual"; // "mensual" o "anual"
     let comparativoChart = null;
+    let areaComparativo = "gastos"; // gastos / ingresos / ahorro
+    let ultimaDataComparativo = null;
 
-    // =============
-    //   UTILIDAD $
-    // =============
+    // ====================
+    //   UTILIDADES
+    // ====================
     function formatMoney(value) {
       const n = Number(value) || 0;
-      return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return "$" + n.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
     }
 
     // =========================
@@ -765,9 +780,8 @@
       document.getElementById("totalGastos").textContent = formatMoney(totalGas);
       document.getElementById("totalAhorro").textContent = formatMoney(totalAho);
 
-      // actualizar comparativo
       const gastosPorCatPres = construirGastosPorCategoriaPresupuesto();
-      actualizarComparativo({
+      const data = {
         presupuesto: {
           ingresos: totalIng,
           gastos: totalGas,
@@ -775,13 +789,16 @@
           gastosPorCategoria: gastosPorCatPres
         },
         real: realDemo
-      });
+      };
+      actualizarComparativo(data);
     }
 
     // =====================
     //   COMPARATIVO VS REAL
     // =====================
     function actualizarComparativo(data) {
+      ultimaDataComparativo = data;
+
       const presGastos = data.presupuesto.gastos || 0;
       const presIngresos = data.presupuesto.ingresos || 0;
       const presAhorro = data.presupuesto.ahorro || 0;
@@ -790,7 +807,7 @@
       const realIngresos = data.real.ingresos || 0;
       const realAhorro = data.real.ahorro || 0;
 
-      // Banner
+      // Banner (se basa en gastos)
       const ratio = presGastos > 0 ? realGastos / presGastos : 0;
       const banner = document.getElementById("cmpBanner");
       const textoP = document.getElementById("cmpBannerTextoPrincipal");
@@ -826,27 +843,54 @@
       textoP.textContent = msgPrincipal;
       textoS.textContent = msgSecundario;
 
-      // Totales comparativos (foco en gastos)
+      // Totales (gastos)
       document.getElementById("cmpPresupuesto").textContent = formatMoney(presGastos);
       document.getElementById("cmpReal").textContent = formatMoney(realGastos);
       document.getElementById("cmpDiferencia").textContent = formatMoney(realGastos - presGastos);
 
-      // Gráfico barras (Ingresos / Gastos / Ahorro)
+      // Gráfico según área seleccionada
       const ctx = document.getElementById("comparativoChart").getContext("2d");
       if (comparativoChart) comparativoChart.destroy();
+
+      let labels = [];
+      let datosPres = [];
+      let datosReal = [];
+
+      if (areaComparativo === "gastos") {
+        const mapaPres = data.presupuesto.gastosPorCategoria || {};
+        const mapaReal = data.real.gastosPorCategoria || {};
+        const categorias = new Set([
+          ...Object.keys(mapaPres),
+          ...Object.keys(mapaReal)
+        ]);
+
+        categorias.forEach(cat => {
+          labels.push(cat);
+          datosPres.push(mapaPres[cat] || 0);
+          datosReal.push(mapaReal[cat] || 0);
+        });
+      } else if (areaComparativo === "ingresos") {
+        labels = ["Total ingresos"];
+        datosPres = [presIngresos];
+        datosReal = [realIngresos];
+      } else if (areaComparativo === "ahorro") {
+        labels = ["Total ahorro"];
+        datosPres = [presAhorro];
+        datosReal = [realAhorro];
+      }
 
       comparativoChart = new Chart(ctx, {
         type: "bar",
         data: {
-          labels: ["Ingresos", "Gastos", "Ahorro"],
+          labels,
           datasets: [
             {
               label: "Presupuesto",
-              data: [presIngresos, presGastos, presAhorro]
+              data: datosPres
             },
             {
               label: "Real",
-              data: [realIngresos, realGastos, realAhorro]
+              data: datosReal
             }
           ]
         },
@@ -855,9 +899,7 @@
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              labels: {
-                font: { size: 10 }
-              }
+              labels: { font: { size: 10 } }
             },
             tooltip: {
               callbacks: {
@@ -870,21 +912,17 @@
           },
           scales: {
             x: {
-              ticks: {
-                font: { size: 10 }
-              }
+              ticks: { font: { size: 10 } }
             },
             y: {
-              ticks: {
-                font: { size: 9 }
-              },
-              beginAtZero: true
+              beginAtZero: true,
+              ticks: { font: { size: 9 } }
             }
           }
         }
       });
 
-      // Desviaciones top por categoría (gastos)
+      // Desviaciones (solo gastos)
       const listaDesv = document.getElementById("listaDesviaciones");
       listaDesv.innerHTML = "";
 
@@ -955,7 +993,6 @@
         area === "ingresos" ? "Ingresos" :
         area === "gastos" ? "Gastos" : "Ahorro";
 
-      // Cargar categorías según área
       let fuente = {};
       if (area === "ingresos") fuente = categoriasIngresos;
       if (area === "gastos") fuente = categoriasGastos;
@@ -969,7 +1006,6 @@
         modalCategoria.appendChild(opt);
       });
 
-      // Cargar subcategorías para la primera categoría
       actualizarSubcategorias(fuente);
 
       modalNombre.value = "";
@@ -1015,10 +1051,7 @@
       const nombre = modalNombre.value.trim();
       const monto = parseFloat(modalMonto.value) || 0;
 
-      if (!cat || !monto) {
-        // mínimo: categoría y monto
-        return;
-      }
+      if (!cat || !monto) return;
 
       const item = {
         id: Date.now() + Math.random().toString(16).slice(2),
@@ -1041,22 +1074,57 @@
     const btnMensual = document.getElementById("btnMensual");
     const btnAnual = document.getElementById("btnAnual");
     const textoTipo = document.getElementById("textoTipo");
-    const modalInfo = document.getElementById("modalInfoTipo");
+
+    function cambiarTipoPresupuesto(nuevoTipo) {
+      if (tipoPresupuesto === nuevoTipo) return;
+
+      const factor = nuevoTipo === "anual" ? 12 : 1 / 12;
+
+      ["ingresos", "gastos", "ahorro"].forEach(area => {
+        presupuesto[area].forEach(item => {
+          const montoActual = Number(item.monto) || 0;
+          const nuevoMonto = montoActual * factor;
+          item.monto = nuevoMonto;
+
+          const input = document.querySelector(
+            `[data-area-list="${area}"] .budget-row[data-item-id="${item.id}"] input`
+          );
+          if (input) {
+            input.value = nuevoMonto.toFixed(2);
+          }
+        });
+      });
+
+      tipoPresupuesto = nuevoTipo;
+
+      if (tipoPresupuesto === "mensual") {
+        textoTipo.innerHTML = 'Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.';
+      } else {
+        textoTipo.innerHTML = 'Trabajando presupuesto <strong>anual</strong> para el año seleccionado.';
+      }
+
+      if (modal.classList.contains("abierto")) {
+        modalInfoTipo.textContent =
+          tipoPresupuesto === "mensual"
+            ? "Monto en formato mensual."
+            : "Monto en formato anual.";
+      }
+
+      recalcularTotales();
+    }
 
     btnMensual.addEventListener("click", () => {
-      tipoPresupuesto = "mensual";
+      if (tipoPresupuesto === "mensual") return;
       btnMensual.classList.add("active");
       btnAnual.classList.remove("active");
-      textoTipo.innerHTML = 'Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.';
-      modalInfo.textContent = "Monto en formato mensual.";
+      cambiarTipoPresupuesto("mensual");
     });
 
     btnAnual.addEventListener("click", () => {
-      tipoPresupuesto = "anual";
+      if (tipoPresupuesto === "anual") return;
       btnAnual.classList.add("active");
       btnMensual.classList.remove("active");
-      textoTipo.innerHTML = 'Trabajando presupuesto <strong>anual</strong> para el año seleccionado.';
-      modalInfo.textContent = "Monto en formato anual.";
+      cambiarTipoPresupuesto("anual");
     });
 
     // =========================
@@ -1069,11 +1137,31 @@
       });
     });
 
+    // =========================
+    //   TOGGLE ÁREA COMPARATIVO
+    // =========================
+    function setAreaComparativo(area) {
+      areaComparativo = area;
+      document.querySelectorAll("[data-btn-area]").forEach(btn => {
+        if (btn.getAttribute("data-btn-area") === area) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+      if (ultimaDataComparativo) {
+        actualizarComparativo(ultimaDataComparativo);
+      }
+    }
+
+    document.getElementById("btnAreaGastos").addEventListener("click", () => setAreaComparativo("gastos"));
+    document.getElementById("btnAreaIngresos").addEventListener("click", () => setAreaComparativo("ingresos"));
+    document.getElementById("btnAreaAhorro").addEventListener("click", () => setAreaComparativo("ahorro"));
+
     // ======================
     //   DEMO INICIAL
     // ======================
     function cargarDemoInicial() {
-      // Demo ingresos
       const demoIng = [
         {
           area: "ingresos",
@@ -1098,7 +1186,6 @@
         }
       ];
 
-      // Demo gastos
       const demoGas = [
         {
           area: "gastos",
@@ -1137,7 +1224,6 @@
         }
       ];
 
-      // Demo ahorro
       const demoAho = [
         {
           area: "ahorro",
@@ -1166,6 +1252,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       cargarDemoInicial();
+      setAreaComparativo("gastos");
     });
   </script>
 </body>
