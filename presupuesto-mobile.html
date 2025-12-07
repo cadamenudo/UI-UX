@@ -20,7 +20,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
   }
 
   h1 {
@@ -57,19 +57,20 @@
     border-radius: 10px;
     border: 1px solid #E5E7EB;
     font-size: 0.9rem;
-    margin-top: 10px;
-    width: 100px;
+    margin-bottom: 14px;
+    margin-top: 4px;
   }
 
-  /* DONUT CARD */
+  /* CARD BASE */
   .card {
     background: white;
     padding: 16px;
     border-radius: 18px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   }
 
+  /* DONA PRESUPUESTO */
   .total {
     text-align: center;
     font-size: 1.6rem;
@@ -84,19 +85,19 @@
     margin: 0 auto;
   }
 
-  /* ACCORDION */
+  /* SECCIONES LISTAS */
   .section {
     background: white;
     padding: 14px 16px;
     border-radius: 14px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
 
   .section-header {
     font-weight: 700;
     font-size: 1rem;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .row {
@@ -107,32 +108,32 @@
   }
 
   .add-btn {
-    margin-top: 10px;
+    margin-top: 8px;
     width: 100%;
-    padding: 10px;
+    padding: 9px;
     background: #3956E8;
     color: white;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     border-radius: 10px;
     border: none;
     cursor: pointer;
   }
 
-  /* BOTTOM TOTALS */
+  /* TOTALES */
   .totals {
-    margin-top: 20px;
+    margin-top: 8px;
     background: white;
     padding: 14px 16px;
     border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
 
   .totals .row {
     font-weight: 600;
   }
 
-  /* Primary button */
   .save {
-    margin-top: 20px;
+    margin-top: 14px;
     width: 100%;
     padding: 14px;
     background: #7459D9;
@@ -143,94 +144,227 @@
     border: none;
     cursor: pointer;
   }
+
+  /* COMPARATIVO */
+  .comp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .comp-title {
+    font-weight: 800;
+    font-size: 1rem;
+  }
+
+  .chips {
+    display: flex;
+    gap: 6px;
+  }
+
+  .chip {
+    border-radius: 999px;
+    border: 1px solid #E5E7EB;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    background: #FFFFFF;
+    color: #64748B;
+  }
+
+  .chip.active {
+    border-color: #3956E8;
+    background: #E8ECFF;
+    color: #3956E8;
+    font-weight: 700;
+  }
+
+  #barComp {
+    width: 100%;
+    height: 260px;
+  }
+
+  .comp-footer {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #64748B;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .comp-footer strong {
+    color: #0f172a;
+  }
 </style>
 </head>
-
 <body>
 
+<!-- HEADER -->
 <div class="top">
   <h1>Presupuesto</h1>
-  <div class="toggle">
-    <span class="active">Mensual</span>
-    <span>Anual</span>
+  <div class="toggle" id="toggleTipo">
+    <span class="active" data-tipo="mensual">Mensual</span>
+    <span data-tipo="anual">Anual</span>
   </div>
 </div>
 
-<select class="select-month">
-  <option>Enero</option>
-  <option>Febrero</option>
-  <option>Marzo</option>
+<select class="select-month" id="selectMes">
+  <option>Enero 2025</option>
+  <option>Febrero 2025</option>
+  <option>Marzo 2025</option>
 </select>
 
+<!-- CARD DONA PRESUPUESTO -->
 <div class="card">
-  <div class="total">$2,450.00</div>
+  <div class="total" id="totalPresupuesto">$2,450.00</div>
   <canvas id="donut"></canvas>
 </div>
 
 <!-- INGRESOS -->
-<div class="section">
+<div class="section" id="secIngresos">
   <div class="section-header">Ingresos</div>
-
-  <div class="row"><span>Salario</span><span>$3200</span></div>
+  <div class="row"><span>Salario</span><span>$3,200</span></div>
   <div class="row"><span>Bonos</span><span>$150</span></div>
-
   <button class="add-btn">+ Añadir</button>
 </div>
 
 <!-- GASTOS -->
-<div class="section">
+<div class="section" id="secGastos">
   <div class="section-header">Gastos</div>
-
   <div class="row"><span>Vivienda</span><span>$950</span></div>
   <div class="row"><span>Alimentación</span><span>$450</span></div>
   <div class="row"><span>Transporte</span><span>$160</span></div>
-
+  <div class="row"><span>Otros</span><span>$440</span></div>
   <button class="add-btn">+ Añadir</button>
 </div>
 
 <!-- AHORRO -->
-<div class="section">
+<div class="section" id="secAhorro">
   <div class="section-header">Ahorro</div>
-
   <div class="row"><span>Emergencia</span><span>$200</span></div>
   <div class="row"><span>Inversión</span><span>$150</span></div>
-
   <button class="add-btn">+ Añadir</button>
 </div>
 
-<!-- TOTALS -->
+<!-- TOTALES -->
 <div class="totals">
   <div class="row"><span>Ingresos</span><span>$3,350.00</span></div>
-  <div class="row"><span>Gastos</span><span>$1,560.00</span></div>
+  <div class="row"><span>Gastos</span><span>$2,000.00</span></div>
   <div class="row"><span>Ahorro</span><span>$350.00</span></div>
 </div>
 
 <button class="save">Guardar presupuesto</button>
 
-<!-- Chart.js -->
+<!-- COMPARATIVO -->
+<div class="card" style="margin-top:18px;">
+  <div class="comp-header">
+    <span class="comp-title">Comparativo presupuesto vs real</span>
+  </div>
+
+  <div class="chips" id="chipsArea">
+    <button class="chip active" data-area="ingresos">Ingresos</button>
+    <button class="chip" data-area="gastos">Gastos</button>
+    <button class="chip" data-area="ahorro">Ahorro</button>
+  </div>
+
+  <canvas id="barComp"></canvas>
+
+  <div class="comp-footer">
+    <span>Presupuesto vs real</span>
+    <span id="resumenComp"><strong>Ingresos</strong> · +$150</span>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-  // DONUT DEMO
-  const ctx = document.getElementById('donut');
+  // DEMO DATA
+  const dataPresupuesto = {
+    ingresos: { labels: ['Salario','Bonos','Extra'], presupuesto: [3200,150,0], real: [3100,200,100] },
+    gastos:   { labels: ['Vivienda','Alimentación','Transporte','Otros'], presupuesto: [950,450,160,440], real: [950,510,150,430] },
+    ahorro:   { labels: ['Emergencia','Inversión'], presupuesto: [200,150], real: [180,160] }
+  };
 
-  new Chart(ctx, {
+  // DONUT (GASTOS)
+  const ctxDonut = document.getElementById('donut');
+  const donutChart = new Chart(ctxDonut, {
     type: 'doughnut',
     data: {
-      labels: ['Vivienda', 'Alimentación', 'Transporte', 'Otros'],
+      labels: ['Vivienda','Alimentación','Transporte','Otros'],
       datasets: [{
-        data: [950, 450, 160, 440],
+        data: dataPresupuesto.gastos.presupuesto,
         backgroundColor: ['#3956E8','#7459D9','#E8C239','#64748B']
       }]
     },
     options: {
       cutout: '65%',
-      plugins: {
-        legend: { display: false }
-      }
+      plugins: { legend: { display:false } }
     }
   });
-</script>
 
+  // BARRAS COMPARATIVO
+  const ctxBar = document.getElementById('barComp');
+  let barChart = null;
+
+  function buildBar(areaKey) {
+    const area = dataPresupuesto[areaKey];
+    const diff = area.real.reduce((a,c)=>a+c,0) - area.presupuesto.reduce((a,c)=>a+c,0);
+
+    if (barChart) barChart.destroy();
+
+    barChart = new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: area.labels,
+        datasets: [
+          {
+            label: 'Presupuesto',
+            data: area.presupuesto,
+            backgroundColor: '#3956E8'
+          },
+          {
+            label: 'Real',
+            data: area.real,
+            backgroundColor: '#E8C239'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { ticks: { font: { size: 10 } } },
+          y: { beginAtZero: true }
+        },
+        plugins: {
+          legend: {
+            labels: { font: { size: 10 } }
+          }
+        }
+      }
+    });
+
+    const txt = (diff >= 0 ? '+$' + diff : '-$' + Math.abs(diff));
+    document.getElementById('resumenComp').innerHTML = `<strong>${areaKey.charAt(0).toUpperCase()+areaKey.slice(1)}</strong> · ${txt}`;
+  }
+
+  // INIT
+  buildBar('ingresos');
+
+  // Chips cambio de área
+  document.getElementById('chipsArea').addEventListener('click', (e) => {
+    if (!e.target.classList.contains('chip')) return;
+    document.querySelectorAll('#chipsArea .chip').forEach(c => c.classList.remove('active'));
+    e.target.classList.add('active');
+    const area = e.target.getAttribute('data-area');
+    buildBar(area);
+  });
+
+  // Toggle mensual/anual (solo visual de momento)
+  document.getElementById('toggleTipo').addEventListener('click', (e) => {
+    if (e.target.tagName !== 'SPAN') return;
+    document.querySelectorAll('#toggleTipo span').forEach(s => s.classList.remove('active'));
+    e.target.classList.add('active');
+  });
+</script>
 </body>
 </html>
