@@ -263,7 +263,7 @@
     font-weight: 700;
   }
 
-  /* MODAL AÑADIR */
+  /* MODAL AÑADIR (tipo desktop, simplificado) */
   .modal {
     position: fixed;
     inset: 0;
@@ -279,50 +279,61 @@
   }
 
   .modal-content {
-    background: white;
+    background: #fff;
     border-radius: 16px;
-    padding: 16px 18px;
+    padding: 1.5rem 1.6rem;
     width: 90%;
-    max-width: 360px;
+    max-width: 380px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
   }
 
   .modal-content h2 {
+    margin-top: 0;
     font-size: 1.1rem;
-    margin-bottom: 10px;
+    color: #111827;
     font-weight: 800;
+    margin-bottom: 1rem;
   }
 
   .modal-content label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 4px;
     display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    margin-top: 0.4rem;
+    color: #111827;
   }
 
-  .modal-content input {
+  .modal-content input,
+  .modal-content select,
+  .modal-content textarea {
     width: 100%;
-    padding: 8px 10px;
-    border-radius: 10px;
+    padding: 0.7rem 0.8rem;
     border: 1px solid #D1D5DB;
-    margin-bottom: 10px;
-    font-family: inherit;
+    border-radius: 12px;
     font-size: 0.9rem;
+    font-family: inherit;
     box-sizing: border-box;
+    margin-bottom: 0.3rem;
+  }
+
+  .modal-content textarea {
+    resize: vertical;
+    min-height: 60px;
   }
 
   .modal-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 8px;
-    margin-top: 4px;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
   }
 
   .btn-cancel {
     border: none;
     background: #F3F4F6;
     color: #111827;
-    padding: 7px 12px;
+    padding: 0.6rem 1.1rem;
     border-radius: 10px;
     font-size: 0.85rem;
     cursor: pointer;
@@ -332,7 +343,7 @@
     border: none;
     background: #3956E8;
     color: white;
-    padding: 7px 14px;
+    padding: 0.6rem 1.3rem;
     border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 700;
@@ -402,7 +413,7 @@
 <!-- COMPARATIVO -->
 <div class="card" style="margin-top:18px;">
   <div class="comp-header">
-    <span class="comp-title">Comparativo presupuesto vs real</span>
+    <span class="comp-title" id="compTitle">Comparativo presupuesto vs real (mensual)</span>
     <div class="chips" id="chipsArea">
       <button class="chip active" data-area="ingresos">Ingresos</button>
       <button class="chip" data-area="gastos">Gastos</button>
@@ -419,15 +430,15 @@
   <!-- MINI RESUMEN -->
   <div class="mini-summary" id="miniSummary">
     <div class="row">
-      <span>Presupuesto total</span>
+      <span id="labelPresupuesto">Presupuesto mensual total</span>
       <span id="miniPresupuesto">$0.00</span>
     </div>
     <div class="row">
-      <span>Real total</span>
+      <span id="labelReal">Real mensual total</span>
       <span id="miniReal">$0.00</span>
     </div>
     <div class="row">
-      <span>Diferencia</span>
+      <span id="labelDiff">Diferencia mensual</span>
       <span id="miniDiff">$0.00</span>
     </div>
   </div>
@@ -437,19 +448,35 @@
 
   <!-- DESVIACIONES TOP -->
   <div class="top-deviations" id="topDeviations">
-    <!-- Se llena por JS -->
+    <!-- JS -->
   </div>
 </div>
 
-<!-- MODAL AÑADIR ITEM -->
+<!-- MODAL AÑADIR ITEM (tipo desktop) -->
 <div class="modal" id="modalAdd">
   <div class="modal-content">
     <h2 id="modalTitle">Añadir</h2>
+
     <label for="inputNombre">Nombre</label>
     <input type="text" id="inputNombre" placeholder="Ej. Restaurante">
 
-    <label for="inputMonto">Monto</label>
-    <input type="number" id="inputMonto" placeholder="0.00" step="0.01" min="0">
+    <label for="inputRecurrencia">Recurrencia</label>
+    <select id="inputRecurrencia">
+      <option value="">Ninguna</option>
+      <option value="diario">Diario</option>
+      <option value="semanal">Semanal</option>
+      <option value="quincenal">Quincenal</option>
+      <option value="mensual">Mensual</option>
+      <option value="anual">Anual</option>
+    </select>
+
+    <div id="grupoMonto">
+      <label for="inputMonto">Monto</label>
+      <input type="number" id="inputMonto" placeholder="0.00" step="0.01" min="0">
+    </div>
+
+    <label for="inputDescripcion">Descripción (opcional)</label>
+    <textarea id="inputDescripcion" placeholder="Descripción breve..."></textarea>
 
     <div class="modal-actions">
       <button class="btn-cancel" id="btnCancel">Cancelar</button>
@@ -460,20 +487,36 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  // ---------- ESTADO TIPO (mensual/anual) ----------
+  let tipoPresupuesto = 'mensual';
+
+  const compTitle       = document.getElementById('compTitle');
+  const labelPresupuesto = document.getElementById('labelPresupuesto');
+  const labelReal        = document.getElementById('labelReal');
+  const labelDiff        = document.getElementById('labelDiff');
+
+  function actualizarEtiquetasTipo() {
+    const sufijo = tipoPresupuesto === 'mensual' ? 'mensual' : 'anual';
+    compTitle.textContent = 'Comparativo presupuesto vs real (' + sufijo + ')';
+    labelPresupuesto.textContent = 'Presupuesto ' + sufijo + ' total';
+    labelReal.textContent        = 'Real ' + sufijo + ' total';
+    labelDiff.textContent        = 'Diferencia ' + sufijo;
+  }
+
   // ---------- DATA DEMO PRESUPUESTO ----------
   let ingresos = [
-    { nombre: 'Salario', monto: 3200 },
-    { nombre: 'Bonos', monto: 150 }
+    { nombre: 'Salario', monto: 3200, recurrencia: 'mensual', descripcion: '' },
+    { nombre: 'Bonos',   monto: 150,  recurrencia: 'mensual', descripcion: '' }
   ];
   let gastos = [
-    { nombre: 'Vivienda', monto: 950 },
-    { nombre: 'Alimentación', monto: 450 },
-    { nombre: 'Transporte', monto: 160 },
-    { nombre: 'Otros', monto: 440 }
+    { nombre: 'Vivienda',      monto: 950, recurrencia: 'mensual', descripcion: '' },
+    { nombre: 'Alimentación',  monto: 450, recurrencia: 'mensual', descripcion: '' },
+    { nombre: 'Transporte',    monto: 160, recurrencia: 'mensual', descripcion: '' },
+    { nombre: 'Otros',         monto: 440, recurrencia: 'mensual', descripcion: '' }
   ];
   let ahorro = [
-    { nombre: 'Emergencia', monto: 200 },
-    { nombre: 'Inversión', monto: 150 }
+    { nombre: 'Emergencia', monto: 200, recurrencia: 'mensual', descripcion: '' },
+    { nombre: 'Inversión',  monto: 150, recurrencia: 'mensual', descripcion: '' }
   ];
 
   const listaIngresos = document.getElementById('listaIngresos');
@@ -517,22 +560,29 @@
 
   renderPresupuesto();
 
-  // ---------- MODAL AÑADIR ----------
-  const modal = document.getElementById('modalAdd');
-  const inputNombre = document.getElementById('inputNombre');
-  const inputMonto  = document.getElementById('inputMonto');
-  const btnCancel   = document.getElementById('btnCancel');
-  const btnSave     = document.getElementById('btnSave');
-  const modalTitle  = document.getElementById('modalTitle');
+  // ---------- MODAL AÑADIR (tipo desktop) ----------
+  const modal           = document.getElementById('modalAdd');
+  const inputNombre     = document.getElementById('inputNombre');
+  const inputRecurrencia= document.getElementById('inputRecurrencia');
+  const inputMonto      = document.getElementById('inputMonto');
+  const inputDescripcion= document.getElementById('inputDescripcion');
+  const btnCancel       = document.getElementById('btnCancel');
+  const btnSave         = document.getElementById('btnSave');
+  const modalTitle      = document.getElementById('modalTitle');
+  const grupoMonto      = document.getElementById('grupoMonto');
 
   let objetivoActual = null; // 'ingresos' | 'gastos' | 'ahorro'
 
   document.querySelectorAll('.add-btn-small').forEach(btn => {
     btn.addEventListener('click', () => {
       objetivoActual = btn.getAttribute('data-objetivo');
-      modalTitle.textContent = 'Añadir a ' + objetivoActual;
-      inputNombre.value = '';
-      inputMonto.value = '';
+      let tituloArea = objetivoActual.charAt(0).toUpperCase() + objetivoActual.slice(1);
+      modalTitle.textContent = 'Añadir a ' + tituloArea;
+      inputNombre.value      = '';
+      inputRecurrencia.value = '';
+      inputMonto.value       = '';
+      inputDescripcion.value = '';
+      grupoMonto.style.display = 'block';
       modal.classList.add('open');
       inputNombre.focus();
     });
@@ -544,16 +594,30 @@
 
   btnSave.addEventListener('click', () => {
     const nombre = inputNombre.value.trim();
+    const recurrencia = inputRecurrencia.value;
     const monto = parseFloat(inputMonto.value);
-    if (!nombre || isNaN(monto) || monto < 0) {
-      return;
-    }
-    if (objetivoActual === 'ingresos') ingresos.push({nombre, monto});
-    if (objetivoActual === 'gastos')   gastos.push({nombre, monto});
-    if (objetivoActual === 'ahorro')   ahorro.push({nombre, monto});
+    const descripcion = inputDescripcion.value.trim();
+
+    if (!nombre || isNaN(monto) || monto < 0) return;
+
+    const nuevo = { nombre, monto, recurrencia, descripcion };
+
+    if (objetivoActual === 'ingresos') ingresos.push(nuevo);
+    if (objetivoActual === 'gastos')   gastos.push(nuevo);
+    if (objetivoActual === 'ahorro')   ahorro.push(nuevo);
+
     renderPresupuesto();
     actualizarComparativo(areaActual);
     modal.classList.remove('open');
+  });
+
+  // Mostrar / ocultar campo monto según recurrencia (aquí siempre dejamos visible, pero respetamos lógica básica)
+  inputRecurrencia.addEventListener('change', () => {
+    if (!inputRecurrencia.value) {
+      grupoMonto.style.display = 'block'; // podrías ocultarlo si quisieras
+    } else {
+      grupoMonto.style.display = 'block';
+    }
   });
 
   // Cerrar modal tocando fondo
@@ -614,7 +678,6 @@
     const presData = getPresupuestoArea(areaKey);
     const realData = dataReal[areaKey];
 
-    // Alinear realData con labels de presupuesto
     const labels = presData.labels;
     const presupuesto = labels.map(lbl => {
       const idx = presData.labels.indexOf(lbl);
@@ -647,8 +710,8 @@
 
     // Mini resumen
     miniPresupuesto.textContent = formato(totalPres);
-    miniReal.textContent = formato(totalReal);
-    miniDiff.textContent = (diff >= 0 ? '+ ' : '- ') + formato(Math.abs(diff));
+    miniReal.textContent        = formato(totalReal);
+    miniDiff.textContent        = (diff >= 0 ? '+ ' : '- ') + formato(Math.abs(diff));
 
     // Gráfico barras
     if (barChart) barChart.destroy();
@@ -712,6 +775,7 @@
   }
 
   actualizarComparativo('ingresos');
+  actualizarEtiquetasTipo();
 
   // Cambiar área con chips
   document.getElementById('chipsArea').addEventListener('click', (e) => {
@@ -722,11 +786,13 @@
     actualizarComparativo(area);
   });
 
-  // Toggle mensual/anual (solo visual por ahora)
+  // Toggle mensual/anual (actualiza etiquetas)
   document.getElementById('toggleTipo').addEventListener('click', (e) => {
     if (e.target.tagName !== 'SPAN') return;
     document.querySelectorAll('#toggleTipo span').forEach(s => s.classList.remove('active'));
     e.target.classList.add('active');
+    tipoPresupuesto = e.target.getAttribute('data-tipo') || 'mensual';
+    actualizarEtiquetasTipo();
   });
 </script>
 </body>
