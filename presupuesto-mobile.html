@@ -1,799 +1,1172 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Presupuesto – Móvil</title>
+  <meta charset="UTF-8" />
+  <title>Presupuesto móvil – Cada Menudo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Nunito -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
 
-<style>
-  body {
-    font-family: Nunito, sans-serif;
-    background: #F6F7FF;
-    padding: 16px;
-    margin: 0;
-  }
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  /* HEADER */
-  .top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
+  <style>
+    :root {
+      --cm-primary: #3956e8;
+      --cm-secondary: #7459d9;
+      --cm-bg: #f5f6ff;
+      --cm-card-bg: #ffffff;
+      --cm-text: #0f172a;
+      --cm-muted: #64748b;
+      --cm-border: #e5e7eb;
+      --cm-success-bg: #ecfdf3;
+      --cm-success-text: #15803d;
+      --cm-warning-bg: #fef9c3;
+      --cm-warning-text: #92400e;
+      --cm-danger-bg: #fef2f2;
+      --cm-danger-text: #b91c1c;
+      --radius-card: 16px;
+      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
 
-  h1 {
-    font-size: 1.4rem;
-    font-weight: 800;
-    margin: 0;
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  .toggle {
-    background: white;
-    border-radius: 999px;
-    padding: 4px;
-    display: flex;
-    gap: 4px;
-    border: 1px solid #E5E7EB;
-  }
+    body {
+      font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--cm-bg);
+      color: var(--cm-text);
+    }
 
-  .toggle span {
-    padding: 6px 14px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 0.85rem;
-  }
+    .cm-page {
+      padding: 16px 16px 24px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
 
-  .toggle .active {
-    background: #E8ECFF;
-    color: #3956E8;
-    font-weight: 700;
-  }
+    /* Header */
+    .cm-page-header {
+      margin-bottom: 16px;
+    }
 
-  .select-month {
-    background: white;
-    padding: 8px 14px;
-    border-radius: 10px;
-    border: 1px solid #E5E7EB;
-    font-size: 0.9rem;
-    margin-bottom: 14px;
-    margin-top: 4px;
-    width: 100%;
-  }
+    .cm-breadcrumb {
+      font-size: 0.8rem;
+      color: var(--cm-muted);
+    }
 
-  /* SECCIONES PRESUPUESTO */
-  .section {
-    background: white;
-    padding: 12px 14px;
-    border-radius: 14px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  }
+    .cm-page-title h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-top: 4px;
+    }
 
-  .section-header-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
+    .cm-header-row {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
-  .section-header {
-    font-weight: 700;
-    font-size: 1rem;
-  }
+    .cm-segment {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: #eef2ff;
+      gap: 4px;
+    }
 
-  .add-btn-small {
-    border: none;
-    background: #EEF2FF;
-    color: #3956E8;
-    font-size: 0.8rem;
-    padding: 5px 10px;
-    border-radius: 999px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
+    .cm-segment button {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--cm-muted);
+      cursor: pointer;
+    }
 
-  .row {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    font-size: 0.95rem;
-  }
+    .cm-segment button.active {
+      background: #ffffff;
+      color: var(--cm-primary);
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(148, 163, 184, 0.4);
+    }
 
-  .row span:last-child {
-    font-weight: 600;
-  }
+    .cm-select-inline {
+      border-radius: 999px;
+      border: 1px solid var(--cm-border);
+      background: #fff;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      color: var(--cm-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      min-width: 140px;
+      justify-content: space-between;
+    }
 
-  /* TOTALES */
-  .totals {
-    margin-top: 4px;
-    background: white;
-    padding: 12px 14px;
-    border-radius: 14px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    margin-bottom: 12px;
-  }
+    .cm-helper-text {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--cm-muted);
+    }
 
-  .totals .row {
-    font-weight: 600;
-  }
+    /* Cards base */
+    .cm-card {
+      background: var(--cm-card-bg);
+      border-radius: var(--radius-card);
+      padding: 14px 14px;
+      box-shadow: var(--shadow-soft);
+      margin-top: 14px;
+    }
 
-  .save {
-    margin-top: 8px;
-    width: 100%;
-    padding: 14px;
-    background: #7459D9;
-    color: white;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-  }
+    .cm-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
 
-  /* CARD BASE */
-  .card {
-    background: white;
-    padding: 14px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    margin-bottom: 14px;
-  }
+    .cm-card-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
 
-  /* COMPARATIVO */
-  .comp-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
+    .cm-btn-add {
+      border: none;
+      background: #eef2ff;
+      color: var(--cm-primary);
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
 
-  .comp-title {
-    font-weight: 800;
-    font-size: 1rem;
-  }
+    /* Bloques presupuesto */
+    .budget-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
 
-  .chips {
-    display: flex;
-    gap: 6px;
-  }
+    .budget-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--cm-border);
+      background: #f9fafb;
+    }
 
-  .chip {
-    border-radius: 999px;
-    border: 1px solid #E5E7EB;
-    padding: 4px 10px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    background: #FFFFFF;
-    color: #64748B;
-  }
+    .budget-row-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
 
-  .chip.active {
-    border-color: #3956E8;
-    background: #E8ECFF;
-    color: #3956E8;
-    font-weight: 700;
-  }
+    .row-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-  /* BANNER ESTADO */
-  .status-banner {
-    border-radius: 12px;
-    padding: 8px 10px;
-    font-size: 0.85rem;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .row-meta {
+      font-size: 0.75rem;
+      color: var(--cm-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-  .status-banner.green {
-    background: #ECFDF3;
-    color: #15803D;
-  }
-  .status-banner.yellow {
-    background: #FEF9C3;
-    color: #92400E;
-  }
-  .status-banner.red {
-    background: #FEF2F2;
-    color: #B91C1C;
-  }
+    .budget-row-amount {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
 
-  .status-banner strong {
-    font-weight: 800;
-  }
+    .budget-row-amount span.currency {
+      font-size: 0.8rem;
+      color: var(--cm-muted);
+    }
 
-  /* MINI RESUMEN */
-  .mini-summary {
-    margin-bottom: 8px;
-  }
+    .budget-row-amount input {
+      width: 88px;
+      padding: 4px 6px;
+      border-radius: 999px;
+      border: 1px solid var(--cm-border);
+      font-size: 0.8rem;
+      text-align: right;
+    }
 
-  .mini-summary .row {
-    font-size: 0.9rem;
-  }
+    .budget-total {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--cm-border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
 
-  .mini-summary .row span:first-child {
-    color: #64748B;
-  }
+    /* Presupuesto vs real: banner */
+    .cm-banner {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-  #barComp {
-    width: 100%;
-    height: 260px;
-    margin-top: 4px;
-    margin-bottom: 8px;
-  }
+    .cm-banner strong {
+      font-weight: 800;
+    }
 
-  /* DESVIACIONES TOP */
-  .top-deviations {
-    border-top: 1px dashed #E5E7EB;
-    padding-top: 6px;
-    margin-top: 4px;
-    font-size: 0.85rem;
-  }
+    .cm-banner-small {
+      font-size: 0.8rem;
+      color: var(--cm-muted);
+    }
 
-  .top-dev-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-  }
+    .cm-banner-success {
+      background: var(--cm-success-bg);
+      color: var(--cm-success-text);
+    }
 
-  .top-dev-left {
-    display: flex;
-    flex-direction: column;
-  }
+    .cm-banner-warning {
+      background: var(--cm-warning-bg);
+      color: var(--cm-warning-text);
+    }
 
-  .top-dev-name {
-    font-weight: 600;
-  }
+    .cm-banner-danger {
+      background: var(--cm-danger-bg);
+      color: var(--cm-danger-text);
+    }
 
-  .top-dev-detail {
-    color: #64748B;
-    font-size: 0.8rem;
-  }
+    /* comparativo totales */
+    .cmp-totales {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
 
-  .top-dev-diff.positive {
-    color: #B91C1C;
-    font-weight: 700;
-  }
-  .top-dev-diff.negative {
-    color: #15803D;
-    font-weight: 700;
-  }
+    .cmp-item {
+      border-radius: 12px;
+      border: 1px solid var(--cm-border);
+      padding: 8px 10px;
+      background: #f9fafb;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-  /* MODAL AÑADIR (tipo desktop, simplificado) */
-  .modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(15,23,42,0.45);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
+    .cmp-label {
+      color: var(--cm-muted);
+      font-size: 0.75rem;
+    }
 
-  .modal.open {
-    display: flex;
-  }
+    .cmp-value {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
 
-  .modal-content {
-    background: #fff;
-    border-radius: 16px;
-    padding: 1.5rem 1.6rem;
-    width: 90%;
-    max-width: 380px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-  }
+    /* gráfico barras */
+    .cm-chart-container {
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--cm-border);
+      background: #ffffff;
+      padding: 10px;
+      min-height: 220px;
+    }
 
-  .modal-content h2 {
-    margin-top: 0;
-    font-size: 1.1rem;
-    color: #111827;
-    font-weight: 800;
-    margin-bottom: 1rem;
-  }
+    .cm-chart-container canvas {
+      width: 100%;
+      height: 200px;
+    }
 
-  .modal-content label {
-    display: block;
-    font-weight: 600;
-    font-size: 0.85rem;
-    margin-bottom: 0.25rem;
-    margin-top: 0.4rem;
-    color: #111827;
-  }
+    /* Desviaciones top */
+    .cm-desv-card {
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--cm-border);
+      background: #ffffff;
+      padding: 10px 12px;
+    }
 
-  .modal-content input,
-  .modal-content select,
-  .modal-content textarea {
-    width: 100%;
-    padding: 0.7rem 0.8rem;
-    border: 1px solid #D1D5DB;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    font-family: inherit;
-    box-sizing: border-box;
-    margin-bottom: 0.3rem;
-  }
+    .cm-desv-card h3 {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
 
-  .modal-content textarea {
-    resize: vertical;
-    min-height: 60px;
-  }
+    .desv-item {
+      font-size: 0.8rem;
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--cm-border);
+    }
 
-  .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 0.8rem;
-  }
+    .desv-item:last-child {
+      border-bottom: none;
+    }
 
-  .btn-cancel {
-    border: none;
-    background: #F3F4F6;
-    color: #111827;
-    padding: 0.6rem 1.1rem;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    cursor: pointer;
-  }
+    .desv-label {
+      font-weight: 600;
+    }
 
-  .btn-save {
-    border: none;
-    background: #3956E8;
-    color: white;
-    padding: 0.6rem 1.3rem;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-  }
-</style>
+    .desv-detalle {
+      color: var(--cm-muted);
+      font-size: 0.75rem;
+    }
+
+    /* Modal */
+    .modal-subcategoria {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-subcategoria.abierto {
+      display: flex;
+    }
+
+    .modal-contenido {
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px 16px 18px;
+      width: 92%;
+      max-width: 380px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      position: relative;
+      font-size: 0.85rem;
+    }
+
+    .modal-titulo {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal-subtitulo {
+      font-size: 0.75rem;
+      color: var(--cm-muted);
+      margin-bottom: 10px;
+    }
+
+    .modal-contenido label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+      margin-top: 8px;
+      color: #111827;
+    }
+
+    .modal-contenido select,
+    .modal-contenido input {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid #D1D5DB;
+      font-size: 0.85rem;
+      font-family: inherit;
+      margin-bottom: 2px;
+      box-sizing: border-box;
+    }
+
+    .modal-info-tipo {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: var(--cm-muted);
+    }
+
+    .modal-botones {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .modal-botones button {
+      border-radius: 999px;
+      border: none;
+      font-size: 0.8rem;
+      padding: 7px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-cancelar {
+      background: #F8F6FF;
+      color: #4B0082;
+    }
+
+    .btn-guardar {
+      background: #3956E8;
+      color: white;
+    }
+
+    .modal-close {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      font-size: 1.2rem;
+      color: #9CA3AF;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    @media (min-width: 600px) {
+      .cm-page {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <main class="cm-page">
+    <!-- Header -->
+    <header class="cm-page-header">
+      <div class="cm-page-title">
+        <span class="cm-breadcrumb">Tablero / Presupuesto</span>
+        <h1>Presupuesto del periodo</h1>
+      </div>
 
-<!-- HEADER -->
-<div class="top">
-  <h1>Presupuesto</h1>
-  <div class="toggle" id="toggleTipo">
-    <span class="active" data-tipo="mensual">Mensual</span>
-    <span data-tipo="anual">Anual</span>
-  </div>
-</div>
+      <div class="cm-header-row">
+        <div class="cm-segment">
+          <button id="btnMensual" type="button" class="active">Mensual</button>
+          <button id="btnAnual" type="button">Anual</button>
+        </div>
 
-<select class="select-month" id="selectMes">
-  <option>Enero 2025</option>
-  <option>Febrero 2025</option>
-  <option>Marzo 2025</option>
-</select>
+        <div class="cm-select-inline">
+          <span id="labelPeriodoTipo">Mes:</span>
+          <span><strong id="labelPeriodo">Enero 2025</strong> ⌄</span>
+        </div>
+      </div>
 
-<!-- INGRESOS -->
-<div class="section" id="secIngresos">
-  <div class="section-header-row">
-    <div class="section-header">Ingresos</div>
-    <button class="add-btn-small" data-objetivo="ingresos">
-      + Añadir
-    </button>
-  </div>
-  <div id="listaIngresos"></div>
-</div>
+      <p class="cm-helper-text" id="textoTipo">
+        Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.
+      </p>
+    </header>
 
-<!-- GASTOS -->
-<div class="section" id="secGastos">
-  <div class="section-header-row">
-    <div class="section-header">Gastos</div>
-    <button class="add-btn-small" data-objetivo="gastos">
-      + Añadir
-    </button>
-  </div>
-  <div id="listaGastos"></div>
-</div>
+    <!-- BLOQUES DE PRESUPUESTO -->
+    <!-- INGRESOS -->
+    <section class="cm-card">
+      <div class="cm-card-header">
+        <h2>Ingresos presupuestados</h2>
+        <button class="cm-btn-add" type="button" data-area="ingresos">
+          + Añadir
+        </button>
+      </div>
+      <div class="budget-list" data-area-list="ingresos"></div>
+      <div class="budget-total">
+        <span>Total ingresos</span>
+        <span id="totalIngresos">$0.00</span>
+      </div>
+    </section>
 
-<!-- AHORRO -->
-<div class="section" id="secAhorro">
-  <div class="section-header-row">
-    <div class="section-header">Ahorro</div>
-    <button class="add-btn-small" data-objetivo="ahorro">
-      + Añadir
-    </button>
-  </div>
-  <div id="listaAhorro"></div>
-</div>
+    <!-- GASTOS -->
+    <section class="cm-card">
+      <div class="cm-card-header">
+        <h2>Gastos presupuestados</h2>
+        <button class="cm-btn-add" type="button" data-area="gastos">
+          + Añadir
+        </button>
+      </div>
+      <div class="budget-list" data-area-list="gastos"></div>
+      <div class="budget-total">
+        <span>Total gastos</span>
+        <span id="totalGastos">$0.00</span>
+      </div>
+    </section>
 
-<!-- TOTALES -->
-<div class="totals">
-  <div class="row"><span>Ingresos</span><span id="totalIng">$0.00</span></div>
-  <div class="row"><span>Gastos</span><span id="totalGas">$0.00</span></div>
-  <div class="row"><span>Ahorro</span><span id="totalAho">$0.00</span></div>
-</div>
+    <!-- AHORRO -->
+    <section class="cm-card">
+      <div class="cm-card-header">
+        <h2>Ahorro presupuestado</h2>
+        <button class="cm-btn-add" type="button" data-area="ahorro">
+          + Añadir
+        </button>
+      </div>
+      <div class="budget-list" data-area-list="ahorro"></div>
+      <div class="budget-total">
+        <span>Total ahorro</span>
+        <span id="totalAhorro">$0.00</span>
+      </div>
+    </section>
 
-<button class="save">Guardar presupuesto</button>
+    <!-- PRESUPUESTO VS REAL -->
+    <section class="cm-card" style="margin-top:18px;">
+      <h2 style="font-size:1rem; font-weight:700; margin-bottom:4px;">
+        Presupuesto vs gasto real
+      </h2>
 
-<!-- COMPARATIVO -->
-<div class="card" style="margin-top:18px;">
-  <div class="comp-header">
-    <span class="comp-title" id="compTitle">Comparativo presupuesto vs real (mensual)</span>
-    <div class="chips" id="chipsArea">
-      <button class="chip active" data-area="ingresos">Ingresos</button>
-      <button class="chip" data-area="gastos">Gastos</button>
-      <button class="chip" data-area="ahorro">Ahorro</button>
+      <!-- Banner -->
+      <div id="cmpBanner" class="cm-banner cm-banner-success">
+        <div id="cmpBannerTextoPrincipal">
+          SUPER: estás usando el 82% de tu presupuesto de gastos.
+        </div>
+        <div id="cmpBannerTextoSecundario" class="cm-banner-small">
+          Te quedan $350 para gastar sin salirte del plan.
+        </div>
+      </div>
+
+      <!-- Totales comparativos -->
+      <div class="cmp-totales">
+        <div class="cmp-item">
+          <span class="cmp-label">Gastos presupuestados</span>
+          <span class="cmp-value" id="cmpPresupuesto">$0.00</span>
+        </div>
+        <div class="cmp-item">
+          <span class="cmp-label">Gasto real</span>
+          <span class="cmp-value" id="cmpReal">$0.00</span>
+        </div>
+        <div class="cmp-item">
+          <span class="cmp-label">Diferencia</span>
+          <span class="cmp-value" id="cmpDiferencia">$0.00</span>
+        </div>
+      </div>
+
+      <!-- Gráfico barras verticales -->
+      <div class="cm-chart-container">
+        <canvas id="comparativoChart"></canvas>
+      </div>
+
+      <!-- Desviaciones top -->
+      <div class="cm-desv-card">
+        <h3>Desviaciones principales (gastos)</h3>
+        <div id="listaDesviaciones">
+          <!-- se llena por JS -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL AÑADIR PARTIDA -->
+  <div id="modalPartida" class="modal-subcategoria">
+    <div class="modal-contenido">
+      <button class="modal-close" type="button" id="btnCerrarModal">×</button>
+      <div class="modal-titulo">Añadir al presupuesto</div>
+      <div class="modal-subtitulo">
+        Área: <strong id="modalAreaTexto">Ingresos</strong>
+      </div>
+
+      <label for="modalCategoria">Categoría</label>
+      <select id="modalCategoria"></select>
+
+      <label for="modalSubcategoria">Subcategoría</label>
+      <select id="modalSubcategoria"></select>
+
+      <label for="modalNombre">Nombre (opcional)</label>
+      <input type="text" id="modalNombre" placeholder="Ej. Salario principal" />
+
+      <label for="modalMonto">Monto</label>
+      <input type="number" id="modalMonto" placeholder="0.00" min="0" step="0.01" />
+
+      <div class="modal-info-tipo" id="modalInfoTipo">
+        Monto en formato mensual.
+      </div>
+
+      <div class="modal-botones">
+        <button type="button" class="btn-cancelar" id="btnCancelarModal">Cancelar</button>
+        <button type="button" class="btn-guardar" id="btnGuardarModal">Guardar</button>
+      </div>
     </div>
   </div>
 
-  <!-- BANNER ESTADO -->
-  <div id="statusBanner" class="status-banner green">
-    <span id="statusText"><strong>Bien:</strong> Vas por debajo del presupuesto.</span>
-    <span id="statusDiff">$0</span>
-  </div>
+  <script>
+    // ================================
+    //   DATA BASE: CATEGORÍAS DESKTOP
+    // ================================
 
-  <!-- MINI RESUMEN -->
-  <div class="mini-summary" id="miniSummary">
-    <div class="row">
-      <span id="labelPresupuesto">Presupuesto mensual total</span>
-      <span id="miniPresupuesto">$0.00</span>
-    </div>
-    <div class="row">
-      <span id="labelReal">Real mensual total</span>
-      <span id="miniReal">$0.00</span>
-    </div>
-    <div class="row">
-      <span id="labelDiff">Diferencia mensual</span>
-      <span id="miniDiff">$0.00</span>
-    </div>
-  </div>
+    const categoriasIngresos = {
+      "Pago por trabajo": [
+        "Salario",
+        "Pago por hora",
+        "Comisión",
+        "Bono",
+        "Propina",
+        "Negocio propio"
+      ],
+      "Ganancia de capital": [
+        "Acciones",
+        "Bonos o renta fija",
+        "ETF, fondo mutuo, etc.",
+        "Casa/Apartamento/Tierra",
+        "Auto"
+      ],
+      "Ingreso pasivo": [
+        "Pensión",
+        "Seguro Social",
+        "Renta inmueble",
+        "Anualidad",
+        "Dividendos e Intereses"
+      ]
+    };
 
-  <!-- GRÁFICO -->
-  <canvas id="barComp"></canvas>
+    const categoriasGastos = {
+      "Alimentación": ["Supermercado", "Comidas fuera", "Pedido a domicilio"],
+      "Casa": ["Hipoteca / Alquiler", "Servicios básicos", "Mantenimiento"],
+      "Impuestos": ["Seguro social", "Propiedad", "Venta", "Estatales", "Federales", "Municipales"],
+      "Transportación": ["Gasolina", "Mantenimiento", "Transporte público / Uber"],
+      "Seguros": ["Salud", "Auto", "Vida"],
+      "Regalos y donaciones": ["Familia", "Amigos", "Instituciones"],
+      "Gastos Médicos": ["Consultas", "Medicamentos", "Procedimientos"],
+      "Cuidado Personal": ["Peluquería", "Cosméticos", "Spa / Barbería"],
+      "Dependientes": ["Cuidado de niños", "Cuidado de mayores", "Educación"],
+      "Deuda": ["Tarjetas de crédito", "Préstamos estudiantiles", "Otros préstamos"],
+      "Entretenimiento": ["Cine", "Conciertos", "Streaming"],
+      "Telecomunicaciones": ["Teléfono", "Internet", "TV"]
+    };
 
-  <!-- DESVIACIONES TOP -->
-  <div class="top-deviations" id="topDeviations">
-    <!-- JS -->
-  </div>
-</div>
+    const categoriasAhorro = {
+      "Emergencia": ["Fondo corto plazo", "Fondo largo plazo", "Reserva médica"],
+      "Meta específica": ["Vacaciones", "Auto", "Casa", "Boda", "Educación de hijos"],
+      "Inversión": ["Cuenta brokerage", "Fondo indexado", "Cripto", "Crowdfunding"],
+      "Retiro": ["IRA / Roth IRA", "401(k)", "Pensión privada"],
+      "Ahorro personal": ["Ahorro mensual", "Ahorro en efectivo", "Cuenta de ahorro tradicional"],
+      "Ahorro para hijos": ["Educación", "Regalos futuros", "Fondo universitario"],
+      "Otros": ["Donaciones planificadas", "Proyectos personales", "Fondo de libertad financiera"]
+    };
 
-<!-- MODAL AÑADIR ITEM (tipo desktop) -->
-<div class="modal" id="modalAdd">
-  <div class="modal-content">
-    <h2 id="modalTitle">Añadir</h2>
+    // Presupuesto en memoria
+    const presupuesto = {
+      ingresos: [],
+      gastos: [],
+      ahorro: []
+    };
 
-    <label for="inputNombre">Nombre</label>
-    <input type="text" id="inputNombre" placeholder="Ej. Restaurante">
-
-    <label for="inputRecurrencia">Recurrencia</label>
-    <select id="inputRecurrencia">
-      <option value="">Ninguna</option>
-      <option value="diario">Diario</option>
-      <option value="semanal">Semanal</option>
-      <option value="quincenal">Quincenal</option>
-      <option value="mensual">Mensual</option>
-      <option value="anual">Anual</option>
-    </select>
-
-    <div id="grupoMonto">
-      <label for="inputMonto">Monto</label>
-      <input type="number" id="inputMonto" placeholder="0.00" step="0.01" min="0">
-    </div>
-
-    <label for="inputDescripcion">Descripción (opcional)</label>
-    <textarea id="inputDescripcion" placeholder="Descripción breve..."></textarea>
-
-    <div class="modal-actions">
-      <button class="btn-cancel" id="btnCancel">Cancelar</button>
-      <button class="btn-save" id="btnSave">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // ---------- ESTADO TIPO (mensual/anual) ----------
-  let tipoPresupuesto = 'mensual';
-
-  const compTitle       = document.getElementById('compTitle');
-  const labelPresupuesto = document.getElementById('labelPresupuesto');
-  const labelReal        = document.getElementById('labelReal');
-  const labelDiff        = document.getElementById('labelDiff');
-
-  function actualizarEtiquetasTipo() {
-    const sufijo = tipoPresupuesto === 'mensual' ? 'mensual' : 'anual';
-    compTitle.textContent = 'Comparativo presupuesto vs real (' + sufijo + ')';
-    labelPresupuesto.textContent = 'Presupuesto ' + sufijo + ' total';
-    labelReal.textContent        = 'Real ' + sufijo + ' total';
-    labelDiff.textContent        = 'Diferencia ' + sufijo;
-  }
-
-  // ---------- DATA DEMO PRESUPUESTO ----------
-  let ingresos = [
-    { nombre: 'Salario', monto: 3200, recurrencia: 'mensual', descripcion: '' },
-    { nombre: 'Bonos',   monto: 150,  recurrencia: 'mensual', descripcion: '' }
-  ];
-  let gastos = [
-    { nombre: 'Vivienda',      monto: 950, recurrencia: 'mensual', descripcion: '' },
-    { nombre: 'Alimentación',  monto: 450, recurrencia: 'mensual', descripcion: '' },
-    { nombre: 'Transporte',    monto: 160, recurrencia: 'mensual', descripcion: '' },
-    { nombre: 'Otros',         monto: 440, recurrencia: 'mensual', descripcion: '' }
-  ];
-  let ahorro = [
-    { nombre: 'Emergencia', monto: 200, recurrencia: 'mensual', descripcion: '' },
-    { nombre: 'Inversión',  monto: 150, recurrencia: 'mensual', descripcion: '' }
-  ];
-
-  const listaIngresos = document.getElementById('listaIngresos');
-  const listaGastos   = document.getElementById('listaGastos');
-  const listaAhorro   = document.getElementById('listaAhorro');
-
-  const totalIng = document.getElementById('totalIng');
-  const totalGas = document.getElementById('totalGas');
-  const totalAho = document.getElementById('totalAho');
-
-  function formato(num) {
-    return '$' + num.toFixed(2);
-  }
-
-  function renderLista(contenedor, data) {
-    contenedor.innerHTML = '';
-    data.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'row';
-      row.innerHTML = `<span>${item.nombre}</span><span>${formato(item.monto)}</span>`;
-      contenedor.appendChild(row);
-    });
-  }
-
-  function totales() {
-    const tIng = ingresos.reduce((a,c)=>a+c.monto,0);
-    const tGas = gastos.reduce((a,c)=>a+c.monto,0);
-    const tAho = ahorro.reduce((a,c)=>a+c.monto,0);
-
-    totalIng.textContent = formato(tIng);
-    totalGas.textContent = formato(tGas);
-    totalAho.textContent = formato(tAho);
-  }
-
-  function renderPresupuesto() {
-    renderLista(listaIngresos, ingresos);
-    renderLista(listaGastos, gastos);
-    renderLista(listaAhorro, ahorro);
-    totales();
-  }
-
-  renderPresupuesto();
-
-  // ---------- MODAL AÑADIR (tipo desktop) ----------
-  const modal           = document.getElementById('modalAdd');
-  const inputNombre     = document.getElementById('inputNombre');
-  const inputRecurrencia= document.getElementById('inputRecurrencia');
-  const inputMonto      = document.getElementById('inputMonto');
-  const inputDescripcion= document.getElementById('inputDescripcion');
-  const btnCancel       = document.getElementById('btnCancel');
-  const btnSave         = document.getElementById('btnSave');
-  const modalTitle      = document.getElementById('modalTitle');
-  const grupoMonto      = document.getElementById('grupoMonto');
-
-  let objetivoActual = null; // 'ingresos' | 'gastos' | 'ahorro'
-
-  document.querySelectorAll('.add-btn-small').forEach(btn => {
-    btn.addEventListener('click', () => {
-      objetivoActual = btn.getAttribute('data-objetivo');
-      let tituloArea = objetivoActual.charAt(0).toUpperCase() + objetivoActual.slice(1);
-      modalTitle.textContent = 'Añadir a ' + tituloArea;
-      inputNombre.value      = '';
-      inputRecurrencia.value = '';
-      inputMonto.value       = '';
-      inputDescripcion.value = '';
-      grupoMonto.style.display = 'block';
-      modal.classList.add('open');
-      inputNombre.focus();
-    });
-  });
-
-  btnCancel.addEventListener('click', () => {
-    modal.classList.remove('open');
-  });
-
-  btnSave.addEventListener('click', () => {
-    const nombre = inputNombre.value.trim();
-    const recurrencia = inputRecurrencia.value;
-    const monto = parseFloat(inputMonto.value);
-    const descripcion = inputDescripcion.value.trim();
-
-    if (!nombre || isNaN(monto) || monto < 0) return;
-
-    const nuevo = { nombre, monto, recurrencia, descripcion };
-
-    if (objetivoActual === 'ingresos') ingresos.push(nuevo);
-    if (objetivoActual === 'gastos')   gastos.push(nuevo);
-    if (objetivoActual === 'ahorro')   ahorro.push(nuevo);
-
-    renderPresupuesto();
-    actualizarComparativo(areaActual);
-    modal.classList.remove('open');
-  });
-
-  // Mostrar / ocultar campo monto según recurrencia (aquí siempre dejamos visible, pero respetamos lógica básica)
-  inputRecurrencia.addEventListener('change', () => {
-    if (!inputRecurrencia.value) {
-      grupoMonto.style.display = 'block'; // podrías ocultarlo si quisieras
-    } else {
-      grupoMonto.style.display = 'block';
-    }
-  });
-
-  // Cerrar modal tocando fondo
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.classList.remove('open');
-  });
-
-  // ---------- DATA DEMO REAL PARA COMPARATIVO ----------
-  const dataReal = {
-    ingresos: {
-      labels: ['Salario','Bonos','Extra'],
-      real:   [3100, 200, 100]
-    },
-    gastos: {
-      labels: ['Vivienda','Alimentación','Transporte','Otros'],
-      real:   [950, 510, 150, 430]
-    },
-    ahorro: {
-      labels: ['Emergencia','Inversión'],
-      real:   [180, 160]
-    }
-  };
-
-  // Construimos data de presupuesto por área desde arrays actuales
-  function getPresupuestoArea(area) {
-    if (area === 'ingresos') {
-      const labels = ingresos.map(i=>i.nombre);
-      const presupuesto = ingresos.map(i=>i.monto);
-      return { labels, presupuesto };
-    }
-    if (area === 'gastos') {
-      const labels = gastos.map(i=>i.nombre);
-      const presupuesto = gastos.map(i=>i.monto);
-      return { labels, presupuesto };
-    }
-    if (area === 'ahorro') {
-      const labels = ahorro.map(i=>i.nombre);
-      const presupuesto = ahorro.map(i=>i.monto);
-      return { labels, presupuesto };
-    }
-  }
-
-  // ---------- GRÁFICO BARRAS ----------
-  const ctxBar = document.getElementById('barComp');
-  let barChart = null;
-  let areaActual = 'ingresos';
-
-  const statusBanner  = document.getElementById('statusBanner');
-  const statusText    = document.getElementById('statusText');
-  const statusDiff    = document.getElementById('statusDiff');
-  const miniPresupuesto = document.getElementById('miniPresupuesto');
-  const miniReal        = document.getElementById('miniReal');
-  const miniDiff        = document.getElementById('miniDiff');
-  const topDeviations   = document.getElementById('topDeviations');
-
-  function actualizarComparativo(areaKey) {
-    areaActual = areaKey;
-    const presData = getPresupuestoArea(areaKey);
-    const realData = dataReal[areaKey];
-
-    const labels = presData.labels;
-    const presupuesto = labels.map(lbl => {
-      const idx = presData.labels.indexOf(lbl);
-      return presData.presupuesto[idx] || 0;
-    });
-    const real = labels.map(lbl => {
-      const idx = realData.labels.indexOf(lbl);
-      return idx >= 0 ? realData.real[idx] : 0;
-    });
-
-    const totalPres = presupuesto.reduce((a,c)=>a+c,0);
-    const totalReal = real.reduce((a,c)=>a+c,0);
-    const diff = totalReal - totalPres;
-
-    // Banner
-    let clase = 'green';
-    let texto = '<strong>Bien:</strong> Vas por debajo del presupuesto.';
-    if (diff > 0 && diff / (totalPres || 1) > 0.1) {
-      clase = 'red';
-      texto = '<strong>Cuidado:</strong> Vas por encima del presupuesto.';
-    } else if (Math.abs(diff) / (totalPres || 1) <= 0.1) {
-      clase = 'yellow';
-      texto = '<strong>Casi:</strong> Muy cerca de tu presupuesto.';
-    }
-
-    statusBanner.classList.remove('green','yellow','red');
-    statusBanner.classList.add(clase);
-    statusText.innerHTML = texto;
-    statusDiff.textContent = (diff >= 0 ? '+$' : '-$') + Math.abs(diff).toFixed(2);
-
-    // Mini resumen
-    miniPresupuesto.textContent = formato(totalPres);
-    miniReal.textContent        = formato(totalReal);
-    miniDiff.textContent        = (diff >= 0 ? '+ ' : '- ') + formato(Math.abs(diff));
-
-    // Gráfico barras
-    if (barChart) barChart.destroy();
-    barChart = new Chart(ctxBar, {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: 'Presupuesto',
-            data: presupuesto,
-            backgroundColor: '#3956E8'
-          },
-          {
-            label: 'Real',
-            data: real,
-            backgroundColor: '#E8C239'
-          }
-        ]
+    // Datos demo "reales" para el comparativo (ejemplo)
+    const realDemo = {
+      ingresos: 4200,
+      gastosPorCategoria: {
+        "Casa": 1250,
+        "Alimentación": 680,
+        "Transportación": 230,
+        "Entretenimiento": 110
       },
-      options: {
-        responsive: true,
-        scales: {
-          x: { ticks: { font: { size: 10 } } },
-          y: { beginAtZero: true }
+      ahorro: 480
+    };
+
+    let tipoPresupuesto = "mensual"; // o "anual"
+    let comparativoChart = null;
+
+    // =============
+    //   UTILIDAD $
+    // =============
+    function formatMoney(value) {
+      const n = Number(value) || 0;
+      return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // =========================
+    //   RENDER FILAS PRESUPUESTO
+    // =========================
+    function agregarFilaUI(area, item) {
+      const lista = document.querySelector(`[data-area-list="${area}"]`);
+      if (!lista) return;
+
+      const row = document.createElement("div");
+      row.className = "budget-row";
+      row.dataset.itemId = item.id;
+
+      const labelDiv = document.createElement("div");
+      labelDiv.className = "budget-row-label";
+
+      const nameDiv = document.createElement("div");
+      nameDiv.className = "row-name";
+      nameDiv.textContent = item.nombre || `${item.categoria}`;
+
+      const metaDiv = document.createElement("div");
+      metaDiv.className = "row-meta";
+      metaDiv.textContent = `${item.categoria}${item.subcategoria ? " · " + item.subcategoria : ""}`;
+
+      labelDiv.appendChild(nameDiv);
+      labelDiv.appendChild(metaDiv);
+
+      const amountDiv = document.createElement("div");
+      amountDiv.className = "budget-row-amount";
+
+      const spanCurrency = document.createElement("span");
+      spanCurrency.className = "currency";
+      spanCurrency.textContent = "$";
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.step = "0.01";
+      input.value = item.monto != null ? item.monto : "";
+      input.addEventListener("input", () => {
+        const val = parseFloat(input.value) || 0;
+        const arr = presupuesto[area];
+        const idx = arr.findIndex(x => x.id === item.id);
+        if (idx !== -1) {
+          arr[idx].monto = val;
+          recalcularTotales();
+        }
+      });
+
+      amountDiv.appendChild(spanCurrency);
+      amountDiv.appendChild(input);
+
+      row.appendChild(labelDiv);
+      row.appendChild(amountDiv);
+      lista.appendChild(row);
+    }
+
+    // ====================
+    //   RECALCULAR TOTALES
+    // ====================
+    function sumaArea(area) {
+      return presupuesto[area].reduce((acc, it) => acc + (Number(it.monto) || 0), 0);
+    }
+
+    function construirGastosPorCategoriaPresupuesto() {
+      const mapa = {};
+      presupuesto.gastos.forEach(it => {
+        const cat = it.categoria || "Otros";
+        const val = Number(it.monto) || 0;
+        mapa[cat] = (mapa[cat] || 0) + val;
+      });
+      return mapa;
+    }
+
+    function recalcularTotales() {
+      const totalIng = sumaArea("ingresos");
+      const totalGas = sumaArea("gastos");
+      const totalAho = sumaArea("ahorro");
+
+      document.getElementById("totalIngresos").textContent = formatMoney(totalIng);
+      document.getElementById("totalGastos").textContent = formatMoney(totalGas);
+      document.getElementById("totalAhorro").textContent = formatMoney(totalAho);
+
+      // actualizar comparativo
+      const gastosPorCatPres = construirGastosPorCategoriaPresupuesto();
+      actualizarComparativo({
+        presupuesto: {
+          ingresos: totalIng,
+          gastos: totalGas,
+          ahorro: totalAho,
+          gastosPorCategoria: gastosPorCatPres
         },
-        plugins: {
-          legend: {
-            labels: { font: { size: 10 } }
+        real: realDemo
+      });
+    }
+
+    // =====================
+    //   COMPARATIVO VS REAL
+    // =====================
+    function actualizarComparativo(data) {
+      const presGastos = data.presupuesto.gastos || 0;
+      const presIngresos = data.presupuesto.ingresos || 0;
+      const presAhorro = data.presupuesto.ahorro || 0;
+
+      const realGastos = Object.values(data.real.gastosPorCategoria || {}).reduce((a, b) => a + b, 0);
+      const realIngresos = data.real.ingresos || 0;
+      const realAhorro = data.real.ahorro || 0;
+
+      // Banner
+      const ratio = presGastos > 0 ? realGastos / presGastos : 0;
+      const banner = document.getElementById("cmpBanner");
+      const textoP = document.getElementById("cmpBannerTextoPrincipal");
+      const textoS = document.getElementById("cmpBannerTextoSecundario");
+
+      banner.classList.remove("cm-banner-success", "cm-banner-warning", "cm-banner-danger");
+
+      let msgPrincipal = "";
+      let msgSecundario = "";
+      if (presGastos <= 0) {
+        banner.classList.add("cm-banner-success");
+        msgPrincipal = "Todavía no has definido tu presupuesto de gastos.";
+        msgSecundario = "";
+      } else if (ratio <= 0.9) {
+        banner.classList.add("cm-banner-success");
+        msgPrincipal = `Vas por debajo del presupuesto (${Math.round(ratio * 100)}% usado).`;
+        const margen = presGastos - realGastos;
+        msgSecundario = `Te quedan ${formatMoney(margen)} para gastar sin salirte del plan.`;
+      } else if (ratio <= 1.05) {
+        banner.classList.add("cm-banner-warning");
+        msgPrincipal = `Estás muy cerca del límite (${Math.round(ratio * 100)}% usado).`;
+        const margen = presGastos - realGastos;
+        msgSecundario = margen >= 0
+          ? `Te quedan ${formatMoney(margen)} de margen.`
+          : `Te has pasado ${formatMoney(Math.abs(margen))} del presupuesto.`;
+      } else {
+        banner.classList.add("cm-banner-danger");
+        msgPrincipal = `Te pasaste del presupuesto (${Math.round(ratio * 100)}% usado).`;
+        const exceso = realGastos - presGastos;
+        msgSecundario = `Estás ${formatMoney(exceso)} por encima de lo planeado.`;
+      }
+
+      textoP.textContent = msgPrincipal;
+      textoS.textContent = msgSecundario;
+
+      // Totales comparativos (foco en gastos)
+      document.getElementById("cmpPresupuesto").textContent = formatMoney(presGastos);
+      document.getElementById("cmpReal").textContent = formatMoney(realGastos);
+      document.getElementById("cmpDiferencia").textContent = formatMoney(realGastos - presGastos);
+
+      // Gráfico barras (Ingresos / Gastos / Ahorro)
+      const ctx = document.getElementById("comparativoChart").getContext("2d");
+      if (comparativoChart) comparativoChart.destroy();
+
+      comparativoChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Ingresos", "Gastos", "Ahorro"],
+          datasets: [
+            {
+              label: "Presupuesto",
+              data: [presIngresos, presGastos, presAhorro]
+            },
+            {
+              label: "Real",
+              data: [realIngresos, realGastos, realAhorro]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                font: { size: 10 }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  const v = ctx.parsed.y || 0;
+                  return `${ctx.dataset.label}: ${formatMoney(v)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                font: { size: 10 }
+              }
+            },
+            y: {
+              ticks: {
+                font: { size: 9 }
+              },
+              beginAtZero: true
+            }
           }
         }
+      });
+
+      // Desviaciones top por categoría (gastos)
+      const listaDesv = document.getElementById("listaDesviaciones");
+      listaDesv.innerHTML = "";
+
+      const mapaPres = data.presupuesto.gastosPorCategoria || {};
+      const mapaReal = data.real.gastosPorCategoria || {};
+
+      const todasCategorias = new Set([
+        ...Object.keys(mapaPres),
+        ...Object.keys(mapaReal)
+      ]);
+
+      const desviaciones = [];
+      todasCategorias.forEach(cat => {
+        const pres = mapaPres[cat] || 0;
+        const real = mapaReal[cat] || 0;
+        if (pres === 0 && real === 0) return;
+        const diff = real - pres;
+        const pct = pres > 0 ? (real / pres) * 100 : null;
+        desviaciones.push({ cat, pres, real, diff, pct });
+      });
+
+      desviaciones.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+
+      const top = desviaciones.slice(0, 3);
+      if (top.length === 0) {
+        const div = document.createElement("div");
+        div.className = "desv-item";
+        div.textContent = "Sin datos suficientes para mostrar desviaciones.";
+        listaDesv.appendChild(div);
+      } else {
+        top.forEach(d => {
+          const div = document.createElement("div");
+          div.className = "desv-item";
+
+          const lbl = document.createElement("div");
+          lbl.className = "desv-label";
+          const signo = d.diff > 0 ? "+" : "";
+          const pctTxt = d.pct != null ? ` (${Math.round(d.pct)}% del presupuesto)` : "";
+          lbl.textContent = `${d.cat}: ${signo}${formatMoney(d.diff)}${pctTxt}`;
+
+          const det = document.createElement("div");
+          det.className = "desv-detalle";
+          det.textContent = `Presupuesto: ${formatMoney(d.pres)} · Real: ${formatMoney(d.real)}`;
+
+          div.appendChild(lbl);
+          div.appendChild(det);
+          listaDesv.appendChild(div);
+        });
       }
+    }
+
+    // ==========
+    //   MODAL
+    // ==========
+    const modal = document.getElementById("modalPartida");
+    const modalAreaTexto = document.getElementById("modalAreaTexto");
+    const modalCategoria = document.getElementById("modalCategoria");
+    const modalSubcategoria = document.getElementById("modalSubcategoria");
+    const modalNombre = document.getElementById("modalNombre");
+    const modalMonto = document.getElementById("modalMonto");
+    const modalInfoTipo = document.getElementById("modalInfoTipo");
+
+    let areaActualModal = "ingresos";
+
+    function abrirModal(area) {
+      areaActualModal = area;
+      modalAreaTexto.textContent =
+        area === "ingresos" ? "Ingresos" :
+        area === "gastos" ? "Gastos" : "Ahorro";
+
+      // Cargar categorías según área
+      let fuente = {};
+      if (area === "ingresos") fuente = categoriasIngresos;
+      if (area === "gastos") fuente = categoriasGastos;
+      if (area === "ahorro") fuente = categoriasAhorro;
+
+      modalCategoria.innerHTML = "";
+      Object.keys(fuente).forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        modalCategoria.appendChild(opt);
+      });
+
+      // Cargar subcategorías para la primera categoría
+      actualizarSubcategorias(fuente);
+
+      modalNombre.value = "";
+      modalMonto.value = "";
+      modalInfoTipo.textContent =
+        tipoPresupuesto === "mensual"
+          ? "Monto en formato mensual."
+          : "Monto en formato anual.";
+
+      modal.classList.add("abierto");
+    }
+
+    function cerrarModal() {
+      modal.classList.remove("abierto");
+    }
+
+    function actualizarSubcategorias(fuente) {
+      const catSel = modalCategoria.value;
+      modalSubcategoria.innerHTML = "";
+      if (!catSel || !fuente[catSel]) return;
+      fuente[catSel].forEach(sub => {
+        const opt = document.createElement("option");
+        opt.value = sub;
+        opt.textContent = sub;
+        modalSubcategoria.appendChild(opt);
+      });
+    }
+
+    document.getElementById("btnCerrarModal").addEventListener("click", cerrarModal);
+    document.getElementById("btnCancelarModal").addEventListener("click", cerrarModal);
+
+    modalCategoria.addEventListener("change", () => {
+      let fuente = {};
+      if (areaActualModal === "ingresos") fuente = categoriasIngresos;
+      if (areaActualModal === "gastos") fuente = categoriasGastos;
+      if (areaActualModal === "ahorro") fuente = categoriasAhorro;
+      actualizarSubcategorias(fuente);
     });
 
-    // Top desviaciones
-    const diffs = labels.map((lbl, i) => ({
-      nombre: lbl,
-      presupuesto: presupuesto[i],
-      real: real[i],
-      diff: real[i] - presupuesto[i]
-    }));
+    document.getElementById("btnGuardarModal").addEventListener("click", () => {
+      const cat = modalCategoria.value;
+      const sub = modalSubcategoria.value;
+      const nombre = modalNombre.value.trim();
+      const monto = parseFloat(modalMonto.value) || 0;
 
-    diffs.sort((a,b)=>Math.abs(b.diff)-Math.abs(a.diff));
-    const top = diffs.slice(0,3);
+      if (!cat || !monto) {
+        // mínimo: categoría y monto
+        return;
+      }
 
-    topDeviations.innerHTML = '';
-    top.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'top-dev-item';
-      const signo = item.diff >= 0 ? '+' : '-';
-      const claseDiff = item.diff >= 0 ? 'positive' : 'negative';
-      div.innerHTML = `
-        <div class="top-dev-left">
-          <span class="top-dev-name">${item.nombre}</span>
-          <span class="top-dev-detail">${formato(item.presupuesto)} · real ${formato(item.real)}</span>
-        </div>
-        <span class="top-dev-diff ${claseDiff}">${signo}$${Math.abs(item.diff).toFixed(2)}</span>
-      `;
-      topDeviations.appendChild(div);
+      const item = {
+        id: Date.now() + Math.random().toString(16).slice(2),
+        area: areaActualModal,
+        categoria: cat,
+        subcategoria: sub || "",
+        nombre: nombre || sub || cat,
+        monto
+      };
+
+      presupuesto[areaActualModal].push(item);
+      agregarFilaUI(areaActualModal, item);
+      recalcularTotales();
+      cerrarModal();
     });
-  }
 
-  actualizarComparativo('ingresos');
-  actualizarEtiquetasTipo();
+    // =====================
+    //   TOGGLE MENSUAL/ANUAL
+    // =====================
+    const btnMensual = document.getElementById("btnMensual");
+    const btnAnual = document.getElementById("btnAnual");
+    const textoTipo = document.getElementById("textoTipo");
+    const modalInfo = document.getElementById("modalInfoTipo");
 
-  // Cambiar área con chips
-  document.getElementById('chipsArea').addEventListener('click', (e) => {
-    if (!e.target.classList.contains('chip')) return;
-    document.querySelectorAll('#chipsArea .chip').forEach(c => c.classList.remove('active'));
-    e.target.classList.add('active');
-    const area = e.target.getAttribute('data-area');
-    actualizarComparativo(area);
-  });
+    btnMensual.addEventListener("click", () => {
+      tipoPresupuesto = "mensual";
+      btnMensual.classList.add("active");
+      btnAnual.classList.remove("active");
+      textoTipo.innerHTML = 'Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.';
+      modalInfo.textContent = "Monto en formato mensual.";
+    });
 
-  // Toggle mensual/anual (actualiza etiquetas)
-  document.getElementById('toggleTipo').addEventListener('click', (e) => {
-    if (e.target.tagName !== 'SPAN') return;
-    document.querySelectorAll('#toggleTipo span').forEach(s => s.classList.remove('active'));
-    e.target.classList.add('active');
-    tipoPresupuesto = e.target.getAttribute('data-tipo') || 'mensual';
-    actualizarEtiquetasTipo();
-  });
-</script>
+    btnAnual.addEventListener("click", () => {
+      tipoPresupuesto = "anual";
+      btnAnual.classList.add("active");
+      btnMensual.classList.remove("active");
+      textoTipo.innerHTML = 'Trabajando presupuesto <strong>anual</strong> para el año seleccionado.';
+      modalInfo.textContent = "Monto en formato anual.";
+    });
+
+    // =========================
+    //   BOTONES "+ AÑADIR"
+    // =========================
+    document.querySelectorAll(".cm-btn-add").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const area = btn.getAttribute("data-area");
+        abrirModal(area);
+      });
+    });
+
+    // ======================
+    //   DEMO INICIAL
+    // ======================
+    function cargarDemoInicial() {
+      // Demo ingresos
+      const demoIng = [
+        {
+          area: "ingresos",
+          categoria: "Pago por trabajo",
+          subcategoria: "Salario",
+          nombre: "Salario principal",
+          monto: 3500
+        },
+        {
+          area: "ingresos",
+          categoria: "Pago por trabajo",
+          subcategoria: "Bono",
+          nombre: "Bono variable",
+          monto: 300
+        },
+        {
+          area: "ingresos",
+          categoria: "Ingreso pasivo",
+          subcategoria: "Dividendos e Intereses",
+          nombre: "Dividendos",
+          monto: 150
+        }
+      ];
+
+      // Demo gastos
+      const demoGas = [
+        {
+          area: "gastos",
+          categoria: "Casa",
+          subcategoria: "Hipoteca / Alquiler",
+          nombre: "Renta",
+          monto: 1200
+        },
+        {
+          area: "gastos",
+          categoria: "Alimentación",
+          subcategoria: "Supermercado",
+          nombre: "Supermercado",
+          monto: 550
+        },
+        {
+          area: "gastos",
+          categoria: "Alimentación",
+          subcategoria: "Comidas fuera",
+          nombre: "Restaurantes",
+          monto: 180
+        },
+        {
+          area: "gastos",
+          categoria: "Transportación",
+          subcategoria: "Gasolina",
+          nombre: "Gasolina",
+          monto: 220
+        },
+        {
+          area: "gastos",
+          categoria: "Entretenimiento",
+          subcategoria: "Streaming",
+          nombre: "Streaming",
+          monto: 40
+        }
+      ];
+
+      // Demo ahorro
+      const demoAho = [
+        {
+          area: "ahorro",
+          categoria: "Emergencia",
+          subcategoria: "Fondo corto plazo",
+          nombre: "Fondo emergencia",
+          monto: 300
+        },
+        {
+          area: "ahorro",
+          categoria: "Inversión",
+          subcategoria: "Fondo indexado",
+          nombre: "Indexado largo plazo",
+          monto: 200
+        }
+      ];
+
+      [...demoIng, ...demoGas, ...demoAho].forEach(it => {
+        it.id = Date.now() + Math.random().toString(16).slice(2);
+        presupuesto[it.area].push(it);
+        agregarFilaUI(it.area, it);
+      });
+
+      recalcularTotales();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      cargarDemoInicial();
+    });
+  </script>
 </body>
 </html>
