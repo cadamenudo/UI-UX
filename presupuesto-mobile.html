@@ -20,7 +20,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   h1 {
@@ -59,73 +59,62 @@
     font-size: 0.9rem;
     margin-bottom: 14px;
     margin-top: 4px;
-  }
-
-  /* CARD BASE */
-  .card {
-    background: white;
-    padding: 16px;
-    border-radius: 18px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  }
-
-  /* DONA PRESUPUESTO */
-  .total {
-    text-align: center;
-    font-size: 1.6rem;
-    font-weight: 800;
-    margin-bottom: 10px;
-  }
-
-  #donut {
     width: 100%;
-    max-width: 260px;
-    height: 260px;
-    margin: 0 auto;
   }
 
-  /* SECCIONES LISTAS */
+  /* SECCIONES PRESUPUESTO */
   .section {
     background: white;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border-radius: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+
+  .section-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
   }
 
   .section-header {
     font-weight: 700;
     font-size: 1rem;
-    margin-bottom: 10px;
+  }
+
+  .add-btn-small {
+    border: none;
+    background: #EEF2FF;
+    color: #3956E8;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
 
   .row {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
+    padding: 4px 0;
     font-size: 0.95rem;
   }
 
-  .add-btn {
-    margin-top: 8px;
-    width: 100%;
-    padding: 9px;
-    background: #3956E8;
-    color: white;
-    font-size: 0.9rem;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
+  .row span:last-child {
+    font-weight: 600;
   }
 
   /* TOTALES */
   .totals {
-    margin-top: 8px;
+    margin-top: 4px;
     background: white;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border-radius: 14px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 12px;
   }
 
   .totals .row {
@@ -133,7 +122,7 @@
   }
 
   .save {
-    margin-top: 14px;
+    margin-top: 8px;
     width: 100%;
     padding: 14px;
     background: #7459D9;
@@ -145,12 +134,21 @@
     cursor: pointer;
   }
 
+  /* CARD BASE */
+  .card {
+    background: white;
+    padding: 14px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 14px;
+  }
+
   /* COMPARATIVO */
   .comp-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .comp-title {
@@ -180,21 +178,165 @@
     font-weight: 700;
   }
 
+  /* BANNER ESTADO */
+  .status-banner {
+    border-radius: 12px;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-banner.green {
+    background: #ECFDF3;
+    color: #15803D;
+  }
+  .status-banner.yellow {
+    background: #FEF9C3;
+    color: #92400E;
+  }
+  .status-banner.red {
+    background: #FEF2F2;
+    color: #B91C1C;
+  }
+
+  .status-banner strong {
+    font-weight: 800;
+  }
+
+  /* MINI RESUMEN */
+  .mini-summary {
+    margin-bottom: 8px;
+  }
+
+  .mini-summary .row {
+    font-size: 0.9rem;
+  }
+
+  .mini-summary .row span:first-child {
+    color: #64748B;
+  }
+
   #barComp {
     width: 100%;
     height: 260px;
+    margin-top: 4px;
+    margin-bottom: 8px;
   }
 
-  .comp-footer {
-    margin-top: 8px;
+  /* DESVIACIONES TOP */
+  .top-deviations {
+    border-top: 1px dashed #E5E7EB;
+    padding-top: 6px;
+    margin-top: 4px;
     font-size: 0.85rem;
-    color: #64748B;
+  }
+
+  .top-dev-item {
     display: flex;
     justify-content: space-between;
+    padding: 4px 0;
   }
 
-  .comp-footer strong {
-    color: #0f172a;
+  .top-dev-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-dev-name {
+    font-weight: 600;
+  }
+
+  .top-dev-detail {
+    color: #64748B;
+    font-size: 0.8rem;
+  }
+
+  .top-dev-diff.positive {
+    color: #B91C1C;
+    font-weight: 700;
+  }
+  .top-dev-diff.negative {
+    color: #15803D;
+    font-weight: 700;
+  }
+
+  /* MODAL AÑADIR */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  .modal.open {
+    display: flex;
+  }
+
+  .modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 16px 18px;
+    width: 90%;
+    max-width: 360px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  }
+
+  .modal-content h2 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+  }
+
+  .modal-content label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .modal-content input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #D1D5DB;
+    margin-bottom: 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .btn-cancel {
+    border: none;
+    background: #F3F4F6;
+    color: #111827;
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .btn-save {
+    border: none;
+    background: #3956E8;
+    color: white;
+    padding: 7px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -215,43 +357,44 @@
   <option>Marzo 2025</option>
 </select>
 
-<!-- CARD DONA PRESUPUESTO -->
-<div class="card">
-  <div class="total" id="totalPresupuesto">$2,450.00</div>
-  <canvas id="donut"></canvas>
-</div>
-
 <!-- INGRESOS -->
 <div class="section" id="secIngresos">
-  <div class="section-header">Ingresos</div>
-  <div class="row"><span>Salario</span><span>$3,200</span></div>
-  <div class="row"><span>Bonos</span><span>$150</span></div>
-  <button class="add-btn">+ Añadir</button>
+  <div class="section-header-row">
+    <div class="section-header">Ingresos</div>
+    <button class="add-btn-small" data-objetivo="ingresos">
+      + Añadir
+    </button>
+  </div>
+  <div id="listaIngresos"></div>
 </div>
 
 <!-- GASTOS -->
 <div class="section" id="secGastos">
-  <div class="section-header">Gastos</div>
-  <div class="row"><span>Vivienda</span><span>$950</span></div>
-  <div class="row"><span>Alimentación</span><span>$450</span></div>
-  <div class="row"><span>Transporte</span><span>$160</span></div>
-  <div class="row"><span>Otros</span><span>$440</span></div>
-  <button class="add-btn">+ Añadir</button>
+  <div class="section-header-row">
+    <div class="section-header">Gastos</div>
+    <button class="add-btn-small" data-objetivo="gastos">
+      + Añadir
+    </button>
+  </div>
+  <div id="listaGastos"></div>
 </div>
 
 <!-- AHORRO -->
 <div class="section" id="secAhorro">
-  <div class="section-header">Ahorro</div>
-  <div class="row"><span>Emergencia</span><span>$200</span></div>
-  <div class="row"><span>Inversión</span><span>$150</span></div>
-  <button class="add-btn">+ Añadir</button>
+  <div class="section-header-row">
+    <div class="section-header">Ahorro</div>
+    <button class="add-btn-small" data-objetivo="ahorro">
+      + Añadir
+    </button>
+  </div>
+  <div id="listaAhorro"></div>
 </div>
 
 <!-- TOTALES -->
 <div class="totals">
-  <div class="row"><span>Ingresos</span><span>$3,350.00</span></div>
-  <div class="row"><span>Gastos</span><span>$2,000.00</span></div>
-  <div class="row"><span>Ahorro</span><span>$350.00</span></div>
+  <div class="row"><span>Ingresos</span><span id="totalIng">$0.00</span></div>
+  <div class="row"><span>Gastos</span><span id="totalGas">$0.00</span></div>
+  <div class="row"><span>Ahorro</span><span id="totalAho">$0.00</span></div>
 </div>
 
 <button class="save">Guardar presupuesto</button>
@@ -260,71 +403,268 @@
 <div class="card" style="margin-top:18px;">
   <div class="comp-header">
     <span class="comp-title">Comparativo presupuesto vs real</span>
+    <div class="chips" id="chipsArea">
+      <button class="chip active" data-area="ingresos">Ingresos</button>
+      <button class="chip" data-area="gastos">Gastos</button>
+      <button class="chip" data-area="ahorro">Ahorro</button>
+    </div>
   </div>
 
-  <div class="chips" id="chipsArea">
-    <button class="chip active" data-area="ingresos">Ingresos</button>
-    <button class="chip" data-area="gastos">Gastos</button>
-    <button class="chip" data-area="ahorro">Ahorro</button>
+  <!-- BANNER ESTADO -->
+  <div id="statusBanner" class="status-banner green">
+    <span id="statusText"><strong>Bien:</strong> Vas por debajo del presupuesto.</span>
+    <span id="statusDiff">$0</span>
   </div>
 
+  <!-- MINI RESUMEN -->
+  <div class="mini-summary" id="miniSummary">
+    <div class="row">
+      <span>Presupuesto total</span>
+      <span id="miniPresupuesto">$0.00</span>
+    </div>
+    <div class="row">
+      <span>Real total</span>
+      <span id="miniReal">$0.00</span>
+    </div>
+    <div class="row">
+      <span>Diferencia</span>
+      <span id="miniDiff">$0.00</span>
+    </div>
+  </div>
+
+  <!-- GRÁFICO -->
   <canvas id="barComp"></canvas>
 
-  <div class="comp-footer">
-    <span>Presupuesto vs real</span>
-    <span id="resumenComp"><strong>Ingresos</strong> · +$150</span>
+  <!-- DESVIACIONES TOP -->
+  <div class="top-deviations" id="topDeviations">
+    <!-- Se llena por JS -->
+  </div>
+</div>
+
+<!-- MODAL AÑADIR ITEM -->
+<div class="modal" id="modalAdd">
+  <div class="modal-content">
+    <h2 id="modalTitle">Añadir</h2>
+    <label for="inputNombre">Nombre</label>
+    <input type="text" id="inputNombre" placeholder="Ej. Restaurante">
+
+    <label for="inputMonto">Monto</label>
+    <input type="number" id="inputMonto" placeholder="0.00" step="0.01" min="0">
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="btnCancel">Cancelar</button>
+      <button class="btn-save" id="btnSave">Guardar</button>
+    </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // DEMO DATA
-  const dataPresupuesto = {
-    ingresos: { labels: ['Salario','Bonos','Extra'], presupuesto: [3200,150,0], real: [3100,200,100] },
-    gastos:   { labels: ['Vivienda','Alimentación','Transporte','Otros'], presupuesto: [950,450,160,440], real: [950,510,150,430] },
-    ahorro:   { labels: ['Emergencia','Inversión'], presupuesto: [200,150], real: [180,160] }
-  };
+  // ---------- DATA DEMO PRESUPUESTO ----------
+  let ingresos = [
+    { nombre: 'Salario', monto: 3200 },
+    { nombre: 'Bonos', monto: 150 }
+  ];
+  let gastos = [
+    { nombre: 'Vivienda', monto: 950 },
+    { nombre: 'Alimentación', monto: 450 },
+    { nombre: 'Transporte', monto: 160 },
+    { nombre: 'Otros', monto: 440 }
+  ];
+  let ahorro = [
+    { nombre: 'Emergencia', monto: 200 },
+    { nombre: 'Inversión', monto: 150 }
+  ];
 
-  // DONUT (GASTOS)
-  const ctxDonut = document.getElementById('donut');
-  const donutChart = new Chart(ctxDonut, {
-    type: 'doughnut',
-    data: {
-      labels: ['Vivienda','Alimentación','Transporte','Otros'],
-      datasets: [{
-        data: dataPresupuesto.gastos.presupuesto,
-        backgroundColor: ['#3956E8','#7459D9','#E8C239','#64748B']
-      }]
-    },
-    options: {
-      cutout: '65%',
-      plugins: { legend: { display:false } }
-    }
+  const listaIngresos = document.getElementById('listaIngresos');
+  const listaGastos   = document.getElementById('listaGastos');
+  const listaAhorro   = document.getElementById('listaAhorro');
+
+  const totalIng = document.getElementById('totalIng');
+  const totalGas = document.getElementById('totalGas');
+  const totalAho = document.getElementById('totalAho');
+
+  function formato(num) {
+    return '$' + num.toFixed(2);
+  }
+
+  function renderLista(contenedor, data) {
+    contenedor.innerHTML = '';
+    data.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `<span>${item.nombre}</span><span>${formato(item.monto)}</span>`;
+      contenedor.appendChild(row);
+    });
+  }
+
+  function totales() {
+    const tIng = ingresos.reduce((a,c)=>a+c.monto,0);
+    const tGas = gastos.reduce((a,c)=>a+c.monto,0);
+    const tAho = ahorro.reduce((a,c)=>a+c.monto,0);
+
+    totalIng.textContent = formato(tIng);
+    totalGas.textContent = formato(tGas);
+    totalAho.textContent = formato(tAho);
+  }
+
+  function renderPresupuesto() {
+    renderLista(listaIngresos, ingresos);
+    renderLista(listaGastos, gastos);
+    renderLista(listaAhorro, ahorro);
+    totales();
+  }
+
+  renderPresupuesto();
+
+  // ---------- MODAL AÑADIR ----------
+  const modal = document.getElementById('modalAdd');
+  const inputNombre = document.getElementById('inputNombre');
+  const inputMonto  = document.getElementById('inputMonto');
+  const btnCancel   = document.getElementById('btnCancel');
+  const btnSave     = document.getElementById('btnSave');
+  const modalTitle  = document.getElementById('modalTitle');
+
+  let objetivoActual = null; // 'ingresos' | 'gastos' | 'ahorro'
+
+  document.querySelectorAll('.add-btn-small').forEach(btn => {
+    btn.addEventListener('click', () => {
+      objetivoActual = btn.getAttribute('data-objetivo');
+      modalTitle.textContent = 'Añadir a ' + objetivoActual;
+      inputNombre.value = '';
+      inputMonto.value = '';
+      modal.classList.add('open');
+      inputNombre.focus();
+    });
   });
 
-  // BARRAS COMPARATIVO
+  btnCancel.addEventListener('click', () => {
+    modal.classList.remove('open');
+  });
+
+  btnSave.addEventListener('click', () => {
+    const nombre = inputNombre.value.trim();
+    const monto = parseFloat(inputMonto.value);
+    if (!nombre || isNaN(monto) || monto < 0) {
+      return;
+    }
+    if (objetivoActual === 'ingresos') ingresos.push({nombre, monto});
+    if (objetivoActual === 'gastos')   gastos.push({nombre, monto});
+    if (objetivoActual === 'ahorro')   ahorro.push({nombre, monto});
+    renderPresupuesto();
+    actualizarComparativo(areaActual);
+    modal.classList.remove('open');
+  });
+
+  // Cerrar modal tocando fondo
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.remove('open');
+  });
+
+  // ---------- DATA DEMO REAL PARA COMPARATIVO ----------
+  const dataReal = {
+    ingresos: {
+      labels: ['Salario','Bonos','Extra'],
+      real:   [3100, 200, 100]
+    },
+    gastos: {
+      labels: ['Vivienda','Alimentación','Transporte','Otros'],
+      real:   [950, 510, 150, 430]
+    },
+    ahorro: {
+      labels: ['Emergencia','Inversión'],
+      real:   [180, 160]
+    }
+  };
+
+  // Construimos data de presupuesto por área desde arrays actuales
+  function getPresupuestoArea(area) {
+    if (area === 'ingresos') {
+      const labels = ingresos.map(i=>i.nombre);
+      const presupuesto = ingresos.map(i=>i.monto);
+      return { labels, presupuesto };
+    }
+    if (area === 'gastos') {
+      const labels = gastos.map(i=>i.nombre);
+      const presupuesto = gastos.map(i=>i.monto);
+      return { labels, presupuesto };
+    }
+    if (area === 'ahorro') {
+      const labels = ahorro.map(i=>i.nombre);
+      const presupuesto = ahorro.map(i=>i.monto);
+      return { labels, presupuesto };
+    }
+  }
+
+  // ---------- GRÁFICO BARRAS ----------
   const ctxBar = document.getElementById('barComp');
   let barChart = null;
+  let areaActual = 'ingresos';
 
-  function buildBar(areaKey) {
-    const area = dataPresupuesto[areaKey];
-    const diff = area.real.reduce((a,c)=>a+c,0) - area.presupuesto.reduce((a,c)=>a+c,0);
+  const statusBanner  = document.getElementById('statusBanner');
+  const statusText    = document.getElementById('statusText');
+  const statusDiff    = document.getElementById('statusDiff');
+  const miniPresupuesto = document.getElementById('miniPresupuesto');
+  const miniReal        = document.getElementById('miniReal');
+  const miniDiff        = document.getElementById('miniDiff');
+  const topDeviations   = document.getElementById('topDeviations');
 
+  function actualizarComparativo(areaKey) {
+    areaActual = areaKey;
+    const presData = getPresupuestoArea(areaKey);
+    const realData = dataReal[areaKey];
+
+    // Alinear realData con labels de presupuesto
+    const labels = presData.labels;
+    const presupuesto = labels.map(lbl => {
+      const idx = presData.labels.indexOf(lbl);
+      return presData.presupuesto[idx] || 0;
+    });
+    const real = labels.map(lbl => {
+      const idx = realData.labels.indexOf(lbl);
+      return idx >= 0 ? realData.real[idx] : 0;
+    });
+
+    const totalPres = presupuesto.reduce((a,c)=>a+c,0);
+    const totalReal = real.reduce((a,c)=>a+c,0);
+    const diff = totalReal - totalPres;
+
+    // Banner
+    let clase = 'green';
+    let texto = '<strong>Bien:</strong> Vas por debajo del presupuesto.';
+    if (diff > 0 && diff / (totalPres || 1) > 0.1) {
+      clase = 'red';
+      texto = '<strong>Cuidado:</strong> Vas por encima del presupuesto.';
+    } else if (Math.abs(diff) / (totalPres || 1) <= 0.1) {
+      clase = 'yellow';
+      texto = '<strong>Casi:</strong> Muy cerca de tu presupuesto.';
+    }
+
+    statusBanner.classList.remove('green','yellow','red');
+    statusBanner.classList.add(clase);
+    statusText.innerHTML = texto;
+    statusDiff.textContent = (diff >= 0 ? '+$' : '-$') + Math.abs(diff).toFixed(2);
+
+    // Mini resumen
+    miniPresupuesto.textContent = formato(totalPres);
+    miniReal.textContent = formato(totalReal);
+    miniDiff.textContent = (diff >= 0 ? '+ ' : '- ') + formato(Math.abs(diff));
+
+    // Gráfico barras
     if (barChart) barChart.destroy();
-
     barChart = new Chart(ctxBar, {
       type: 'bar',
       data: {
-        labels: area.labels,
+        labels,
         datasets: [
           {
             label: 'Presupuesto',
-            data: area.presupuesto,
+            data: presupuesto,
             backgroundColor: '#3956E8'
           },
           {
             label: 'Real',
-            data: area.real,
+            data: real,
             backgroundColor: '#E8C239'
           }
         ]
@@ -343,23 +683,46 @@
       }
     });
 
-    const txt = (diff >= 0 ? '+$' + diff : '-$' + Math.abs(diff));
-    document.getElementById('resumenComp').innerHTML = `<strong>${areaKey.charAt(0).toUpperCase()+areaKey.slice(1)}</strong> · ${txt}`;
+    // Top desviaciones
+    const diffs = labels.map((lbl, i) => ({
+      nombre: lbl,
+      presupuesto: presupuesto[i],
+      real: real[i],
+      diff: real[i] - presupuesto[i]
+    }));
+
+    diffs.sort((a,b)=>Math.abs(b.diff)-Math.abs(a.diff));
+    const top = diffs.slice(0,3);
+
+    topDeviations.innerHTML = '';
+    top.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'top-dev-item';
+      const signo = item.diff >= 0 ? '+' : '-';
+      const claseDiff = item.diff >= 0 ? 'positive' : 'negative';
+      div.innerHTML = `
+        <div class="top-dev-left">
+          <span class="top-dev-name">${item.nombre}</span>
+          <span class="top-dev-detail">${formato(item.presupuesto)} · real ${formato(item.real)}</span>
+        </div>
+        <span class="top-dev-diff ${claseDiff}">${signo}$${Math.abs(item.diff).toFixed(2)}</span>
+      `;
+      topDeviations.appendChild(div);
+    });
   }
 
-  // INIT
-  buildBar('ingresos');
+  actualizarComparativo('ingresos');
 
-  // Chips cambio de área
+  // Cambiar área con chips
   document.getElementById('chipsArea').addEventListener('click', (e) => {
     if (!e.target.classList.contains('chip')) return;
     document.querySelectorAll('#chipsArea .chip').forEach(c => c.classList.remove('active'));
     e.target.classList.add('active');
     const area = e.target.getAttribute('data-area');
-    buildBar(area);
+    actualizarComparativo(area);
   });
 
-  // Toggle mensual/anual (solo visual de momento)
+  // Toggle mensual/anual (solo visual por ahora)
   document.getElementById('toggleTipo').addEventListener('click', (e) => {
     if (e.target.tagName !== 'SPAN') return;
     document.querySelectorAll('#toggleTipo span').forEach(s => s.classList.remove('active'));
