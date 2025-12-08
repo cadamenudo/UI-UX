@@ -74,11 +74,24 @@
 
   /* SECCIONES PRESUPUESTO */
   .section {
-    background: white;
     padding: 12px 14px;
     border-radius: 14px;
     margin-bottom: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+
+  /* colores distintos por bloque */
+  .section-ingresos {
+    background: #F0FDF4;           /* verde suave */
+    border-left: 4px solid #22C55E;
+  }
+  .section-gastos {
+    background: #FEF2F2;           /* rojo suave */
+    border-left: 4px solid #EF4444;
+  }
+  .section-ahorro {
+    background: #EFF6FF;           /* azul suave */
+    border-left: 4px solid #3B82F6;
   }
 
   .section-header-row {
@@ -89,9 +102,12 @@
   }
 
   .section-header {
-    font-weight: 700;
+    font-weight: 800;
     font-size: 1rem;
   }
+  .section-ingresos .section-header { color: #15803D; }
+  .section-gastos .section-header { color: #B91C1C; }
+  .section-ahorro .section-header { color: #1D4ED8; }
 
   .add-btn-small {
     border: none;
@@ -227,6 +243,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 6px;
   }
 
   .status-banner.green {
@@ -260,7 +277,7 @@
     font-weight: 400;
   }
 
-  /* WRAPPER DEL GRÁFICO (para que no crezca infinito) */
+  /* WRAPPER DEL GRÁFICO */
   .chart-wrapper {
     width: 100%;
     height: 260px;
@@ -280,6 +297,11 @@
     padding-top: 6px;
     margin-top: 4px;
     font-size: 0.85rem;
+  }
+
+  .top-deviations-title {
+    font-weight: 700;
+    margin-bottom: 4px;
   }
 
   .top-dev-item {
@@ -310,6 +332,22 @@
   .top-dev-diff.negative {
     color: #15803D;
     font-weight: 700;
+  }
+
+  .top-dev-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    margin-top: 2px;
+  }
+  .top-dev-badge.sobre {
+    background: rgba(239, 68, 68, 0.08);
+    color: #B91C1C;
+  }
+  .top-dev-badge.debajo {
+    background: rgba(34, 197, 94, 0.08);
+    color: #15803D;
   }
 
   /* MODAL AÑADIR */
@@ -429,7 +467,7 @@
   </div>
 
   <!-- INGRESOS -->
-  <section class="section">
+  <section class="section section-ingresos">
     <div class="section-header-row">
       <div class="section-header">Ingresos presupuestados</div>
       <button class="add-btn-small" type="button" data-area="ingresos">
@@ -440,7 +478,7 @@
   </section>
 
   <!-- GASTOS -->
-  <section class="section">
+  <section class="section section-gastos">
     <div class="section-header-row">
       <div class="section-header">Gastos presupuestados</div>
       <button class="add-btn-small" type="button" data-area="gastos">
@@ -451,7 +489,7 @@
   </section>
 
   <!-- AHORRO -->
-  <section class="section">
+  <section class="section section-ahorro">
     <div class="section-header-row">
       <div class="section-header">Ahorro presupuestado</div>
       <button class="add-btn-small" type="button" data-area="ahorro">
@@ -482,18 +520,19 @@
     <div class="comp-header">
       <div class="comp-title">Presupuesto vs real</div>
       <div class="chips">
-        <span class="chip active" data-comp-area="gastos">Gastos</span>
-        <span class="chip" data-comp-area="ingresos">Ingresos</span>
+        <!-- ORDEN: INGRESOS, GASTOS, AHORRO -->
+        <span class="chip active" data-comp-area="ingresos">Ingresos</span>
+        <span class="chip" data-comp-area="gastos">Gastos</span>
         <span class="chip" data-comp-area="ahorro">Ahorro</span>
       </div>
     </div>
 
     <div id="statusBanner" class="status-banner green">
       <span id="statusTextoPrincipal">
-        SUPER: estás usando el 82% de tu presupuesto de gastos.
+        Vas por debajo del presupuesto de gastos.
       </span>
       <span id="statusTextoSecundario" style="font-size:0.8rem; color:#64748B;">
-        Te quedan $350 para gastar sin salirte del plan.
+        Margen disponible: $0.00
       </span>
     </div>
 
@@ -518,7 +557,9 @@
     </div>
 
     <div class="top-deviations">
-      <div style="font-weight:700; margin-bottom:4px;">Desviaciones principales (gastos)</div>
+      <div class="top-deviations-title">
+        Top desviaciones por categoría (gastos)
+      </div>
       <div id="topDeviationsList"></div>
     </div>
   </section>
@@ -628,7 +669,8 @@
 
     let tipoPresupuesto = "mensual"; // "mensual" o "anual"
     let comparativoChart = null;
-    let areaComparativo = "gastos";
+    // ahora arrancamos mostrando INGRESOS en el navegador
+    let areaComparativo = "ingresos";
     let ultimaDataComparativo = null;
 
     function formatMoney(value) {
@@ -742,6 +784,7 @@
       const realIngresos = data.real.ingresos || 0;
       const realAhorro = data.real.ahorro || 0;
 
+      // Banner SIEMPRE basado en gastos (como en desktop)
       const banner = document.getElementById("statusBanner");
       const textoP = document.getElementById("statusTextoPrincipal");
       const textoS = document.getElementById("statusTextoSecundario");
@@ -752,29 +795,29 @@
 
       if (presGastos <= 0) {
         banner.classList.add("green");
-        msgPrincipal = "Todavía no has definido tu presupuesto de gastos.";
+        msgPrincipal = "Aún no defines tu presupuesto de gastos.";
         msgSecundario = "";
       } else {
         const ratio = presGastos > 0 ? realGastos / presGastos : 0;
+        const pct = Math.round(ratio * 100);
+        const margen = presGastos - realGastos;
+
         if (ratio <= 0.9) {
           banner.classList.add("green");
-          msgPrincipal = `Vas por debajo del presupuesto (${Math.round(ratio * 100)}% usado).`;
-          const margen = presGastos - realGastos;
-          msgSecundario = `Te quedan ${formatMoney(margen)} para gastar sin salirte del plan.`;
+          msgPrincipal = `Vas por debajo (${pct}% de gastos).`;
+          msgSecundario = `Margen: ${formatMoney(margen)}.`;
         } else if (ratio <= 1.05) {
+          // TEXTO MUCHO MÁS CORTO EN AMARILLO
           banner.classList.add("yellow");
-          const pct = Math.round(ratio * 100);
-          msgPrincipal = `Estás muy cerca del límite (${pct}% usado).`;
-          const margen = presGastos - realGastos;
+          msgPrincipal = `Cuidado: ${pct}% de gastos.`;
           msgSecundario = margen >= 0
-            ? `Te quedan ${formatMoney(margen)} de margen.`
-            : `Te has pasado ${formatMoney(Math.abs(margen))} del presupuesto.`;
+            ? `Margen: ${formatMoney(margen)}.`
+            : `Exceso: ${formatMoney(Math.abs(margen))}.`;
         } else {
           banner.classList.add("red");
-          const pct = Math.round(ratio * 100);
-          msgPrincipal = `Te pasaste del presupuesto (${pct}% usado).`;
+          msgPrincipal = `Te pasaste (${pct}% de gastos).`;
           const exceso = realGastos - presGastos;
-          msgSecundario = `Estás ${formatMoney(exceso)} por encima de lo planeado.`;
+          msgSecundario = `Exceso: ${formatMoney(exceso)}.`;
         }
       }
 
@@ -873,6 +916,7 @@
         }
       });
 
+      // Top desviaciones (solo sentido para gastos)
       const lista = document.getElementById("topDeviationsList");
       lista.innerHTML = "";
 
@@ -903,6 +947,7 @@
         desv.push({ cat, pres, real, diff, pct });
       });
 
+      // Ordenar por mayor desviación (como "top")
       desv.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
 
       const top = desv.slice(0, 3);
@@ -929,8 +974,13 @@
           det.className = "top-dev-detail";
           det.textContent = `Presupuesto: ${formatMoney(d.pres)} · Real: ${formatMoney(d.real)}`;
 
+          const badge = document.createElement("span");
+          badge.className = "top-dev-badge " + (d.diff > 0 ? "sobre" : "debajo");
+          badge.textContent = d.diff > 0 ? "Sobre presupuesto" : "Debajo presupuesto";
+
           left.appendChild(name);
           left.appendChild(det);
+          left.appendChild(badge);
 
           const diff = document.createElement("div");
           diff.className = "top-dev-diff " + (d.diff > 0 ? "positive" : "negative");
@@ -944,6 +994,7 @@
       }
     }
 
+    // ---- MODAL ----
     const modal = document.getElementById("modalAdd");
     const modalAreaTexto = document.getElementById("modalAreaTexto");
     const modalCategoria = document.getElementById("modalCategoria");
@@ -1036,6 +1087,7 @@
       cerrarModal();
     });
 
+    // ---- TOGGLE MENSUAL / ANUAL ----
     const toggleMensual = document.getElementById("toggleMensual");
     const toggleAnual = document.getElementById("toggleAnual");
     const textoTipo = document.getElementById("textoTipo");
@@ -1096,6 +1148,7 @@
       cambiarTipoPresupuesto("anual");
     });
 
+    // Botones de "Añadir"
     document.querySelectorAll(".add-btn-small").forEach(btn => {
       btn.addEventListener("click", () => {
         const area = btn.getAttribute("data-area");
@@ -1103,6 +1156,7 @@
       });
     });
 
+    // Chips del comparativo (Ingresos / Gastos / Ahorro)
     document.querySelectorAll(".chip[data-comp-area]").forEach(chip => {
       chip.addEventListener("click", () => {
         const area = chip.getAttribute("data-comp-area");
@@ -1115,6 +1169,7 @@
       });
     });
 
+    // DEMO inicial
     function cargarDemoInicial() {
       const demoIng = [
         {
