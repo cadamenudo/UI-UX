@@ -260,11 +260,18 @@
     font-weight: 400;
   }
 
-  #barComp {
+  /* WRAPPER DEL GRÁFICO (para que no crezca infinito) */
+  .chart-wrapper {
     width: 100%;
     height: 260px;
     margin-top: 4px;
     margin-bottom: 8px;
+  }
+
+  .chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
   }
 
   /* DESVIACIONES TOP */
@@ -505,7 +512,10 @@
       </div>
     </div>
 
-    <canvas id="barComp"></canvas>
+    <!-- WRAPPER FIJO PARA EL GRÁFICO -->
+    <div class="chart-wrapper">
+      <canvas id="barComp"></canvas>
+    </div>
 
     <div class="top-deviations">
       <div style="font-weight:700; margin-bottom:4px;">Desviaciones principales (gastos)</div>
@@ -621,9 +631,6 @@
     let areaComparativo = "gastos";
     let ultimaDataComparativo = null;
 
-    // ====================
-    //   UTILIDADES
-    // ====================
     function formatMoney(value) {
       const n = Number(value) || 0;
       return "$" + n.toLocaleString("en-US", {
@@ -632,9 +639,6 @@
       });
     }
 
-    // =========================
-    //   RENDER FILAS PRESUPUESTO
-    // =========================
     function agregarFilaUI(area, item) {
       const cont = document.querySelector(`[data-area-list="${area}"]`);
       if (!cont) return;
@@ -689,9 +693,6 @@
       cont.appendChild(row);
     }
 
-    // ====================
-    //   RECALCULAR TOTALES
-    // ====================
     function sumaArea(area) {
       return presupuesto[area].reduce((acc, it) => acc + (Number(it.monto) || 0), 0);
     }
@@ -730,9 +731,6 @@
       actualizarComparativo(data);
     }
 
-    // =====================
-    //   COMPARATIVO VS REAL
-    // =====================
     function actualizarComparativo(data) {
       ultimaDataComparativo = data;
 
@@ -744,7 +742,6 @@
       const realIngresos = data.real.ingresos || 0;
       const realAhorro = data.real.ahorro || 0;
 
-      // Banner
       const banner = document.getElementById("statusBanner");
       const textoP = document.getElementById("statusTextoPrincipal");
       const textoS = document.getElementById("statusTextoSecundario");
@@ -766,14 +763,16 @@
           msgSecundario = `Te quedan ${formatMoney(margen)} para gastar sin salirte del plan.`;
         } else if (ratio <= 1.05) {
           banner.classList.add("yellow");
-          msgPrincipal = `Estás muy cerca del límite (${Math.round(ratio * 100)}% usado).`;
+          const pct = Math.round(ratio * 100);
+          msgPrincipal = `Estás muy cerca del límite (${pct}% usado).`;
           const margen = presGastos - realGastos;
           msgSecundario = margen >= 0
             ? `Te quedan ${formatMoney(margen)} de margen.`
             : `Te has pasado ${formatMoney(Math.abs(margen))} del presupuesto.`;
         } else {
           banner.classList.add("red");
-          msgPrincipal = `Te pasaste del presupuesto (${Math.round(ratio * 100)}% usado).`;
+          const pct = Math.round(ratio * 100);
+          msgPrincipal = `Te pasaste del presupuesto (${pct}% usado).`;
           const exceso = realGastos - presGastos;
           msgSecundario = `Estás ${formatMoney(exceso)} por encima de lo planeado.`;
         }
@@ -782,7 +781,6 @@
       textoP.textContent = msgPrincipal;
       textoS.textContent = msgSecundario;
 
-      // Totales de la vista actual (según áreaComparativo)
       let presVista = 0;
       let realVista = 0;
 
@@ -801,7 +799,6 @@
       document.getElementById("cmpReal").textContent = formatMoney(realVista);
       document.getElementById("cmpDiferencia").textContent = formatMoney(realVista - presVista);
 
-      // Gráfico
       const ctx = document.getElementById("barComp").getContext("2d");
       if (comparativoChart) comparativoChart.destroy();
 
@@ -876,7 +873,6 @@
         }
       });
 
-      // Desviaciones (solo gastos)
       const lista = document.getElementById("topDeviationsList");
       lista.innerHTML = "";
 
@@ -948,9 +944,6 @@
       }
     }
 
-    // ==========
-    //   MODAL
-    // ==========
     const modal = document.getElementById("modalAdd");
     const modalAreaTexto = document.getElementById("modalAreaTexto");
     const modalCategoria = document.getElementById("modalCategoria");
@@ -1043,9 +1036,6 @@
       cerrarModal();
     });
 
-    // =====================
-    //   TOGGLE MENSUAL/ANUAL
-    // =====================
     const toggleMensual = document.getElementById("toggleMensual");
     const toggleAnual = document.getElementById("toggleAnual");
     const textoTipo = document.getElementById("textoTipo");
@@ -1055,7 +1045,6 @@
 
       const factor = nuevoTipo === "anual" ? 12 : 1 / 12;
 
-      // Escalamos presupuesto
       ["ingresos", "gastos", "ahorro"].forEach(area => {
         presupuesto[area].forEach(item => {
           const montoActual = Number(item.monto) || 0;
@@ -1071,7 +1060,6 @@
         });
       });
 
-      // Escalamos realDemo también
       realDemo.ingresos = (realDemo.ingresos || 0) * factor;
       realDemo.ahorro = (realDemo.ahorro || 0) * factor;
       Object.keys(realDemo.gastosPorCategoria).forEach(cat => {
@@ -1108,9 +1096,6 @@
       cambiarTipoPresupuesto("anual");
     });
 
-    // =========================
-    //   BOTONES "+ AÑADIR"
-    // =========================
     document.querySelectorAll(".add-btn-small").forEach(btn => {
       btn.addEventListener("click", () => {
         const area = btn.getAttribute("data-area");
@@ -1118,9 +1103,6 @@
       });
     });
 
-    // =========================
-    //   CHIPS ÁREA COMPARATIVO
-    // =========================
     document.querySelectorAll(".chip[data-comp-area]").forEach(chip => {
       chip.addEventListener("click", () => {
         const area = chip.getAttribute("data-comp-area");
@@ -1133,9 +1115,6 @@
       });
     });
 
-    // ======================
-    //   DEMO INICIAL
-    // ======================
     function cargarDemoInicial() {
       const demoIng = [
         {
