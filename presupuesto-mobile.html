@@ -12,580 +12,512 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    :root {
-      --cm-primary: #3956e8;
-      --cm-secondary: #7459d9;
-      --cm-bg: #f5f6ff;
-      --cm-card-bg: #ffffff;
-      --cm-text: #0f172a;
-      --cm-muted: #64748b;
-      --cm-border: #e5e7eb;
-      --cm-success-bg: #ecfdf3;
-      --cm-success-text: #15803d;
-      --cm-warning-bg: #fef9c3;
-      --cm-warning-text: #92400e;
-      --cm-danger-bg: #fef2f2;
-      --cm-danger-text: #b91c1c;
-      --radius-card: 16px;
-      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.06);
-    }
+  body {
+    font-family: Nunito, sans-serif;
+    background: #F6F7FF;
+    padding: 16px;
+    margin: 0;
+  }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  /* HEADER */
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
 
-    body {
-      font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--cm-bg);
-      color: var(--cm-text);
-    }
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+  }
 
-    .cm-page {
-      padding: 16px 16px 24px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
+  .toggle {
+    background: white;
+    border-radius: 999px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    border: 1px solid #E5E7EB;
+  }
 
-    /* Header */
-    .cm-page-header {
-      margin-bottom: 16px;
-    }
+  .toggle span {
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
 
-    .cm-breadcrumb {
-      font-size: 0.8rem;
-      color: var(--cm-muted);
-    }
+  .toggle .active {
+    background: #E8ECFF;
+    color: #3956E8;
+    font-weight: 700;
+  }
 
-    .cm-page-title h1 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-top: 4px;
-    }
+  .select-month {
+    background: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #E5E7EB;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    margin-top: 4px;
+    width: 100%;
+  }
 
-    .cm-header-row {
-      margin-top: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+  .helper-label {
+    font-size: 0.78rem;
+    color: #64748B;
+    margin-bottom: 10px;
+  }
 
-    .cm-segment {
-      display: inline-flex;
-      padding: 3px;
-      border-radius: 999px;
-      background: #eef2ff;
-      gap: 4px;
-    }
+  /* SECCIONES PRESUPUESTO */
+  .section {
+    background: white;
+    padding: 12px 14px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
 
-    .cm-segment button {
-      border: none;
-      background: transparent;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      color: var(--cm-muted);
-      cursor: pointer;
-    }
+  .section-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
 
-    .cm-segment button.active {
-      background: #ffffff;
-      color: var(--cm-primary);
-      font-weight: 700;
-      box-shadow: 0 2px 6px rgba(148, 163, 184, 0.4);
-    }
+  .section-header {
+    font-weight: 700;
+    font-size: 1rem;
+  }
 
-    .cm-select-inline {
-      border-radius: 999px;
-      border: 1px solid var(--cm-border);
-      background: #fff;
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      color: var(--cm-muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      min-width: 140px;
-      justify-content: space-between;
-    }
+  .add-btn-small {
+    border: none;
+    background: #EEF2FF;
+    color: #3956E8;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
 
-    .cm-helper-text {
-      margin-top: 6px;
-      font-size: 0.75rem;
-      color: var(--cm-muted);
-    }
+  .rows-container {
+    margin-top: 4px;
+  }
 
-    /* Cards */
-    .cm-card {
-      background: var(--cm-card-bg);
-      border-radius: var(--radius-card);
-      padding: 14px 14px;
-      box-shadow: var(--shadow-soft);
-      margin-top: 14px;
-    }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.9rem;
+    align-items: center;
+    gap: 8px;
+  }
 
-    .cm-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
+  .row span:last-child {
+    font-weight: 600;
+  }
 
-    .cm-card-header h2 {
-      font-size: 1rem;
-      font-weight: 700;
-    }
+  .row-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
 
-    .cm-btn-add {
-      border: none;
-      background: #eef2ff;
-      color: var(--cm-primary);
-      font-size: 0.8rem;
-      padding: 6px 10px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-    }
+  .row-name {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    /* Lista presupuesto */
-    .budget-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
-    }
+  .row-meta {
+    color: #64748B;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    .budget-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border: 1px solid var(--cm-border);
-      background: #f9fafb;
-    }
+  .row input[type="number"] {
+    width: 90px;
+    padding: 4px 6px;
+    border-radius: 999px;
+    border: 1px solid #E5E7EB;
+    font-size: 0.8rem;
+    text-align: right;
+  }
 
-    .budget-row-label {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      flex: 1;
-      min-width: 0;
-    }
+  .row-amount-prefix {
+    font-size: 0.78rem;
+    color: #64748B;
+  }
 
-    .row-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  /* TOTALES */
+  .totals {
+    margin-top: 4px;
+    background: white;
+    padding: 12px 14px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 12px;
+  }
 
-    .row-meta {
-      font-size: 0.75rem;
-      color: var(--cm-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .totals .row {
+    font-weight: 600;
+  }
 
-    .budget-row-amount {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-    }
+  /* CARD BASE */
+  .card {
+    background: white;
+    padding: 14px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 14px;
+  }
 
-    .budget-row-amount span.currency {
-      font-size: 0.8rem;
-      color: var(--cm-muted);
-    }
+  /* COMPARATIVO */
+  .comp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
 
-    .budget-row-amount input {
-      width: 88px;
-      padding: 4px 6px;
-      border-radius: 999px;
-      border: 1px solid var(--cm-border);
-      font-size: 0.8rem;
-      text-align: right;
-    }
+  .comp-title {
+    font-weight: 800;
+    font-size: 1rem;
+  }
 
-    .budget-total {
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px dashed var(--cm-border);
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
+  .chips {
+    display: flex;
+    gap: 6px;
+  }
 
-    /* Banner comparativo */
-    .cm-banner {
-      margin-top: 16px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+  .chip {
+    border-radius: 999px;
+    border: 1px solid #E5E7EB;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    background: #FFFFFF;
+    color: #64748B;
+  }
 
-    .cm-banner strong {
-      font-weight: 800;
-    }
+  .chip.active {
+    border-color: #3956E8;
+    background: #E8ECFF;
+    color: #3956E8;
+    font-weight: 700;
+  }
 
-    .cm-banner-small {
-      font-size: 0.8rem;
-      color: var(--cm-muted);
-    }
+  /* BANNER ESTADO */
+  .status-banner {
+    border-radius: 12px;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .cm-banner-success {
-      background: var(--cm-success-bg);
-      color: var(--cm-success-text);
-    }
+  .status-banner.green {
+    background: #ECFDF3;
+    color: #15803D;
+  }
+  .status-banner.yellow {
+    background: #FEF9C3;
+    color: #92400E;
+  }
+  .status-banner.red {
+    background: #FEF2F2;
+    color: #B91C1C;
+  }
 
-    .cm-banner-warning {
-      background: var(--cm-warning-bg);
-      color: var(--cm-warning-text);
-    }
+  .status-banner strong {
+    font-weight: 800;
+  }
 
-    .cm-banner-danger {
-      background: var(--cm-danger-bg);
-      color: var(--cm-danger-text);
-    }
+  /* MINI RESUMEN */
+  .mini-summary {
+    margin-bottom: 8px;
+  }
 
-    /* Totales comparativos */
-    .cmp-totales {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 10px;
-    }
+  .mini-summary .row {
+    font-size: 0.9rem;
+  }
 
-    .cmp-item {
-      border-radius: 12px;
-      border: 1px solid var(--cm-border);
-      padding: 8px 10px;
-      background: #f9fafb;
-      font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+  .mini-summary .row span:first-child {
+    color: #64748B;
+    font-weight: 400;
+  }
 
-    .cmp-label {
-      color: var(--cm-muted);
-      font-size: 0.75rem;
-    }
+  #barComp {
+    width: 100%;
+    height: 260px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
 
-    .cmp-value {
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
+  /* DESVIACIONES TOP */
+  .top-deviations {
+    border-top: 1px dashed #E5E7EB;
+    padding-top: 6px;
+    margin-top: 4px;
+    font-size: 0.85rem;
+  }
 
-    /* Toggle área comparativo */
-    .cm-area-toggle {
-      margin-top: 12px;
-      display: flex;
-      justify-content: center;
-    }
+  .top-dev-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    gap: 8px;
+  }
 
-    /* Gráfico */
-    .cm-chart-container {
-      margin-top: 14px;
-      border-radius: 12px;
-      border: 1px solid var(--cm-border);
-      background: #ffffff;
-      padding: 10px;
-      min-height: 220px;
-    }
+  .top-dev-left {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .cm-chart-container canvas {
-      width: 100%;
-      height: 200px;
-    }
+  .top-dev-name {
+    font-weight: 600;
+  }
 
-    /* Desviaciones */
-    .cm-desv-card {
-      margin-top: 14px;
-      border-radius: 12px;
-      border: 1px solid var(--cm-border);
-      background: #ffffff;
-      padding: 10px 12px;
-    }
+  .top-dev-detail {
+    color: #64748B;
+    font-size: 0.8rem;
+  }
 
-    .cm-desv-card h3 {
-      font-size: 0.95rem;
-      margin-bottom: 6px;
-    }
+  .top-dev-diff.positive {
+    color: #B91C1C;
+    font-weight: 700;
+  }
+  .top-dev-diff.negative {
+    color: #15803D;
+    font-weight: 700;
+  }
 
-    .desv-item {
-      font-size: 0.8rem;
-      padding: 6px 0;
-      border-bottom: 1px dashed var(--cm-border);
-    }
+  /* MODAL AÑADIR */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
 
-    .desv-item:last-child {
-      border-bottom: none;
-    }
+  .modal.open {
+    display: flex;
+  }
 
-    .desv-label {
-      font-weight: 600;
-    }
+  .modal-content {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem 1.6rem;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  }
 
-    .desv-detalle {
-      color: var(--cm-muted);
-      font-size: 0.75rem;
-    }
+  .modal-content h2 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #111827;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+  }
 
-    /* Modal */
-    .modal-subcategoria {
-      position: fixed;
-      inset: 0;
-      background: rgba(17, 24, 39, 0.65);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
+  .modal-subtitle {
+    font-size: 0.8rem;
+    color: #64748B;
+    margin-bottom: 0.7rem;
+  }
 
-    .modal-subcategoria.abierto {
-      display: flex;
-    }
+  .modal-content label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    margin-top: 0.4rem;
+    color: #111827;
+  }
 
-    .modal-contenido {
-      background: #fff;
-      border-radius: 18px;
-      padding: 16px 16px 18px;
-      width: 92%;
-      max-width: 380px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-      position: relative;
-      font-size: 0.85rem;
-    }
+  .modal-content input,
+  .modal-content select,
+  .modal-content textarea {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    margin-bottom: 0.3rem;
+  }
 
-    .modal-titulo {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
+  .modal-info-tipo {
+    font-size: 0.78rem;
+    color: #6B7280;
+    margin-top: 2px;
+  }
 
-    .modal-subtitulo {
-      font-size: 0.75rem;
-      color: var(--cm-muted);
-      margin-bottom: 10px;
-    }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
 
-    .modal-contenido label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-bottom: 2px;
-      margin-top: 8px;
-      color: #111827;
-    }
+  .btn-cancel {
+    border: none;
+    background: #F3F4F6;
+    color: #111827;
+    padding: 0.6rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
 
-    .modal-contenido select,
-    .modal-contenido input {
-      width: 100%;
-      padding: 7px 10px;
-      border-radius: 10px;
-      border: 1px solid #D1D5DB;
-      font-size: 0.85rem;
-      font-family: inherit;
-      margin-bottom: 2px;
-      box-sizing: border-box;
-    }
-
-    .modal-info-tipo {
-      margin-top: 4px;
-      font-size: 0.75rem;
-      color: var(--cm-muted);
-    }
-
-    .modal-botones {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .modal-botones button {
-      border-radius: 999px;
-      border: none;
-      font-size: 0.8rem;
-      padding: 7px 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .btn-cancelar {
-      background: #F8F6FF;
-      color: #4B0082;
-    }
-
-    .btn-guardar {
-      background: #3956E8;
-      color: white;
-    }
-
-    .modal-close {
-      position: absolute;
-      right: 10px;
-      top: 8px;
-      font-size: 1.2rem;
-      color: #9CA3AF;
-      cursor: pointer;
-      border: none;
-      background: none;
-    }
-
-    @media (min-width: 600px) {
-      .cm-page {
-        padding: 20px;
-      }
-    }
+  .btn-save {
+    border: none;
+    background: #3956E8;
+    color: white;
+    padding: 0.6rem 1.3rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
   </style>
 </head>
 <body>
-  <main class="cm-page">
-    <!-- Header -->
-    <header class="cm-page-header">
-      <div class="cm-page-title">
-        <span class="cm-breadcrumb">Tablero / Presupuesto</span>
-        <h1>Presupuesto del periodo</h1>
-      </div>
+  <!-- HEADER -->
+  <div class="top">
+    <h1>Presupuesto</h1>
+    <div class="toggle">
+      <span id="toggleMensual" class="active">Mensual</span>
+      <span id="toggleAnual">Anual</span>
+    </div>
+  </div>
 
-      <div class="cm-header-row">
-        <div class="cm-segment">
-          <button id="btnMensual" type="button" class="active">Mensual</button>
-          <button id="btnAnual" type="button">Anual</button>
-        </div>
+  <div>
+    <select class="select-month" id="selectPeriodo">
+      <option>Mes: Enero 2025</option>
+      <option>Mes: Febrero 2025</option>
+      <option>Año: 2025</option>
+    </select>
+    <div class="helper-label" id="textoTipo">
+      Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.
+    </div>
+  </div>
 
-        <div class="cm-select-inline">
-          <span id="labelPeriodoTipo">Mes:</span>
-          <span><strong id="labelPeriodo">Enero 2025</strong> ⌄</span>
-        </div>
-      </div>
+  <!-- INGRESOS -->
+  <section class="section">
+    <div class="section-header-row">
+      <div class="section-header">Ingresos presupuestados</div>
+      <button class="add-btn-small" type="button" data-area="ingresos">
+        + Añadir
+      </button>
+    </div>
+    <div class="rows-container" data-area-list="ingresos"></div>
+  </section>
 
-      <p class="cm-helper-text" id="textoTipo">
-        Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.
-      </p>
-    </header>
+  <!-- GASTOS -->
+  <section class="section">
+    <div class="section-header-row">
+      <div class="section-header">Gastos presupuestados</div>
+      <button class="add-btn-small" type="button" data-area="gastos">
+        + Añadir
+      </button>
+    </div>
+    <div class="rows-container" data-area-list="gastos"></div>
+  </section>
 
-    <!-- INGRESOS -->
-    <section class="cm-card">
-      <div class="cm-card-header">
-        <h2>Ingresos presupuestados</h2>
-        <button class="cm-btn-add" type="button" data-area="ingresos">
-          + Añadir
-        </button>
-      </div>
-      <div class="budget-list" data-area-list="ingresos"></div>
-      <div class="budget-total">
-        <span>Total ingresos</span>
-        <span id="totalIngresos">$0.00</span>
-      </div>
-    </section>
+  <!-- AHORRO -->
+  <section class="section">
+    <div class="section-header-row">
+      <div class="section-header">Ahorro presupuestado</div>
+      <button class="add-btn-small" type="button" data-area="ahorro">
+        + Añadir
+      </button>
+    </div>
+    <div class="rows-container" data-area-list="ahorro"></div>
+  </section>
 
-    <!-- GASTOS -->
-    <section class="cm-card">
-      <div class="cm-card-header">
-        <h2>Gastos presupuestados</h2>
-        <button class="cm-btn-add" type="button" data-area="gastos">
-          + Añadir
-        </button>
-      </div>
-      <div class="budget-list" data-area-list="gastos"></div>
-      <div class="budget-total">
-        <span>Total gastos</span>
-        <span id="totalGastos">$0.00</span>
-      </div>
-    </section>
+  <!-- TOTALES -->
+  <section class="totals">
+    <div class="row">
+      <span>Total ingresos</span>
+      <span id="totalIngresos">$0.00</span>
+    </div>
+    <div class="row">
+      <span>Total gastos</span>
+      <span id="totalGastos">$0.00</span>
+    </div>
+    <div class="row">
+      <span>Total ahorro</span>
+      <span id="totalAhorro">$0.00</span>
+    </div>
+  </section>
 
-    <!-- AHORRO -->
-    <section class="cm-card">
-      <div class="cm-card-header">
-        <h2>Ahorro presupuestado</h2>
-        <button class="cm-btn-add" type="button" data-area="ahorro">
-          + Añadir
-        </button>
+  <!-- COMPARATIVO PRESUPUESTO VS REAL -->
+  <section class="card">
+    <div class="comp-header">
+      <div class="comp-title">Presupuesto vs real</div>
+      <div class="chips">
+        <span class="chip active" data-comp-area="gastos">Gastos</span>
+        <span class="chip" data-comp-area="ingresos">Ingresos</span>
+        <span class="chip" data-comp-area="ahorro">Ahorro</span>
       </div>
-      <div class="budget-list" data-area-list="ahorro"></div>
-      <div class="budget-total">
-        <span>Total ahorro</span>
-        <span id="totalAhorro">$0.00</span>
-      </div>
-    </section>
+    </div>
 
-    <!-- PRESUPUESTO VS REAL -->
-    <section class="cm-card" style="margin-top:18px;">
-      <h2 style="font-size:1rem; font-weight:700; margin-bottom:4px;">
-        Presupuesto vs gasto real
-      </h2>
+    <div id="statusBanner" class="status-banner green">
+      <span id="statusTextoPrincipal">
+        SUPER: estás usando el 82% de tu presupuesto de gastos.
+      </span>
+      <span id="statusTextoSecundario" style="font-size:0.8rem; color:#64748B;">
+        Te quedan $350 para gastar sin salirte del plan.
+      </span>
+    </div>
 
-      <!-- Banner -->
-      <div id="cmpBanner" class="cm-banner cm-banner-success">
-        <div id="cmpBannerTextoPrincipal">
-          SUPER: estás usando el 82% de tu presupuesto de gastos.
-        </div>
-        <div id="cmpBannerTextoSecundario" class="cm-banner-small">
-          Te quedan $350 para gastar sin salirte del plan.
-        </div>
+    <div class="mini-summary">
+      <div class="row">
+        <span>Presupuesto</span>
+        <span id="cmpPresupuesto">$0.00</span>
       </div>
+      <div class="row">
+        <span>Real</span>
+        <span id="cmpReal">$0.00</span>
+      </div>
+      <div class="row">
+        <span>Diferencia</span>
+        <span id="cmpDiferencia">$0.00</span>
+      </div>
+    </div>
 
-      <!-- Totales comparativos -->
-      <div class="cmp-totales">
-        <div class="cmp-item">
-          <span class="cmp-label">Gastos presupuestados</span>
-          <span class="cmp-value" id="cmpPresupuesto">$0.00</span>
-        </div>
-        <div class="cmp-item">
-          <span class="cmp-label">Gasto real</span>
-          <span class="cmp-value" id="cmpReal">$0.00</span>
-        </div>
-        <div class="cmp-item">
-          <span class="cmp-label">Diferencia</span>
-          <span class="cmp-value" id="cmpDiferencia">$0.00</span>
-        </div>
-      </div>
+    <canvas id="barComp"></canvas>
 
-      <!-- Navegador por área -->
-      <div class="cm-area-toggle">
-        <div class="cm-segment">
-          <button type="button" id="btnAreaGastos" class="active" data-btn-area="gastos">Gastos</button>
-          <button type="button" id="btnAreaIngresos" data-btn-area="ingresos">Ingresos</button>
-          <button type="button" id="btnAreaAhorro" data-btn-area="ahorro">Ahorro</button>
-        </div>
-      </div>
-
-      <!-- Gráfico barras -->
-      <div class="cm-chart-container">
-        <canvas id="comparativoChart"></canvas>
-      </div>
-
-      <!-- Desviaciones top (solo gastos) -->
-      <div class="cm-desv-card">
-        <h3>Desviaciones principales (gastos)</h3>
-        <div id="listaDesviaciones"></div>
-      </div>
-    </section>
-  </main>
+    <div class="top-deviations">
+      <div style="font-weight:700; margin-bottom:4px;">Desviaciones principales (gastos)</div>
+      <div id="topDeviationsList"></div>
+    </div>
+  </section>
 
   <!-- MODAL AÑADIR PARTIDA -->
-  <div id="modalPartida" class="modal-subcategoria">
-    <div class="modal-contenido">
-      <button class="modal-close" type="button" id="btnCerrarModal">×</button>
-      <div class="modal-titulo">Añadir al presupuesto</div>
-      <div class="modal-subtitulo">
+  <div class="modal" id="modalAdd">
+    <div class="modal-content">
+      <h2>Añadir al presupuesto</h2>
+      <div class="modal-subtitle">
         Área: <strong id="modalAreaTexto">Ingresos</strong>
       </div>
 
@@ -600,14 +532,13 @@
 
       <label for="modalMonto">Monto</label>
       <input type="number" id="modalMonto" placeholder="0.00" min="0" step="0.01" />
-
       <div class="modal-info-tipo" id="modalInfoTipo">
         Monto en formato mensual.
       </div>
 
-      <div class="modal-botones">
-        <button type="button" class="btn-cancelar" id="btnCancelarModal">Cancelar</button>
-        <button type="button" class="btn-guardar" id="btnGuardarModal">Guardar</button>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="btnModalCancel">Cancelar</button>
+        <button type="button" class="btn-save" id="btnModalSave">Guardar</button>
       </div>
     </div>
   </div>
@@ -666,12 +597,14 @@
       "Otros": ["Donaciones planificadas", "Proyectos personales", "Fondo de libertad financiera"]
     };
 
+    // Presupuesto del usuario
     const presupuesto = {
       ingresos: [],
       gastos: [],
       ahorro: []
     };
 
+    // Datos de gasto real DEMO (inicialmente en formato mensual)
     const realDemo = {
       ingresos: 4200,
       gastosPorCategoria: {
@@ -685,7 +618,7 @@
 
     let tipoPresupuesto = "mensual"; // "mensual" o "anual"
     let comparativoChart = null;
-    let areaComparativo = "gastos"; // gastos / ingresos / ahorro
+    let areaComparativo = "gastos";
     let ultimaDataComparativo = null;
 
     // ====================
@@ -703,33 +636,35 @@
     //   RENDER FILAS PRESUPUESTO
     // =========================
     function agregarFilaUI(area, item) {
-      const lista = document.querySelector(`[data-area-list="${area}"]`);
-      if (!lista) return;
+      const cont = document.querySelector(`[data-area-list="${area}"]`);
+      if (!cont) return;
 
       const row = document.createElement("div");
-      row.className = "budget-row";
+      row.className = "row";
       row.dataset.itemId = item.id;
 
-      const labelDiv = document.createElement("div");
-      labelDiv.className = "budget-row-label";
+      const main = document.createElement("div");
+      main.className = "row-main";
 
       const nameDiv = document.createElement("div");
       nameDiv.className = "row-name";
-      nameDiv.textContent = item.nombre || `${item.categoria}`;
+      nameDiv.textContent = item.nombre || item.categoria;
 
       const metaDiv = document.createElement("div");
       metaDiv.className = "row-meta";
-      metaDiv.textContent = `${item.categoria}${item.subcategoria ? " · " + item.subcategoria : ""}`;
+      metaDiv.textContent = item.categoria + (item.subcategoria ? " · " + item.subcategoria : "");
 
-      labelDiv.appendChild(nameDiv);
-      labelDiv.appendChild(metaDiv);
+      main.appendChild(nameDiv);
+      main.appendChild(metaDiv);
 
-      const amountDiv = document.createElement("div");
-      amountDiv.className = "budget-row-amount";
+      const amountWrapper = document.createElement("div");
+      amountWrapper.style.display = "flex";
+      amountWrapper.style.alignItems = "center";
+      amountWrapper.style.gap = "4px";
 
-      const spanCurrency = document.createElement("span");
-      spanCurrency.className = "currency";
-      spanCurrency.textContent = "$";
+      const prefix = document.createElement("span");
+      prefix.className = "row-amount-prefix";
+      prefix.textContent = "$";
 
       const input = document.createElement("input");
       input.type = "number";
@@ -746,12 +681,12 @@
         }
       });
 
-      amountDiv.appendChild(spanCurrency);
-      amountDiv.appendChild(input);
+      amountWrapper.appendChild(prefix);
+      amountWrapper.appendChild(input);
 
-      row.appendChild(labelDiv);
-      row.appendChild(amountDiv);
-      lista.appendChild(row);
+      row.appendChild(main);
+      row.appendChild(amountWrapper);
+      cont.appendChild(row);
     }
 
     // ====================
@@ -781,6 +716,7 @@
       document.getElementById("totalAhorro").textContent = formatMoney(totalAho);
 
       const gastosPorCatPres = construirGastosPorCategoriaPresupuesto();
+
       const data = {
         presupuesto: {
           ingresos: totalIng,
@@ -790,6 +726,7 @@
         },
         real: realDemo
       };
+
       actualizarComparativo(data);
     }
 
@@ -807,49 +744,65 @@
       const realIngresos = data.real.ingresos || 0;
       const realAhorro = data.real.ahorro || 0;
 
-      // Banner (se basa en gastos)
-      const ratio = presGastos > 0 ? realGastos / presGastos : 0;
-      const banner = document.getElementById("cmpBanner");
-      const textoP = document.getElementById("cmpBannerTextoPrincipal");
-      const textoS = document.getElementById("cmpBannerTextoSecundario");
-
-      banner.classList.remove("cm-banner-success", "cm-banner-warning", "cm-banner-danger");
+      // Banner
+      const banner = document.getElementById("statusBanner");
+      const textoP = document.getElementById("statusTextoPrincipal");
+      const textoS = document.getElementById("statusTextoSecundario");
+      banner.classList.remove("green", "yellow", "red");
 
       let msgPrincipal = "";
       let msgSecundario = "";
+
       if (presGastos <= 0) {
-        banner.classList.add("cm-banner-success");
+        banner.classList.add("green");
         msgPrincipal = "Todavía no has definido tu presupuesto de gastos.";
         msgSecundario = "";
-      } else if (ratio <= 0.9) {
-        banner.classList.add("cm-banner-success");
-        msgPrincipal = `Vas por debajo del presupuesto (${Math.round(ratio * 100)}% usado).`;
-        const margen = presGastos - realGastos;
-        msgSecundario = `Te quedan ${formatMoney(margen)} para gastar sin salirte del plan.`;
-      } else if (ratio <= 1.05) {
-        banner.classList.add("cm-banner-warning");
-        msgPrincipal = `Estás muy cerca del límite (${Math.round(ratio * 100)}% usado).`;
-        const margen = presGastos - realGastos;
-        msgSecundario = margen >= 0
-          ? `Te quedan ${formatMoney(margen)} de margen.`
-          : `Te has pasado ${formatMoney(Math.abs(margen))} del presupuesto.`;
       } else {
-        banner.classList.add("cm-banner-danger");
-        msgPrincipal = `Te pasaste del presupuesto (${Math.round(ratio * 100)}% usado).`;
-        const exceso = realGastos - presGastos;
-        msgSecundario = `Estás ${formatMoney(exceso)} por encima de lo planeado.`;
+        const ratio = presGastos > 0 ? realGastos / presGastos : 0;
+        if (ratio <= 0.9) {
+          banner.classList.add("green");
+          msgPrincipal = `Vas por debajo del presupuesto (${Math.round(ratio * 100)}% usado).`;
+          const margen = presGastos - realGastos;
+          msgSecundario = `Te quedan ${formatMoney(margen)} para gastar sin salirte del plan.`;
+        } else if (ratio <= 1.05) {
+          banner.classList.add("yellow");
+          msgPrincipal = `Estás muy cerca del límite (${Math.round(ratio * 100)}% usado).`;
+          const margen = presGastos - realGastos;
+          msgSecundario = margen >= 0
+            ? `Te quedan ${formatMoney(margen)} de margen.`
+            : `Te has pasado ${formatMoney(Math.abs(margen))} del presupuesto.`;
+        } else {
+          banner.classList.add("red");
+          msgPrincipal = `Te pasaste del presupuesto (${Math.round(ratio * 100)}% usado).`;
+          const exceso = realGastos - presGastos;
+          msgSecundario = `Estás ${formatMoney(exceso)} por encima de lo planeado.`;
+        }
       }
 
       textoP.textContent = msgPrincipal;
       textoS.textContent = msgSecundario;
 
-      // Totales (gastos)
-      document.getElementById("cmpPresupuesto").textContent = formatMoney(presGastos);
-      document.getElementById("cmpReal").textContent = formatMoney(realGastos);
-      document.getElementById("cmpDiferencia").textContent = formatMoney(realGastos - presGastos);
+      // Totales de la vista actual (según áreaComparativo)
+      let presVista = 0;
+      let realVista = 0;
 
-      // Gráfico según área seleccionada
-      const ctx = document.getElementById("comparativoChart").getContext("2d");
+      if (areaComparativo === "gastos") {
+        presVista = presGastos;
+        realVista = realGastos;
+      } else if (areaComparativo === "ingresos") {
+        presVista = presIngresos;
+        realVista = realIngresos;
+      } else {
+        presVista = presAhorro;
+        realVista = realAhorro;
+      }
+
+      document.getElementById("cmpPresupuesto").textContent = formatMoney(presVista);
+      document.getElementById("cmpReal").textContent = formatMoney(realVista);
+      document.getElementById("cmpDiferencia").textContent = formatMoney(realVista - presVista);
+
+      // Gráfico
+      const ctx = document.getElementById("barComp").getContext("2d");
       if (comparativoChart) comparativoChart.destroy();
 
       let labels = [];
@@ -859,6 +812,7 @@
       if (areaComparativo === "gastos") {
         const mapaPres = data.presupuesto.gastosPorCategoria || {};
         const mapaReal = data.real.gastosPorCategoria || {};
+
         const categorias = new Set([
           ...Object.keys(mapaPres),
           ...Object.keys(mapaReal)
@@ -898,16 +852,16 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: {
-              labels: { font: { size: 10 } }
-            },
             tooltip: {
               callbacks: {
-                label: function (ctx) {
+                label: function(ctx) {
                   const v = ctx.parsed.y || 0;
                   return `${ctx.dataset.label}: ${formatMoney(v)}`;
                 }
               }
+            },
+            legend: {
+              labels: { font: { size: 10 } }
             }
           },
           scales: {
@@ -923,8 +877,17 @@
       });
 
       // Desviaciones (solo gastos)
-      const listaDesv = document.getElementById("listaDesviaciones");
-      listaDesv.innerHTML = "";
+      const lista = document.getElementById("topDeviationsList");
+      lista.innerHTML = "";
+
+      if (areaComparativo !== "gastos") {
+        const msg = document.createElement("div");
+        msg.textContent = "Las desviaciones por categoría aplican a la vista de gastos.";
+        msg.style.fontSize = "0.8rem";
+        msg.style.color = "#64748B";
+        lista.appendChild(msg);
+        return;
+      }
 
       const mapaPres = data.presupuesto.gastosPorCategoria || {};
       const mapaReal = data.real.gastosPorCategoria || {};
@@ -934,42 +897,53 @@
         ...Object.keys(mapaReal)
       ]);
 
-      const desviaciones = [];
+      const desv = [];
       todasCategorias.forEach(cat => {
         const pres = mapaPres[cat] || 0;
         const real = mapaReal[cat] || 0;
         if (pres === 0 && real === 0) return;
         const diff = real - pres;
         const pct = pres > 0 ? (real / pres) * 100 : null;
-        desviaciones.push({ cat, pres, real, diff, pct });
+        desv.push({ cat, pres, real, diff, pct });
       });
 
-      desviaciones.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+      desv.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
 
-      const top = desviaciones.slice(0, 3);
+      const top = desv.slice(0, 3);
       if (top.length === 0) {
         const div = document.createElement("div");
-        div.className = "desv-item";
         div.textContent = "Sin datos suficientes para mostrar desviaciones.";
-        listaDesv.appendChild(div);
+        div.style.fontSize = "0.8rem";
+        div.style.color = "#64748B";
+        lista.appendChild(div);
       } else {
         top.forEach(d => {
-          const div = document.createElement("div");
-          div.className = "desv-item";
+          const item = document.createElement("div");
+          item.className = "top-dev-item";
 
-          const lbl = document.createElement("div");
-          lbl.className = "desv-label";
-          const signo = d.diff > 0 ? "+" : "";
-          const pctTxt = d.pct != null ? ` (${Math.round(d.pct)}% del presupuesto)` : "";
-          lbl.textContent = `${d.cat}: ${signo}${formatMoney(d.diff)}${pctTxt}`;
+          const left = document.createElement("div");
+          left.className = "top-dev-left";
+
+          const name = document.createElement("div");
+          name.className = "top-dev-name";
+          const pctText = d.pct != null ? ` (${Math.round(d.pct)}%)` : "";
+          name.textContent = d.cat + pctText;
 
           const det = document.createElement("div");
-          det.className = "desv-detalle";
+          det.className = "top-dev-detail";
           det.textContent = `Presupuesto: ${formatMoney(d.pres)} · Real: ${formatMoney(d.real)}`;
 
-          div.appendChild(lbl);
-          div.appendChild(det);
-          listaDesv.appendChild(div);
+          left.appendChild(name);
+          left.appendChild(det);
+
+          const diff = document.createElement("div");
+          diff.className = "top-dev-diff " + (d.diff > 0 ? "positive" : "negative");
+          const signo = d.diff > 0 ? "+" : "";
+          diff.textContent = signo + formatMoney(d.diff);
+
+          item.appendChild(left);
+          item.appendChild(diff);
+          lista.appendChild(item);
         });
       }
     }
@@ -977,7 +951,7 @@
     // ==========
     //   MODAL
     // ==========
-    const modal = document.getElementById("modalPartida");
+    const modal = document.getElementById("modalAdd");
     const modalAreaTexto = document.getElementById("modalAreaTexto");
     const modalCategoria = document.getElementById("modalCategoria");
     const modalSubcategoria = document.getElementById("modalSubcategoria");
@@ -1007,7 +981,6 @@
       });
 
       actualizarSubcategorias(fuente);
-
       modalNombre.value = "";
       modalMonto.value = "";
       modalInfoTipo.textContent =
@@ -1015,11 +988,11 @@
           ? "Monto en formato mensual."
           : "Monto en formato anual.";
 
-      modal.classList.add("abierto");
+      modal.classList.add("open");
     }
 
     function cerrarModal() {
-      modal.classList.remove("abierto");
+      modal.classList.remove("open");
     }
 
     function actualizarSubcategorias(fuente) {
@@ -1034,9 +1007,6 @@
       });
     }
 
-    document.getElementById("btnCerrarModal").addEventListener("click", cerrarModal);
-    document.getElementById("btnCancelarModal").addEventListener("click", cerrarModal);
-
     modalCategoria.addEventListener("change", () => {
       let fuente = {};
       if (areaActualModal === "ingresos") fuente = categoriasIngresos;
@@ -1045,7 +1015,12 @@
       actualizarSubcategorias(fuente);
     });
 
-    document.getElementById("btnGuardarModal").addEventListener("click", () => {
+    document.getElementById("btnModalCancel").addEventListener("click", cerrarModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) cerrarModal();
+    });
+
+    document.getElementById("btnModalSave").addEventListener("click", () => {
       const cat = modalCategoria.value;
       const sub = modalSubcategoria.value;
       const nombre = modalNombre.value.trim();
@@ -1071,8 +1046,8 @@
     // =====================
     //   TOGGLE MENSUAL/ANUAL
     // =====================
-    const btnMensual = document.getElementById("btnMensual");
-    const btnAnual = document.getElementById("btnAnual");
+    const toggleMensual = document.getElementById("toggleMensual");
+    const toggleAnual = document.getElementById("toggleAnual");
     const textoTipo = document.getElementById("textoTipo");
 
     function cambiarTipoPresupuesto(nuevoTipo) {
@@ -1080,6 +1055,7 @@
 
       const factor = nuevoTipo === "anual" ? 12 : 1 / 12;
 
+      // Escalamos presupuesto
       ["ingresos", "gastos", "ahorro"].forEach(area => {
         presupuesto[area].forEach(item => {
           const montoActual = Number(item.monto) || 0;
@@ -1087,12 +1063,19 @@
           item.monto = nuevoMonto;
 
           const input = document.querySelector(
-            `[data-area-list="${area}"] .budget-row[data-item-id="${item.id}"] input`
+            `[data-area-list="${area}"] .row[data-item-id="${item.id}"] input`
           );
           if (input) {
             input.value = nuevoMonto.toFixed(2);
           }
         });
+      });
+
+      // Escalamos realDemo también
+      realDemo.ingresos = (realDemo.ingresos || 0) * factor;
+      realDemo.ahorro = (realDemo.ahorro || 0) * factor;
+      Object.keys(realDemo.gastosPorCategoria).forEach(cat => {
+        realDemo.gastosPorCategoria[cat] = (realDemo.gastosPorCategoria[cat] || 0) * factor;
       });
 
       tipoPresupuesto = nuevoTipo;
@@ -1103,34 +1086,32 @@
         textoTipo.innerHTML = 'Trabajando presupuesto <strong>anual</strong> para el año seleccionado.';
       }
 
-      if (modal.classList.contains("abierto")) {
-        modalInfoTipo.textContent =
-          tipoPresupuesto === "mensual"
-            ? "Monto en formato mensual."
-            : "Monto en formato anual.";
-      }
+      modalInfoTipo.textContent =
+        tipoPresupuesto === "mensual"
+          ? "Monto en formato mensual."
+          : "Monto en formato anual.";
 
       recalcularTotales();
     }
 
-    btnMensual.addEventListener("click", () => {
+    toggleMensual.addEventListener("click", () => {
       if (tipoPresupuesto === "mensual") return;
-      btnMensual.classList.add("active");
-      btnAnual.classList.remove("active");
+      toggleMensual.classList.add("active");
+      toggleAnual.classList.remove("active");
       cambiarTipoPresupuesto("mensual");
     });
 
-    btnAnual.addEventListener("click", () => {
+    toggleAnual.addEventListener("click", () => {
       if (tipoPresupuesto === "anual") return;
-      btnAnual.classList.add("active");
-      btnMensual.classList.remove("active");
+      toggleAnual.classList.add("active");
+      toggleMensual.classList.remove("active");
       cambiarTipoPresupuesto("anual");
     });
 
     // =========================
     //   BOTONES "+ AÑADIR"
     // =========================
-    document.querySelectorAll(".cm-btn-add").forEach(btn => {
+    document.querySelectorAll(".add-btn-small").forEach(btn => {
       btn.addEventListener("click", () => {
         const area = btn.getAttribute("data-area");
         abrirModal(area);
@@ -1138,25 +1119,19 @@
     });
 
     // =========================
-    //   TOGGLE ÁREA COMPARATIVO
+    //   CHIPS ÁREA COMPARATIVO
     // =========================
-    function setAreaComparativo(area) {
-      areaComparativo = area;
-      document.querySelectorAll("[data-btn-area]").forEach(btn => {
-        if (btn.getAttribute("data-btn-area") === area) {
-          btn.classList.add("active");
-        } else {
-          btn.classList.remove("active");
+    document.querySelectorAll(".chip[data-comp-area]").forEach(chip => {
+      chip.addEventListener("click", () => {
+        const area = chip.getAttribute("data-comp-area");
+        areaComparativo = area;
+        document.querySelectorAll(".chip[data-comp-area]").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        if (ultimaDataComparativo) {
+          actualizarComparativo(ultimaDataComparativo);
         }
       });
-      if (ultimaDataComparativo) {
-        actualizarComparativo(ultimaDataComparativo);
-      }
-    }
-
-    document.getElementById("btnAreaGastos").addEventListener("click", () => setAreaComparativo("gastos"));
-    document.getElementById("btnAreaIngresos").addEventListener("click", () => setAreaComparativo("ingresos"));
-    document.getElementById("btnAreaAhorro").addEventListener("click", () => setAreaComparativo("ahorro"));
+    });
 
     // ======================
     //   DEMO INICIAL
@@ -1252,7 +1227,6 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       cargarDemoInicial();
-      setAreaComparativo("gastos");
     });
   </script>
 </body>
