@@ -61,36 +61,27 @@
     border-radius: 10px;
     border: 1px solid #E5E7EB;
     font-size: 0.9rem;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
     margin-top: 4px;
     width: 100%;
   }
 
-  .helper-label {
-    font-size: 0.78rem;
-    color: #64748B;
-    margin-bottom: 10px;
-  }
-
   /* SECCIONES PRESUPUESTO */
   .section {
+    background: white;
     padding: 12px 14px;
     border-radius: 14px;
     margin-bottom: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
 
-  /* colores distintos por bloque */
-  .section-ingresos {
-    background: #F0FDF4;           /* verde suave */
+  .section.ingresos {
     border-left: 4px solid #22C55E;
   }
-  .section-gastos {
-    background: #FEF2F2;           /* rojo suave */
-    border-left: 4px solid #EF4444;
+  .section.gastos {
+    border-left: 4px solid #F97316;
   }
-  .section-ahorro {
-    background: #EFF6FF;           /* azul suave */
+  .section.ahorro {
     border-left: 4px solid #3B82F6;
   }
 
@@ -102,12 +93,15 @@
   }
 
   .section-header {
-    font-weight: 800;
+    font-weight: 700;
     font-size: 1rem;
   }
-  .section-ingresos .section-header { color: #15803D; }
-  .section-gastos .section-header { color: #B91C1C; }
-  .section-ahorro .section-header { color: #1D4ED8; }
+
+  .section-label {
+    font-size: 0.8rem;
+    color: #64748B;
+    margin-top: 2px;
+  }
 
   .add-btn-small {
     border: none;
@@ -122,58 +116,15 @@
     gap: 4px;
   }
 
-  .rows-container {
-    margin-top: 4px;
-  }
-
   .row {
     display: flex;
     justify-content: space-between;
     padding: 4px 0;
-    font-size: 0.9rem;
-    align-items: center;
-    gap: 8px;
+    font-size: 0.95rem;
   }
 
   .row span:last-child {
     font-weight: 600;
-  }
-
-  .row-main {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .row-name {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .row-meta {
-    color: #64748B;
-    font-size: 0.78rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .row input[type="number"] {
-    width: 90px;
-    padding: 4px 6px;
-    border-radius: 999px;
-    border: 1px solid #E5E7EB;
-    font-size: 0.8rem;
-    text-align: right;
-  }
-
-  .row-amount-prefix {
-    font-size: 0.78rem;
-    color: #64748B;
   }
 
   /* TOTALES */
@@ -188,6 +139,24 @@
 
   .totals .row {
     font-weight: 600;
+  }
+
+  .totals .row span:first-child {
+    color: #64748B;
+    font-weight: 500;
+  }
+
+  .save {
+    margin-top: 8px;
+    width: 100%;
+    padding: 14px;
+    background: #7459D9;
+    color: white;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
   }
 
   /* CARD BASE */
@@ -243,7 +212,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 6px;
   }
 
   .status-banner.green {
@@ -274,20 +242,17 @@
 
   .mini-summary .row span:first-child {
     color: #64748B;
-    font-weight: 400;
   }
 
-  /* WRAPPER DEL GRÁFICO */
-  .chart-wrapper {
+  #barComp {
     width: 100%;
     height: 260px;
     margin-top: 4px;
     margin-bottom: 8px;
   }
 
-  .chart-wrapper canvas {
-    width: 100% !important;
-    height: 100% !important;
+  canvas {
+    max-height: 260px;
     display: block;
   }
 
@@ -299,16 +264,10 @@
     font-size: 0.85rem;
   }
 
-  .top-deviations-title {
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
   .top-dev-item {
     display: flex;
     justify-content: space-between;
     padding: 4px 0;
-    gap: 8px;
   }
 
   .top-dev-left {
@@ -332,22 +291,6 @@
   .top-dev-diff.negative {
     color: #15803D;
     font-weight: 700;
-  }
-
-  .top-dev-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 0.72rem;
-    margin-top: 2px;
-  }
-  .top-dev-badge.sobre {
-    background: rgba(239, 68, 68, 0.08);
-    color: #B91C1C;
-  }
-  .top-dev-badge.debajo {
-    background: rgba(34, 197, 94, 0.08);
-    color: #15803D;
   }
 
   /* MODAL AÑADIR */
@@ -379,13 +322,7 @@
     font-size: 1.1rem;
     color: #111827;
     font-weight: 800;
-    margin-bottom: 0.4rem;
-  }
-
-  .modal-subtitle {
-    font-size: 0.8rem;
-    color: #64748B;
-    margin-bottom: 0.7rem;
+    margin-bottom: 1rem;
   }
 
   .modal-content label {
@@ -410,10 +347,9 @@
     margin-bottom: 0.3rem;
   }
 
-  .modal-info-tipo {
-    font-size: 0.78rem;
-    color: #6B7280;
-    margin-top: 2px;
+  .modal-content textarea {
+    resize: vertical;
+    min-height: 60px;
   }
 
   .modal-actions {
@@ -449,54 +385,58 @@
   <!-- HEADER -->
   <div class="top">
     <h1>Presupuesto</h1>
-    <div class="toggle">
-      <span id="toggleMensual" class="active">Mensual</span>
-      <span id="toggleAnual">Anual</span>
+    <div class="toggle" id="toggleTipo">
+      <span data-tipo="mensual" class="active">Mensual</span>
+      <span data-tipo="anual">Anual</span>
     </div>
   </div>
 
-  <div>
-    <select class="select-month" id="selectPeriodo">
-      <option>Mes: Enero 2025</option>
-      <option>Mes: Febrero 2025</option>
-      <option>Año: 2025</option>
-    </select>
-    <div class="helper-label" id="textoTipo">
-      Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.
-    </div>
-  </div>
+  <select class="select-month">
+    <option>Enero 2025</option>
+    <option>Febrero 2025</option>
+    <option>Marzo 2025</option>
+  </select>
 
-  <!-- INGRESOS -->
-  <section class="section section-ingresos">
+  <!-- SECCION INGRESOS -->
+  <section class="section ingresos">
     <div class="section-header-row">
-      <div class="section-header">Ingresos presupuestados</div>
-      <button class="add-btn-small" type="button" data-area="ingresos">
+      <div>
+        <div class="section-header">Ingresos</div>
+        <div class="section-label">Lo que entra cada periodo</div>
+      </div>
+      <button class="add-btn-small" data-area="ingresos">
         + Añadir
       </button>
     </div>
-    <div class="rows-container" data-area-list="ingresos"></div>
+    <div id="listaIngresos"></div>
   </section>
 
-  <!-- GASTOS -->
-  <section class="section section-gastos">
+  <!-- SECCION GASTOS -->
+  <section class="section gastos">
     <div class="section-header-row">
-      <div class="section-header">Gastos presupuestados</div>
-      <button class="add-btn-small" type="button" data-area="gastos">
+      <div>
+        <div class="section-header">Gastos</div>
+        <div class="section-label">Lo que sale en el periodo</div>
+      </div>
+      <button class="add-btn-small" data-area="gastos">
         + Añadir
       </button>
     </div>
-    <div class="rows-container" data-area-list="gastos"></div>
+    <div id="listaGastos"></div>
   </section>
 
-  <!-- AHORRO -->
-  <section class="section section-ahorro">
+  <!-- SECCION AHORRO -->
+  <section class="section ahorro">
     <div class="section-header-row">
-      <div class="section-header">Ahorro presupuestado</div>
-      <button class="add-btn-small" type="button" data-area="ahorro">
+      <div>
+        <div class="section-header">Ahorro</div>
+        <div class="section-label">Lo que apartas del ingreso</div>
+      </div>
+      <button class="add-btn-small" data-area="ahorro">
         + Añadir
       </button>
     </div>
-    <div class="rows-container" data-area-list="ahorro"></div>
+    <div id="listaAhorro"></div>
   </section>
 
   <!-- TOTALES -->
@@ -513,754 +453,489 @@
       <span>Total ahorro</span>
       <span id="totalAhorro">$0.00</span>
     </div>
+    <div class="row">
+      <span>Disponible</span>
+      <span id="totalDisponible">$0.00</span>
+    </div>
   </section>
 
-  <!-- COMPARATIVO PRESUPUESTO VS REAL -->
+  <button class="save">Guardar presupuesto</button>
+
+  <!-- COMPARATIVO -->
   <section class="card">
     <div class="comp-header">
-      <div class="comp-title">Presupuesto vs real</div>
-      <div class="chips">
-        <!-- ORDEN: INGRESOS, GASTOS, AHORRO -->
-        <span class="chip active" data-comp-area="ingresos">Ingresos</span>
-        <span class="chip" data-comp-area="gastos">Gastos</span>
-        <span class="chip" data-comp-area="ahorro">Ahorro</span>
+      <div class="comp-title">Comparar presupuesto vs real</div>
+      <div class="chips" id="chipsArea">
+        <button class="chip active" data-area="ingresos">Ingresos</button>
+        <button class="chip" data-area="gastos">Gastos</button>
+        <button class="chip" data-area="ahorro">Ahorro</button>
       </div>
     </div>
 
     <div id="statusBanner" class="status-banner green">
-      <span id="statusTextoPrincipal">
-        Vas por debajo del presupuesto de gastos.
-      </span>
-      <span id="statusTextoSecundario" style="font-size:0.8rem; color:#64748B;">
-        Margen disponible: $0.00
-      </span>
+      <span><strong>Vas bien.</strong> Por debajo del presupuesto.</span>
+      <span id="bannerPct">90%</span>
     </div>
 
     <div class="mini-summary">
       <div class="row">
         <span>Presupuesto</span>
-        <span id="cmpPresupuesto">$0.00</span>
+        <span id="miniPres">$0.00</span>
       </div>
       <div class="row">
         <span>Real</span>
-        <span id="cmpReal">$0.00</span>
+        <span id="miniReal">$0.00</span>
       </div>
       <div class="row">
         <span>Diferencia</span>
-        <span id="cmpDiferencia">$0.00</span>
+        <span id="miniDiff">$0.00</span>
       </div>
     </div>
 
-    <!-- WRAPPER FIJO PARA EL GRÁFICO -->
-    <div class="chart-wrapper">
-      <canvas id="barComp"></canvas>
-    </div>
+    <canvas id="barComp"></canvas>
 
-    <div class="top-deviations">
-      <div class="top-deviations-title">
-        Top desviaciones por categoría (gastos)
-      </div>
-      <div id="topDeviationsList"></div>
+    <div class="top-deviations" id="topDeviations">
+      <!-- Se llena por JS para Gastos -->
     </div>
   </section>
 
-  <!-- MODAL AÑADIR PARTIDA -->
-  <div class="modal" id="modalAdd">
+  <!-- MODAL AÑADIR -->
+  <div class="modal" id="modal">
     <div class="modal-content">
-      <h2>Añadir al presupuesto</h2>
-      <div class="modal-subtitle">
-        Área: <strong id="modalAreaTexto">Ingresos</strong>
-      </div>
+      <h2 id="modalTitle">Añadir</h2>
 
       <label for="modalCategoria">Categoría</label>
       <select id="modalCategoria"></select>
 
-      <label for="modalSubcategoria">Subcategoría</label>
-      <select id="modalSubcategoria"></select>
-
-      <label for="modalNombre">Nombre (opcional)</label>
-      <input type="text" id="modalNombre" placeholder="Ej. Salario principal" />
-
       <label for="modalMonto">Monto</label>
-      <input type="number" id="modalMonto" placeholder="0.00" min="0" step="0.01" />
-      <div class="modal-info-tipo" id="modalInfoTipo">
-        Monto en formato mensual.
-      </div>
+      <input type="number" id="modalMonto" placeholder="0.00" />
+
+      <label for="modalNota">Nota (opcional)</label>
+      <textarea id="modalNota" placeholder="Ej. Detalle rápido..."></textarea>
 
       <div class="modal-actions">
-        <button type="button" class="btn-cancel" id="btnModalCancel">Cancelar</button>
-        <button type="button" class="btn-save" id="btnModalSave">Guardar</button>
+        <button class="btn-cancel" id="btnCancel">Cancelar</button>
+        <button class="btn-save" id="btnSave">Guardar</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ================================
-    //   DATA BASE: CATEGORÍAS
-    // ================================
-    const categoriasIngresos = {
-      "Pago por trabajo": [
-        "Salario",
+    // -----------------------------
+    // DATOS DEMO (BASE MENSUAL)
+    // -----------------------------
+    const demoData = {
+      tipo: "mensual", // "mensual" o "anual"
+      presupuesto: {
+        ingresos: [
+          { categoria: "Salario fijo", monto: 3200 },
+          { categoria: "Ingreso extra", monto: 500 },
+          { categoria: "Intereses / dividendos", monto: 150 }
+        ],
+        gastos: [
+          { categoria: "Casa", monto: 1200 },
+          { categoria: "Alimentación", monto: 650 },
+          { categoria: "Transportación", monto: 220 },
+          { categoria: "Entretenimiento", monto: 150 },
+          { categoria: "Deuda", monto: 300 }
+        ],
+        ahorro: [
+          { categoria: "Emergencia", monto: 250 },
+          { categoria: "Meta específica", monto: 200 }
+        ]
+      },
+      real: {
+        ingresos: [
+          { categoria: "Salario fijo", monto: 3300 },
+          { categoria: "Ingreso extra", monto: 450 },
+          { categoria: "Intereses / dividendos", monto: 120 }
+        ],
+        gastos: [
+          { categoria: "Casa", monto: 1250 },
+          { categoria: "Alimentación", monto: 780 },
+          { categoria: "Transportación", monto: 250 },
+          { categoria: "Entretenimiento", monto: 190 },
+          { categoria: "Deuda", monto: 360 }
+        ],
+        ahorro: [
+          { categoria: "Emergencia", monto: 180 },
+          { categoria: "Meta específica", monto: 150 }
+        ]
+      }
+    };
+
+    // Opciones de categorías (mismas que desktop)
+    const opcionesCategorias = {
+      ingresos: [
+        "Salario fijo",
         "Pago por hora",
-        "Comisión",
         "Bono",
+        "Comisión",
+        "Negocio propio",
         "Propina",
-        "Negocio propio"
+        "Ingresos pasivos",
+        "Intereses / dividendos"
       ],
-      "Ganancia de capital": [
-        "Acciones",
-        "Bonos o renta fija",
-        "ETF, fondo mutuo, etc.",
-        "Casa/Apartamento/Tierra",
-        "Auto"
+      gastos: [
+        "Casa",
+        "Alimentación",
+        "Impuestos",
+        "Transportación",
+        "Seguros",
+        "Regalos y donaciones",
+        "Gastos Médicos",
+        "Cuidado Personal",
+        "Dependientes",
+        "Deuda",
+        "Entretenimiento",
+        "Telecomunicaciones"
       ],
-      "Ingreso pasivo": [
-        "Pensión",
-        "Seguro Social",
-        "Renta inmueble",
-        "Anualidad",
-        "Dividendos e Intereses"
+      ahorro: [
+        "Emergencia",
+        "Meta específica",
+        "Inversión",
+        "Retiro",
+        "Ahorro personal",
+        "Ahorro para hijos",
+        "Otros"
       ]
     };
 
-    const categoriasGastos = {
-      "Alimentación": ["Supermercado", "Comidas fuera", "Pedido a domicilio"],
-      "Casa": ["Hipoteca / Alquiler", "Servicios básicos", "Mantenimiento"],
-      "Impuestos": ["Seguro social", "Propiedad", "Venta", "Estatales", "Federales", "Municipales"],
-      "Transportación": ["Gasolina", "Mantenimiento", "Transporte público / Uber"],
-      "Seguros": ["Salud", "Auto", "Vida"],
-      "Regalos y donaciones": ["Familia", "Amigos", "Instituciones"],
-      "Gastos Médicos": ["Consultas", "Medicamentos", "Procedimientos"],
-      "Cuidado Personal": ["Peluquería", "Cosméticos", "Spa / Barbería"],
-      "Dependientes": ["Cuidado de niños", "Cuidado de mayores", "Educación"],
-      "Deuda": ["Tarjetas de crédito", "Préstamos estudiantiles", "Otros préstamos"],
-      "Entretenimiento": ["Cine", "Conciertos", "Streaming"],
-      "Telecomunicaciones": ["Teléfono", "Internet", "TV"]
-    };
+    let tipoActual = "mensual"; // mensual/anual
+    let areaComparativa = "ingresos"; // ingresos/gastos/ahorro
+    let chartComp = null;
 
-    const categoriasAhorro = {
-      "Emergencia": ["Fondo corto plazo", "Fondo largo plazo", "Reserva médica"],
-      "Meta específica": ["Vacaciones", "Auto", "Casa", "Boda", "Educación de hijos"],
-      "Inversión": ["Cuenta brokerage", "Fondo indexado", "Cripto", "Crowdfunding"],
-      "Retiro": ["IRA / Roth IRA", "401(k)", "Pensión privada"],
-      "Ahorro personal": ["Ahorro mensual", "Ahorro en efectivo", "Cuenta de ahorro tradicional"],
-      "Ahorro para hijos": ["Educación", "Regalos futuros", "Fondo universitario"],
-      "Otros": ["Donaciones planificadas", "Proyectos personales", "Fondo de libertad financiera"]
-    };
+    // Helpers
+    function factorTipo() {
+      return tipoActual === "anual" ? 12 : 1;
+    }
 
-    // Presupuesto del usuario
-    const presupuesto = {
-      ingresos: [],
-      gastos: [],
-      ahorro: []
-    };
-
-    // Datos de gasto real DEMO (inicialmente en formato mensual)
-    const realDemo = {
-      ingresos: 4200,
-      gastosPorCategoria: {
-        "Casa": 1250,
-        "Alimentación": 680,
-        "Transportación": 230,
-        "Entretenimiento": 110
-      },
-      ahorro: 480
-    };
-
-    let tipoPresupuesto = "mensual"; // "mensual" o "anual"
-    let comparativoChart = null;
-    // ahora arrancamos mostrando INGRESOS en el navegador
-    let areaComparativo = "ingresos";
-    let ultimaDataComparativo = null;
-
-    function formatMoney(value) {
-      const n = Number(value) || 0;
-      return "$" + n.toLocaleString("en-US", {
+    function formatear(monto) {
+      return "$" + monto.toLocaleString("es-US", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
     }
 
-    function agregarFilaUI(area, item) {
-      const cont = document.querySelector(`[data-area-list="${area}"]`);
-      if (!cont) return;
+    function sumarLista(lista) {
+      const f = factorTipo();
+      return lista.reduce((acc, item) => acc + item.monto * f, 0);
+    }
 
-      const row = document.createElement("div");
-      row.className = "row";
-      row.dataset.itemId = item.id;
+    // Render de listas de presupuesto
+    function renderSecciones() {
+      const f = factorTipo();
 
-      const main = document.createElement("div");
-      main.className = "row-main";
+      const listaIngresos = document.getElementById("listaIngresos");
+      const listaGastos = document.getElementById("listaGastos");
+      const listaAhorro = document.getElementById("listaAhorro");
 
-      const nameDiv = document.createElement("div");
-      nameDiv.className = "row-name";
-      nameDiv.textContent = item.nombre || item.categoria;
+      listaIngresos.innerHTML = "";
+      listaGastos.innerHTML = "";
+      listaAhorro.innerHTML = "";
 
-      const metaDiv = document.createElement("div");
-      metaDiv.className = "row-meta";
-      metaDiv.textContent = item.categoria + (item.subcategoria ? " · " + item.subcategoria : "");
-
-      main.appendChild(nameDiv);
-      main.appendChild(metaDiv);
-
-      const amountWrapper = document.createElement("div");
-      amountWrapper.style.display = "flex";
-      amountWrapper.style.alignItems = "center";
-      amountWrapper.style.gap = "4px";
-
-      const prefix = document.createElement("span");
-      prefix.className = "row-amount-prefix";
-      prefix.textContent = "$";
-
-      const input = document.createElement("input");
-      input.type = "number";
-      input.min = "0";
-      input.step = "0.01";
-      input.value = item.monto != null ? item.monto : "";
-      input.addEventListener("input", () => {
-        const val = parseFloat(input.value) || 0;
-        const arr = presupuesto[area];
-        const idx = arr.findIndex(x => x.id === item.id);
-        if (idx !== -1) {
-          arr[idx].monto = val;
-          recalcularTotales();
-        }
+      demoData.presupuesto.ingresos.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span>${item.categoria}</span><span>${formatear(item.monto * f)}</span>`;
+        listaIngresos.appendChild(row);
       });
 
-      amountWrapper.appendChild(prefix);
-      amountWrapper.appendChild(input);
-
-      row.appendChild(main);
-      row.appendChild(amountWrapper);
-      cont.appendChild(row);
-    }
-
-    function sumaArea(area) {
-      return presupuesto[area].reduce((acc, it) => acc + (Number(it.monto) || 0), 0);
-    }
-
-    function construirGastosPorCategoriaPresupuesto() {
-      const mapa = {};
-      presupuesto.gastos.forEach(it => {
-        const cat = it.categoria || "Otros";
-        const val = Number(it.monto) || 0;
-        mapa[cat] = (mapa[cat] || 0) + val;
+      demoData.presupuesto.gastos.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span>${item.categoria}</span><span>${formatear(item.monto * f)}</span>`;
+        listaGastos.appendChild(row);
       });
-      return mapa;
+
+      demoData.presupuesto.ahorro.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<span>${item.categoria}</span><span>${formatear(item.monto * f)}</span>`;
+        listaAhorro.appendChild(row);
+      });
     }
 
-    function recalcularTotales() {
-      const totalIng = sumaArea("ingresos");
-      const totalGas = sumaArea("gastos");
-      const totalAho = sumaArea("ahorro");
+    // Render totales
+    function renderTotales() {
+      const tIng = sumarLista(demoData.presupuesto.ingresos);
+      const tGas = sumarLista(demoData.presupuesto.gastos);
+      const tAh = sumarLista(demoData.presupuesto.ahorro);
+      const disp = tIng - tGas - tAh;
 
-      document.getElementById("totalIngresos").textContent = formatMoney(totalIng);
-      document.getElementById("totalGastos").textContent = formatMoney(totalGas);
-      document.getElementById("totalAhorro").textContent = formatMoney(totalAho);
-
-      const gastosPorCatPres = construirGastosPorCategoriaPresupuesto();
-
-      const data = {
-        presupuesto: {
-          ingresos: totalIng,
-          gastos: totalGas,
-          ahorro: totalAho,
-          gastosPorCategoria: gastosPorCatPres
-        },
-        real: realDemo
-      };
-
-      actualizarComparativo(data);
+      document.getElementById("totalIngresos").textContent = formatear(tIng);
+      document.getElementById("totalGastos").textContent = formatear(tGas);
+      document.getElementById("totalAhorro").textContent = formatear(tAh);
+      document.getElementById("totalDisponible").textContent = formatear(disp);
     }
 
-    function actualizarComparativo(data) {
-      ultimaDataComparativo = data;
-
-      const presGastos = data.presupuesto.gastos || 0;
-      const presIngresos = data.presupuesto.ingresos || 0;
-      const presAhorro = data.presupuesto.ahorro || 0;
-
-      const realGastos = Object.values(data.real.gastosPorCategoria || {}).reduce((a, b) => a + b, 0);
-      const realIngresos = data.real.ingresos || 0;
-      const realAhorro = data.real.ahorro || 0;
-
-      // Banner SIEMPRE basado en gastos (como en desktop)
+    // Banner estado
+    function actualizarBanner(pres, real) {
       const banner = document.getElementById("statusBanner");
-      const textoP = document.getElementById("statusTextoPrincipal");
-      const textoS = document.getElementById("statusTextoSecundario");
+      const pctSpan = document.getElementById("bannerPct");
+
       banner.classList.remove("green", "yellow", "red");
 
-      let msgPrincipal = "";
-      let msgSecundario = "";
+      if (!pres || pres === 0) {
+        banner.classList.add("yellow");
+        banner.innerHTML = `<span>Sin presupuesto para esta área.</span><span></span>`;
+        return;
+      }
 
-      if (presGastos <= 0) {
+      const ratio = real / pres;
+      const pct = Math.round(ratio * 100);
+      pctSpan.textContent = pct + "%";
+
+      let texto = "";
+
+      if (ratio < 0.9) {
         banner.classList.add("green");
-        msgPrincipal = "Aún no defines tu presupuesto de gastos.";
-        msgSecundario = "";
+        texto = "<strong>Vas bien.</strong> Por debajo del presupuesto.";
+      } else if (ratio <= 1.05) {
+        banner.classList.add("yellow");
+        texto = "<strong>Casi al límite.</strong> Ojo con los gastos.";
       } else {
-        const ratio = presGastos > 0 ? realGastos / presGastos : 0;
-        const pct = Math.round(ratio * 100);
-        const margen = presGastos - realGastos;
+        banner.classList.add("red");
+        texto = "<strong>Te pasaste.</strong> Sobre el presupuesto.";
+      }
 
-        if (ratio <= 0.9) {
-          banner.classList.add("green");
-          msgPrincipal = `Vas por debajo (${pct}% de gastos).`;
-          msgSecundario = `Margen: ${formatMoney(margen)}.`;
-        } else if (ratio <= 1.05) {
-          // TEXTO MUCHO MÁS CORTO EN AMARILLO
-          banner.classList.add("yellow");
-          msgPrincipal = `Cuidado: ${pct}% de gastos.`;
-          msgSecundario = margen >= 0
-            ? `Margen: ${formatMoney(margen)}.`
-            : `Exceso: ${formatMoney(Math.abs(margen))}.`;
-        } else {
-          banner.classList.add("red");
-          msgPrincipal = `Te pasaste (${pct}% de gastos).`;
-          const exceso = realGastos - presGastos;
-          msgSecundario = `Exceso: ${formatMoney(exceso)}.`;
+      banner.firstElementChild.innerHTML = texto;
+    }
+
+    // Top desviaciones (solo gastos)
+    function renderTopDeviations() {
+      const cont = document.getElementById("topDeviations");
+      cont.innerHTML = "";
+
+      if (areaComparativa !== "gastos") {
+        cont.style.display = "none";
+        return;
+      }
+
+      const f = factorTipo();
+      cont.style.display = "block";
+
+      // Mapas por categoría
+      const mapaPres = {};
+      demoData.presupuesto.gastos.forEach(g => {
+        mapaPres[g.categoria] = (mapaPres[g.categoria] || 0) + g.monto * f;
+      });
+
+      const mapaReal = {};
+      demoData.real.gastos.forEach(g => {
+        mapaReal[g.categoria] = (mapaReal[g.categoria] || 0) + g.monto * f;
+      });
+
+      const categorias = new Set([
+        ...Object.keys(mapaPres),
+        ...Object.keys(mapaReal)
+      ]);
+
+      const desviaciones = [];
+      categorias.forEach(cat => {
+        const pres = mapaPres[cat] || 0;
+        const real = mapaReal[cat] || 0;
+        const diff = real - pres;
+        if (Math.abs(diff) > 0) {
+          desviaciones.push({ cat, pres, real, diff });
         }
+      });
+
+      desviaciones.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+
+      const top = desviaciones.slice(0, 3);
+
+      if (top.length === 0) {
+        cont.innerHTML = "<div class='top-dev-detail'>Sin desviaciones relevantes.</div>";
+        return;
       }
 
-      textoP.textContent = msgPrincipal;
-      textoS.textContent = msgSecundario;
+      top.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "top-dev-item";
 
-      let presVista = 0;
-      let realVista = 0;
+        const left = document.createElement("div");
+        left.className = "top-dev-left";
+        left.innerHTML = `
+          <span class="top-dev-name">${item.cat}</span>
+          <span class="top-dev-detail">Pres: ${formatear(item.pres)} · Real: ${formatear(item.real)}</span>
+        `;
 
-      if (areaComparativo === "gastos") {
-        presVista = presGastos;
-        realVista = realGastos;
-      } else if (areaComparativo === "ingresos") {
-        presVista = presIngresos;
-        realVista = realIngresos;
-      } else {
-        presVista = presAhorro;
-        realVista = realAhorro;
-      }
+        const diffSpan = document.createElement("span");
+        diffSpan.className = "top-dev-diff " + (item.diff > 0 ? "positive" : "negative");
+        const signo = item.diff > 0 ? "+" : "";
+        diffSpan.textContent = signo + formatear(item.diff);
 
-      document.getElementById("cmpPresupuesto").textContent = formatMoney(presVista);
-      document.getElementById("cmpReal").textContent = formatMoney(realVista);
-      document.getElementById("cmpDiferencia").textContent = formatMoney(realVista - presVista);
+        row.appendChild(left);
+        row.appendChild(diffSpan);
+        cont.appendChild(row);
+      });
+    }
 
+    // Comparativo por área
+    function renderComparativo() {
+      const f = factorTipo();
+
+      const presLista = demoData.presupuesto[areaComparativa];
+      const realLista = demoData.real[areaComparativa];
+
+      const totalPres = sumarLista(presLista);
+      const totalReal = realLista.reduce((acc, item) => acc + item.monto * f, 0);
+      const diff = totalReal - totalPres;
+
+      document.getElementById("miniPres").textContent = formatear(totalPres);
+      document.getElementById("miniReal").textContent = formatear(totalReal);
+      const diffSpan = document.getElementById("miniDiff");
+      diffSpan.textContent = (diff >= 0 ? "+" : "") + formatear(diff);
+
+      actualizarBanner(totalPres, totalReal);
+
+      // Chart
       const ctx = document.getElementById("barComp").getContext("2d");
-      if (comparativoChart) comparativoChart.destroy();
+      if (chartComp) chartComp.destroy();
 
-      let labels = [];
-      let datosPres = [];
-      let datosReal = [];
-
-      if (areaComparativo === "gastos") {
-        const mapaPres = data.presupuesto.gastosPorCategoria || {};
-        const mapaReal = data.real.gastosPorCategoria || {};
-
-        const categorias = new Set([
-          ...Object.keys(mapaPres),
-          ...Object.keys(mapaReal)
-        ]);
-
-        categorias.forEach(cat => {
-          labels.push(cat);
-          datosPres.push(mapaPres[cat] || 0);
-          datosReal.push(mapaReal[cat] || 0);
-        });
-      } else if (areaComparativo === "ingresos") {
-        labels = ["Total ingresos"];
-        datosPres = [presIngresos];
-        datosReal = [realIngresos];
-      } else if (areaComparativo === "ahorro") {
-        labels = ["Total ahorro"];
-        datosPres = [presAhorro];
-        datosReal = [realAhorro];
-      }
-
-      comparativoChart = new Chart(ctx, {
+      chartComp = new Chart(ctx, {
         type: "bar",
         data: {
-          labels,
+          labels: ["Presupuesto", "Real"],
           datasets: [
             {
-              label: "Presupuesto",
-              data: datosPres
-            },
-            {
-              label: "Real",
-              data: datosReal
+              label: areaComparativa.charAt(0).toUpperCase() + areaComparativa.slice(1),
+              data: [totalPres, totalReal]
             }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: function(ctx) {
-                  const v = ctx.parsed.y || 0;
-                  return `${ctx.dataset.label}: ${formatMoney(v)}`;
-                }
-              }
-            },
-            legend: {
-              labels: { font: { size: 10 } }
-            }
-          },
           scales: {
-            x: {
-              ticks: { font: { size: 10 } }
-            },
-            y: {
-              beginAtZero: true,
-              ticks: { font: { size: 9 } }
+            y: { beginAtZero: true }
+          },
+          plugins: {
+            legend: {
+              display: false
             }
           }
         }
       });
 
-      // Top desviaciones (solo sentido para gastos)
-      const lista = document.getElementById("topDeviationsList");
-      lista.innerHTML = "";
-
-      if (areaComparativo !== "gastos") {
-        const msg = document.createElement("div");
-        msg.textContent = "Las desviaciones por categoría aplican a la vista de gastos.";
-        msg.style.fontSize = "0.8rem";
-        msg.style.color = "#64748B";
-        lista.appendChild(msg);
-        return;
-      }
-
-      const mapaPres = data.presupuesto.gastosPorCategoria || {};
-      const mapaReal = data.real.gastosPorCategoria || {};
-
-      const todasCategorias = new Set([
-        ...Object.keys(mapaPres),
-        ...Object.keys(mapaReal)
-      ]);
-
-      const desv = [];
-      todasCategorias.forEach(cat => {
-        const pres = mapaPres[cat] || 0;
-        const real = mapaReal[cat] || 0;
-        if (pres === 0 && real === 0) return;
-        const diff = real - pres;
-        const pct = pres > 0 ? (real / pres) * 100 : null;
-        desv.push({ cat, pres, real, diff, pct });
-      });
-
-      // Ordenar por mayor desviación (como "top")
-      desv.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
-
-      const top = desv.slice(0, 3);
-      if (top.length === 0) {
-        const div = document.createElement("div");
-        div.textContent = "Sin datos suficientes para mostrar desviaciones.";
-        div.style.fontSize = "0.8rem";
-        div.style.color = "#64748B";
-        lista.appendChild(div);
-      } else {
-        top.forEach(d => {
-          const item = document.createElement("div");
-          item.className = "top-dev-item";
-
-          const left = document.createElement("div");
-          left.className = "top-dev-left";
-
-          const name = document.createElement("div");
-          name.className = "top-dev-name";
-          const pctText = d.pct != null ? ` (${Math.round(d.pct)}%)` : "";
-          name.textContent = d.cat + pctText;
-
-          const det = document.createElement("div");
-          det.className = "top-dev-detail";
-          det.textContent = `Presupuesto: ${formatMoney(d.pres)} · Real: ${formatMoney(d.real)}`;
-
-          const badge = document.createElement("span");
-          badge.className = "top-dev-badge " + (d.diff > 0 ? "sobre" : "debajo");
-          badge.textContent = d.diff > 0 ? "Sobre presupuesto" : "Debajo presupuesto";
-
-          left.appendChild(name);
-          left.appendChild(det);
-          left.appendChild(badge);
-
-          const diff = document.createElement("div");
-          diff.className = "top-dev-diff " + (d.diff > 0 ? "positive" : "negative");
-          const signo = d.diff > 0 ? "+" : "";
-          diff.textContent = signo + formatMoney(d.diff);
-
-          item.appendChild(left);
-          item.appendChild(diff);
-          lista.appendChild(item);
-        });
-      }
+      renderTopDeviations();
     }
 
-    // ---- MODAL ----
-    const modal = document.getElementById("modalAdd");
-    const modalAreaTexto = document.getElementById("modalAreaTexto");
-    const modalCategoria = document.getElementById("modalCategoria");
-    const modalSubcategoria = document.getElementById("modalSubcategoria");
-    const modalNombre = document.getElementById("modalNombre");
-    const modalMonto = document.getElementById("modalMonto");
-    const modalInfoTipo = document.getElementById("modalInfoTipo");
+    // Toggle tipo mensual/anual
+    function configurarToggleTipo() {
+      const toggle = document.getElementById("toggleTipo");
+      toggle.querySelectorAll("span").forEach(span => {
+        span.addEventListener("click", () => {
+          const nuevo = span.getAttribute("data-tipo");
+          if (nuevo === tipoActual) return;
+          tipoActual = nuevo;
 
-    let areaActualModal = "ingresos";
+          toggle.querySelectorAll("span").forEach(s => s.classList.remove("active"));
+          span.classList.add("active");
+
+          renderSecciones();
+          renderTotales();
+          renderComparativo();
+        });
+      });
+    }
+
+    // Chips comparativo
+    function configurarChips() {
+      const chips = document.getElementById("chipsArea");
+      chips.querySelectorAll(".chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          const area = chip.getAttribute("data-area");
+          if (area === areaComparativa) return;
+          areaComparativa = area;
+
+          chips.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+
+          renderComparativo();
+        });
+      });
+    }
+
+    // Modal añadir
+    let areaModal = "ingresos";
 
     function abrirModal(area) {
-      areaActualModal = area;
-      modalAreaTexto.textContent =
-        area === "ingresos" ? "Ingresos" :
-        area === "gastos" ? "Gastos" : "Ahorro";
+      areaModal = area;
+      const modal = document.getElementById("modal");
+      const title = document.getElementById("modalTitle");
+      const sel = document.getElementById("modalCategoria");
+      const montoInput = document.getElementById("modalMonto");
+      const nota = document.getElementById("modalNota");
 
-      let fuente = {};
-      if (area === "ingresos") fuente = categoriasIngresos;
-      if (area === "gastos") fuente = categoriasGastos;
-      if (area === "ahorro") fuente = categoriasAhorro;
-
-      modalCategoria.innerHTML = "";
-      Object.keys(fuente).forEach(cat => {
+      title.textContent = "Añadir a " + areaModal;
+      sel.innerHTML = "";
+      opcionesCategorias[areaModal].forEach(cat => {
         const opt = document.createElement("option");
         opt.value = cat;
         opt.textContent = cat;
-        modalCategoria.appendChild(opt);
+        sel.appendChild(opt);
       });
 
-      actualizarSubcategorias(fuente);
-      modalNombre.value = "";
-      modalMonto.value = "";
-      modalInfoTipo.textContent =
-        tipoPresupuesto === "mensual"
-          ? "Monto en formato mensual."
-          : "Monto en formato anual.";
+      montoInput.value = "";
+      nota.value = "";
 
       modal.classList.add("open");
     }
 
     function cerrarModal() {
-      modal.classList.remove("open");
+      document.getElementById("modal").classList.remove("open");
     }
 
-    function actualizarSubcategorias(fuente) {
-      const catSel = modalCategoria.value;
-      modalSubcategoria.innerHTML = "";
-      if (!catSel || !fuente[catSel]) return;
-      fuente[catSel].forEach(sub => {
-        const opt = document.createElement("option");
-        opt.value = sub;
-        opt.textContent = sub;
-        modalSubcategoria.appendChild(opt);
-      });
-    }
-
-    modalCategoria.addEventListener("change", () => {
-      let fuente = {};
-      if (areaActualModal === "ingresos") fuente = categoriasIngresos;
-      if (areaActualModal === "gastos") fuente = categoriasGastos;
-      if (areaActualModal === "ahorro") fuente = categoriasAhorro;
-      actualizarSubcategorias(fuente);
-    });
-
-    document.getElementById("btnModalCancel").addEventListener("click", cerrarModal);
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) cerrarModal();
-    });
-
-    document.getElementById("btnModalSave").addEventListener("click", () => {
-      const cat = modalCategoria.value;
-      const sub = modalSubcategoria.value;
-      const nombre = modalNombre.value.trim();
-      const monto = parseFloat(modalMonto.value) || 0;
-
-      if (!cat || !monto) return;
-
-      const item = {
-        id: Date.now() + Math.random().toString(16).slice(2),
-        area: areaActualModal,
-        categoria: cat,
-        subcategoria: sub || "",
-        nombre: nombre || sub || cat,
-        monto
-      };
-
-      presupuesto[areaActualModal].push(item);
-      agregarFilaUI(areaActualModal, item);
-      recalcularTotales();
-      cerrarModal();
-    });
-
-    // ---- TOGGLE MENSUAL / ANUAL ----
-    const toggleMensual = document.getElementById("toggleMensual");
-    const toggleAnual = document.getElementById("toggleAnual");
-    const textoTipo = document.getElementById("textoTipo");
-
-    function cambiarTipoPresupuesto(nuevoTipo) {
-      if (tipoPresupuesto === nuevoTipo) return;
-
-      const factor = nuevoTipo === "anual" ? 12 : 1 / 12;
-
-      ["ingresos", "gastos", "ahorro"].forEach(area => {
-        presupuesto[area].forEach(item => {
-          const montoActual = Number(item.monto) || 0;
-          const nuevoMonto = montoActual * factor;
-          item.monto = nuevoMonto;
-
-          const input = document.querySelector(
-            `[data-area-list="${area}"] .row[data-item-id="${item.id}"] input`
-          );
-          if (input) {
-            input.value = nuevoMonto.toFixed(2);
-          }
+    function configurarModal() {
+      // botones añadir
+      document.querySelectorAll(".add-btn-small").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const area = btn.getAttribute("data-area");
+          abrirModal(area);
         });
       });
 
-      realDemo.ingresos = (realDemo.ingresos || 0) * factor;
-      realDemo.ahorro = (realDemo.ahorro || 0) * factor;
-      Object.keys(realDemo.gastosPorCategoria).forEach(cat => {
-        realDemo.gastosPorCategoria[cat] = (realDemo.gastosPorCategoria[cat] || 0) * factor;
+      document.getElementById("btnCancel").addEventListener("click", cerrarModal);
+
+      document.getElementById("btnSave").addEventListener("click", () => {
+        const sel = document.getElementById("modalCategoria");
+        const montoInput = document.getElementById("modalMonto");
+        const valor = parseFloat(montoInput.value || "0");
+        if (!valor) {
+          cerrarModal();
+          return;
+        }
+
+        const f = factorTipo();
+        const montoMensual = valor / f; // se guarda siempre en base mensual
+
+        demoData.presupuesto[areaModal].push({
+          categoria: sel.value,
+          monto: montoMensual
+        });
+
+        cerrarModal();
+        renderSecciones();
+        renderTotales();
+        renderComparativo();
       });
 
-      tipoPresupuesto = nuevoTipo;
-
-      if (tipoPresupuesto === "mensual") {
-        textoTipo.innerHTML = 'Trabajando presupuesto <strong>mensual</strong> para el mes seleccionado.';
-      } else {
-        textoTipo.innerHTML = 'Trabajando presupuesto <strong>anual</strong> para el año seleccionado.';
-      }
-
-      modalInfoTipo.textContent =
-        tipoPresupuesto === "mensual"
-          ? "Monto en formato mensual."
-          : "Monto en formato anual.";
-
-      recalcularTotales();
+      // cerrar clic fuera
+      document.getElementById("modal").addEventListener("click", (e) => {
+        if (e.target.id === "modal") cerrarModal();
+      });
     }
 
-    toggleMensual.addEventListener("click", () => {
-      if (tipoPresupuesto === "mensual") return;
-      toggleMensual.classList.add("active");
-      toggleAnual.classList.remove("active");
-      cambiarTipoPresupuesto("mensual");
-    });
-
-    toggleAnual.addEventListener("click", () => {
-      if (tipoPresupuesto === "anual") return;
-      toggleAnual.classList.add("active");
-      toggleMensual.classList.remove("active");
-      cambiarTipoPresupuesto("anual");
-    });
-
-    // Botones de "Añadir"
-    document.querySelectorAll(".add-btn-small").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const area = btn.getAttribute("data-area");
-        abrirModal(area);
-      });
-    });
-
-    // Chips del comparativo (Ingresos / Gastos / Ahorro)
-    document.querySelectorAll(".chip[data-comp-area]").forEach(chip => {
-      chip.addEventListener("click", () => {
-        const area = chip.getAttribute("data-comp-area");
-        areaComparativo = area;
-        document.querySelectorAll(".chip[data-comp-area]").forEach(c => c.classList.remove("active"));
-        chip.classList.add("active");
-        if (ultimaDataComparativo) {
-          actualizarComparativo(ultimaDataComparativo);
-        }
-      });
-    });
-
-    // DEMO inicial
-    function cargarDemoInicial() {
-      const demoIng = [
-        {
-          area: "ingresos",
-          categoria: "Pago por trabajo",
-          subcategoria: "Salario",
-          nombre: "Salario principal",
-          monto: 3500
-        },
-        {
-          area: "ingresos",
-          categoria: "Pago por trabajo",
-          subcategoria: "Bono",
-          nombre: "Bono variable",
-          monto: 300
-        },
-        {
-          area: "ingresos",
-          categoria: "Ingreso pasivo",
-          subcategoria: "Dividendos e Intereses",
-          nombre: "Dividendos",
-          monto: 150
-        }
-      ];
-
-      const demoGas = [
-        {
-          area: "gastos",
-          categoria: "Casa",
-          subcategoria: "Hipoteca / Alquiler",
-          nombre: "Renta",
-          monto: 1200
-        },
-        {
-          area: "gastos",
-          categoria: "Alimentación",
-          subcategoria: "Supermercado",
-          nombre: "Supermercado",
-          monto: 550
-        },
-        {
-          area: "gastos",
-          categoria: "Alimentación",
-          subcategoria: "Comidas fuera",
-          nombre: "Restaurantes",
-          monto: 180
-        },
-        {
-          area: "gastos",
-          categoria: "Transportación",
-          subcategoria: "Gasolina",
-          nombre: "Gasolina",
-          monto: 220
-        },
-        {
-          area: "gastos",
-          categoria: "Entretenimiento",
-          subcategoria: "Streaming",
-          nombre: "Streaming",
-          monto: 40
-        }
-      ];
-
-      const demoAho = [
-        {
-          area: "ahorro",
-          categoria: "Emergencia",
-          subcategoria: "Fondo corto plazo",
-          nombre: "Fondo emergencia",
-          monto: 300
-        },
-        {
-          area: "ahorro",
-          categoria: "Inversión",
-          subcategoria: "Fondo indexado",
-          nombre: "Indexado largo plazo",
-          monto: 200
-        }
-      ];
-
-      [...demoIng, ...demoGas, ...demoAho].forEach(it => {
-        it.id = Date.now() + Math.random().toString(16).slice(2);
-        presupuesto[it.area].push(it);
-        agregarFilaUI(it.area, it);
-      });
-
-      recalcularTotales();
-    }
-
+    // Init
     document.addEventListener("DOMContentLoaded", () => {
-      cargarDemoInicial();
+      configurarToggleTipo();
+      configurarChips();
+      configurarModal();
+      renderSecciones();
+      renderTotales();
+      renderComparativo();
     });
   </script>
 </body>
