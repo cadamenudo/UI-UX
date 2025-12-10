@@ -794,7 +794,7 @@
       return lista.reduce((acc, item) => acc + item.monto * f, 0);
     }
 
-    // Render de cada área agrupando por categoría
+    // 🔴🔴🔴 SOLO CAMBIO AQUÍ: renderArea con lógica de 1 partida vs varias 🔴🔴🔴
     function renderArea(area, contId, resumenId) {
       const f = factorTipo();
       const cont = document.getElementById(contId);
@@ -816,6 +816,37 @@
       // render de grupos
       Object.keys(grupos).forEach(cat => {
         const grupo = grupos[cat];
+
+        // ✅ SOLO UNA PARTIDA → fila simple (sin acordeón)
+        if (grupo.items.length === 1) {
+          const item = grupo.items[0];
+          const row = document.createElement("div");
+          row.className = "row";
+          row.dataset.area = area;
+          row.dataset.index = item.__index;
+
+          const labelSpan = document.createElement("span");
+          // Aquí mantenemos el label completo (categoría – subcategoría) si existe
+          const label = item.label || item.categoria;
+          labelSpan.textContent = label;
+
+          const montoSpan = document.createElement("span");
+          montoSpan.textContent = formatear(item.monto * f);
+
+          row.appendChild(labelSpan);
+          row.appendChild(montoSpan);
+
+          // Permitir editar al tocar la fila
+          row.addEventListener("click", () => {
+            const idx = parseInt(row.dataset.index, 10);
+            abrirModal(area, idx);
+          });
+
+          cont.appendChild(row);
+          return; // pasamos al siguiente grupo
+        }
+
+        // ✅ VARIAS PARTIDAS → acordeón con total por categoría
         const groupDiv = document.createElement("div");
         groupDiv.className = "cat-group collapsed";
 
@@ -857,9 +888,18 @@
           subRow.dataset.area = area;
           subRow.dataset.index = item.__index;
 
-          const label = item.label || item.categoria;
           const labelSpan = document.createElement("span");
-          labelSpan.textContent = label;
+
+          // 👇 Solo mostramos la SUBCATEGORÍA (sin repetir la categoría)
+          let subLabel = "";
+          if (item.label) {
+            const parts = item.label.split(" – ");
+            subLabel = parts.length > 1 ? parts.slice(1).join(" – ") : item.label;
+          } else {
+            // si no hay label, usamos la categoría como fallback
+            subLabel = item.categoria;
+          }
+          labelSpan.textContent = subLabel;
 
           const montoSpan = document.createElement("span");
           montoSpan.textContent = formatear(item.monto * f);
