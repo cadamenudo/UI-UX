@@ -150,10 +150,78 @@
     justify-content: space-between;
     padding: 4px 0;
     font-size: 0.95rem;
-    cursor: pointer;
+    cursor: default;
   }
 
   .row span:last-child {
+    font-weight: 600;
+  }
+
+  /* GRUPOS POR CATEGORÍA */
+  .cat-group {
+    background: #F9FAFB;
+    border-radius: 10px;
+    padding: 4px 6px;
+    margin-bottom: 4px;
+  }
+
+  .cat-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px 2px;
+  }
+
+  .cat-group-title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cat-group-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .cat-group-summary {
+    font-size: 0.8rem;
+    color: #64748B;
+  }
+
+  .cat-group-total {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .cat-group-arrow {
+    font-size: 0.85rem;
+    margin-left: 6px;
+    transition: transform 0.2s ease;
+  }
+
+  .cat-group.collapsed .cat-group-body {
+    display: none;
+  }
+
+  .cat-group.collapsed .cat-group-arrow {
+    transform: rotate(-90deg);
+  }
+
+  .cat-group-body {
+    margin-top: 2px;
+    padding-top: 2px;
+    border-top: 1px dashed #E5E7EB;
+  }
+
+  .cat-sub-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .cat-sub-row span:last-child {
     font-weight: 600;
   }
 
@@ -169,7 +237,6 @@
 
   .totals .row {
     font-weight: 600;
-    cursor: default;
   }
 
   .totals .row span:first-child {
@@ -716,49 +783,106 @@
       return lista.reduce((acc, item) => acc + item.monto * f, 0);
     }
 
-    function renderSecciones() {
+    // Render de cada área agrupando por categoría
+    function renderArea(area, contId, resumenId) {
       const f = factorTipo();
+      const cont = document.getElementById(contId);
+      cont.innerHTML = "";
 
-      const listaIngresos = document.getElementById("listaIngresos");
-      const listaGastos = document.getElementById("listaGastos");
-      const listaAhorro = document.getElementById("listaAhorro");
+      const lista = demoData.presupuesto[area];
 
-      listaIngresos.innerHTML = "";
-      listaGastos.innerHTML = "";
-      listaAhorro.innerHTML = "";
+      // agrupar por categoría
+      const grupos = {};
+      lista.forEach((item, index) => {
+        const cat = item.categoria;
+        if (!grupos[cat]) {
+          grupos[cat] = { total: 0, items: [] };
+        }
+        grupos[cat].total += item.monto * f;
+        grupos[cat].items.push({ ...item, __index: index });
+      });
 
-      // Helper para crear filas clickeables (editar)
-      function crearFila(item, area, index, contenedor) {
-        const row = document.createElement("div");
-        row.className = "row";
-        row.dataset.area = area;
-        row.dataset.index = index;
+      // render de grupos
+      Object.keys(grupos).forEach(cat => {
+        const grupo = grupos[cat];
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "cat-group collapsed";
 
-        const label = item.label || item.categoria;
-        row.innerHTML = `<span>${label}</span><span>${formatear(item.monto * f)}</span>`;
+        const header = document.createElement("div");
+        header.className = "cat-group-header";
 
-        row.addEventListener("click", () => {
-          abrirModal(area, index);
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "cat-group-title";
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "cat-group-name";
+        nameSpan.textContent = cat;
+        const summarySpan = document.createElement("span");
+        summarySpan.className = "cat-group-summary";
+        summarySpan.textContent = `${grupo.items.length} partida(s)`;
+
+        titleDiv.appendChild(nameSpan);
+        titleDiv.appendChild(summarySpan);
+
+        const rightDiv = document.createElement("div");
+        const totalSpan = document.createElement("span");
+        totalSpan.className = "cat-group-total";
+        totalSpan.textContent = formatear(grupo.total);
+        const arrowSpan = document.createElement("span");
+        arrowSpan.className = "cat-group-arrow";
+        arrowSpan.textContent = "⌄";
+
+        rightDiv.appendChild(totalSpan);
+        rightDiv.appendChild(arrowSpan);
+
+        header.appendChild(titleDiv);
+        header.appendChild(rightDiv);
+
+        const body = document.createElement("div");
+        body.className = "cat-group-body";
+
+        grupo.items.forEach(item => {
+          const subRow = document.createElement("div");
+          subRow.className = "cat-sub-row";
+          subRow.dataset.area = area;
+          subRow.dataset.index = item.__index;
+
+          const label = item.label || item.categoria;
+          const labelSpan = document.createElement("span");
+          labelSpan.textContent = label;
+
+          const montoSpan = document.createElement("span");
+          montoSpan.textContent = formatear(item.monto * f);
+
+          subRow.appendChild(labelSpan);
+          subRow.appendChild(montoSpan);
+
+          subRow.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const idx = parseInt(subRow.dataset.index, 10);
+            abrirModal(area, idx);
+          });
+
+          body.appendChild(subRow);
         });
 
-        contenedor.appendChild(row);
-      }
+        header.addEventListener("click", () => {
+          groupDiv.classList.toggle("collapsed");
+        });
 
-      demoData.presupuesto.ingresos.forEach((item, idx) => {
-        crearFila(item, "ingresos", idx, listaIngresos);
+        groupDiv.appendChild(header);
+        groupDiv.appendChild(body);
+        cont.appendChild(groupDiv);
       });
 
-      demoData.presupuesto.gastos.forEach((item, idx) => {
-        crearFila(item, "gastos", idx, listaGastos);
-      });
+      // resumen total por área
+      const totalArea = sumarLista(lista);
+      document.getElementById(resumenId).textContent = formatear(totalArea);
+    }
 
-      demoData.presupuesto.ahorro.forEach((item, idx) => {
-        crearFila(item, "ahorro", idx, listaAhorro);
-      });
-
-      document.getElementById("resumenIngresos").textContent = formatear(sumarLista(demoData.presupuesto.ingresos));
-      document.getElementById("resumenGastos").textContent = formatear(sumarLista(demoData.presupuesto.gastos));
-      document.getElementById("resumenAhorro").textContent = formatear(sumarLista(demoData.presupuesto.ahorro));
+    function renderSecciones() {
+      renderArea("ingresos", "listaIngresos", "resumenIngresos");
+      renderArea("gastos", "listaGastos", "resumenGastos");
+      renderArea("ahorro", "listaAhorro", "resumenAhorro");
     }
 
     function renderTotales() {
@@ -1025,14 +1149,11 @@
 
       if (modoModal === "edit" && demoData.presupuesto[areaModal][index]) {
         const item = demoData.presupuesto[areaModal][index];
-        // categoría
         selCat.value = item.categoria;
 
-        // monto mostrado en escala actual (mensual/anual)
         const f = factorTipo();
         montoInput.value = (item.monto * f).toFixed(2);
 
-        // descomponer label en subcategoría si existe
         actualizarSubcategoriasModal();
         const label = item.label || item.categoria;
         const parts = label.split(" – ");
@@ -1044,7 +1165,6 @@
           });
         }
       } else {
-        // nuevo → cargar subcategorías según primera categoría
         actualizarSubcategoriasModal();
       }
 
