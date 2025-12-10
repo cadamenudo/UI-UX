@@ -66,10 +66,10 @@
     width: 100%;
   }
 
-  /* SECCIONES PRESUPUESTO */
+  /* SECCIONES PRESUPUESTO (ACORDEÓN) */
   .section {
     background: white;
-    padding: 12px 14px;
+    padding: 10px 14px;
     border-radius: 14px;
     margin-bottom: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -89,7 +89,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 6px;
+    cursor: pointer;
   }
 
   .section-header {
@@ -103,6 +103,34 @@
     margin-top: 2px;
   }
 
+  .accordion-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .section-summary {
+    font-size: 0.8rem;
+    color: #64748B;
+  }
+
+  .accordion-icon {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+  }
+
+  .section.collapsed .accordion-icon {
+    transform: rotate(-90deg);
+  }
+
+  .section-body {
+    margin-top: 6px;
+  }
+
+  .section.collapsed .section-body {
+    display: none;
+  }
+
   .add-btn-small {
     border: none;
     background: #EEF2FF;
@@ -114,6 +142,7 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    margin-bottom: 4px;
   }
 
   .row {
@@ -397,46 +426,64 @@
     <option>Marzo 2025</option>
   </select>
 
-  <!-- SECCION INGRESOS -->
+  <!-- SECCION INGRESOS (ACORDEÓN) -->
   <section class="section ingresos">
-    <div class="section-header-row">
+    <div class="section-header-row accordion-header" data-area="ingresos">
       <div>
         <div class="section-header">Ingresos</div>
         <div class="section-label">Lo que entra cada periodo</div>
       </div>
+      <div class="accordion-right">
+        <span class="section-summary" id="resumenIngresos">$0.00</span>
+        <span class="accordion-icon">⌄</span>
+      </div>
+    </div>
+    <div class="section-body">
       <button class="add-btn-small" data-area="ingresos">
         + Añadir
       </button>
+      <div id="listaIngresos"></div>
     </div>
-    <div id="listaIngresos"></div>
   </section>
 
-  <!-- SECCION GASTOS -->
-  <section class="section gastos">
-    <div class="section-header-row">
+  <!-- SECCION GASTOS (ACORDEÓN) -->
+  <section class="section gastos collapsed">
+    <div class="section-header-row accordion-header" data-area="gastos">
       <div>
         <div class="section-header">Gastos</div>
         <div class="section-label">Lo que sale en el periodo</div>
       </div>
+      <div class="accordion-right">
+        <span class="section-summary" id="resumenGastos">$0.00</span>
+        <span class="accordion-icon">⌄</span>
+      </div>
+    </div>
+    <div class="section-body">
       <button class="add-btn-small" data-area="gastos">
         + Añadir
       </button>
+      <div id="listaGastos"></div>
     </div>
-    <div id="listaGastos"></div>
   </section>
 
-  <!-- SECCION AHORRO -->
-  <section class="section ahorro">
-    <div class="section-header-row">
+  <!-- SECCION AHORRO (ACORDEÓN) -->
+  <section class="section ahorro collapsed">
+    <div class="section-header-row accordion-header" data-area="ahorro">
       <div>
         <div class="section-header">Ahorro</div>
         <div class="section-label">Lo que apartas del ingreso</div>
       </div>
+      <div class="accordion-right">
+        <span class="section-summary" id="resumenAhorro">$0.00</span>
+        <span class="accordion-icon">⌄</span>
+      </div>
+    </div>
+    <div class="section-body">
       <button class="add-btn-small" data-area="ahorro">
         + Añadir
       </button>
+      <div id="listaAhorro"></div>
     </div>
-    <div id="listaAhorro"></div>
   </section>
 
   <!-- TOTALES -->
@@ -654,6 +701,11 @@
         row.innerHTML = `<span>${item.categoria}</span><span>${formatear(item.monto * f)}</span>`;
         listaAhorro.appendChild(row);
       });
+
+      // actualizar resúmenes en headers
+      document.getElementById("resumenIngresos").textContent = formatear(sumarLista(demoData.presupuesto.ingresos));
+      document.getElementById("resumenGastos").textContent = formatear(sumarLista(demoData.presupuesto.gastos));
+      document.getElementById("resumenAhorro").textContent = formatear(sumarLista(demoData.presupuesto.ahorro));
     }
 
     // Render totales
@@ -715,7 +767,6 @@
       const f = factorTipo();
       cont.style.display = "block";
 
-      // Mapas por categoría
       const mapaPres = {};
       demoData.presupuesto.gastos.forEach(g => {
         mapaPres[g.categoria] = (mapaPres[g.categoria] || 0) + g.monto * f;
@@ -790,7 +841,6 @@
 
       actualizarBanner(totalPres, totalReal);
 
-      // Chart
       const ctx = document.getElementById("barComp").getContext("2d");
       if (chartComp) chartComp.destroy();
 
@@ -891,7 +941,8 @@
     function configurarModal() {
       // botones añadir
       document.querySelectorAll(".add-btn-small").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation(); // para no disparar el acordeón
           const area = btn.getAttribute("data-area");
           abrirModal(area);
         });
@@ -928,11 +979,22 @@
       });
     }
 
+    // Acordeones
+    function configurarAcordeones() {
+      document.querySelectorAll(".accordion-header").forEach(header => {
+        header.addEventListener("click", () => {
+          const section = header.closest(".section");
+          section.classList.toggle("collapsed");
+        });
+      });
+    }
+
     // Init
     document.addEventListener("DOMContentLoaded", () => {
       configurarToggleTipo();
       configurarChips();
       configurarModal();
+      configurarAcordeones();
       renderSecciones();
       renderTotales();
       renderComparativo();
