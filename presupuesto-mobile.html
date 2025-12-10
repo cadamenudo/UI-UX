@@ -420,7 +420,7 @@
     </div>
   </div>
 
-  <select class="select-month">
+  <select class="select-month" id="selectMonth">
     <option>Enero 2025</option>
     <option>Febrero 2025</option>
     <option>Marzo 2025</option>
@@ -541,9 +541,7 @@
 
     <canvas id="barComp"></canvas>
 
-    <div class="top-deviations" id="topDeviations">
-      <!-- Se llena por JS para Gastos -->
-    </div>
+    <div class="top-deviations" id="topDeviations"></div>
   </section>
 
   <!-- MODAL AÑADIR -->
@@ -652,7 +650,6 @@
     let areaComparativa = "ingresos"; // ingresos/gastos/ahorro
     let chartComp = null;
 
-    // Helpers
     function factorTipo() {
       return tipoActual === "anual" ? 12 : 1;
     }
@@ -669,7 +666,6 @@
       return lista.reduce((acc, item) => acc + item.monto * f, 0);
     }
 
-    // Render de listas de presupuesto
     function renderSecciones() {
       const f = factorTipo();
 
@@ -702,13 +698,11 @@
         listaAhorro.appendChild(row);
       });
 
-      // actualizar resúmenes en headers
       document.getElementById("resumenIngresos").textContent = formatear(sumarLista(demoData.presupuesto.ingresos));
       document.getElementById("resumenGastos").textContent = formatear(sumarLista(demoData.presupuesto.gastos));
       document.getElementById("resumenAhorro").textContent = formatear(sumarLista(demoData.presupuesto.ahorro));
     }
 
-    // Render totales
     function renderTotales() {
       const tIng = sumarLista(demoData.presupuesto.ingresos);
       const tGas = sumarLista(demoData.presupuesto.gastos);
@@ -721,7 +715,6 @@
       document.getElementById("totalDisponible").textContent = formatear(disp);
     }
 
-    // Banner estado
     function actualizarBanner(pres, real) {
       const banner = document.getElementById("statusBanner");
       const pctSpan = document.getElementById("bannerPct");
@@ -754,7 +747,6 @@
       banner.firstElementChild.innerHTML = texto;
     }
 
-    // Top desviaciones (solo gastos)
     function renderTopDeviations() {
       const cont = document.getElementById("topDeviations");
       cont.innerHTML = "";
@@ -823,7 +815,6 @@
       });
     }
 
-    // Comparativo por área
     function renderComparativo() {
       const f = factorTipo();
 
@@ -872,26 +863,37 @@
       renderTopDeviations();
     }
 
-    // Toggle tipo mensual/anual
     function configurarToggleTipo() {
       const toggle = document.getElementById("toggleTipo");
+      const selectMonth = document.getElementById("selectMonth");
+
       toggle.querySelectorAll("span").forEach(span => {
         span.addEventListener("click", () => {
           const nuevo = span.getAttribute("data-tipo");
           if (nuevo === tipoActual) return;
           tipoActual = nuevo;
 
+          // activar visualmente el toggle
           toggle.querySelectorAll("span").forEach(s => s.classList.remove("active"));
           span.classList.add("active");
+
+          // mostrar/ocultar dropdown de mes
+          if (tipoActual === "mensual") {
+            selectMonth.style.display = "";
+          } else {
+            selectMonth.style.display = "none";
+          }
 
           renderSecciones();
           renderTotales();
           renderComparativo();
         });
       });
+
+      // estado inicial (mensual → mostrar dropdown)
+      selectMonth.style.display = "";
     }
 
-    // Chips comparativo
     function configurarChips() {
       const chips = document.getElementById("chipsArea");
       chips.querySelectorAll(".chip").forEach(chip => {
@@ -908,7 +910,6 @@
       });
     }
 
-    // Modal añadir
     let areaModal = "ingresos";
 
     function abrirModal(area) {
@@ -939,10 +940,9 @@
     }
 
     function configurarModal() {
-      // botones añadir
       document.querySelectorAll(".add-btn-small").forEach(btn => {
         btn.addEventListener("click", (e) => {
-          e.stopPropagation(); // para no disparar el acordeón
+          e.stopPropagation();
           const area = btn.getAttribute("data-area");
           abrirModal(area);
         });
@@ -973,13 +973,11 @@
         renderComparativo();
       });
 
-      // cerrar clic fuera
       document.getElementById("modal").addEventListener("click", (e) => {
         if (e.target.id === "modal") cerrarModal();
       });
     }
 
-    // Acordeones
     function configurarAcordeones() {
       document.querySelectorAll(".accordion-header").forEach(header => {
         header.addEventListener("click", () => {
@@ -989,7 +987,6 @@
       });
     }
 
-    // Init
     document.addEventListener("DOMContentLoaded", () => {
       configurarToggleTipo();
       configurarChips();
