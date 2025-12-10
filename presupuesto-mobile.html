@@ -226,33 +226,23 @@
   }
 
   /* TOTALES */
-.totals {
-  margin-top: 4px;
-  margin-bottom: 12px;
-  background: #E8ECFF;           /* Azul suave Cada Menudo */
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid #C7D2FE;     /* Borde sutil */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-}
-
-.totals .row span:first-child {
-  color: #4B5563;
-  font-weight: 500;
-}
-
-.totals .row span:last-child {
-  color: #111827;
-}
-
-
-  .totals .row {
-    font-weight: 600;
+  .totals {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    background: #E8ECFF;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #C7D2FE;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
 
   .totals .row span:first-child {
-    color: #64748B;
+    color: #4B5563;
     font-weight: 500;
+  }
+
+  .totals .row span:last-child {
+    color: #111827;
   }
 
   .save {
@@ -275,6 +265,11 @@
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     margin-bottom: 14px;
+  }
+
+  /* Comparativo separado visualmente del botón guardar */
+  .card.comp-card {
+    margin-top: 16px;
   }
 
   /* COMPARATIVO */
@@ -590,7 +585,7 @@
   <button class="save">Guardar presupuesto</button>
 
   <!-- COMPARATIVO -->
-  <section class="card">
+  <section class="card comp-card">
     <div class="comp-header">
       <div class="comp-title">Comparar presupuesto vs real</div>
       <div class="chips" id="chipsArea">
@@ -794,7 +789,7 @@
       return lista.reduce((acc, item) => acc + item.monto * f, 0);
     }
 
-    // 🔴🔴🔴 SOLO CAMBIO AQUÍ: renderArea con lógica de 1 partida vs varias 🔴🔴🔴
+    // Render de cada área agrupando por categoría (con regla 1-partida / varias)
     function renderArea(area, contId, resumenId) {
       const f = factorTipo();
       const cont = document.getElementById(contId);
@@ -817,7 +812,7 @@
       Object.keys(grupos).forEach(cat => {
         const grupo = grupos[cat];
 
-        // ✅ SOLO UNA PARTIDA → fila simple (sin acordeón)
+        // SOLO UNA PARTIDA → fila simple (sin acordeón)
         if (grupo.items.length === 1) {
           const item = grupo.items[0];
           const row = document.createElement("div");
@@ -826,7 +821,6 @@
           row.dataset.index = item.__index;
 
           const labelSpan = document.createElement("span");
-          // Aquí mantenemos el label completo (categoría – subcategoría) si existe
           const label = item.label || item.categoria;
           labelSpan.textContent = label;
 
@@ -836,17 +830,16 @@
           row.appendChild(labelSpan);
           row.appendChild(montoSpan);
 
-          // Permitir editar al tocar la fila
           row.addEventListener("click", () => {
             const idx = parseInt(row.dataset.index, 10);
             abrirModal(area, idx);
           });
 
           cont.appendChild(row);
-          return; // pasamos al siguiente grupo
+          return;
         }
 
-        // ✅ VARIAS PARTIDAS → acordeón con total por categoría
+        // VARIAS PARTIDAS → acordeón
         const groupDiv = document.createElement("div");
         groupDiv.className = "cat-group collapsed";
 
@@ -889,14 +882,12 @@
           subRow.dataset.index = item.__index;
 
           const labelSpan = document.createElement("span");
-
-          // 👇 Solo mostramos la SUBCATEGORÍA (sin repetir la categoría)
+          // sólo subcategoría (sin repetir categoría)
           let subLabel = "";
           if (item.label) {
             const parts = item.label.split(" – ");
             subLabel = parts.length > 1 ? parts.slice(1).join(" – ") : item.label;
           } else {
-            // si no hay label, usamos la categoría como fallback
             subLabel = item.categoria;
           }
           labelSpan.textContent = subLabel;
@@ -948,7 +939,8 @@
       document.getElementById("totalDisponible").textContent = formatear(disp);
     }
 
-    function actualizarBanner(pres, real) {
+    // Banner que depende del área (ingresos / gastos / ahorro)
+    function actualizarBanner(pres, real, area) {
       const banner = document.getElementById("statusBanner");
       const pctSpan = document.getElementById("bannerPct");
 
@@ -960,24 +952,56 @@
         return;
       }
 
+      const diff = real - pres;     // signo importa
       const ratio = real / pres;
       const pct = Math.round(ratio * 100);
       pctSpan.textContent = pct + "%";
 
+      // umbral para "muy cerca"
+      const umbral = pres * 0.05;
+      const dentroRango = Math.abs(diff) <= umbral;
+
       let texto = "";
 
-      if (ratio < 0.9) {
-        banner.classList.add("green");
-        texto = "<strong>Vas bien.</strong> Por debajo del presupuesto.";
-      } else if (ratio <= 1.05) {
-        banner.classList.add("yellow");
-        texto = "<strong>Casi al límite.</strong> Ojo con los gastos.";
-      } else {
-        banner.classList.add("red");
-        texto = "<strong>Te pasaste.</strong> Sobre el presupuesto.";
+      if (area === "ingresos") {
+        if (diff > umbral) {
+          banner.classList.add("green");
+          texto = "<strong>Ingresos arriba.</strong> Ganaste más de lo planificado.";
+        } else if (dentroRango) {
+          banner.classList.add("yellow");
+          texto = "<strong>Cerca de lo planificado.</strong>";
+        } else {
+          banner.classList.add("red");
+          texto = "<strong>Ingresos abajo.</strong> Entró menos de lo esperado.";
+        }
+      } else if (area === "gastos") {
+        if (diff < -umbral) {
+          // gastó menos → positivo
+          banner.classList.add("green");
+          texto = "<strong>Vas bien.</strong> Gasto por debajo del presupuesto.";
+        } else if (dentroRango) {
+          banner.classList.add("yellow");
+          texto = "<strong>Casi al límite.</strong> Muy cerca del presupuesto.";
+        } else {
+          // gastó más
+          banner.classList.add("red");
+          texto = "<strong>Te pasaste.</strong> Gasto por encima del presupuesto.";
+        }
+      } else if (area === "ahorro") {
+        if (diff > umbral) {
+          banner.classList.add("green");
+          texto = "<strong>Buen trabajo.</strong> Ahorro por encima de lo planificado.";
+        } else if (dentroRango) {
+          banner.classList.add("yellow");
+          texto = "<strong>Cerca de la meta.</strong>";
+        } else {
+          banner.classList.add("red");
+          texto = "<strong>Ahorro bajo.</strong> Estás ahorrando menos de lo planeado.";
+        }
       }
 
-      banner.firstElementChild.innerHTML = texto;
+      // Mantener estructura del banner
+      banner.innerHTML = `<span>${texto}</span><span id="bannerPct">${pct}%</span>`;
     }
 
     function renderTopDeviations() {
@@ -1063,7 +1087,7 @@
       const diffSpan = document.getElementById("miniDiff");
       diffSpan.textContent = (diff >= 0 ? "+" : "") + formatear(diff);
 
-      actualizarBanner(totalPres, totalReal);
+      actualizarBanner(totalPres, totalReal, areaComparativa);
 
       const ctx = document.getElementById("barComp").getContext("2d");
       if (chartComp) chartComp.destroy();
