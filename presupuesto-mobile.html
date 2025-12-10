@@ -349,6 +349,15 @@
     color: #64748B;
   }
 
+  /* Colores para la diferencia */
+  #miniDiff.diff-positive {
+    color: #15803D; /* verde */
+  }
+
+  #miniDiff.diff-negative {
+    color: #B91C1C; /* rojo */
+  }
+
   #barComp {
     width: 100%;
     height: 260px;
@@ -1063,8 +1072,9 @@
 
         const diffSpan = document.createElement("span");
         diffSpan.className = "top-dev-diff " + (item.diff > 0 ? "positive" : "negative");
-        const signo = item.diff > 0 ? "+" : "";
-        diffSpan.textContent = signo + formatear(item.diff);
+        const signo = item.diff > 0 ? "+" : "-";
+        const montoAbs = Math.abs(item.diff);
+        diffSpan.textContent = signo + formatear(montoAbs);
 
         row.appendChild(left);
         row.appendChild(diffSpan);
@@ -1080,12 +1090,36 @@
 
       const totalPres = sumarLista(presLista);
       const totalReal = realLista.reduce((acc, item) => acc + item.monto * f, 0);
-      const diff = totalReal - totalPres;
+
+      // diferencia “matemática” (real - presupuesto)
+      const diffRaw = totalReal - totalPres;
+
+      // diferencia “visual” según el área:
+      // - ingresos / ahorro: real - pres (más es positivo)
+      // - gastos: pres - real (menos gasto es positivo)
+      let diffVisual = diffRaw;
+      if (areaComparativa === "gastos") {
+        diffVisual = totalPres - totalReal;
+      }
 
       document.getElementById("miniPres").textContent = formatear(totalPres);
       document.getElementById("miniReal").textContent = formatear(totalReal);
+
       const diffSpan = document.getElementById("miniDiff");
-      diffSpan.textContent = (diff >= 0 ? "+" : "") + formatear(diff);
+      diffSpan.classList.remove("diff-positive", "diff-negative");
+
+      if (diffVisual === 0) {
+        diffSpan.textContent = formatear(0);
+      } else {
+        const signo = diffVisual > 0 ? "+" : "-";
+        const montoAbs = Math.abs(diffVisual);
+        diffSpan.textContent = signo + formatear(montoAbs);
+        if (diffVisual > 0) {
+          diffSpan.classList.add("diff-positive");
+        } else {
+          diffSpan.classList.add("diff-negative");
+        }
+      }
 
       actualizarBanner(totalPres, totalReal, areaComparativa);
 
