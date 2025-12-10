@@ -150,6 +150,7 @@
     justify-content: space-between;
     padding: 4px 0;
     font-size: 0.95rem;
+    cursor: pointer;
   }
 
   .row span:last-child {
@@ -168,6 +169,7 @@
 
   .totals .row {
     font-weight: 600;
+    cursor: default;
   }
 
   .totals .row span:first-child {
@@ -267,6 +269,7 @@
 
   .mini-summary .row {
     font-size: 0.9rem;
+    cursor: default;
   }
 
   .mini-summary .row span:first-child {
@@ -322,7 +325,7 @@
     font-weight: 700;
   }
 
-  /* MODAL AÑADIR */
+  /* MODAL AÑADIR / EDITAR */
   .modal {
     position: fixed;
     inset: 0;
@@ -427,11 +430,11 @@
   </select>
 
   <!-- SECCION INGRESOS (ACORDEÓN) -->
-  <section class="section ingresos">
+  <section class="section ingresos collapsed">
     <div class="section-header-row accordion-header" data-area="ingresos">
       <div>
         <div class="section-header">Ingresos</div>
-        <div class="section-label">Lo que entra cada periodo</div>
+        <div class="section-label">Lo que entra en el periodo</div>
       </div>
       <div class="accordion-right">
         <span class="section-summary" id="resumenIngresos">$0.00</span>
@@ -544,13 +547,18 @@
     <div class="top-deviations" id="topDeviations"></div>
   </section>
 
-  <!-- MODAL AÑADIR -->
+  <!-- MODAL AÑADIR / EDITAR -->
   <div class="modal" id="modal">
     <div class="modal-content">
       <h2 id="modalTitle">Añadir</h2>
 
       <label for="modalCategoria">Categoría</label>
       <select id="modalCategoria"></select>
+
+      <div id="grupoSubcategoria" style="display:none;">
+        <label for="modalSubcat">Subcategoría</label>
+        <select id="modalSubcat"></select>
+      </div>
 
       <label for="modalMonto">Monto</label>
       <input type="number" id="modalMonto" placeholder="0.00" />
@@ -570,23 +578,23 @@
     // DATOS DEMO (BASE MENSUAL)
     // -----------------------------
     const demoData = {
-      tipo: "mensual", // "mensual" o "anual"
+      tipo: "mensual",
       presupuesto: {
         ingresos: [
-          { categoria: "Salario fijo", monto: 3200 },
-          { categoria: "Ingreso extra", monto: 500 },
-          { categoria: "Intereses / dividendos", monto: 150 }
+          { categoria: "Salario fijo", label: "Salario fijo", monto: 3200 },
+          { categoria: "Ingreso extra", label: "Ingreso extra", monto: 500 },
+          { categoria: "Intereses / dividendos", label: "Intereses / dividendos", monto: 150 }
         ],
         gastos: [
-          { categoria: "Casa", monto: 1200 },
-          { categoria: "Alimentación", monto: 650 },
-          { categoria: "Transportación", monto: 220 },
-          { categoria: "Entretenimiento", monto: 150 },
-          { categoria: "Deuda", monto: 300 }
+          { categoria: "Casa", label: "Casa – Hipoteca / alquiler", monto: 1200 },
+          { categoria: "Alimentación", label: "Alimentación – Supermercado", monto: 500 },
+          { categoria: "Alimentación", label: "Alimentación – Comidas fuera", monto: 150 },
+          { categoria: "Transportación", label: "Transportación – Gasolina", monto: 150 },
+          { categoria: "Deuda", label: "Deuda – Tarjetas de crédito", monto: 300 }
         ],
         ahorro: [
-          { categoria: "Emergencia", monto: 250 },
-          { categoria: "Meta específica", monto: 200 }
+          { categoria: "Emergencia", label: "Emergencia – Fondo corto plazo", monto: 250 },
+          { categoria: "Meta específica", label: "Meta específica – Vacaciones", monto: 200 }
         ]
       },
       real: {
@@ -609,7 +617,7 @@
       }
     };
 
-    // Opciones de categorías (mismas que desktop)
+    // CATEGORÍAS PRINCIPALES
     const opcionesCategorias = {
       ingresos: [
         "Salario fijo",
@@ -646,9 +654,51 @@
       ]
     };
 
-    let tipoActual = "mensual"; // mensual/anual
-    let areaComparativa = "ingresos"; // ingresos/gastos/ahorro
+    // SUBCATEGORÍAS (simplificadas, alineadas con desktop)
+    const subcategoriasPorArea = {
+      ingresos: {
+        "Salario fijo": ["Mensual", "Quincenal"],
+        "Pago por hora": ["Horas regulares", "Horas extra"],
+        "Bono": ["Bono anual", "Bono puntual"],
+        "Comisión": ["Ventas", "Servicios"],
+        "Negocio propio": ["Producto", "Servicio"],
+        "Propina": ["Restaurante", "Otros"],
+        "Ingresos pasivos": ["Renta inmueble", "Regalías"],
+        "Intereses / dividendos": ["Cuenta inversión", "Cuenta ahorro"]
+      },
+      gastos: {
+        "Casa": ["Hipoteca / alquiler", "Servicios", "Mantenimiento"],
+        "Alimentación": ["Supermercado", "Comidas fuera", "Pedido a domicilio"],
+        "Impuestos": ["Propiedad", "Estatales", "Federales", "Municipales"],
+        "Transportación": ["Gasolina", "Mantenimiento", "Transporte público / Uber"],
+        "Seguros": ["Salud", "Auto", "Vida"],
+        "Regalos y donaciones": ["Familia", "Amigos", "Instituciones"],
+        "Gastos Médicos": ["Consultas", "Medicamentos", "Procedimientos"],
+        "Cuidado Personal": ["Peluquería", "Cosméticos", "Spa / Barbería"],
+        "Dependientes": ["Cuidado de niños", "Cuidado de mayores", "Educación"],
+        "Deuda": ["Tarjetas de crédito", "Préstamo estudiantil", "Otros préstamos"],
+        "Entretenimiento": ["Cine / streaming", "Salidas", "Eventos"],
+        "Telecomunicaciones": ["Teléfono", "Internet", "TV"]
+      },
+      ahorro: {
+        "Emergencia": ["Fondo corto plazo", "Fondo largo plazo"],
+        "Meta específica": ["Vacaciones", "Auto", "Casa", "Educación"],
+        "Inversión": ["Fondos indexados", "Acciones", "Otros"],
+        "Retiro": ["Plan empleador", "Cuenta individual"],
+        "Ahorro personal": ["Ahorro mensual", "Efectivo"],
+        "Ahorro para hijos": ["Educación", "Regalos futuros"],
+        "Otros": ["Proyectos personales", "Donaciones planificadas"]
+      }
+    };
+
+    let tipoActual = "mensual";        // mensual/anual
+    let areaComparativa = "ingresos";  // ingresos/gastos/ahorro
     let chartComp = null;
+
+    // Estado para modal (añadir / editar)
+    let areaModal = "ingresos";
+    let modoModal = "add"; // "add" o "edit"
+    let indiceModal = null;
 
     function factorTipo() {
       return tipoActual === "anual" ? 12 : 1;
@@ -677,25 +727,33 @@
       listaGastos.innerHTML = "";
       listaAhorro.innerHTML = "";
 
-      demoData.presupuesto.ingresos.forEach(item => {
+      // Helper para crear filas clickeables (editar)
+      function crearFila(item, area, index, contenedor) {
         const row = document.createElement("div");
         row.className = "row";
-        row.innerHTML = `<span>${item.categoria}</span><span>${formatear(item.monto * f)}</span>`;
-        listaIngresos.appendChild(row);
+        row.dataset.area = area;
+        row.dataset.index = index;
+
+        const label = item.label || item.categoria;
+        row.innerHTML = `<span>${label}</span><span>${formatear(item.monto * f)}</span>`;
+
+        row.addEventListener("click", () => {
+          abrirModal(area, index);
+        });
+
+        contenedor.appendChild(row);
+      }
+
+      demoData.presupuesto.ingresos.forEach((item, idx) => {
+        crearFila(item, "ingresos", idx, listaIngresos);
       });
 
-      demoData.presupuesto.gastos.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "row";
-        row.innerHTML = `<span>${item.categoria}</span><span>${formatear(item.monto * f)}</span>`;
-        listaGastos.appendChild(row);
+      demoData.presupuesto.gastos.forEach((item, idx) => {
+        crearFila(item, "gastos", idx, listaGastos);
       });
 
-      demoData.presupuesto.ahorro.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "row";
-        row.innerHTML = `<span>${item.categoria}</span><span>${formatear(item.monto * f)}</span>`;
-        listaAhorro.appendChild(row);
+      demoData.presupuesto.ahorro.forEach((item, idx) => {
+        crearFila(item, "ahorro", idx, listaAhorro);
       });
 
       document.getElementById("resumenIngresos").textContent = formatear(sumarLista(demoData.presupuesto.ingresos));
@@ -723,7 +781,7 @@
 
       if (!pres || pres === 0) {
         banner.classList.add("yellow");
-        banner.innerHTML = `<span>Sin presupuesto para esta área.</span><span></span>`;
+        banner.innerHTML = `<span>Sin presupuesto en esta área.</span><span></span>`;
         return;
       }
 
@@ -853,9 +911,7 @@
             y: { beginAtZero: true }
           },
           plugins: {
-            legend: {
-              display: false
-            }
+            legend: { display: false }
           }
         }
       });
@@ -873,11 +929,10 @@
           if (nuevo === tipoActual) return;
           tipoActual = nuevo;
 
-          // activar visualmente el toggle
           toggle.querySelectorAll("span").forEach(s => s.classList.remove("active"));
           span.classList.add("active");
 
-          // mostrar/ocultar dropdown de mes
+          // mostrar/ocultar mes
           if (tipoActual === "mensual") {
             selectMonth.style.display = "";
           } else {
@@ -890,7 +945,7 @@
         });
       });
 
-      // estado inicial (mensual → mostrar dropdown)
+      // estado inicial
       selectMonth.style.display = "";
     }
 
@@ -910,27 +965,88 @@
       });
     }
 
-    let areaModal = "ingresos";
+    function actualizarSubcategoriasModal() {
+      const selCat = document.getElementById("modalCategoria");
+      const subWrap = document.getElementById("grupoSubcategoria");
+      const selSub = document.getElementById("modalSubcat");
 
-    function abrirModal(area) {
+      const mapaArea = subcategoriasPorArea[areaModal] || {};
+      const lista = mapaArea[selCat.value] || [];
+
+      if (!lista || lista.length === 0) {
+        subWrap.style.display = "none";
+        selSub.innerHTML = "";
+        return;
+      }
+
+      subWrap.style.display = "block";
+      selSub.innerHTML = "";
+      const optBlank = document.createElement("option");
+      optBlank.value = "";
+      optBlank.textContent = "Selecciona subcategoría";
+      selSub.appendChild(optBlank);
+
+      lista.forEach(sub => {
+        const opt = document.createElement("option");
+        opt.value = sub;
+        opt.textContent = sub;
+        selSub.appendChild(opt);
+      });
+    }
+
+    function abrirModal(area, index = null) {
       areaModal = area;
+      modoModal = index === null ? "add" : "edit";
+      indiceModal = index;
+
       const modal = document.getElementById("modal");
       const title = document.getElementById("modalTitle");
-      const sel = document.getElementById("modalCategoria");
+      const selCat = document.getElementById("modalCategoria");
+      const selSub = document.getElementById("modalSubcat");
       const montoInput = document.getElementById("modalMonto");
       const nota = document.getElementById("modalNota");
 
-      title.textContent = "Añadir a " + areaModal;
-      sel.innerHTML = "";
+      title.textContent = (modoModal === "add" ? "Añadir a " : "Editar en ") + areaModal;
+
+      // llenar categorías
+      selCat.innerHTML = "";
       opcionesCategorias[areaModal].forEach(cat => {
         const opt = document.createElement("option");
         opt.value = cat;
         opt.textContent = cat;
-        sel.appendChild(opt);
+        selCat.appendChild(opt);
       });
 
+      // estado por defecto
       montoInput.value = "";
       nota.value = "";
+      selSub.innerHTML = "";
+      document.getElementById("grupoSubcategoria").style.display = "none";
+
+      if (modoModal === "edit" && demoData.presupuesto[areaModal][index]) {
+        const item = demoData.presupuesto[areaModal][index];
+        // categoría
+        selCat.value = item.categoria;
+
+        // monto mostrado en escala actual (mensual/anual)
+        const f = factorTipo();
+        montoInput.value = (item.monto * f).toFixed(2);
+
+        // descomponer label en subcategoría si existe
+        actualizarSubcategoriasModal();
+        const label = item.label || item.categoria;
+        const parts = label.split(" – ");
+        if (parts.length > 1) {
+          const sub = parts.slice(1).join(" – ");
+          const selSubEl = document.getElementById("modalSubcat");
+          Array.from(selSubEl.options).forEach(o => {
+            if (o.value === sub) selSubEl.value = sub;
+          });
+        }
+      } else {
+        // nuevo → cargar subcategorías según primera categoría
+        actualizarSubcategoriasModal();
+      }
 
       modal.classList.add("open");
     }
@@ -944,15 +1060,21 @@
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
           const area = btn.getAttribute("data-area");
-          abrirModal(area);
+          abrirModal(area, null);
         });
       });
 
       document.getElementById("btnCancel").addEventListener("click", cerrarModal);
 
+      document.getElementById("modalCategoria").addEventListener("change", () => {
+        actualizarSubcategoriasModal();
+      });
+
       document.getElementById("btnSave").addEventListener("click", () => {
-        const sel = document.getElementById("modalCategoria");
+        const selCat = document.getElementById("modalCategoria");
+        const selSub = document.getElementById("modalSubcat");
         const montoInput = document.getElementById("modalMonto");
+
         const valor = parseFloat(montoInput.value || "0");
         if (!valor) {
           cerrarModal();
@@ -960,12 +1082,25 @@
         }
 
         const f = factorTipo();
-        const montoMensual = valor / f; // se guarda siempre en base mensual
+        const categoria = selCat.value;
+        const subcat = selSub.value || "";
+        const label = subcat ? `${categoria} – ${subcat}` : categoria;
 
-        demoData.presupuesto[areaModal].push({
-          categoria: sel.value,
-          monto: montoMensual
-        });
+        const montoMensual = valor / f; // siempre guardamos en base mensual
+
+        const lista = demoData.presupuesto[areaModal];
+
+        if (modoModal === "edit" && indiceModal !== null && lista[indiceModal]) {
+          lista[indiceModal].categoria = categoria;
+          lista[indiceModal].label = label;
+          lista[indiceModal].monto = montoMensual;
+        } else {
+          lista.push({
+            categoria,
+            label,
+            monto: montoMensual
+          });
+        }
 
         cerrarModal();
         renderSecciones();
