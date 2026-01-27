@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cada Menudo – Recordatorios (Push UX)</title>
+
+  <!-- Greycliff CF (tu link) -->
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+
+  <style>
+    :root{
+      --primary:#3956E8;
+      --secondary:#7459D9;
+      --accent:#E8C239;
+      --text:#0f172a;
+      --muted:#64748B;
+      --bg:#ffffff;
+      --soft:#F4F7FF;
+      --field-bg:#EEF3FF;
+      --field-border:#C8D3FF;
+      --border:#e5e7eb;
+      --shadow:0 10px 30px rgba(15,23,42,.10);
+      --radius:24px;
+      --radius-field:16px;
+      --topbar-h:72px;
+      --sidebar-w:260px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Greycliff CF", "Nunito", system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
+    /* --- Layout (replica visual de tu screenshot) --- */
+    .app{
+      display:grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      grid-template-rows: var(--topbar-h) 1fr;
+      min-height:100vh;
+    }
+
+    .topbar{
+      grid-column:1 / -1;
+      grid-row:1;
+      background:var(--secondary);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+    }
+    .topbar .left{
+      display:flex;align-items:center;gap:14px;
+    }
+    .burger{
+      width:42px;height:42px;border-radius:12px;
+      display:grid;place-items:center;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .burger span{display:block;width:18px;height:2px;background:#fff;position:relative}
+    .burger span::before,.burger span::after{
+      content:"";position:absolute;left:0;width:18px;height:2px;background:#fff
+    }
+    .burger span::before{top:-6px}
+    .burger span::after{top:6px}
+
+    .topbar .right{
+      display:flex;align-items:center;gap:14px;
+    }
+    .notif-dot{
+      position:relative;
+      width:38px;height:38px;border-radius:12px;
+      display:grid;place-items:center;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:700;
+    }
+    .notif-dot::after{
+      content:"1";
+      position:absolute;top:-6px;right:-6px;
+      width:18px;height:18px;border-radius:999px;
+      background:#fff;color:var(--secondary);
+      display:grid;place-items:center;
+      font-size:12px;font-weight:800;
+      border:2px solid var(--secondary);
+    }
+    .user{
+      display:flex;align-items:center;gap:10px;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:600;
+    }
+    .avatar{
+      width:30px;height:30px;border-radius:999px;
+      background:rgba(255,255,255,.45);
+      border:2px solid rgba(255,255,255,.55);
+    }
+
+    .sidebar{
+      grid-column:1;
+      grid-row:2;
+      border-right:1px solid var(--border);
+      background:#fff;
+      padding:16px 14px;
+    }
+    .sidebar .cta{
+      display:flex;align-items:center;gap:10px;
+      padding:12px 14px;border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-weight:700;
+      margin-bottom:14px;
+    }
+    .pill-icon{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      background:var(--field-bg);
+      border:1px solid var(--field-border);
+      color:var(--primary);
+      font-weight:900;
+    }
+    .menu-title{
+      margin:18px 10px 8px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+      text-transform:none;
+    }
+    .nav{
+      display:flex;flex-direction:column;gap:6px;
+      padding:0 6px;
+    }
+    .nav a{
+      text-decoration:none;color:var(--text);
+      padding:10px 10px;border-radius:14px;
+      display:flex;align-items:center;gap:10px;
+      font-weight:600;
+    }
+    .nav a:hover{background:var(--soft)}
+    .nav a.active{
+      background:rgba(116,89,217,.10);
+      color:var(--secondary);
+      border:1px solid rgba(116,89,217,.25);
+    }
+    .nav .ico{
+      width:30px;height:30px;border-radius:12px;
+      background:#f1f5f9;
+      display:grid;place-items:center;
+      color:#334155;font-weight:800;
+      border:1px solid var(--border);
+    }
+
+    .main{
+      grid-column:2;
+      grid-row:2;
+      padding:26px 28px 40px;
+      background:#fff;
+    }
+
+    .page-head{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:16px;
+    }
+    .page-head h1{
+      margin:0;
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .btn-primary{
+      appearance:none;border:none;
+      background:var(--secondary);
+      color:#fff;
+      font-weight:800;
+      padding:11px 14px;
+      border-radius:14px;
+      box-shadow:0 8px 18px rgba(116,89,217,.22);
+      cursor:pointer;
+      display:inline-flex;align-items:center;gap:8px;
+    }
+    .btn-primary:active{transform:translateY(1px)}
+    .btn-primary .plus{
+      width:20px;height:20px;border-radius:8px;
+      background:rgba(255,255,255,.18);
+      display:grid;place-items:center;
+      font-weight:900;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#fff;
+      box-shadow:0 8px 22px rgba(15,23,42,.06);
+      overflow:hidden;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 24px 1fr auto;
+      gap:12px;
+      padding:16px 16px;
+      align-items:flex-start;
+    }
+    .row + .row{border-top:1px solid var(--border)}
+    .check{
+      width:18px;height:18px;border-radius:6px;
+      border:2px solid #cbd5e1;
+      margin-top:2px;
+    }
+    .titleline{
+      display:flex;align-items:center;gap:10px;
+    }
+    .title{
+      font-weight:800;
+      font-size:16px;
+      margin:0;
+    }
+    .bell{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid rgba(116,89,217,.25);
+      background:rgba(116,89,217,.10);
+      color:var(--secondary);
+      user-select:none;
+    }
+    .bell.off{
+      border:1px solid rgba(100,116,139,.25);
+      background:rgba(100,116,139,.08);
+      color:var(--muted);
+    }
+    .sub{
+      margin-top:6px;
+      display:flex;flex-direction:column;gap:2px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .sub .freq{color:var(--secondary);font-weight:800}
+    .actions{
+      display:flex;gap:10px;
+    }
+    .iconbtn{
+      width:36px;height:36px;border-radius:10px;
+      border:none;cursor:pointer;
+      display:grid;place-items:center;
+      font-weight:900;
+      color:#fff;
+    }
+    .iconbtn.edit{background:var(--secondary)}
+    .iconbtn.del{background:#ef4444}
+
+    /* --- Modal --- */
+    .backdrop{
+      position:fixed;inset:0;
+      background:rgba(15,23,42,.45);
+      display:none;
+      align-items:center;justify-content:center;
+      padding:22px;
+    }
+    .backdrop.open{display:flex}
+    .modal{
+      width:min(720px, 92vw);
+      background:#fff;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      border:1px solid rgba(15,23,42,.10);
+    }
+    .modal-h{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 18px;
+      border-bottom:1px solid var(--border);
+    }
+    .modal-h .left{
+      display:flex;align-items:center;gap:10px;
+      font-weight:900;
+    }
+    .modal-h .x{
+      width:36px;height:36px;border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size:18px;line-height:1;
+      display:grid;place-items:center;
+      color:#0f172a;
+    }
+
+    .modal-b{padding:18px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+
+    .field{
+      display:flex;flex-direction:column;gap:6px;
+    }
+    .field label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+      margin-left:4px;
+    }
+    .input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid #d1d5db;
+      background:#fff;
+      font-size:14px;
+      outline:none;
+    }
+    .input:focus{
+      border-color:rgba(116,89,217,.55);
+      box-shadow:0 0 0 4px rgba(116,89,217,.12);
+    }
+    textarea.input{min-height:110px;resize:none}
+
+    /* Notificación section */
+    .notify{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px 14px;
+      background:#fff;
+    }
+    .notify-top{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:12px;
+    }
+    .notify-title{
+      display:flex;align-items:center;gap:10px;
+      font-weight:900;
+    }
+    .notify-title .mini{
+      width:30px;height:30px;border-radius:12px;
+      display:grid;place-items:center;
+      background:rgba(116,89,217,.10);
+      border:1px solid rgba(116,89,217,.25);
+      color:var(--secondary);
+      font-weight:900;
+    }
+    .notify-help{
+      margin:6px 0 0 40px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* Toggle */
+    .switch{
+      position:relative;display:inline-block;
+      width:54px;height:30px;
+    }
+    .switch input{display:none}
+    .slider{
+      position:absolute;inset:0;
+      background:#e2e8f0;
+      border-radius:999px;
+      transition:.2s;
+      border:1px solid #cbd5e1;
+    }
+    .slider:before{
+      content:"";
+      position:absolute;
+      width:24px;height:24px;
+      left:3px;top:50%;
+      transform:translateY(-50%);
+      background:#fff;
+      border-radius:999px;
+      transition:.2s;
+      box-shadow:0 6px 14px rgba(15,23,42,.12);
+    }
+    .switch input:checked + .slider{
+      background:rgba(116,89,217,.35);
+      border-color:rgba(116,89,217,.55);
+    }
+    .switch input:checked + .slider:before{
+      left:27px;
+      background:#fff;
+    }
+
+    .notify-options{
+      margin-top:12px;
+      padding-left:40px;
+      display:none;
+      gap:10px;
+      flex-direction:column;
+    }
+    .notify-options.show{display:flex}
+
+    .radio{
+      display:flex;align-items:center;gap:10px;
+      font-size:14px;
+      color:var(--text);
+      font-weight:700;
+    }
+    .radio input{accent-color: var(--secondary)}
+    .notify-preview{
+      margin-top:6px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:var(--soft);
+      border:1px solid rgba(116,89,217,.18);
+      color:var(--text);
+      font-size:13px;
+      font-weight:700;
+    }
+    .notify-preview span{color:var(--secondary);font-weight:900}
+
+    .modal-f{
+      display:flex;justify-content:flex-end;gap:10px;
+      padding:12px 18px 16px;
+      border-top:1px solid var(--border);
+      background:#fff;
+    }
+    .btn{
+      appearance:none;border:none;cursor:pointer;
+      padding:10px 14px;border-radius:14px;
+      font-weight:900;
+    }
+    .btn.ghost{
+      background:#f1f5f9;color:#0f172a;
+    }
+    .btn.save{
+      background:var(--secondary);
+      color:#fff;
+      box-shadow:0 10px 20px rgba(116,89,217,.22);
+    }
+
+    /* Footer */
+    .foot{
+      position:fixed;
+      left:var(--sidebar-w);
+      right:0;
+      bottom:0;
+      padding:10px 18px;
+      font-size:13px;
+      color:var(--muted);
+      display:flex;justify-content:center;
+      background:linear-gradient(to top, rgba(255,255,255,.96), rgba(255,255,255,0));
+      pointer-events:none;
+    }
+    .foot a{color:var(--secondary);text-decoration:none;font-weight:800}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      :root{--sidebar-w: 220px}
+      .main{padding:22px 18px 60px}
+      .foot{left:220px}
+    }
+    @media (max-width: 820px){
+      .app{grid-template-columns: 1fr}
+      .sidebar{display:none}
+      .main{grid-column:1}
+      .foot{left:0}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="left">
+        <div class="burger" aria-label="Menú"><span></span></div>
+      </div>
+      <div class="right">
+        <div class="notif-dot" title="Notificaciones">🔔</div>
+        <div class="user" title="Usuario">
+          <div class="avatar" aria-hidden="true"></div>
+          <span>admin admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="cta">
+        <div class="pill-icon">＋</div>
+        Nueva Transacción
+      </div>
+
+      <div class="menu-title">Menú</div>
+      <nav class="nav">
+        <a href="#" aria-label="Tablero"><span class="ico">🏠</span>Tablero</a>
+        <a href="#" aria-label="Transacciones"><span class="ico">≡</span>Transacciones</a>
+        <a href="#" aria-label="Educación"><span class="ico">▶</span>Educación</a>
+      </nav>
+
+      <div class="menu-title">Configuración</div>
+      <nav class="nav">
+        <a href="#" aria-label="Metas"><span class="ico">▮</span>Metas</a>
+        <a href="#" aria-label="Categorías"><span class="ico">▦</span>Categorías</a>
+        <a href="#" aria-label="Monedas"><span class="ico">$</span>Monedas</a>
+        <a class="active" href="#" aria-label="Recordatorios"><span class="ico">📅</span>Recordatorios</a>
+        <a href="#" aria-label="Suscripciones"><span class="ico">▾</span>Suscripciones</a>
+        <a href="#" aria-label="Usuarios"><span class="ico">👤</span>Usuarios</a>
+        <a href="#" aria-label="Contáctanos"><span class="ico">✉</span>Contáctanos</a>
+        <a href="#" aria-label="Salir"><span class="ico">↩</span>Salir</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="page-head">
+        <h1>Recordatorios</h1>
+        <button class="btn-primary" id="openModal">
+          <span class="plus">+</span> Nuevo
+        </button>
+      </div>
+
+      <section class="card" aria-label="Lista de recordatorios">
+        <div class="row">
+          <div class="check" aria-hidden="true"></div>
+
+          <div>
+            <div class="titleline">
+              <p class="title">Pagar Amex</p>
+              <!-- Estado visual push -->
+              <span class="bell" title="Notificación activa (15 min antes)">🔔 Aviso 15 min</span>
+            </div>
+            <div class="sub">
+              <div class="freq">Mensual</div>
+              <div>31/01/2026 12:00</div>
+            </div>
+          </div>
+
+          <div class="actions" aria-label="Acciones">
+            <button class="iconbtn edit" title="Editar">✎</button>
+            <button class="iconbtn del" title="Eliminar">✕</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="foot">
+      <div>
+        <a href="#" aria-label="Términos">Términos</a> y <a href="#" aria-label="Políticas">Políticas</a> / tech@cadamenudo.com
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-label="Nuevo recordatorio">
+    <div class="modal">
+      <div class="modal-h">
+        <div class="left">
+          <span style="font-size:18px;font-weight:900;">＋</span>
+          <span>Nuevo</span>
+        </div>
+        <button class="x" id="closeModal" aria-label="Cerrar">×</button>
+      </div>
+
+      <div class="modal-b">
+        <div class="grid">
+          <div class="field">
+            <input class="input" type="text" placeholder="Título" />
+          </div>
+
+          <div class="field">
+            <input class="input" type="text" placeholder="Fecha" />
+          </div>
+
+          <div class="field">
+            <label>Frecuencia</label>
+            <input class="input" type="text" value="Ninguna" />
+          </div>
+
+          <!-- NUEVO: NOTIFICACIÓN PUSH -->
+          <div class="notify">
+            <div class="notify-top">
+              <div>
+                <div class="notify-title">
+                  <div class="mini">🔔</div>
+                  <div>Notificación push</div>
+                </div>
+                <div class="notify-help">Recibe una alerta en tu dispositivo</div>
+              </div>
+
+              <label class="switch" aria-label="Activar notificación push">
+                <input id="pushToggle" type="checkbox" />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notify-options" id="pushOptions">
+              <div class="field" style="gap:8px;">
+                <label style="margin-left:0;">Avisar</label>
+
+                <label class="radio"><input type="radio" name="when" checked /> En el momento</label>
+                <label class="radio"><input type="radio" name="when" /> 5 minutos antes</label>
+                <label class="radio"><input type="radio" name="when" /> 15 minutos antes</label>
+                <label class="radio"><input type="radio" name="when" /> 1 hora antes</label>
+                <label class="radio"><input type="radio" name="when" /> 1 día antes</label>
+
+                <div class="notify-preview">
+                  📱 Te avisaremos el <span>31/01/2026</span> a las <span>11:45</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <textarea class="input" placeholder="Descripción"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-f">
+        <button class="btn ghost" id="cancelModal">Cancel</button>
+        <button class="btn save">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Solo para demo UX (abrir/cerrar modal y mostrar opciones push)
+    const backdrop = document.getElementById('backdrop');
+    const openBtn = document.getElementById('openModal');
+    const closeBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelModal');
+
+    const pushToggle = document.getElementById('pushToggle');
+    const pushOptions = document.getElementById('pushOptions');
+
+    const open = () => backdrop.classList.add('open');
+    const close = () => backdrop.classList.remove('open');
+
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    cancelBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
+
+    pushToggle.addEventListener('change', () => {
+      pushOptions.classList.toggle('show', pushToggle.checked);
+    });
+  </script>
+</body>
+</html>
