@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cada Menudo – UX Push Notification</title>
+
+  <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
+
+  <style>
+    :root{
+      --primary:#3956E8;
+      --secondary:#7459D9;
+      --accent:#E8C239;
+      --text:#0f172a;
+      --muted:#64748B;
+      --bg:#ffffff;
+      --soft:#F4F7FF;
+      --border:#e5e7eb;
+      --shadow:0 14px 40px rgba(15,23,42,.14);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Greycliff CF","Nunito",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg, #f6f8ff, #ffffff 55%);
+      min-height:100vh;
+      padding:26px 18px 60px;
+    }
+
+    .wrap{max-width:1050px;margin:0 auto;}
+    .head{
+      display:flex;align-items:flex-start;justify-content:space-between;
+      gap:14px;margin-bottom:16px;
+    }
+    .head h1{margin:0;font-size:20px;font-weight:900}
+    .head p{margin:6px 0 0;color:var(--muted);font-weight:650}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow:0 10px 26px rgba(15,23,42,.08);
+      overflow:hidden;
+    }
+    .card-h{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+      font-weight:900;
+    }
+    .badge{
+      font-size:12px;font-weight:900;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(116,89,217,.25);
+      background:rgba(116,89,217,.10);
+      color:var(--secondary);
+    }
+    .card-b{padding:16px}
+
+    /* --- Permission UI --- */
+    .permission{
+      display:flex;flex-direction:column;gap:12px;
+      padding:4px 2px;
+    }
+    .perm-row{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+    }
+    .appicon{
+      width:46px;height:46px;border-radius:14px;
+      display:grid;place-items:center;
+      background:rgba(116,89,217,.12);
+      border:1px solid rgba(116,89,217,.25);
+      font-weight:1000;
+      color:var(--secondary);
+      user-select:none;
+    }
+    .perm-text h3{margin:0;font-size:15px;font-weight:1000}
+    .perm-text p{margin:4px 0 0;color:var(--muted);font-weight:650;font-size:13px}
+    .perm-actions{
+      display:flex;gap:10px;margin-top:6px;flex-wrap:wrap
+    }
+    .btn{
+      border:none;cursor:pointer;
+      padding:10px 14px;border-radius:14px;
+      font-weight:900;
+    }
+    .btn.primary{
+      background:var(--secondary);color:#fff;
+      box-shadow:0 10px 22px rgba(116,89,217,.22);
+    }
+    .btn.ghost{
+      background:#f1f5f9;color:#0f172a;border:1px solid var(--border);
+    }
+
+    /* --- In-app toast --- */
+    .toast-demo{
+      position:relative;
+      padding:14px;
+      background:linear-gradient(180deg, rgba(116,89,217,.08), rgba(255,255,255,0));
+      border:1px solid rgba(116,89,217,.18);
+      border-radius:18px;
+      min-height:180px;
+      overflow:hidden;
+    }
+    .toast{
+      position:absolute;
+      right:14px;bottom:14px;
+      width:min(420px, calc(100% - 28px));
+      background:#fff;
+      border:1px solid rgba(15,23,42,.10);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:12px 12px 10px;
+      display:flex;gap:12px;
+      align-items:flex-start;
+    }
+    .toast .ticon{
+      width:40px;height:40px;border-radius:14px;
+      background:rgba(116,89,217,.12);
+      border:1px solid rgba(116,89,217,.25);
+      display:grid;place-items:center;
+      color:var(--secondary);font-weight:1000;
+      flex:0 0 auto;
+    }
+    .toast .tcontent{flex:1}
+    .toast .tcontent .t1{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .toast .appname{font-weight:1000;font-size:13px}
+    .toast .time{font-size:12px;color:var(--muted);font-weight:800}
+    .toast .title{margin:6px 0 0;font-weight:1000}
+    .toast .msg{margin:3px 0 0;color:var(--muted);font-weight:650;font-size:13px}
+    .toast .tactions{
+      margin-top:10px;display:flex;gap:8px;flex-wrap:wrap
+    }
+    .chip{
+      font-size:12px;font-weight:950;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+    }
+    .chip.primary{
+      border-color:rgba(116,89,217,.25);
+      background:rgba(116,89,217,.10);
+      color:var(--secondary);
+    }
+    .chip.danger{
+      border-color:rgba(239,68,68,.25);
+      background:rgba(239,68,68,.08);
+      color:#ef4444;
+    }
+
+    /* --- System Push preview (lock/banner) --- */
+    .phone{
+      background:#0b1220;
+      border-radius:26px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 24px 60px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .phone-top{
+      padding:12px 14px;
+      color:rgba(255,255,255,.72);
+      display:flex;align-items:center;justify-content:space-between;
+      font-weight:800;font-size:12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .screen{
+      padding:18px 14px 22px;
+      min-height:380px;
+      background:radial-gradient(1200px 600px at 20% 0%, rgba(116,89,217,.35), transparent 60%),
+                 radial-gradient(900px 500px at 80% 30%, rgba(57,86,232,.25), transparent 60%),
+                 #0b1220;
+      position:relative;
+    }
+    .push{
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.65);
+      border-radius:18px;
+      padding:12px;
+      display:flex;gap:12px;
+      box-shadow:0 18px 50px rgba(0,0,0,.35);
+      backdrop-filter: blur(12px);
+    }
+    .push .picon{
+      width:44px;height:44px;border-radius:16px;
+      background:rgba(116,89,217,.14);
+      border:1px solid rgba(116,89,217,.28);
+      display:grid;place-items:center;
+      color:var(--secondary);
+      font-weight:1000;
+      flex:0 0 auto;
+    }
+    .push .pcontent{flex:1}
+    .push .pline{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;
+    }
+    .push .papp{font-weight:1000;font-size:13px}
+    .push .ptime{font-size:12px;color:#475569;font-weight:900}
+    .push .ptitle{margin:6px 0 0;font-weight:1000}
+    .push .pmsg{margin:3px 0 0;color:#475569;font-weight:700;font-size:13px}
+    .push .psub{margin:8px 0 0;color:#0f172a;font-weight:900;font-size:12px}
+    .hint{
+      margin-top:12px;
+      color:rgba(255,255,255,.76);
+      font-size:12px;
+      font-weight:750;
+      line-height:1.35;
+    }
+
+    /* tiny controls demo */
+    .demo-controls{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:12px
+    }
+
+    .mini-note{
+      margin-top:10px;color:var(--muted);font-weight:650;font-size:13px;line-height:1.35
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>UX: ¿Cómo recibe el usuario la notificación?</h1>
+        <p>3 vistas: permiso inicial, notificación dentro de la app, y preview de push del sistema.</p>
+      </div>
+      <span class="badge">Prototype</span>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: permission + in-app -->
+      <div class="card">
+        <div class="card-h">
+          <span>Dentro de Cada Menudo</span>
+          <span class="badge">In-app</span>
+        </div>
+        <div class="card-b">
+          <!-- Permission prompt (UX dentro de la app) -->
+          <div class="permission">
+            <div class="perm-row">
+              <div class="appicon">CM</div>
+              <div class="perm-text">
+                <h3>Activa notificaciones</h3>
+                <p>Para recordatorios como pagos, metas y fechas importantes.</p>
+
+                <div class="perm-actions">
+                  <button class="btn primary" id="btnAllow">Permitir</button>
+                  <button class="btn ghost" id="btnLater">Ahora no</button>
+                </div>
+
+                <div class="mini-note" id="permNote" style="display:none;">
+                  ✅ Listo. Recibirás alertas cuando llegue la hora del recordatorio.
+                </div>
+              </div>
+            </div>
+
+            <!-- In-app toast demo area -->
+            <div class="toast-demo" aria-label="Vista demo de notificación dentro de la app">
+              <div class="mini-note" style="max-width:520px">
+                Cuando el usuario <b>está dentro</b> de Cada Menudo, mostramos un <b>toast</b> discreto abajo a la derecha
+                (sin interrumpir el flujo). Incluye acciones rápidas.
+              </div>
+
+              <div class="toast" id="toast" style="display:none;">
+                <div class="ticon">🔔</div>
+                <div class="tcontent">
+                  <div class="t1">
+                    <div class="appname">Cada Menudo</div>
+                    <div class="time">Ahora</div>
+                  </div>
+                  <div class="title">Recordatorio: Pagar Amex</div>
+                  <div class="msg">Hoy a las 12:00 · Aviso 15 min antes</div>
+
+                  <div class="tactions">
+                    <button class="chip primary" id="btnOpen">Abrir</button>
+                    <button class="chip" id="btnSnooze">Posponer 1h</button>
+                    <button class="chip danger" id="btnDone">Marcar como hecho</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-controls">
+              <button class="btn primary" id="btnSimulate">Simular notificación (in-app)</button>
+              <button class="btn ghost" id="btnHideToast">Ocultar</button>
+            </div>
+
+            <div class="mini-note">
+              Nota UX: si el usuario no dio permisos del sistema, igual puede crear recordatorios,
+              pero el toggle 🔔 se mostrará desactivado y con mensaje “Activa notificaciones en Configuración”.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: system push preview -->
+      <div class="card">
+        <div class="card-h">
+          <span>Fuera de la app</span>
+          <span class="badge">Push (sistema)</span>
+        </div>
+
+        <div class="card-b">
+          <div class="phone" aria-label="Preview de notificación del sistema">
+            <div class="phone-top">
+              <span>5:09</span>
+              <span>📶  🔋</span>
+            </div>
+            <div class="screen">
+              <div class="push" id="pushBox">
+                <div class="picon">CM</div>
+                <div class="pcontent">
+                  <div class="pline">
+                    <div class="papp">Cada Menudo</div>
+                    <div class="ptime">ahora</div>
+                  </div>
+                  <div class="ptitle">Recordatorio: Pagar Amex</div>
+                  <div class="pmsg">Hoy a las 12:00 · Aviso 15 min antes</div>
+                  <div class="psub">Toca para abrir Recordatorios</div>
+                </div>
+              </div>
+
+              <div class="hint">
+                Este bloque representa cómo se ve en <b>lock screen/banner</b> (iOS/Android).<br/>
+                Copia y tono corto: título claro, hora + contexto, y acción implícita.
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-controls">
+            <button class="btn primary" id="btnVariant1">Ejemplo: “En el momento”</button>
+            <button class="btn ghost" id="btnVariant2">Ejemplo: “1 día antes”</button>
+          </div>
+
+          <div class="mini-note">
+            Recomendación UX: mantén el mensaje en <b>1 línea de contexto</b>. Evita texto largo para que no se corte.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Demo interactions (UX only)
+    const permNote = document.getElementById('permNote');
+    const btnAllow = document.getElementById('btnAllow');
+    const btnLater = document.getElementById('btnLater');
+
+    btnAllow.addEventListener('click', () => {
+      permNote.style.display = 'block';
+      permNote.textContent = '✅ Listo. Recibirás alertas cuando llegue la hora del recordatorio.';
+    });
+
+    btnLater.addEventListener('click', () => {
+      permNote.style.display = 'block';
+      permNote.textContent = '👍 Perfecto. Puedes activarlas cuando quieras en Configuración.';
+    });
+
+    // In-app toast simulate
+    const toast = document.getElementById('toast');
+    const btnSimulate = document.getElementById('btnSimulate');
+    const btnHideToast = document.getElementById('btnHideToast');
+
+    btnSimulate.addEventListener('click', () => {
+      toast.style.display = 'flex';
+    });
+    btnHideToast.addEventListener('click', () => {
+      toast.style.display = 'none';
+    });
+
+    // Toast actions (demo)
+    document.getElementById('btnOpen').addEventListener('click', () => {
+      alert('UX: abre /reminders (deep link)');
+    });
+    document.getElementById('btnSnooze').addEventListener('click', () => {
+      alert('UX: posponer 1 hora (actualiza nextRunAt)');
+    });
+    document.getElementById('btnDone').addEventListener('click', () => {
+      alert('UX: marcar como hecho (status=done)');
+    });
+
+    // System push variants
+    const pushBox = document.getElementById('pushBox');
+    const btnV1 = document.getElementById('btnVariant1');
+    const btnV2 = document.getElementById('btnVariant2');
+
+    btnV1.addEventListener('click', () => {
+      pushBox.querySelector('.ptitle').textContent = 'Recordatorio: Pagar Amex';
+      pushBox.querySelector('.pmsg').textContent = 'Hoy a las 12:00 · En el momento';
+      pushBox.querySelector('.psub').textContent = 'Toca para abrir Recordatorios';
+      pushBox.querySelector('.ptime').textContent = 'ahora';
+    });
+
+    btnV2.addEventListener('click', () => {
+      pushBox.querySelector('.ptitle').textContent = 'Mañana vence: Pagar Amex';
+      pushBox.querySelector('.pmsg').textContent = 'Aviso 1 día antes · Vence 31/01 12:00';
+      pushBox.querySelector('.psub').textContent = 'Revisa tus recordatorios';
+      pushBox.querySelector('.ptime').textContent = 'hoy';
+    });
+  </script>
+</body>
+</html>
