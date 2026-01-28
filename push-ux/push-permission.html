@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cada Menudo – Activar notificaciones</title>
+
   <link rel="stylesheet" href="https://cadamenudo.github.io/UI-UX/css-fonts.css"/>
 
   <style>
     :root{
       --primary:#3956E8;
       --secondary:#7459D9;
-      --accent:#E8C239;
       --text:#0f172a;
       --muted:#64748B;
       --bg:#ffffff;
@@ -34,6 +34,7 @@
       width:min(460px, 100%);
     }
 
+    /* Top bar */
     .topbar{
       display:flex;align-items:center;justify-content:space-between;
       padding:8px 2px 14px;
@@ -49,6 +50,7 @@
       font-size:16px;font-weight:1000;margin:0;
     }
 
+    /* Card */
     .card{
       background:#fff;
       border:1px solid var(--border);
@@ -87,69 +89,83 @@
       line-height:1.35;
     }
 
-    .bullets{
-      margin:12px 0 0;
+    /* Switch row */
+    .switch-row{
+      margin-top:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
       padding:12px;
       border-radius:16px;
-      background:var(--soft);
-      border:1px solid rgba(116,89,217,.16);
+      border:1px solid var(--border);
+      background:#fff;
     }
-    .bullets .b{
-      display:flex;gap:10px;align-items:flex-start;
-      font-size:13px;font-weight:800;color:#1f2937;
-      padding:8px 6px;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:999px;
-      background:var(--secondary);
-      margin-top:5px;
-      flex:0 0 auto;
-    }
-
-    .actions{
-      margin-top:14px;
-      display:flex;
-      gap:10px;
-      flex-direction:column;
-    }
-    .btn{
-      width:100%;
-      border:none;
-      cursor:pointer;
-      border-radius:16px;
-      padding:12px 14px;
-      font-weight:1000;
+    .switch-text{
+      font-weight:900;
       font-size:14px;
     }
-    .btn.primary{
-      background:var(--secondary);
-      color:#fff;
-      box-shadow:0 14px 26px rgba(116,89,217,.22);
+
+    /* Toggle */
+    .switch{
+      position:relative;
+      width:56px;
+      height:32px;
     }
-    .btn.ghost{
+    .switch input{display:none}
+    .slider{
+      position:absolute;inset:0;
+      background:#e5e7eb;
+      border-radius:999px;
+      transition:.2s;
+      border:1px solid #cbd5e1;
+    }
+    .slider:before{
+      content:"";
+      position:absolute;
+      width:26px;height:26px;
+      left:3px;top:50%;
+      transform:translateY(-50%);
       background:#fff;
-      color:var(--text);
-      border:1px solid var(--border);
+      border-radius:999px;
+      transition:.2s;
+      box-shadow:0 6px 14px rgba(15,23,42,.18);
+    }
+    .switch input:checked + .slider{
+      background:rgba(116,89,217,.45);
+      border-color:rgba(116,89,217,.65);
+    }
+    .switch input:checked + .slider:before{
+      left:27px;
+    }
+
+    /* Status message */
+    .status{
+      margin-top:12px;
+      padding:12px;
+      border-radius:16px;
+      font-size:13px;
+      font-weight:800;
+      display:none;
+    }
+    .status.on{
+      background:rgba(34,197,94,.10);
+      border:1px solid rgba(34,197,94,.25);
+      color:#166534;
+    }
+    .status.off{
+      background:rgba(100,116,139,.08);
+      border:1px solid rgba(100,116,139,.25);
+      color:#475569;
     }
 
     .note{
-      margin-top:10px;
+      margin-top:12px;
       font-size:12px;
       font-weight:750;
       color:var(--muted);
       line-height:1.35;
       text-align:center;
-    }
-    .ok{
-      margin-top:12px;
-      display:none;
-      padding:12px;
-      border-radius:16px;
-      background:rgba(34,197,94,.10);
-      border:1px solid rgba(34,197,94,.25);
-      color:#166534;
-      font-weight:900;
-      font-size:13px;
     }
   </style>
 </head>
@@ -157,7 +173,7 @@
 <body>
   <div class="wrap">
     <div class="topbar">
-      <div class="back" aria-label="Volver">←</div>
+      <div class="back">←</div>
       <p class="title">Notificaciones</p>
       <div style="width:42px"></div>
     </div>
@@ -168,40 +184,52 @@
           <img src="https://cadamenudo.github.io/UI-UX/assets/icons/nueva.png" alt="Cada Menudo"/>
         </div>
         <div>
-          <h2>Activa notificaciones</h2>
-          <p>Te avisamos de recordatorios importantes sin interrumpir tu día.</p>
+          <h2>Notificaciones de recordatorios</h2>
+          <p>Recibe avisos de pagos, metas y fechas importantes justo cuando los necesitas.</p>
         </div>
       </div>
 
-      <div class="bullets" aria-label="Beneficios">
-        <div class="b"><span class="dot"></span>Pagos y fechas importantes</div>
-        <div class="b"><span class="dot"></span>Avisos antes de que venza</div>
-        <div class="b"><span class="dot"></span>Control total: puedes apagarlas cuando quieras</div>
+      <!-- Toggle -->
+      <div class="switch-row">
+        <div class="switch-text">Activar notificaciones</div>
+        <label class="switch">
+          <input type="checkbox" id="toggle">
+          <span class="slider"></span>
+        </label>
       </div>
 
-      <div class="actions">
-        <button class="btn primary" id="allow">Permitir</button>
-        <button class="btn ghost" id="later">Ahora no</button>
+      <!-- Status -->
+      <div class="status on" id="statusOn">
+        🔔 Notificaciones activas. Te avisaremos cuando llegue la hora del recordatorio.
       </div>
 
-      <div class="ok" id="ok">✅ Listo. Recibirás alertas cuando llegue la hora del recordatorio.</div>
+      <div class="status off" id="statusOff">
+        🔕 Notificaciones desactivadas. Puedes activarlas cuando quieras.
+      </div>
 
       <div class="note">
-        Si cambias de opinión, puedes activarlas luego en Configuración del teléfono.
+        Puedes cambiar esta preferencia en cualquier momento desde Configuración.
       </div>
     </div>
   </div>
 
   <script>
-    const ok = document.getElementById('ok');
-    document.getElementById('allow').addEventListener('click', () => {
-      ok.style.display = 'block';
-      ok.textContent = '✅ Listo. Recibirás alertas cuando llegue la hora del recordatorio.';
-    });
-    document.getElementById('later').addEventListener('click', () => {
-      ok.style.display = 'block';
-      ok.textContent = '👍 Perfecto. Puedes activarlas cuando quieras en Configuración.';
-    });
+    const toggle = document.getElementById('toggle');
+    const statusOn = document.getElementById('statusOn');
+    const statusOff = document.getElementById('statusOff');
+
+    const render = () => {
+      if(toggle.checked){
+        statusOn.style.display = 'block';
+        statusOff.style.display = 'none';
+      } else {
+        statusOn.style.display = 'none';
+        statusOff.style.display = 'block';
+      }
+    };
+
+    toggle.addEventListener('change', render);
+    render();
   </script>
 </body>
 </html>
