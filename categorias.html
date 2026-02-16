@@ -2,1927 +2,1127 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Presupuesto móvil – Cada Menudo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Categorías - Gastos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Nunito -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-  :root{
-    --primary:#3956E8;
-    --secondary:#7459D9;
-    --bg:#F6F7FF;
-    --card:#FFFFFF;
-    --text:#0f172a;
-    --muted:#64748B;
-    --border:#E5E7EB;
-    --shadow:0 4px 12px rgba(0,0,0,0.06);
-    --radius:16px;
-    --tap:48px;
-    --success:#22C55E;
-    --warning:#F59E0B;
-    --danger:#EF4444;
-  }
-
-  *{box-sizing:border-box}
-  body{
-    font-family: Nunito, sans-serif;
-    background: var(--bg);
-    padding: 0;
-    margin: 0;
-    color: var(--text);
-    -webkit-tap-highlight-color: transparent;
-    overflow-x: hidden;
-  }
-
-  /* Sticky header */
-  .sticky-wrap{
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--bg);
-    padding: 14px 16px 10px;
-    border-bottom: 1px solid rgba(229,231,235,.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom: 10px;
-  }
-
-  h1{
-    font-size: 1.25rem;
-    font-weight: 900;
-    margin: 0;
-    letter-spacing: -0.4px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .toggle{
-    background: white;
-    border-radius: 999px;
-    padding: 4px;
-    display: flex;
-    gap: 4px;
-    border: 1px solid var(--border);
-    flex-shrink:0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .toggle span{
-    padding: 8px 14px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    min-height: 36px;
-    display:flex;align-items:center;justify-content:center;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 700;
-  }
-  .toggle .active{
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    font-weight: 900;
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(57,86,232,0.3);
-  }
-
-  .select-month{
-    background: white;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    font-size: 0.92rem;
-    width: 100%;
-    outline: none;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-    transition: all 0.2s ease;
-  }
-  .select-month:focus{
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(57,86,232,0.1);
-  }
-
-  /* Main content padding */
-  .page{
-    padding: 14px 16px 110px;
-  }
-
-  /* Sections */
-  .section{
-    background: var(--card);
-    padding: 12px 16px;
-    border-radius: 16px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(229,231,235,0.6);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .section.ingresos{ border-left: 4px solid var(--success); }
-  .section.gastos  { border-left: 4px solid #F97316; }
-  .section.ahorro  { border-left: 4px solid #3B82F6; }
-
-  .section-header-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    cursor:pointer;
-    padding: 8px 0;
-    min-height: var(--tap);
-    transition: opacity 0.2s ease;
-  }
-  .section-header-row:active{
-    opacity: 0.7;
-  }
-  .section-header{
-    font-weight: 900;
-    font-size: 1.05rem;
-    letter-spacing: -0.3px;
-  }
-  .section-label{
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-top: 3px;
-    font-weight: 600;
-  }
-  .accordion-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
-  .btn-add-section {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    font-size: 1.3rem;
-    font-weight: 900;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(57, 86, 232, 0.3);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    flex-shrink: 0;
-  }
-
-  .btn-add-section:active {
-    transform: scale(0.92);
-  }
-
-  .accordion-icon{
-    font-size: 1rem;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: bold;
-  }
-  .section.collapsed .accordion-icon{ transform: rotate(-90deg); }
-  .section-body{ 
-    margin-top: 8px;
-    max-height: 2000px;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 1;
-  }
-  .section.collapsed .section-body{ 
-    max-height: 0;
-    opacity: 0;
-  }
-
-  /* Nueva fila de input inline */
-  .input-row {
-    background: linear-gradient(135deg, #F0F9FF, #E0F2FE);
-    border: 2px solid var(--primary);
-    border-radius: 14px;
-    padding: 12px 14px;
-    margin-bottom: 12px;
-    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .input-row-label {
-    font-weight: 900;
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-
-  .input-row-field {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .input-row-monto {
-    flex: 1;
-    padding: 12px 14px;
-    border: 1.5px solid #D1D5DB;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    font-family: inherit;
-    outline: none;
-    transition: all 0.2s ease;
-  }
-
-  .input-row-monto:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(57, 86, 232, 0.1);
-  }
-
-  .input-row-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-
-  .input-row-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 900;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .input-row-btn.cancelar {
-    background: #F3F4F6;
-    color: var(--text);
-  }
-
-  .input-row-btn.guardar {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    box-shadow: 0 4px 12px rgba(57, 86, 232, 0.3);
-  }
-
-  .input-row-btn:active {
-    transform: scale(0.97);
-  }
-
-  /* Swipeable rows */
-  .row-wrapper{
-    position: relative;
-    margin-bottom: 6px;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .row-delete-bg{
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 80px;
-    background: linear-gradient(90deg, transparent, var(--danger));
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 20px;
-    color: white;
-    font-weight: 900;
-    font-size: 0.85rem;
-  }
-
-  .row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding: 12px 10px;
-    font-size: 0.95rem;
-    border-radius: 12px;
-    min-height: var(--tap);
-    background: white;
-    position: relative;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease;
-    cursor: pointer;
-    touch-action: pan-y;
-  }
-  .row:active{ background: #F9FAFB; }
-  .row span:first-child{ font-weight: 600; }
-  .row span:last-child{ font-weight: 900; }
-
-  /* Progress bars */
-  .progress-wrapper{
-    margin-top: 6px;
-    margin-bottom: 2px;
-  }
-  .progress-bar{
-    height: 4px;
-    background: #E5E7EB;
-    border-radius: 999px;
-    overflow: hidden;
-    position: relative;
-  }
-  .progress-fill{
-    height: 100%;
-    border-radius: 999px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
-    background: linear-gradient(90deg, var(--success), #22C55E);
-  }
-  .progress-fill.warning{
-    background: linear-gradient(90deg, var(--warning), #FBBF24);
-  }
-  .progress-fill.danger{
-    background: linear-gradient(90deg, var(--danger), #F87171);
-  }
-  .progress-label{
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-top: 2px;
-    font-weight: 700;
-  }
-
-  /* Category groups */
-  .cat-group{
-    background:#F9FAFB;
-    border-radius: 14px;
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    border: 1px solid rgba(229,231,235,.65);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .cat-group-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    cursor:pointer;
-    padding: 8px 6px;
-    min-height: var(--tap);
-    transition: opacity 0.2s ease;
-  }
-  .cat-group-header:active{
-    opacity: 0.7;
-  }
-  .cat-group-name{ font-size: 0.95rem; font-weight: 900; }
-  .cat-group-summary{ font-size: 0.78rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
-  .cat-group-total{ font-weight: 900; font-size: 0.95rem; }
-  .cat-group-arrow{ font-size: .9rem; margin-left: 8px; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-  .cat-group.collapsed .cat-group-body{ 
-    max-height: 0;
-    opacity: 0;
-  }
-  .cat-group.collapsed .cat-group-arrow{ transform: rotate(-90deg); }
-
-  .cat-group-body{
-    margin-top: 4px;
-    padding-top: 4px;
-    border-top: 1px dashed #E5E7EB;
-    max-height: 2000px;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 1;
-  }
-  .cat-sub-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding: 12px 8px;
-    font-size: 0.88rem;
-    border-radius: 12px;
-    min-height: var(--tap);
-    cursor:pointer;
-    transition: background 0.2s ease;
-  }
-  .cat-sub-row:active{ background: rgba(57,86,232,0.08); }
-  .cat-sub-row span:first-child{ font-weight: 600; }
-  .cat-sub-row span:last-child{ font-weight: 900; }
-
-  /* Totals collapsible */
-  .totals{
-    margin-top: 10px;
-    margin-bottom: 14px;
-    background: linear-gradient(135deg, #E8ECFF, #DDD6FE);
-    padding: 14px 16px;
-    border-radius: 16px;
-    border: 1px solid #C7D2FE;
-    box-shadow: 0 4px 12px rgba(116,89,217,0.12);
-  }
-  .totals-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap: 10px;
-    cursor:pointer;
-    min-height: var(--tap);
-    transition: opacity 0.2s ease;
-  }
-  .totals-top:active{
-    opacity: 0.7;
-  }
-  .totals-title{
-    font-weight: 900;
-    color: #1f2a5a;
-    font-size: 1rem;
-  }
-  .totals-chevron{
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 900;
-  }
-  .totals.collapsed .totals-chevron{ transform: rotate(-90deg); }
-  .totals-body{ 
-    margin-top: 8px;
-    max-height: 1000px;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 1;
-  }
-  .totals.collapsed .totals-body{ 
-    max-height: 0;
-    opacity: 0;
-  }
-  .totals .row{
-    padding: 10px 0;
-    min-height: auto;
-    background: transparent;
-  }
-  .totals .row span:first-child{ color: #4B5563; font-weight: 800; }
-  .totals .row span:last-child{ color: #111827; font-weight: 900; }
-
-  /* Save button */
-  .save{
-    margin-top: 12px;
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
-    color: white;
-    border-radius: 16px;
-    font-size: 1.05rem;
-    font-weight: 900;
-    border: none;
-    cursor: pointer;
-    min-height: 56px;
-    box-shadow: 0 10px 25px rgba(116,89,217,.25);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .save:active{
-    transform: scale(0.98);
-    box-shadow: 0 5px 15px rgba(116,89,217,.3);
-  }
-
-  /* Card base */
-  .card{
-    background: white;
-    padding: 16px;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    margin-bottom: 14px;
-    border: 1px solid rgba(229,231,235,0.6);
-  }
-  .card.comp-card{ margin-top: 14px; }
-
-  .comp-header{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .comp-title{ font-weight: 900; font-size: 1.05rem; letter-spacing: -0.3px; }
-  .chips{ display:flex; gap: 6px; flex-wrap: wrap; justify-content:flex-end; }
-  .chip{
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    background: #FFFFFF;
-    color: var(--muted);
-    min-height: 38px;
-    font-weight: 800;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .chip:active{
-    transform: scale(0.95);
-  }
-  .chip.active{
-    border-color: var(--primary);
-    background: linear-gradient(135deg, #E8ECFF, #DDD6FE);
-    color: var(--primary);
-    box-shadow: 0 2px 8px rgba(57,86,232,0.15);
-  }
-
-  /* Status banner */
-  .status-banner{
-    border-radius: 14px;
-    padding: 12px 12px;
-    font-size: 0.88rem;
-    margin-bottom: 12px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    border: 1px solid;
-  }
-  .status-banner.green{ background:#ECFDF3; color:#15803D; border-color: rgba(21,128,61,0.2); }
-  .status-banner.yellow{ background:#FEF9C3; color:#92400E; border-color: rgba(146,64,14,0.2); }
-  .status-banner.red{ background:#FEF2F2; color:#B91C1C; border-color: rgba(185,28,28,0.2); }
-  .status-banner strong{ font-weight: 900; }
-
-  .mini-summary .row{ font-size: 0.92rem; padding: 10px 0; min-height:auto; }
-  .mini-summary .row span:first-child{ color: var(--muted); font-weight: 800; }
-
-  #miniDiff.diff-positive{ color:#15803D; font-weight: 900; }
-  #miniDiff.diff-negative{ color:#B91C1C; font-weight: 900; }
-
-  /* Chart */
-  .chart-wrap{ 
-    display:block;
-    padding: 10px 0;
-  }
-  .chart-wrap.collapsed{ 
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-  }
-
-  canvas{ max-height: 260px; display:block; margin: 0 auto; }
-
-  .top-deviations{
-    border-top: 1px dashed #E5E7EB;
-    padding-top: 8px;
-    margin-top: 6px;
-    font-size: 0.85rem;
-  }
-  .top-dev-item{
-    display:flex;
-    justify-content:space-between;
-    padding: 10px 0;
-    gap: 10px;
-  }
-  .top-dev-name{ font-weight: 900; }
-  .top-dev-detail{ color: var(--muted); font-size: .78rem; font-weight: 700; margin-top: 2px; }
-  .top-dev-diff.positive{ color:#B91C1C; font-weight: 900; }
-  .top-dev-diff.negative{ color:#15803D; font-weight: 900; }
-
-  /* Modal Categorías */
-  .modal-categorias {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.6);
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-    z-index: 999;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
-  .modal-categorias.open {
-    display: flex;
-    animation: fadeIn 0.2s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .modal-categorias-content {
-    background: #fff;
-    border-radius: 24px 24px 0 0;
-    padding: 1.5rem 0 0;
-    width: 100%;
-    max-width: 100%;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-    max-height: 85vh;
-    overflow-y: auto;
-    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-
-  .modal-cat-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.3rem 1rem;
-    border-bottom: 1px solid #E5E7EB;
-  }
-
-  .modal-cat-title {
-    font-size: 1.2rem;
-    font-weight: 900;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
-
-  .btn-cerrar-cat {
-    background: none;
-    border: none;
-    font-size: 1.8rem;
-    color: var(--muted);
-    cursor: pointer;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-  }
-
-  .btn-cerrar-cat:active {
-    background: #F3F4F6;
-  }
-
-  .bloque-sector-modal {
-    border-bottom: 1px solid #F3F4F6;
-  }
-
-  .encabezado-modal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.3rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-
-  .encabezado-modal:active {
+<style>
+  body {
+    font-family: 'Nunito', sans-serif;
     background: #F9FAFB;
+    margin: 0;
+    padding: 2rem;
+    color: #111827;
   }
 
-  .encabezado-left-modal {
+  .bloque-sector {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    margin: 0 auto 1.5rem;
+    max-width: 700px;
+  }
+
+  .encabezado {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 1.25rem 1rem;
   }
 
-  .encabezado-title-modal {
-    font-size: 1.1rem;
-    font-weight: 900;
-    letter-spacing: -0.3px;
-  }
-
-  .icono-sector-modal {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background-size: 30px;
+  .icono-ingresos,
+  .icono-gastos,
+  .icono-ahorro {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-size: 32px;
     background-repeat: no-repeat;
     background-position: center;
-    flex-shrink: 0;
   }
 
-  .icono-ingresos-modal {
-    background-color: #ECFDF3;
+  .icono-ingresos {
+    background-color: #F4F2FF;
     background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
   }
 
-  .icono-gastos-modal {
-    background-color: #FEF2F2;
+  .icono-gastos {
+    background-color: #F3F4F6;
     background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/gastos.png');
   }
 
-  .icono-ahorro-modal {
-    background-color: #FEF9C3;
+   .icono-ahorro {
+    background-color: #FCFAEA;
     background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ahorro.png');
   }
+  .contenido-bloque {
+    display: none;
+    padding: 1rem 2rem;
+  }
 
-  .chevron-modal {
+  .bloque-sector.abierto .contenido-bloque {
+    display: block;
+  }
+
+  .bloque-categoria {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+  }
+
+  .titulo-categoria {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
     font-size: 1.1rem;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: var(--muted);
-    font-weight: 900;
   }
 
-  .bloque-sector-modal.abierto .chevron-modal {
-    transform: rotate(180deg);
+  .subcategorias {
+    margin-top: 0.75rem;
+    padding-left: 1rem;
+    display: none;
   }
 
-  .contenido-bloque-modal {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  .subcategorias.activo {
+    display: block;
   }
 
-  .bloque-sector-modal.abierto .contenido-bloque-modal {
-    max-height: 2000px;
-  }
-
-  .contenido-inner-modal {
-    padding: 0 1.3rem 1rem;
-  }
-
-  .bloque-categoria-modal {
-    background: #F9FAFB;
-    border-radius: 14px;
-    padding: 1rem 1.1rem;
-    margin-bottom: 0.8rem;
-    border: 1px solid rgba(229, 231, 235, 0.7);
-  }
-
-  .titulo-categoria-modal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    padding: 0.3rem 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .titulo-categoria-modal:active {
-    opacity: 0.7;
-  }
-
-  .titulo-cat-nombre-modal {
-    font-weight: 900;
-    font-size: 1rem;
-    color: var(--text);
-  }
-
-  .subcategorias-modal {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-top: 0;
-  }
-
-  .subcategorias-modal.activo {
-    max-height: 1500px;
-    margin-top: 0.8rem;
-  }
-
-  .fila-sub-modal {
+  .fila {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.9rem 0.8rem;
-    border-radius: 10px;
-    margin-bottom: 0.4rem;
-    background: white;
-    transition: background 0.2s ease;
+    margin-bottom: 0.5rem;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
     cursor: pointer;
-  }
-
-  .fila-sub-modal:active {
-    background: rgba(57,86,232,0.08);
-  }
-
-  .fila-sub-nombre-modal {
-    font-weight: 600;
-    font-size: 0.92rem;
-    color: var(--text);
-  }
-
-  /* Delete confirmation */
-  .delete-confirm{
-    position: fixed;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
-    background: white;
-    padding: 20px;
-    border-radius: 24px 24px 0 0;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
-    z-index: 1000;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .delete-confirm.show{
-    transform: translateY(0);
-  }
-  .delete-confirm-text{
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    color: #111827;
-  }
-  .delete-confirm-actions{
-    display: flex;
-    gap: 10px;
-  }
-  .delete-confirm-actions button{
-    flex: 1;
-    padding: 14px;
-    border: none;
-    border-radius: 14px;
-    font-weight: 900;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .btn-delete-cancel{
-    background: #F3F4F6;
-    color: #111827;
-  }
-  .btn-delete-confirm{
-    background: var(--danger);
-    color: white;
-  }
-  .delete-confirm-actions button:active{
-    transform: scale(0.98);
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
   }
 
-  /* Toast */
-  .toast{
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 30px;
-    background: rgba(15,23,42,.95);
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 999px;
-    font-weight: 900;
-    font-size: .9rem;
-    display:none;
-    z-index: 1100;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  .toast.show{ 
-    display:block;
-    animation: toastIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  @keyframes toastIn {
-    from { 
-      opacity: 0;
-      transform: translateX(-50%) translateY(20px);
-    }
-    to { 
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-  }
-
-  /* Loading state */
-  .loading-overlay{
-    position: fixed;
-    inset: 0;
-    background: rgba(255,255,255,0.9);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-  .loading-overlay.show{
-    display: flex;
-  }
-  .spinner{
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(57,86,232,0.2);
-    border-top-color: var(--primary);
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
   }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
+
+  input:checked + .slider {
+    background-color: #4F46E5;
   }
-  </style>
+
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+
+  .acciones {
+    margin-top: 1rem;
+    text-align: right;
+  }
+
+  .acciones button {
+    background: #7459D9;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+
+  .editable-span {
+    cursor: pointer;
+  }
+
+  .editable-input {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 2px 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .titulo-categoria button,
+  .fila-subcategoria button {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+  }
+      .contenido-bloque {
+      display: none;
+      padding: 1rem 2rem;
+    }
+    .bloque-sector.abierto .contenido-bloque {
+      display: block;
+    }
+  .titulo-categorias {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 1rem 0 2rem 0;
+  padding-left: 1rem;
+}
+.modal-subcategoria {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  display: none;
+}
+
+.modal-subcategoria.abierto {
+  display: flex;
+}
+
+.modal-contenido {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-contenido h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  color: #111827;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.modal-contenido label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  margin-top: 1rem;
+  color: #111827;
+}
+
+.modal-contenido input,
+.modal-contenido select,
+.modal-contenido textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 0.5rem;
+}
+
+.modal-contenido textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: center; /* Centra ambos botones */
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.modal-botones .cancelar {
+  background: #F8F6FF !important;
+  color: #4B0082 !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+}
+
+.modal-botones .guardar {
+  background: #3956E8 !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  color: #64748B;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+    button.cancelar {
+    background: #E8C7FF !important;
+    color: #4B0082 !important;
+  }
+  button.guardar {
+    background: #3956E8 !important;
+    color: white !important;
+  }
+.pildora-recurrencia {
+ background: #ECFDF3;         
+ color: #00AC4F;  
+ font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  margin-left: 0.4rem;
+  display: inline-block;
+}
+</style>
 </head>
-
 <body>
-  <!-- STICKY HEADER -->
-  <div class="sticky-wrap">
-    <div class="top">
-      <h1>Presupuesto</h1>
-      <div class="toggle" id="toggleTipo">
-        <span data-tipo="mensual" class="active">Mensual</span>
-        <span data-tipo="anual">Anual</span>
+<section class="seccion-categorias">
+  <h3 class="titulo-categorias">Lista de Categorías</h3>
+<!-- INGRESOS -->
+<div class="bloque-sector">
+  <div class="encabezado" onclick="toggleBloque(this)">
+    <div class="icono-ingresos"></div>
+    <span>Ingresos</span>
+  </div>
+  <div class="contenido-bloque">
+
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Pago por trabajo</span>
+        <button style="display:none;"></button> <!-- botón oculto -->
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Bono"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Bono</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Comisión"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Comisión</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Negocio propio"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Negocio propio</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Pago por hora"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Pago por hora</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Propina"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Propina</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Salario"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Salario</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="acciones">
+          <button onclick="anadirSubcategoria(this)">+ Subcategoría</button>
+        </div>
       </div>
     </div>
 
-    <select class="select-month" id="selectMonth">
-      <option>Enero 2025</option>
-      <option>Febrero 2025</option>
-      <option>Marzo 2025</option>
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Ganancia de capital</span>
+        <button style="display:none;"></button> <!-- botón oculto -->
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Acciones"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Acciones</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Auto"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Auto</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Bonos o renta fija"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Bonos o renta fija</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Casa/Apartamento/Tierra"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Casa/Apartamento/Tierra</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="ETF, fondo mutuo, etc."
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">ETF, fondo mutuo, etc.</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+
+        <div class="acciones">
+          <button onclick="anadirSubcategoria(this)">+ Subcategoría</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bloque-categoria">
+      <div class="titulo-categoria" onclick="toggleSubcategorias(this)">
+        <span>Ingreso pasivo</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="subcategorias">
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Anualidad"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Anualidad</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Dividendos e Intereses"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Dividendos e Intereses</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Pensión"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Pensión</span>
+  <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Renta inmueble"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Renta inmueble</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+<div class="fila">
+  <span class="editable-span"
+        data-nombre="Seguro Social"
+        data-recurrencia=""
+        data-monto=""
+        data-descripcion="">Seguro Social</span>
+  <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+</div>
+
+        <div class="acciones">
+          <button onclick="anadirSubcategoria(this)">+ Subcategoría</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- GASTOS -->
+  <div class="bloque-sector">
+    <div class="bloque-gastos">
+      <div class="encabezado" onclick="toggleBloque(this)">
+        <div class="icono-gastos"></div>
+        <span>Gastos</span>
+      </div>
+      <div class="contenido-bloque">
+        <div id="contenedorGastos"></div>
+        <div class="acciones">
+          <button onclick="anadirCategoria()">+ Categoría</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- AHORRO -->
+  <div class="bloque-sector">
+  <div class="bloque-ahorro">
+    <div class="encabezado" onclick="toggleBloque(this)">
+      <div class="icono-ahorro"></div>
+      <span>Ahorro</span>
+    </div>
+    <div class="contenido-bloque">
+      <div id="contenedorAhorro"></div>
+      <div class="acciones">
+        <button onclick="anadirCategoriaAhorro()">+ Categoría</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- MODAL SUBCATEGORIAS -->
+  <div id="modalSubcategoria" class="modal-subcategoria">
+  <div class="modal-contenido">
+  <h3>Subcategoría</h3>
+
+    <label for="nombreSub">Nombre</label>
+    <input type="text" id="nombreSub" placeholder="Ej. Comisión extra" />
+
+    <label for="inputRecurrencia">Recurrencia</label>
+    <select id="inputRecurrencia">
+      <option value="">Ninguna</option>
+      <option value="diario">Diario</option>
+      <option value="semanal">Semanal</option>
+      <option value="quincenal">Quincenal</option>
+      <option value="mensual">Mensual</option>
+      <option value="anual">Anual</option>
     </select>
-  </div>
 
-  <main class="page">
+<div id="grupoMonto" style="display: none;">
+  <label for="montoRecurrencia">Monto</label>
+  <input type="number" id="montoRecurrencia" placeholder="$0.00" />
+</div>
 
-    <!-- SECCION INGRESOS -->
-    <section class="section ingresos collapsed">
-      <div class="section-header-row accordion-header" data-area="ingresos">
-        <div>
-          <div class="section-header">Ingresos</div>
-          <div class="section-label">Lo que entra en el periodo</div>
-        </div>
-        <div class="accordion-right">
-          <button class="btn-add-section" onclick="abrirModalCategorias(event, 'ingresos')">+</button>
-          <span class="accordion-icon">⌄</span>
-        </div>
-      </div>
-      <div class="section-body">
-        <div id="listaIngresos"></div>
-      </div>
-    </section>
+    <label for="descripcion">Descripción (opcional)</label>
+    <textarea id="descripcion" placeholder="Descripción breve..."></textarea>
 
-    <!-- SECCION GASTOS -->
-    <section class="section gastos collapsed">
-      <div class="section-header-row accordion-header" data-area="gastos">
-        <div>
-          <div class="section-header">Gastos</div>
-          <div class="section-label">Lo que sale en el periodo</div>
-        </div>
-        <div class="accordion-right">
-          <button class="btn-add-section" onclick="abrirModalCategorias(event, 'gastos')">+</button>
-          <span class="accordion-icon">⌄</span>
-        </div>
-      </div>
-      <div class="section-body">
-        <div id="listaGastos"></div>
-      </div>
-    </section>
-
-    <!-- SECCION AHORRO -->
-    <section class="section ahorro collapsed">
-      <div class="section-header-row accordion-header" data-area="ahorro">
-        <div>
-          <div class="section-header">Ahorro</div>
-          <div class="section-label">Lo que apartas del ingreso</div>
-        </div>
-        <div class="accordion-right">
-          <button class="btn-add-section" onclick="abrirModalCategorias(event, 'ahorro')">+</button>
-          <span class="accordion-icon">⌄</span>
-        </div>
-      </div>
-      <div class="section-body">
-        <div id="listaAhorro"></div>
-      </div>
-    </section>
-
-    <!-- TOTALES (COLLAPSIBLE) -->
-    <section class="totals collapsed" id="totalsCard">
-      <div class="totals-top" id="totalsToggle">
-        <div class="totals-title">Totales del periodo</div>
-        <div class="totals-chevron">⌄</div>
-      </div>
-      <div class="totals-body" id="totalsBody">
-        <div class="row">
-          <span>Total ingresos</span>
-          <span id="totalIngresos">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Total gastos</span>
-          <span id="totalGastos">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Total ahorro</span>
-          <span id="totalAhorro">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Disponible</span>
-          <span id="totalDisponible">$0.00</span>
-        </div>
-      </div>
-    </section>
-
-    <button class="save" id="btnGuardar">💾 Guardar presupuesto</button>
-
-    <!-- COMPARATIVO -->
-    <section class="card comp-card">
-      <div class="comp-header">
-        <div class="comp-title">Presupuesto vs Real</div>
-        <div class="chips" id="chipsArea">
-          <button class="chip active" data-area="ingresos">Ingresos</button>
-          <button class="chip" data-area="gastos">Gastos</button>
-          <button class="chip" data-area="ahorro">Ahorro</button>
-        </div>
-      </div>
-
-      <div id="statusBanner" class="status-banner green">
-        <span><strong>Vas bien.</strong> Por debajo del presupuesto.</span>
-        <span id="bannerPct">90%</span>
-      </div>
-
-      <div class="mini-summary">
-        <div class="row">
-          <span>Presupuesto</span>
-          <span id="miniPres">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Real</span>
-          <span id="miniReal">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Diferencia</span>
-          <span id="miniDiff">$0.00</span>
-        </div>
-      </div>
-
-      <div class="chart-wrap" id="chartWrap">
-        <canvas id="barComp"></canvas>
-      </div>
-
-      <div class="top-deviations" id="topDeviations"></div>
-    </section>
-  </main>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">Guardado ✅</div>
-
-  <!-- Loading overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-  </div>
-
-  <!-- Delete confirmation -->
-  <div class="delete-confirm" id="deleteConfirm">
-    <div class="delete-confirm-text">¿Eliminar este elemento?</div>
-    <div class="delete-confirm-actions">
-      <button class="btn-delete-cancel" id="btnDeleteCancel">Cancelar</button>
-      <button class="btn-delete-confirm" id="btnDeleteConfirm">Eliminar</button>
+    <div class="modal-botones">
+      <button class="cancelar" onclick="cerrarModalSubcategoria()">Cancelar</button>
+      <button class="guardar" onclick="guardarSubcategoria()">Guardar</button>
     </div>
   </div>
+</div>
 
-  <!-- MODAL CATEGORÍAS -->
-  <div class="modal-categorias" id="modalCategorias">
-    <div class="modal-categorias-content">
-      <div class="modal-cat-header">
-        <span class="modal-cat-title">Selecciona una categoría</span>
-        <button class="btn-cerrar-cat" onclick="cerrarModalCategorias()">×</button>
-      </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Cierra todos los bloques al iniciar
+    document.querySelectorAll('.bloque-sector').forEach(b => b.classList.remove('abierto'));
 
-      <!-- INGRESOS -->
-      <div class="bloque-sector-modal">
-        <div class="encabezado-modal" onclick="toggleBloqueModal(this)">
-          <div class="encabezado-left-modal">
-            <div class="icono-sector-modal icono-ingresos-modal"></div>
-            <span class="encabezado-title-modal">Ingresos</span>
-          </div>
-          <span class="chevron-modal">⌄</span>
-        </div>
-        <div class="contenido-bloque-modal">
-          <div class="contenido-inner-modal" id="contenedorIngresosModal"></div>
-        </div>
-      </div>
+      function toggleBloque(encabezado) {
+    const parent = encabezado.closest('.bloque-sector');
+    document.querySelectorAll('.bloque-sector').forEach(b => {
+      if (b !== parent) b.classList.remove('abierto');
+    });
+    parent.classList.toggle('abierto');
+  }
 
-      <!-- GASTOS -->
-      <div class="bloque-sector-modal">
-        <div class="encabezado-modal" onclick="toggleBloqueModal(this)">
-          <div class="encabezado-left-modal">
-            <div class="icono-sector-modal icono-gastos-modal"></div>
-            <span class="encabezado-title-modal">Gastos</span>
-          </div>
-          <span class="chevron-modal">⌄</span>
-        </div>
-        <div class="contenido-bloque-modal">
-          <div class="contenido-inner-modal" id="contenedorGastosModal"></div>
-        </div>
-      </div>
+    // Añade evento a todos los encabezados
+    document.querySelectorAll('.encabezado').forEach(header => {
+      header.addEventListener('click', () => toggleBloque(header));
+    });
 
-      <!-- AHORRO -->
-      <div class="bloque-sector-modal">
-        <div class="encabezado-modal" onclick="toggleBloqueModal(this)">
-          <div class="encabezado-left-modal">
-            <div class="icono-sector-modal icono-ahorro-modal"></div>
-            <span class="encabezado-title-modal">Ahorro</span>
-          </div>
-          <span class="chevron-modal">⌄</span>
-        </div>
-        <div class="contenido-bloque-modal">
-          <div class="contenido-inner-modal" id="contenedorAhorroModal"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+    // Carga categorías de gastos predefinidas
+    Object.entries(categoriasGastos).forEach(([categoria, subcategorias]) => {
+      agregarCategoria(categoria, subcategorias, false);
+    });
+  });
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
-  <script>
-    // Datos de categorías
-    const categorias = {
-      ingresos: {
-        'Pago por trabajo': ['Salario', 'Pago por hora', 'Bono', 'Comisión', 'Negocio propio', 'Propina'],
-        'Ganancia de capital': ['Acciones', 'Auto', 'Bonos o renta fija', 'Casa/Apartamento/Tierra', 'ETF, fondo mutuo, etc.'],
-        'Ingreso pasivo': ['Anualidad', 'Dividendos e Intereses', 'Pensión', 'Renta inmueble', 'Seguro Social']
-      },
-      gastos: {
-        'Alimentación': ['Supermercado', 'Comidas fuera', 'Pedido a domicilio'],
-        'Casa': ['Hipoteca / Alquiler', 'Servicios básicos', 'Mantenimiento'],
-        'Impuestos': ['Seguro social', 'Propiedad', 'Venta', 'Estatales', 'Federales', 'Municipales'],
-        'Transportación': ['Gasolina', 'Mantenimiento', 'Transporte público / Uber'],
-        'Seguros': ['Salud', 'Auto', 'Vida'],
-        'Regalos y donaciones': ['Familia', 'Amigos', 'Instituciones'],
-        'Gastos Médicos': ['Consultas', 'Medicamentos', 'Procedimientos'],
-        'Cuidado Personal': ['Peluquería', 'Cosméticos', 'Spa / Barbería'],
-        'Dependientes': ['Cuidado de niños', 'Cuidado de mayores', 'Educación'],
-        'Deuda': ['Tarjetas de crédito', 'Préstamos estudiantiles', 'Otros préstamos'],
-        'Entretenimiento': ['Cine', 'Conciertos', 'Streaming'],
-        'Telecomunicaciones': ['Teléfono', 'Internet', 'TV']
-      },
-      ahorro: {
-        'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
-        'Meta específica': ['Vacaciones', 'Auto', 'Casa', 'Boda', 'Educación de hijos'],
-        'Inversión': ['Cuenta brokerage', 'Fondo indexado', 'Cripto', 'Crowdfunding'],
-        'Retiro': ['IRA / Roth IRA', '401(k)', 'Pensión privada'],
-        'Ahorro personal': ['Ahorro mensual', 'Ahorro en efectivo', 'Cuenta de ahorro tradicional'],
-        'Ahorro para hijos': ['Educación', 'Regalos futuros', 'Fondo universitario'],
-        'Otros': ['Donaciones planificadas', 'Proyectos personales', 'Fondo de libertad financiera']
+  function toggleSubcategorias(element) {
+    const all = document.querySelectorAll('.subcategorias');
+    all.forEach(sc => {
+      if (sc !== element.nextElementSibling) sc.classList.remove('activo');
+    });
+    element.nextElementSibling.classList.toggle('activo');
+  }
+
+  function activarEdicion(span) {
+    const texto = span.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = texto;
+    input.className = 'editable-input';
+    input.onblur = input.onkeydown = function (e) {
+      if (e.type === 'blur' || e.key === 'Enter') {
+        const nuevoTexto = input.value.trim();
+        span.textContent = nuevoTexto || texto;
+        span.style.display = 'inline';
+        input.remove();
       }
     };
+    span.parentNode.insertBefore(input, span);
+    input.focus();
+    span.style.display = 'none';
+  }
 
-    // -----------------------------
-    // DATOS (BASE MENSUAL) - VACÍO
-    // -----------------------------
-    const demoData = {
-      tipo: "mensual",
-      presupuesto: {
-        ingresos: [],
-        gastos: [],
-        ahorro: []
-      },
-      real: {
-        ingresos: [],
-        gastos: [],
-        ahorro: []
-      }
-    };
+  // Categorías y subcategorías predefinidas de GASTOS
+  const categoriasGastos = {
+    'Alimentación': ['Supermercado', 'Comidas fuera', 'Pedido a domicilio'],
+    'Casa': ['Hipoteca / Alquiler', 'Servicios básicos', 'Mantenimiento'],
+    'Impuestos': ['Seguro social', 'Propiedad', 'Venta', 'Estatales', 'Federales', 'Municipales'],
+    'Transportación': ['Gasolina', 'Mantenimiento', 'Transporte público / Uber'],
+    'Seguros': ['Salud', 'Auto', 'Vida'],
+    'Regalos y donaciones': ['Familia', 'Amigos', 'Instituciones'],
+    'Gastos Médicos': ['Consultas', 'Medicamentos', 'Procedimientos'],
+    'Cuidado Personal': ['Peluquería', 'Cosméticos', 'Spa / Barbería'],
+    'Dependientes': ['Cuidado de niños', 'Cuidado de mayores', 'Educación'],
+    'Deuda': ['Tarjetas de crédito', 'Préstamos estudiantiles', 'Otros préstamos'],
+    'Entretenimiento': ['Cine', 'Conciertos', 'Streaming'],
+    'Telecomunicaciones': ['Teléfono', 'Internet', 'TV']
+  };
 
-    let tipoActual = "mensual";
-    let areaComparativa = "ingresos";
-    let chartComp = null;
+  const contenedor = document.getElementById('contenedorGastos');
 
-    let categoriaSeleccionada = null;
-    let subcategoriaSeleccionada = null;
-    let areaSeleccionada = null;
+  function agregarCategoria(nombre, subcategorias = [], editable = false) {
+    const div = document.createElement('div');
+    div.className = 'bloque-categoria';
 
-    let deleteTarget = null;
+    const titulo = document.createElement('div');
+    titulo.className = 'titulo-categoria';
+    titulo.onclick = () => toggleSubcategorias(titulo);
 
-    function factorTipo(){ return tipoActual === "anual" ? 12 : 1; }
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
 
-    function formatear(monto){
-      return "$" + monto.toLocaleString("es-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+    if (editable) {
+      const borrar = document.createElement('button');
+      borrar.textContent = '✖';
+      borrar.onclick = e => {
+        e.stopPropagation();
+        div.remove();
+      };
+      contenedorIzq.appendChild(borrar);
     }
 
-    function sumarLista(lista){
-      const f = factorTipo();
-      return lista.reduce((acc, item) => acc + item.monto * f, 0);
-    }
+    const nombreSpan = document.createElement('span');
+    nombreSpan.textContent = nombre;
+    contenedorIzq.appendChild(nombreSpan);
 
-    function getProgressColor(pct, isExpense = false){
-      if (isExpense){
-        if (pct <= 75) return '';
-        if (pct <= 90) return 'warning';
-        return 'danger';
-      } else {
-        if (pct >= 90) return '';
-        if (pct >= 70) return 'warning';
-        return 'danger';
-      }
-    }
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
 
-    function enableSwipe(element, onDelete){
-      let startX = 0;
-      let currentX = 0;
-      let isDragging = false;
+    titulo.appendChild(contenedorIzq);
+    titulo.appendChild(switchLabel);
 
-      element.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-      });
+    const subDiv = document.createElement('div');
+    subDiv.className = 'subcategorias';
 
-      element.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        currentX = e.touches[0].clientX;
-        const diff = startX - currentX;
-        
-        if (diff > 0 && diff < 100) {
-          element.style.transform = `translateX(-${diff}px)`;
-        }
-      });
+     subcategorias.forEach(sub => {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
 
-      element.addEventListener('touchend', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        const diff = startX - currentX;
-        if (diff > 80) {
-          onDelete();
-        }
-        
-        element.style.transform = '';
-      });
-    }
+      const contenedorIzq = document.createElement('div');
+      contenedorIzq.style.display = 'flex';
+      contenedorIzq.style.alignItems = 'center';
+      contenedorIzq.style.gap = '0.5rem';
 
-    function renderArea(area, contId){
-      const f = factorTipo();
-      const cont = document.getElementById(contId);
-      
-      // Remover solo los elementos que no son input-row
-      const existingInputRow = cont.querySelector('.input-row');
-      cont.innerHTML = "";
-      
-      // Si había un input-row, volver a agregarlo al inicio
-      if (existingInputRow) {
-        cont.appendChild(existingInputRow);
-      }
-      
-      const lista = demoData.presupuesto[area];
+      const span = document.createElement('span');
+      span.className = 'editable-span';
+      span.innerHTML = sub;
+      span.setAttribute('data-nombre', sub);
+      span.setAttribute('data-recurrencia', '');
+      span.setAttribute('data-monto', '');
+      span.setAttribute('data-descripcion', '');
 
-      const mapaReal = {};
-      demoData.real[area].forEach(r => {
-        mapaReal[r.categoria] = (mapaReal[r.categoria] || 0) + r.monto * f;
-      });
+      span.onclick = (e) => {
+        e.stopPropagation();
+        abrirModalSubcategoria(
+          span.getAttribute('data-nombre') || '',
+          (data) => {
+            if (!data.nombre) return;
 
-      const grupos = {};
-      lista.forEach((item, index) => {
-        const cat = item.categoria;
-        if (!grupos[cat]) grupos[cat] = { total: 0, items: [], real: 0 };
-        grupos[cat].total += item.monto * f;
-        grupos[cat].real = mapaReal[cat] || 0;
-        grupos[cat].items.push({ ...item, __index: index });
-      });
+            span.innerHTML = data.recurrencia
+              ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+              : data.nombre;
 
-      Object.keys(grupos).forEach(cat => {
-        const grupo = grupos[cat];
-
-        if (grupo.items.length === 1){
-          const item = grupo.items[0];
-          const wrapper = document.createElement("div");
-          wrapper.className = "row-wrapper";
-
-          const deleteBg = document.createElement("div");
-          deleteBg.className = "row-delete-bg";
-          deleteBg.textContent = "Eliminar";
-
-          const row = document.createElement("div");
-          row.className = "row";
-          row.dataset.area = area;
-          row.dataset.index = item.__index;
-
-          const labelSpan = document.createElement("span");
-          labelSpan.textContent = item.label || item.categoria;
-
-          const montoSpan = document.createElement("span");
-          montoSpan.textContent = formatear(item.monto * f);
-
-          row.appendChild(labelSpan);
-          row.appendChild(montoSpan);
-
-          enableSwipe(row, () => {
-            deleteTarget = { area, index: item.__index };
-            document.getElementById('deleteConfirm').classList.add('show');
-          });
-
-          wrapper.appendChild(deleteBg);
-          wrapper.appendChild(row);
-
-          if (area === 'gastos' && grupo.real > 0) {
-            const pct = Math.min((grupo.real / grupo.total) * 100, 100);
-            const progressWrap = document.createElement('div');
-            progressWrap.className = 'progress-wrapper';
-            progressWrap.innerHTML = `
-              <div class="progress-bar">
-                <div class="progress-fill ${getProgressColor(pct, true)}" style="width: ${pct}%"></div>
-              </div>
-              <div class="progress-label">${Math.round(pct)}% del presupuesto</div>
-            `;
-            wrapper.appendChild(progressWrap);
+            span.setAttribute('data-nombre', data.nombre);
+            span.setAttribute('data-recurrencia', data.recurrencia || '');
+            span.setAttribute('data-monto', data.monto || '');
+            span.setAttribute('data-descripcion', data.descripcion || '');
+          },
+          {
+            nombre: span.getAttribute('data-nombre') || '',
+            recurrencia: span.getAttribute('data-recurrencia') || '',
+            monto: span.getAttribute('data-monto') || '',
+            descripcion: span.getAttribute('data-descripcion') || ''
           }
-
-          cont.appendChild(wrapper);
-          return;
-        }
-
-        const groupDiv = document.createElement("div");
-        groupDiv.className = "cat-group collapsed";
-
-        const header = document.createElement("div");
-        header.className = "cat-group-header";
-
-        const titleDiv = document.createElement("div");
-        titleDiv.className = "cat-group-title";
-
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "cat-group-name";
-        nameSpan.textContent = cat;
-
-        const summarySpan = document.createElement("span");
-        summarySpan.className = "cat-group-summary";
-        summarySpan.textContent = `${grupo.items.length} partida(s)`;
-
-        titleDiv.appendChild(nameSpan);
-        titleDiv.appendChild(summarySpan);
-
-        const rightDiv = document.createElement("div");
-        const totalSpan = document.createElement("span");
-        totalSpan.className = "cat-group-total";
-        totalSpan.textContent = formatear(grupo.total);
-
-        const arrowSpan = document.createElement("span");
-        arrowSpan.className = "cat-group-arrow";
-        arrowSpan.textContent = "⌄";
-
-        rightDiv.appendChild(totalSpan);
-        rightDiv.appendChild(arrowSpan);
-
-        header.appendChild(titleDiv);
-        header.appendChild(rightDiv);
-
-        const body = document.createElement("div");
-        body.className = "cat-group-body";
-
-        grupo.items.forEach(item => {
-          const wrapper = document.createElement("div");
-          wrapper.className = "row-wrapper";
-
-          const deleteBg = document.createElement("div");
-          deleteBg.className = "row-delete-bg";
-          deleteBg.textContent = "Eliminar";
-
-          const subRow = document.createElement("div");
-          subRow.className = "cat-sub-row";
-          subRow.dataset.area = area;
-          subRow.dataset.index = item.__index;
-
-          const labelSpan = document.createElement("span");
-          let subLabel = "";
-          if (item.label){
-            const parts = item.label.split(" – ");
-            subLabel = parts.length > 1 ? parts.slice(1).join(" – ") : item.label;
-          } else {
-            subLabel = item.categoria;
-          }
-          labelSpan.textContent = subLabel;
-
-          const montoSpan = document.createElement("span");
-          montoSpan.textContent = formatear(item.monto * f);
-
-          subRow.appendChild(labelSpan);
-          subRow.appendChild(montoSpan);
-
-          enableSwipe(subRow, () => {
-            deleteTarget = { area, index: item.__index };
-            document.getElementById('deleteConfirm').classList.add('show');
-          });
-
-          wrapper.appendChild(deleteBg);
-          wrapper.appendChild(subRow);
-          body.appendChild(wrapper);
-        });
-
-        if (area === 'gastos' && grupo.real > 0) {
-          const pct = Math.min((grupo.real / grupo.total) * 100, 100);
-          const progressWrap = document.createElement('div');
-          progressWrap.className = 'progress-wrapper';
-          progressWrap.style.marginTop = '8px';
-          progressWrap.innerHTML = `
-            <div class="progress-bar">
-              <div class="progress-fill ${getProgressColor(pct, true)}" style="width: ${pct}%"></div>
-            </div>
-            <div class="progress-label">${Math.round(pct)}% del presupuesto · Real: ${formatear(grupo.real)}</div>
-          `;
-          body.appendChild(progressWrap);
-        }
-
-        header.addEventListener("click", () => groupDiv.classList.toggle("collapsed"));
-        groupDiv.appendChild(header);
-        groupDiv.appendChild(body);
-        cont.appendChild(groupDiv);
-      });
-    }
-
-    function mostrarInputInline(area, categoria, subcategoria) {
-      const contId = area === 'ingresos' ? 'listaIngresos' : 
-                     area === 'gastos' ? 'listaGastos' : 'listaAhorro';
-      const cont = document.getElementById(contId);
-      
-      // Remover cualquier input-row existente
-      const existingInputRow = cont.querySelector('.input-row');
-      if (existingInputRow) {
-        existingInputRow.remove();
-      }
-      
-      // Crear nueva fila de input
-      const inputRow = document.createElement('div');
-      inputRow.className = 'input-row';
-      
-      const label = `${categoria} – ${subcategoria}`;
-      
-      inputRow.innerHTML = `
-        <div class="input-row-label">${label}</div>
-        <div class="input-row-field">
-          <input type="number" 
-                 class="input-row-monto" 
-                 id="inputMonto${area}" 
-                 placeholder="0.00" 
-                 step="0.01"
-                 inputmode="decimal"
-                 autofocus>
-        </div>
-        <div class="input-row-actions">
-          <button class="input-row-btn cancelar" onclick="cancelarInput('${area}')">Cancelar</button>
-          <button class="input-row-btn guardar" onclick="guardarInput('${area}', '${categoria}', '${subcategoria}')">Guardar</button>
-        </div>
-      `;
-      
-      // Insertar al inicio
-      cont.insertBefore(inputRow, cont.firstChild);
-      
-      // Enfocar el input
-      setTimeout(() => {
-        document.getElementById(`inputMonto${area}`).focus();
-      }, 100);
-    }
-
-    function cancelarInput(area) {
-      const contId = area === 'ingresos' ? 'listaIngresos' : 
-                     area === 'gastos' ? 'listaGastos' : 'listaAhorro';
-      const cont = document.getElementById(contId);
-      const inputRow = cont.querySelector('.input-row');
-      if (inputRow) {
-        inputRow.remove();
-      }
-    }
-
-    function guardarInput(area, categoria, subcategoria) {
-      const input = document.getElementById(`inputMonto${area}`);
-      const valor = parseFloat(input.value);
-      
-      if (!valor || valor <= 0) {
-        showToast('⚠️ Ingresa un monto válido');
-        return;
-      }
-
-      const f = factorTipo();
-      const label = `${categoria} – ${subcategoria}`;
-      const montoMensual = valor / f;
-
-      demoData.presupuesto[area].push({
-        categoria: categoria,
-        label: label,
-        monto: montoMensual
-      });
-
-      // Remover el input row
-      cancelarInput(area);
-      
-      showLoading();
-      setTimeout(() => {
-        renderSecciones();
-        renderTotales();
-        renderComparativo();
-        hideLoading();
-        showToast(`✅ ${subcategoria}: ${formatear(valor)}`);
-      }, 200);
-    }
-
-    function renderSecciones(){
-      renderArea("ingresos", "listaIngresos");
-      renderArea("gastos", "listaGastos");
-      renderArea("ahorro", "listaAhorro");
-    }
-
-    function renderTotales(){
-      const tIng = sumarLista(demoData.presupuesto.ingresos);
-      const tGas = sumarLista(demoData.presupuesto.gastos);
-      const tAh  = sumarLista(demoData.presupuesto.ahorro);
-      const disp = tIng - tGas - tAh;
-
-      const totalIngresosEl = document.getElementById("totalIngresos");
-      const totalGastosEl = document.getElementById("totalGastos");
-      const totalAhorroEl = document.getElementById("totalAhorro");
-      const totalDisponibleEl = document.getElementById("totalDisponible");
-
-      if (totalIngresosEl) totalIngresosEl.textContent = formatear(tIng);
-      if (totalGastosEl) totalGastosEl.textContent = formatear(tGas);
-      if (totalAhorroEl) totalAhorroEl.textContent = formatear(tAh);
-      if (totalDisponibleEl) totalDisponibleEl.textContent = formatear(disp);
-    }
-
-    function actualizarBanner(pres, real, area){
-      const banner = document.getElementById("statusBanner");
-      if (!banner) return;
-
-      banner.classList.remove("green","yellow","red");
-
-      if (!pres || pres === 0){
-        banner.classList.add("yellow");
-        banner.innerHTML = `<span>Sin presupuesto en esta área.</span><span></span>`;
-        return;
-      }
-
-      const diff = real - pres;
-      const ratio = real / pres;
-      const pct = Math.round(ratio * 100);
-
-      const umbral = pres * 0.05;
-      const dentroRango = Math.abs(diff) <= umbral;
-      let texto = "";
-
-      if (area === "ingresos"){
-        if (diff > umbral){ banner.classList.add("green"); texto = "<strong>Ingresos arriba.</strong> Ganaste más de lo planificado."; }
-        else if (dentroRango){ banner.classList.add("yellow"); texto = "<strong>Cerca de lo planificado.</strong>"; }
-        else { banner.classList.add("red"); texto = "<strong>Ingresos abajo.</strong> Entró menos de lo esperado."; }
-      } else if (area === "gastos"){
-        if (diff < -umbral){ banner.classList.add("green"); texto = "<strong>Vas bien.</strong> Gasto por debajo del presupuesto."; }
-        else if (dentroRango){ banner.classList.add("yellow"); texto = "<strong>Casi al límite.</strong> Muy cerca del presupuesto."; }
-        else { banner.classList.add("red"); texto = "<strong>Te pasaste.</strong> Gasto por encima del presupuesto."; }
-      } else {
-        if (diff > umbral){ banner.classList.add("green"); texto = "<strong>Buen trabajo.</strong> Ahorro por encima de lo planificado."; }
-        else if (dentroRango){ banner.classList.add("yellow"); texto = "<strong>Cerca de la meta.</strong>"; }
-        else { banner.classList.add("red"); texto = "<strong>Ahorro bajo.</strong> Estás ahorrando menos de lo planeado."; }
-      }
-
-      banner.innerHTML = `<span>${texto}</span><span id="bannerPct">${pct}%</span>`;
-    }
-
-    function renderTopDeviations(){
-      const cont = document.getElementById("topDeviations");
-      cont.innerHTML = "";
-
-      if (areaComparativa !== "gastos"){
-        cont.style.display = "none";
-        return;
-      }
-
-      const f = factorTipo();
-      cont.style.display = "block";
-
-      const mapaPres = {};
-      demoData.presupuesto.gastos.forEach(g => mapaPres[g.categoria] = (mapaPres[g.categoria] || 0) + g.monto * f);
-
-      const mapaReal = {};
-      demoData.real.gastos.forEach(g => mapaReal[g.categoria] = (mapaReal[g.categoria] || 0) + g.monto * f);
-
-      const categorias = new Set([...Object.keys(mapaPres), ...Object.keys(mapaReal)]);
-      const desviaciones = [];
-
-      categorias.forEach(cat => {
-        const pres = mapaPres[cat] || 0;
-        const real = mapaReal[cat] || 0;
-        const diff = real - pres;
-        if (Math.abs(diff) > 0) desviaciones.push({ cat, pres, real, diff });
-      });
-
-      desviaciones.sort((a,b) => Math.abs(b.diff) - Math.abs(a.diff));
-      const top = desviaciones.slice(0,3);
-
-      if (top.length === 0){
-        cont.innerHTML = "<div class='top-dev-detail'>Sin desviaciones relevantes.</div>";
-        return;
-      }
-
-      top.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "top-dev-item";
-
-        const left = document.createElement("div");
-        left.innerHTML = `
-          <div class="top-dev-name">${item.cat}</div>
-          <div class="top-dev-detail">Pres: ${formatear(item.pres)} · Real: ${formatear(item.real)}</div>
-        `;
-
-        const diffSpan = document.createElement("div");
-        diffSpan.className = "top-dev-diff " + (item.diff > 0 ? "positive" : "negative");
-        const signo = item.diff > 0 ? "+" : "-";
-        diffSpan.textContent = signo + formatear(Math.abs(item.diff));
-
-        row.appendChild(left);
-        row.appendChild(diffSpan);
-        cont.appendChild(row);
-      });
-    }
-
-    function renderComparativo(){
-      const f = factorTipo();
-      const presLista = demoData.presupuesto[areaComparativa];
-      const realLista = demoData.real[areaComparativa];
-
-      const totalPres = sumarLista(presLista);
-      const totalReal = realLista.reduce((acc, item) => acc + item.monto * f, 0);
-
-      const diffRaw = totalReal - totalPres;
-      let diffVisual = diffRaw;
-      if (areaComparativa === "gastos") diffVisual = totalPres - totalReal;
-
-      const miniPresEl = document.getElementById("miniPres");
-      const miniRealEl = document.getElementById("miniReal");
-      const diffSpan = document.getElementById("miniDiff");
-
-      if (miniPresEl) miniPresEl.textContent = formatear(totalPres);
-      if (miniRealEl) miniRealEl.textContent = formatear(totalReal);
-
-      if (diffSpan) {
-        diffSpan.classList.remove("diff-positive","diff-negative");
-
-        if (diffVisual === 0){
-          diffSpan.textContent = formatear(0);
-        } else {
-          const signo = diffVisual > 0 ? "+" : "-";
-          diffSpan.textContent = signo + formatear(Math.abs(diffVisual));
-          diffSpan.classList.add(diffVisual > 0 ? "diff-positive" : "diff-negative");
-        }
-      }
-
-      actualizarBanner(totalPres, totalReal, areaComparativa);
-
-      const canvas = document.getElementById("barComp");
-      if (!canvas) return;
-
-      const ctx = canvas.getContext("2d");
-      if (chartComp) chartComp.destroy();
-
-      const remaining = totalPres - totalReal;
-      const colorPres = areaComparativa === 'gastos' ? '#F97316' : 
-                        areaComparativa === 'ingresos' ? '#22C55E' : '#3B82F6';
-      const colorReal = '#9333EA';
-
-      chartComp = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-          labels: ["Real", "Restante"],
-          datasets: [{
-            data: [totalReal, Math.max(0, remaining)],
-            backgroundColor: [colorReal, 'rgba(229,231,235,0.5)'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          cutout: '70%',
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  return context.label + ': ' + formatear(context.parsed);
-                }
-              }
-            }
-          }
-        }
-      });
-
-      renderTopDeviations();
-    }
-
-    function configurarToggleTipo(){
-      const toggle = document.getElementById("toggleTipo");
-      const selectMonth = document.getElementById("selectMonth");
-
-      toggle.querySelectorAll("span").forEach(span => {
-        span.addEventListener("click", () => {
-          const nuevo = span.getAttribute("data-tipo");
-          if (nuevo === tipoActual) return;
-          tipoActual = nuevo;
-
-          toggle.querySelectorAll("span").forEach(s => s.classList.remove("active"));
-          span.classList.add("active");
-
-          selectMonth.style.display = (tipoActual === "mensual") ? "" : "none";
-
-          renderSecciones();
-          renderTotales();
-          renderComparativo();
-        });
-      });
-
-      selectMonth.style.display = "";
-    }
-
-    function configurarChips(){
-      const chips = document.getElementById("chipsArea");
-      chips.querySelectorAll(".chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-          const area = chip.getAttribute("data-area");
-          if (area === areaComparativa) return;
-          areaComparativa = area;
-
-          chips.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-          chip.classList.add("active");
-
-          renderComparativo();
-        });
-      });
-    }
-
-    // Renderizar categorías en modal
-    function renderizarCategoriasModal(area, contenedorId) {
-      const contenedor = document.getElementById(contenedorId);
-      contenedor.innerHTML = '';
-
-      const cats = categorias[area];
-      
-      Object.entries(cats).forEach(([categoria, subcategorias]) => {
-        const bloqueDiv = document.createElement('div');
-        bloqueDiv.className = 'bloque-categoria-modal';
-
-        const tituloDiv = document.createElement('div');
-        tituloDiv.className = 'titulo-categoria-modal';
-        tituloDiv.onclick = () => toggleSubcategoriasModal(tituloDiv);
-
-        const nombreSpan = document.createElement('span');
-        nombreSpan.className = 'titulo-cat-nombre-modal';
-        nombreSpan.textContent = categoria;
-
-        const arrowSpan = document.createElement('span');
-        arrowSpan.textContent = '⌄';
-        arrowSpan.style.color = 'var(--muted)';
-        arrowSpan.style.transition = 'transform 0.3s ease';
-
-        tituloDiv.appendChild(nombreSpan);
-        tituloDiv.appendChild(arrowSpan);
-
+        );
+      };
+
+      contenedorIzq.appendChild(span);
+      fila.appendChild(contenedorIzq);
+
+      const switchLabel = document.createElement('label');
+      switchLabel.className = 'switch';
+      switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+      fila.appendChild(switchLabel);
+
+      subDiv.appendChild(fila);
+    });
+
+
+    const acciones = document.createElement('div');
+    acciones.className = 'acciones';
+    const btn = document.createElement('button');
+    btn.textContent = '+ Subcategoría';
+    btn.onclick = () => anadirSubcategoria(titulo, subDiv);
+    acciones.appendChild(btn);
+    subDiv.appendChild(acciones);
+
+    div.appendChild(titulo);
+    div.appendChild(subDiv);
+    contenedor.appendChild(div);
+  }
+function anadirCategoria() {
+  const contenedor = document.getElementById('contenedorGastos');
+
+  // evitar múltiples inputs abiertos
+  if (contenedor.querySelector('input.editable-input')) return;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Nombre de categoría';
+  input.className = 'editable-input';
+
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') {
+      const nombre = input.value.trim();
+      if (nombre) {
+        const div = document.createElement('div');
+        div.className = 'bloque-categoria';
+
+        const titulo = document.createElement('div');
+        titulo.className = 'titulo-categoria';
+        titulo.setAttribute('onclick', 'toggleSubcategorias(this)');
+
+        const contenedorIzq = document.createElement('div');
+        contenedorIzq.style.display = 'flex';
+        contenedorIzq.style.alignItems = 'center';
+        contenedorIzq.style.gap = '0.5rem';
+
+        const borrarBtn = document.createElement('button');
+        borrarBtn.textContent = '✖';
+        borrarBtn.onclick = function(e) {
+          e.stopPropagation();
+          div.remove();
+        };
+
+        const span = document.createElement('span');
+        span.textContent = nombre;
+
+        contenedorIzq.appendChild(borrarBtn);
+        contenedorIzq.appendChild(span);
+
+        const switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+        switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+        titulo.appendChild(contenedorIzq);
+        titulo.appendChild(switchLabel);
+
+        // ✅ aquí creamos subDiv que antes estaba dando error
         const subDiv = document.createElement('div');
-        subDiv.className = 'subcategorias-modal';
+        subDiv.className = 'subcategorias';
 
-        subcategorias.forEach(sub => {
-          const filaDiv = document.createElement('div');
-          filaDiv.className = 'fila-sub-modal';
+        const acciones = document.createElement('div');
+        acciones.className = 'acciones';
+        const boton = document.createElement('button');
+        boton.textContent = '+ Subcategoría';
+        boton.onclick = () => anadirSubcategoria(titulo, subDiv);
+        acciones.appendChild(boton);
 
-          const nombreSubSpan = document.createElement('span');
-          nombreSubSpan.className = 'fila-sub-nombre-modal';
-          nombreSubSpan.textContent = sub;
+        subDiv.appendChild(acciones);
+        div.appendChild(titulo);
+        div.appendChild(subDiv);
+        contenedor.appendChild(div);
 
-          filaDiv.appendChild(nombreSubSpan);
-
-          filaDiv.addEventListener('click', () => {
-            seleccionarSubcategoria(area, categoria, sub);
-          });
-
-          subDiv.appendChild(filaDiv);
-        });
-
-        bloqueDiv.appendChild(tituloDiv);
-        bloqueDiv.appendChild(subDiv);
-        contenedor.appendChild(bloqueDiv);
-      });
-    }
-
-    function toggleSubcategoriasModal(element) {
-      const subcats = element.closest('.bloque-categoria-modal').querySelector('.subcategorias-modal');
-      const arrow = element.querySelector('span:last-child');
-      const allSubcats = document.querySelectorAll('.subcategorias-modal');
-      
-      allSubcats.forEach(sc => {
-        if (sc !== subcats) {
-          sc.classList.remove('activo');
-          const otherArrow = sc.previousElementSibling?.querySelector('span:last-child');
-          if (otherArrow) otherArrow.style.transform = '';
-        }
-      });
-      
-      subcats.classList.toggle('activo');
-      if (subcats.classList.contains('activo')) {
-        arrow.style.transform = 'rotate(180deg)';
-      } else {
-        arrow.style.transform = '';
+        input.remove();
       }
+    } else if (e.key === 'Escape') {
+      input.remove();
+    }
+  };
+
+  contenedor.appendChild(input);
+  input.focus();
+}
+
+function anadirSubcategoria(tituloCategoria, subDiv) {
+  abrirModalSubcategoria('', (data) => {
+    if (!data.nombre) return;
+
+    const fila = document.createElement('div');
+    fila.className = 'fila';
+
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
+
+    const esEditable = tituloCategoria.querySelector('button') !== null;
+
+    if (esEditable) {
+      const borrarBtn = document.createElement('button');
+      borrarBtn.textContent = '✖';
+      borrarBtn.onclick = e => {
+        e.stopPropagation();
+        fila.remove();
+      };
+      contenedorIzq.appendChild(borrarBtn);
     }
 
-    function toggleBloqueModal(encabezado) {
-      const parent = encabezado.closest('.bloque-sector-modal');
-      parent.classList.toggle('abierto');
+    const span = document.createElement('span');
+    span.className = 'editable-span';
+
+// Mostrar nombre + pildora si hay recurrencia
+span.innerHTML = data.recurrencia
+  ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+  : data.nombre;
+
+// Asegura que los atributos estén bien definidos desde el inicio
+span.setAttribute('data-nombre', data.nombre);
+span.setAttribute('data-recurrencia', data.recurrencia || '');
+span.setAttribute('data-monto', data.monto || '');
+span.setAttribute('data-descripcion', data.descripcion || '');
+
+// ✅ Evita que la pildora contamine el nombre
+span.onclick = (e) => {
+  e.stopPropagation(); // evitar conflictos si está dentro de algo clickeable
+
+  abrirModalSubcategoria(
+    span.getAttribute('data-nombre') || '', // ✅ lee solo el nombre limpio
+    (newData) => {
+      if (!newData.nombre) return;
+
+      span.innerHTML = newData.recurrencia
+        ? `${newData.nombre} <span class="pildora-recurrencia">↻ ${newData.recurrencia}</span>`
+        : newData.nombre;
+
+      // Reasignar los atributos correctamente
+      span.setAttribute('data-nombre', newData.nombre);
+      span.setAttribute('data-recurrencia', newData.recurrencia || '');
+      span.setAttribute('data-monto', newData.monto || '');
+      span.setAttribute('data-descripcion', newData.descripcion || '');
+    },
+    {
+      nombre: span.getAttribute('data-nombre') || '',
+      recurrencia: span.getAttribute('data-recurrencia') || '',
+      monto: span.getAttribute('data-monto') || '',
+      descripcion: span.getAttribute('data-descripcion') || ''
+    }
+  );
+};
+
+
+    contenedorIzq.appendChild(span);
+
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+
+    fila.appendChild(contenedorIzq);
+    fila.appendChild(switchLabel);
+
+    subDiv.insertBefore(fila, subDiv.querySelector('.acciones'));
+  });
+}
+
+const categoriasAhorro = {
+  'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
+  'Meta específica': ['Vacaciones', 'Auto', 'Casa', 'Boda', 'Educación de hijos'],
+  'Inversión': ['Cuenta brokerage', 'Fondo indexado', 'Cripto', 'Crowdfunding'],
+  'Retiro': ['IRA / Roth IRA', '401(k)', 'Pensión privada'],
+  'Ahorro personal': ['Ahorro mensual', 'Ahorro en efectivo', 'Cuenta de ahorro tradicional'],
+  'Ahorro para hijos': ['Educación', 'Regalos futuros', 'Fondo universitario'],
+  'Otros': ['Donaciones planificadas', 'Proyectos personales', 'Fondo de libertad financiera']
+};
+
+  const contenedorAhorro = document.getElementById('contenedorAhorro');
+
+  Object.entries(categoriasAhorro).forEach(([categoria, subcategorias]) => {
+    agregarCategoriaAhorro(categoria, subcategorias, false);
+  });
+
+  function agregarCategoriaAhorro(nombre, subcategorias = [], editable = false) {
+    const div = document.createElement('div');
+    div.className = 'bloque-categoria';
+
+    const titulo = document.createElement('div');
+    titulo.className = 'titulo-categoria';
+    titulo.onclick = () => toggleSubcategorias(titulo);
+
+    const contenedorIzq = document.createElement('div');
+    contenedorIzq.style.display = 'flex';
+    contenedorIzq.style.alignItems = 'center';
+    contenedorIzq.style.gap = '0.5rem';
+
+    if (editable) {
+      const borrar = document.createElement('button');
+      borrar.textContent = '✖';
+      borrar.onclick = e => {
+        e.stopPropagation();
+        div.remove();
+      };
+      contenedorIzq.appendChild(borrar);
     }
 
-    function abrirModalCategorias(event, area) {
-      event.stopPropagation();
-      areaSeleccionada = area;
-      
-      // Asegurar que la sección esté abierta
-      const section = event.target.closest('.section');
-      section.classList.remove('collapsed');
-      
-      const modal = document.getElementById('modalCategorias');
-      
-      // Renderizar todas las categorías
-      renderizarCategoriasModal('ingresos', 'contenedorIngresosModal');
-      renderizarCategoriasModal('gastos', 'contenedorGastosModal');
-      renderizarCategoriasModal('ahorro', 'contenedorAhorroModal');
-      
-      modal.classList.add('open');
-    }
+    const nombreSpan = document.createElement('span');
+    nombreSpan.textContent = nombre;
+    contenedorIzq.appendChild(nombreSpan);
 
-    function cerrarModalCategorias() {
-      document.getElementById('modalCategorias').classList.remove('open');
-    }
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
+    switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
 
-    function seleccionarSubcategoria(area, categoria, subcategoria) {
-      categoriaSeleccionada = categoria;
-      subcategoriaSeleccionada = subcategoria;
-      areaSeleccionada = area;
-      
-      // Cerrar modal
-      cerrarModalCategorias();
-      
-      // Mostrar input inline
-      mostrarInputInline(area, categoria, subcategoria);
-    }
+    titulo.appendChild(contenedorIzq);
+    titulo.appendChild(switchLabel);
 
-    function configurarAcordeones(){
-      document.querySelectorAll(".accordion-header").forEach(header => {
-        header.addEventListener("click", (e) => {
-          // Evitar toggle si se hace click en el botón +
-          if (e.target.classList.contains('btn-add-section')) return;
-          header.closest(".section").classList.toggle("collapsed");
-        });
-      });
-    }
+    const subDiv = document.createElement('div');
+    subDiv.className = 'subcategorias';
 
-    function configurarTotalesCollapsible(){
-      const card = document.getElementById("totalsCard");
-      const toggle = document.getElementById("totalsToggle");
-      toggle.addEventListener("click", () => card.classList.toggle("collapsed"));
-    }
+subcategorias.forEach(sub => {
+  const fila = document.createElement('div');
+  fila.className = 'fila';
 
-    function showToast(msg){
-      const toast = document.getElementById("toast");
-      toast.textContent = msg;
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2000);
-    }
+  const contenedorIzq = document.createElement('div');
+  contenedorIzq.style.display = 'flex';
+  contenedorIzq.style.alignItems = 'center';
+  contenedorIzq.style.gap = '0.5rem';
 
-    function showLoading(){
-      document.getElementById("loadingOverlay").classList.add("show");
-    }
+  const span = document.createElement('span');
+  span.className = 'editable-span';
+  span.innerHTML = sub;
+  span.setAttribute('data-nombre', sub);
+  span.setAttribute('data-recurrencia', '');
+  span.setAttribute('data-monto', '');
+  span.setAttribute('data-descripcion', '');
 
-    function hideLoading(){
-      document.getElementById("loadingOverlay").classList.remove("show");
-    }
+  span.onclick = (e) => {
+    e.stopPropagation();
+    abrirModalSubcategoria(
+      span.getAttribute('data-nombre') || '',
+      (data) => {
+        if (!data.nombre) return;
 
-    function configurarGuardar(){
-      document.getElementById("btnGuardar").addEventListener("click", () => {
-        showLoading();
-        setTimeout(() => {
-          hideLoading();
-          showToast("💾 Presupuesto guardado");
-        }, 800);
-      });
-    }
+        span.innerHTML = data.recurrencia
+          ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+          : data.nombre;
 
-    function configurarDeleteConfirm(){
-      document.getElementById('btnDeleteCancel').addEventListener('click', () => {
-        document.getElementById('deleteConfirm').classList.remove('show');
-        deleteTarget = null;
-      });
-
-      document.getElementById('btnDeleteConfirm').addEventListener('click', () => {
-        if (deleteTarget) {
-          const { area, index } = deleteTarget;
-          demoData.presupuesto[area].splice(index, 1);
-          
-          showLoading();
-          setTimeout(() => {
-            renderSecciones();
-            renderTotales();
-            renderComparativo();
-            hideLoading();
-            showToast("🗑️ Elemento eliminado");
-          }, 300);
-          
-          document.getElementById('deleteConfirm').classList.remove('show');
-          deleteTarget = null;
-        }
-      });
-    }
-
-    // Click fuera del modal
-    document.getElementById('modalCategorias').addEventListener('click', (e) => {
-      if (e.target.id === 'modalCategorias') {
-        cerrarModalCategorias();
+        span.setAttribute('data-nombre', data.nombre);
+        span.setAttribute('data-recurrencia', data.recurrencia || '');
+        span.setAttribute('data-monto', data.monto || '');
+        span.setAttribute('data-descripcion', data.descripcion || '');
+      },
+      {
+        nombre: span.getAttribute('data-nombre') || '',
+        recurrencia: span.getAttribute('data-recurrencia') || '',
+        monto: span.getAttribute('data-monto') || '',
+        descripcion: span.getAttribute('data-descripcion') || ''
       }
-    });
+    );
+  };
 
-    document.addEventListener("DOMContentLoaded", () => {
-      configurarToggleTipo();
-      configurarChips();
-      configurarAcordeones();
-      configurarTotalesCollapsible();
-      configurarGuardar();
-      configurarDeleteConfirm();
+  contenedorIzq.appendChild(span);
+  fila.appendChild(contenedorIzq);
 
-      renderSecciones();
-      renderTotales();
-      renderComparativo();
-    });
-  </script>
+  const switchLabel = document.createElement('label');
+  switchLabel.className = 'switch';
+  switchLabel.innerHTML = `<input type="checkbox" checked><span class="slider"></span>`;
+  fila.appendChild(switchLabel);
+
+  subDiv.appendChild(fila);
+});
+
+
+    const acciones = document.createElement('div');
+    acciones.className = 'acciones';
+    const btn = document.createElement('button');
+    btn.textContent = '+ Subcategoría';
+    btn.onclick = () => anadirSubcategoria(titulo, subDiv);
+    acciones.appendChild(btn);
+    subDiv.appendChild(acciones);
+
+    div.appendChild(titulo);
+    div.appendChild(subDiv);
+    contenedorAhorro.appendChild(div);
+  }
+
+  function anadirCategoriaAhorro() {
+    const input = document.createElement('input');
+    input.className = 'editable-input';
+    input.placeholder = 'Nueva categoría';
+
+    input.onkeydown = function (e) {
+      if (e.key === 'Enter') {
+        const nombre = input.value.trim();
+        if (nombre) {
+          agregarCategoriaAhorro(nombre, [], true);
+          input.remove();
+        }
+      } else if (e.key === 'Escape') {
+        input.remove();
+      }
+    };
+
+    contenedorAhorro.appendChild(input);
+    input.focus();
+  }
+
+// Asume que ya existe una variable global `modal` referenciando el modal
+const modal = document.getElementById('modalSubcategoria');
+
+// Función para abrir el modal
+function abrirModalSubcategoria(textoInicial = '', callbackAceptar, datosPrevios = {}) {
+  document.getElementById('nombreSub').value = textoInicial;
+  document.getElementById('inputRecurrencia').value = datosPrevios.recurrencia || '';
+  document.getElementById('montoRecurrencia').value = datosPrevios.monto || '';
+  document.getElementById('descripcion').value = datosPrevios.descripcion || '';
+
+  // Mostrar u ocultar grupoMonto según valor
+  const grupoMonto = document.getElementById('grupoMonto');
+  if (datosPrevios.recurrencia) {
+    grupoMonto.style.display = 'block';
+  } else {
+    grupoMonto.style.display = 'none';
+  }
+
+  modal.style.display = 'flex';
+
+  const aceptar = modal.querySelector('.guardar');
+  const cancelar = modal.querySelector('.cancelar');
+
+  const cerrar = () => {
+    modal.style.display = 'none';
+    aceptar.onclick = null;
+    cancelar.onclick = null;
+  };
+
+  aceptar.onclick = () => {
+    const nombre = document.getElementById('nombreSub').value.trim();
+    const recurrencia = document.getElementById('inputRecurrencia').value;
+    const monto = parseFloat(document.getElementById('montoRecurrencia').value) || null;
+    const descripcion = document.getElementById('descripcion').value.trim();
+    callbackAceptar({ nombre, recurrencia, monto, descripcion });
+    cerrar();
+  };
+
+  cancelar.onclick = cerrar;
+}
+
+// Al hacer clic en subcategoría editable
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('editable-span')) {
+    const span = e.target;
+
+    abrirModalSubcategoria(
+      span.getAttribute('data-nombre') || '', // nombre limpio
+      (data) => {
+        if (!data.nombre) return;
+
+        span.innerHTML = data.recurrencia
+          ? `${data.nombre} <span class="pildora-recurrencia">↻ ${data.recurrencia}</span>`
+          : data.nombre;
+
+        span.setAttribute('data-nombre', data.nombre);
+        span.setAttribute('data-recurrencia', data.recurrencia || '');
+        span.setAttribute('data-monto', data.monto || '');
+        span.setAttribute('data-descripcion', data.descripcion || '');
+      },
+      {
+        nombre: span.getAttribute('data-nombre') || '', // ✅ Agregado
+        recurrencia: span.getAttribute('data-recurrencia') || '',
+        monto: span.getAttribute('data-monto') || '',
+        descripcion: span.getAttribute('data-descripcion') || ''
+      }
+    );
+  }
+});
+
+// Mostrar/ocultar monto según selección
+document.addEventListener('change', function (e) {
+  if (e.target && e.target.id === 'inputRecurrencia') {
+    const grupoMonto = document.getElementById('grupoMonto');
+    const montoInput = document.getElementById('montoRecurrencia');
+    const seleccion = e.target.value;
+
+    if (!seleccion) {
+      grupoMonto.style.display = 'none';
+      montoInput.value = '';
+    } else {
+      grupoMonto.style.display = 'block';
+    }
+  }
+});
+</script>
 </body>
 </html>
