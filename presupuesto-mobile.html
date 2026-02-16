@@ -8,9 +8,6 @@
   <!-- Nunito -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <style>
   :root{
     --primary:#3956E8;
@@ -498,14 +495,16 @@
   .card.comp-card{ margin-top: 14px; }
 
   .comp-header{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   .comp-title{ font-weight: 900; font-size: 1.05rem; letter-spacing: -0.3px; }
-  .chips{ display:flex; gap: 6px; flex-wrap: wrap; justify-content:flex-end; }
+  .chips{ 
+    display:flex; 
+    gap: 8px; 
+    flex-wrap: wrap; 
+    justify-content: center;
+    margin-bottom: 14px;
+  }
   .chip{
     border-radius: 999px;
     border: 1px solid var(--border);
@@ -551,15 +550,96 @@
   #miniDiff.diff-positive{ color:#15803D; font-weight: 900; }
   #miniDiff.diff-negative{ color:#B91C1C; font-weight: 900; }
 
-  /* Chart */
-  .chart-wrap{ 
-    display:block;
-    padding: 10px 0;
+  /* Bullet Chart */
+  .bullet-chart {
+    margin: 1.2rem 0;
   }
-  .chart-wrap.collapsed{ 
-    max-height: 0;
-    opacity: 0;
+
+  .bullet-chart-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .bullet-chart-bar {
+    position: relative;
+    height: 40px;
+    background: #F3F4F6;
+    border-radius: 12px;
     overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .bullet-budget {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, #E0E7FF, #C7D2FE);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-weight: 900;
+    font-size: 0.85rem;
+    color: var(--primary);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bullet-actual {
+    position: absolute;
+    height: 24px;
+    top: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(57, 86, 232, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-weight: 900;
+    font-size: 0.85rem;
+    color: white;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bullet-actual.over-budget {
+    background: linear-gradient(135deg, var(--danger), #F87171);
+  }
+
+  .bullet-actual.under-budget {
+    background: linear-gradient(135deg, var(--success), #22C55E);
+  }
+
+  .bullet-legend {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .bullet-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .bullet-legend-color {
+    width: 20px;
+    height: 12px;
+    border-radius: 4px;
+  }
+
+  .bullet-legend-color.budget {
+    background: linear-gradient(90deg, #E0E7FF, #C7D2FE);
+  }
+
+  .bullet-legend-color.actual {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
   }
 
   canvas{ max-height: 260px; display:block; margin: 0 auto; }
@@ -978,7 +1058,7 @@
     </section>
 
     <!-- TOTALES (COLLAPSIBLE) -->
-    <section class="totals collapsed" id="totalsCard">
+    <section class="totals" id="totalsCard">
       <div class="totals-top" id="totalsToggle">
         <div class="totals-title">Totales del periodo</div>
         <div class="totals-chevron">⌄</div>
@@ -1009,11 +1089,12 @@
     <section class="card comp-card">
       <div class="comp-header">
         <div class="comp-title">Presupuesto vs Real</div>
-        <div class="chips" id="chipsArea">
-          <button class="chip active" data-area="ingresos">Ingresos</button>
-          <button class="chip" data-area="gastos">Gastos</button>
-          <button class="chip" data-area="ahorro">Ahorro</button>
-        </div>
+      </div>
+      
+      <div class="chips" id="chipsArea">
+        <button class="chip active" data-area="ingresos">Ingresos</button>
+        <button class="chip" data-area="gastos">Gastos</button>
+        <button class="chip" data-area="ahorro">Ahorro</button>
       </div>
 
       <div id="statusBanner" class="status-banner green">
@@ -1036,8 +1117,28 @@
         </div>
       </div>
 
-      <div class="chart-wrap" id="chartWrap">
-        <canvas id="barComp"></canvas>
+      <div class="bullet-chart" id="bulletChart">
+        <div class="bullet-chart-label">
+          <span>Comparativa</span>
+        </div>
+        <div class="bullet-chart-bar">
+          <div class="bullet-budget" id="bulletBudget">
+            <span id="bulletBudgetText">$0</span>
+          </div>
+          <div class="bullet-actual" id="bulletActual">
+            <span id="bulletActualText">$0</span>
+          </div>
+        </div>
+        <div class="bullet-legend">
+          <div class="bullet-legend-item">
+            <div class="bullet-legend-color budget"></div>
+            <span>Presupuesto</span>
+          </div>
+          <div class="bullet-legend-item">
+            <div class="bullet-legend-color actual"></div>
+            <span>Real</span>
+          </div>
+        </div>
       </div>
 
       <div class="top-deviations" id="topDeviations"></div>
@@ -1113,7 +1214,6 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <script>
     // Datos de categorías
     const categorias = {
@@ -1166,7 +1266,6 @@
 
     let tipoActual = "mensual";
     let areaComparativa = "ingresos";
-    let chartComp = null;
 
     let categoriaSeleccionada = null;
     let subcategoriaSeleccionada = null;
@@ -1643,45 +1742,60 @@
 
       actualizarBanner(totalPres, totalReal, areaComparativa);
 
-      const canvas = document.getElementById("barComp");
-      if (!canvas) return;
-
-      const ctx = canvas.getContext("2d");
-      if (chartComp) chartComp.destroy();
-
-      const remaining = totalPres - totalReal;
-      const colorPres = areaComparativa === 'gastos' ? '#F97316' : 
-                        areaComparativa === 'ingresos' ? '#22C55E' : '#3B82F6';
-      const colorReal = '#9333EA';
-
-      chartComp = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-          labels: ["Real", "Restante"],
-          datasets: [{
-            data: [totalReal, Math.max(0, remaining)],
-            backgroundColor: [colorReal, 'rgba(229,231,235,0.5)'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          cutout: '70%',
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  return context.label + ': ' + formatear(context.parsed);
-                }
-              }
-            }
-          }
-        }
-      });
+      // Renderizar Bullet Chart
+      renderBulletChart(totalPres, totalReal);
 
       renderTopDeviations();
+    }
+
+    function renderBulletChart(presupuesto, real) {
+      const bulletBudget = document.getElementById('bulletBudget');
+      const bulletActual = document.getElementById('bulletActual');
+      const bulletBudgetText = document.getElementById('bulletBudgetText');
+      const bulletActualText = document.getElementById('bulletActualText');
+
+      if (!bulletBudget || !bulletActual) return;
+
+      // Determinar el máximo para el ancho
+      const maxValue = Math.max(presupuesto, real, 1); // Evitar división por 0
+
+      // Calcular porcentajes
+      const budgetWidth = (presupuesto / maxValue) * 100;
+      const actualWidth = (real / maxValue) * 100;
+
+      // Aplicar anchos
+      bulletBudget.style.width = budgetWidth + '%';
+      bulletActual.style.width = actualWidth + '%';
+
+      // Actualizar textos
+      if (bulletBudgetText) bulletBudgetText.textContent = formatear(presupuesto);
+      if (bulletActualText) bulletActualText.textContent = formatear(real);
+
+      // Aplicar colores según el área y si está sobre o bajo presupuesto
+      bulletActual.classList.remove('over-budget', 'under-budget');
+      
+      if (areaComparativa === 'gastos') {
+        // Para gastos: verde si gastaste menos, rojo si gastaste más
+        if (real > presupuesto) {
+          bulletActual.classList.add('over-budget');
+        } else if (real < presupuesto) {
+          bulletActual.classList.add('under-budget');
+        }
+      } else if (areaComparativa === 'ingresos') {
+        // Para ingresos: verde si ganaste más, rojo si ganaste menos
+        if (real > presupuesto) {
+          bulletActual.classList.add('under-budget');
+        } else if (real < presupuesto) {
+          bulletActual.classList.add('over-budget');
+        }
+      } else {
+        // Para ahorro: verde si ahorraste más, rojo si ahorraste menos
+        if (real > presupuesto) {
+          bulletActual.classList.add('under-budget');
+        } else if (real < presupuesto) {
+          bulletActual.classList.add('over-budget');
+        }
+      }
     }
 
     function configurarToggleTipo(){
@@ -1851,6 +1965,7 @@
       const card = document.getElementById("totalsCard");
       const toggle = document.getElementById("totalsToggle");
       toggle.addEventListener("click", () => card.classList.toggle("collapsed"));
+      // Ahora inicia abierto por defecto
     }
 
     function showToast(msg){
