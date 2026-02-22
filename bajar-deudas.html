@@ -320,6 +320,18 @@
     }
     .edit-btn:active{background:var(--muted)}
 
+    /* ===== NUEVA DEUDA BUTTON ===== */
+    .nueva-btn{
+      width:100%;padding:14px;border-radius:14px;
+      background:var(--primary);color:#fff;border:none;
+      font-family:"Nunito",sans-serif;font-size:15px;font-weight:900;
+      cursor:pointer;margin-bottom:12px;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      box-shadow:0 6px 16px rgba(89,74,226,.3);
+      transition:transform .1s,box-shadow .15s;
+    }
+    .nueva-btn:active{transform:scale(.98);box-shadow:0 3px 8px rgba(89,74,226,.2)}
+
     /* ===== EMPTY STATE ===== */
     .empty-state{
       text-align:center;padding:32px 16px;
@@ -501,6 +513,11 @@
     <div class="section-label">
       Mis deudas <span id="countDebts">0 registradas</span>
     </div>
+
+    <button class="nueva-btn" onclick="window.location.href='https://cadamenudo.github.io/UI-UX/nueva-deuda.html'">
+      <span style="font-size:18px;font-weight:900">+</span> Nueva deuda
+    </button>
+
     <div class="debt-list" id="debtList"></div>
 
     <!-- bottom padding for FAB -->
@@ -573,7 +590,7 @@
 </div>
 
 <!-- FAB -->
-<button class="fab" onclick="window.location.href='https://cadamenudo.github.io/UI-UX-desktop/nueva-deuda.html'" title="Nueva deuda">+</button>
+<button class="fab" onclick="window.location.href='https://cadamenudo.github.io/UI-UX/nueva-deuda.html'" title="Nueva deuda">+</button>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
