@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Nueva transacción – Cada Menudo</title>
+  <title>AI – Nueva transacción | Cada Menudo</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/>
 
@@ -11,6 +11,7 @@
     :root{
       --primary:#3956E8;
       --secondary:#7459D9;
+      --yellow:#E8C239;
       --gray:#64748B;
       --muted:#EEF0F6;
       --bg:#F7F8FC;
@@ -20,7 +21,6 @@
       --shadow:0 6px 18px rgba(17,24,39,.06);
       --radius:18px;
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -28,8 +28,51 @@
       font-family:"Nunito",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
     }
+    .wrap{ max-width:430px; margin:0 auto; padding:16px 16px 28px; }
 
-    .wrap{ max-width:420px; margin:0 auto; padding:18px; }
+    /* top */
+    .top{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:12px;
+    }
+    .backBtn{
+      width:44px; height:44px; border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      box-shadow:0 4px 14px rgba(15,23,42,.06);
+      font-weight:900; cursor:pointer;
+    }
+    .topTitle{ flex:1; text-align:center; padding-right:44px; }
+    .topTitle h1{ margin:0; font-size:1.05rem; font-weight:900; }
+    .topTitle p{ margin:3px 0 0; color:var(--gray); font-size:.88rem; }
+
+    /* progress */
+    .progress{
+      display:flex; gap:10px; align-items:center;
+      margin:10px 0 14px;
+    }
+    .pill{
+      flex:1;
+      height:8px;
+      border-radius:999px;
+      background:#e9edf8;
+      overflow:hidden;
+      border:1px solid rgba(57,86,232,.12);
+    }
+    .pill > i{
+      display:block;
+      height:100%;
+      width:0%;
+      background:linear-gradient(135deg,var(--primary),#4d6bff);
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+    .stepLabel{
+      font-weight:900;
+      color:var(--gray);
+      font-size:.85rem;
+      white-space:nowrap;
+    }
 
     .card{
       background:var(--card);
@@ -38,12 +81,14 @@
       box-shadow:var(--shadow);
       padding:16px;
     }
-
-    h1{ margin:0 0 6px; font-size:1.15rem; font-weight:900; }
-    p{ margin:0; color:var(--gray); font-size:.95rem; }
+    .help{
+      margin:0;
+      color:var(--gray);
+      font-size:.94rem;
+      line-height:1.35;
+    }
 
     .btnCol{ display:grid; gap:10px; margin-top:14px; }
-
     .btn{
       width:100%;
       border:1px solid var(--border);
@@ -56,119 +101,376 @@
       box-shadow:0 4px 14px rgba(15,23,42,.06);
       display:flex; align-items:center; justify-content:space-between;
     }
-
     .btn:active{ transform:translateY(1px); }
-
     .btnPrimary{
-      background:linear-gradient(135deg, var(--primary), #4d6bff);
+      background:linear-gradient(135deg,var(--primary),#4d6bff);
       color:#fff;
       border-color:rgba(255,255,255,.15);
       box-shadow:0 12px 22px rgba(57,86,232,.22);
     }
-
-    .pill{
-      font-size:.8rem;
-      font-weight:900;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.18);
-      border:1px solid rgba(255,255,255,.25);
-      color:#fff;
+    .btnGhost{
+      background:transparent;
+      box-shadow:none;
     }
 
-    .sub{
+    input[type="file"]{ display:none; }
+
+    .preview{
       margin-top:12px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:#000;
       display:none;
-      border-top:1px dashed var(--border);
-      padding-top:12px;
+    }
+    .preview img{ width:100%; display:block; max-height:320px; object-fit:cover; }
+
+    .status{
+      display:none;
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(116,89,217,.25);
+      background:rgba(116,89,217,.08);
+      color:#1f1b33;
+      font-weight:900;
+      font-size:.9rem;
+    }
+    .status.show{ display:block; }
+
+    /* steps */
+    .step{ display:none; }
+    .step.show{ display:block; }
+
+    /* form */
+    .grid{ display:grid; gap:10px; margin-top:12px; }
+    .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media (max-width:360px){ .row2{ grid-template-columns:1fr; } }
+    label{ font-size:.82rem; color:var(--gray); font-weight:900; }
+    .control{
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-family:inherit;
+      font-size:1rem;
+      outline:none;
+    }
+    .control:focus{
+      border-color:rgba(57,86,232,.55);
+      box-shadow:0 0 0 4px rgba(57,86,232,.12);
     }
 
-    .sub.show{ display:block; }
-
-    .hint{
+    .note{
       margin-top:10px;
       font-size:.78rem;
       color:var(--gray);
       line-height:1.35;
     }
 
-    input[type="file"]{ display:none; }
+    .toast{
+      margin-top:12px;
+      display:none;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(16,185,129,.22);
+      background:rgba(16,185,129,.10);
+      color:#064e3b;
+      font-weight:900;
+      font-size:.9rem;
+    }
+    .toast.show{ display:block; }
   </style>
 </head>
 
 <body>
   <main class="wrap">
-    <section class="card">
-      <h1>¿Cómo quieres crearla?</h1>
-      <p>Elige automatizar con foto o entrar los datos manualmente.</p>
+
+    <!-- Header -->
+    <div class="top">
+      <button class="backBtn" id="topBack" type="button" aria-label="Atrás">←</button>
+      <div class="topTitle">
+        <h1>AI · Nueva transacción</h1>
+        <p id="subTitle">Paso 1 de 2 · Subir recibo</p>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress">
+      <div class="pill" aria-hidden="true"><i id="bar"></i></div>
+      <div class="stepLabel" id="stepLabel">1/2</div>
+    </div>
+
+    <!-- STEP 1: Upload -->
+    <section class="card step show" id="step1">
+      <p class="help">
+        Sube tu recibo y te pre-llenamos la transacción.
+        Luego podrás <strong>revisar</strong> y <strong>editar</strong> antes de guardar.
+      </p>
 
       <div class="btnCol">
-        <button class="btn btnPrimary" id="btnAuto" type="button">
-          <span>Entrada automática</span>
-          <span class="pill">AI</span>
+        <button class="btn btnPrimary" id="btnCamera" type="button">
+          <span>Tomar foto</span><span>📸</span>
         </button>
 
-        <button class="btn" id="btnManual" type="button">
-          <span>Entrada manual</span>
-          <span>→</span>
+        <button class="btn" id="btnUpload" type="button">
+          <span>Subir foto</span><span>🖼️</span>
         </button>
       </div>
 
-      <!-- Opciones automática -->
-      <div class="sub" id="autoOptions">
-        <div class="btnCol" style="margin-top:0;">
-          <button class="btn" id="btnCamera" type="button">
-            <span>Tomar foto</span>
-            <span>📸</span>
-          </button>
+      <input id="fileCamera" type="file" accept="image/*" capture="environment">
+      <input id="fileUpload" type="file" accept="image/*">
 
-          <button class="btn" id="btnGallery" type="button">
-            <span>Escoger foto</span>
-            <span>🖼️</span>
-          </button>
+      <div class="preview" id="preview">
+        <img id="previewImg" alt="Vista previa del recibo">
+      </div>
+
+      <div class="status" id="status">Analizando recibo…</div>
+
+      <div class="note">
+        La AI sugiere datos. Tú confirmas antes de guardar.
+      </div>
+    </section>
+
+    <!-- STEP 2: Review -->
+    <section class="card step" id="step2">
+      <p class="help">
+        Revisa la información sugerida. Puedes editar cualquier campo.
+      </p>
+
+      <div class="grid">
+        <div>
+          <label for="tipo">Tipo</label>
+          <select class="control" id="tipo">
+            <option value="gasto">Gasto</option>
+            <option value="ingreso">Ingreso</option>
+            <option value="ahorro">Ahorro</option>
+          </select>
         </div>
 
-        <input id="fileCamera" type="file" accept="image/*" capture="environment"/>
-        <input id="fileGallery" type="file" accept="image/*"/>
+        <div class="row2">
+          <div>
+            <label for="monto">Monto</label>
+            <input class="control" id="monto" type="number" inputmode="decimal" placeholder="0.00">
+          </div>
+          <div>
+            <label for="fecha">Fecha</label>
+            <input class="control" id="fecha" type="date">
+          </div>
+        </div>
 
-        <div class="hint">
-          Luego de seleccionar la foto, se procesa y se pre-llena el formulario.
+        <div>
+          <label for="comercio">Comercio / Descripción</label>
+          <input class="control" id="comercio" type="text" placeholder="Ej. Publix, Uber, Netflix…">
+        </div>
+
+        <div class="row2">
+          <div>
+            <label for="categoria">Categoría</label>
+            <select class="control" id="categoria">
+              <option value="">Selecciona</option>
+              <option>Supermercado</option>
+              <option>Restaurantes</option>
+              <option>Transporte</option>
+              <option>Hogar</option>
+              <option>Salud</option>
+              <option>Entretenimiento</option>
+              <option>Servicios</option>
+              <option>Otros</option>
+            </select>
+          </div>
+          <div>
+            <label for="metodo">Método</label>
+            <select class="control" id="metodo">
+              <option>Efectivo</option>
+              <option>Tarjeta</option>
+              <option>Cuenta bancaria</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="nota">Nota (opcional)</label>
+          <textarea class="control" id="nota" rows="3" placeholder="Opcional…"></textarea>
         </div>
       </div>
+
+      <div class="btnCol" style="margin-top:14px;">
+        <button class="btn btnGhost" id="btnBackToUpload" type="button">
+          ← Volver al recibo
+        </button>
+        <button class="btn btnPrimary" id="btnSave" type="button">
+          Guardar
+        </button>
+      </div>
+
+      <div class="toast" id="toast">Guardado ✅ (demo)</div>
     </section>
   </main>
 
   <script>
-    const btnAuto = document.getElementById('btnAuto');
-    const btnManual = document.getElementById('btnManual');
-    const autoOptions = document.getElementById('autoOptions');
+    // Step state
+    let currentStep = 1;
+    let receiptFile = null;
+
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const subTitle = document.getElementById('subTitle');
+    const stepLabel = document.getElementById('stepLabel');
+    const bar = document.getElementById('bar');
 
     const btnCamera = document.getElementById('btnCamera');
-    const btnGallery = document.getElementById('btnGallery');
+    const btnUpload = document.getElementById('btnUpload');
     const fileCamera = document.getElementById('fileCamera');
-    const fileGallery = document.getElementById('fileGallery');
+    const fileUpload = document.getElementById('fileUpload');
 
-    // Mostrar opciones automática
-    btnAuto.addEventListener('click', () => {
-      autoOptions.classList.toggle('show');
-    });
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const statusEl = document.getElementById('status');
 
-    // Redirección manual
-    btnManual.addEventListener('click', () => {
-      window.location.href = "https://cadamenudo.github.io/UI-UX/nueva-transaccion.html";
-    });
+    const topBack = document.getElementById('topBack');
+    const btnBackToUpload = document.getElementById('btnBackToUpload');
+    const btnSave = document.getElementById('btnSave');
+    const toast = document.getElementById('toast');
 
-    // Activar inputs ocultos
-    btnCamera.addEventListener('click', () => fileCamera.click());
-    btnGallery.addEventListener('click', () => fileGallery.click());
+    // form fields
+    const tipo = document.getElementById('tipo');
+    const monto = document.getElementById('monto');
+    const fecha = document.getElementById('fecha');
+    const comercio = document.getElementById('comercio');
+    const categoria = document.getElementById('categoria');
+    const metodo = document.getElementById('metodo');
+    const nota = document.getElementById('nota');
 
-    function onSelected(file){
-      if(!file) return;
-      alert('Foto seleccionada: ' + file.name + ' (placeholder procesamiento AI)');
+    function todayISO(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,'0');
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
+    fecha.value = todayISO();
+
+    function setStep(n){
+      currentStep = n;
+      step1.classList.toggle('show', n === 1);
+      step2.classList.toggle('show', n === 2);
+
+      if(n === 1){
+        subTitle.textContent = 'Paso 1 de 2 · Subir recibo';
+        stepLabel.textContent = '1/2';
+        bar.style.width = '50%';
+      }else{
+        subTitle.textContent = 'Paso 2 de 2 · Revisar y guardar';
+        stepLabel.textContent = '2/2';
+        bar.style.width = '100%';
+      }
+      window.scrollTo({top:0, behavior:'smooth'});
     }
 
-    fileCamera.addEventListener('change', (e) => onSelected(e.target.files[0]));
-    fileGallery.addEventListener('change', (e) => onSelected(e.target.files[0]));
+    // top back: if step2 -> step1, else go back in history
+    topBack.addEventListener('click', () => {
+      if(currentStep === 2) setStep(1);
+      else history.back();
+    });
+
+    btnBackToUpload.addEventListener('click', () => setStep(1));
+
+    btnCamera.addEventListener('click', () => fileCamera.click());
+    btnUpload.addEventListener('click', () => fileUpload.click());
+
+    function showPreview(file){
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      preview.style.display = 'block';
+    }
+
+    async function mockAIExtract(file){
+      // Simulación: reemplaza por tu endpoint real (OCR/Vision/LLM)
+      await new Promise(r => setTimeout(r, 900));
+
+      const name = (file?.name || '').toLowerCase();
+      let cat = 'Otros';
+      let merchant = 'Comercio detectado (revisar)';
+      if(name.includes('uber') || name.includes('lyft')) { cat='Transporte'; merchant='Uber'; }
+      if(name.includes('publix') || name.includes('walmart') || name.includes('target')) { cat='Supermercado'; merchant='Supermercado'; }
+      if(name.includes('netflix') || name.includes('spotify')) { cat='Entretenimiento'; merchant='Suscripción'; }
+
+      return {
+        tipo:'gasto',
+        monto: 28.73,
+        fecha: todayISO(),
+        comercio: merchant,
+        categoria: cat,
+        metodo: 'Tarjeta',
+        nota: 'Sugerido por AI. Confirma antes de guardar.'
+      };
+    }
+
+    async function handleSelected(file){
+      if(!file) return;
+      receiptFile = file;
+
+      showPreview(file);
+      statusEl.classList.add('show');
+      statusEl.textContent = 'Analizando recibo…';
+
+      try{
+        const data = await mockAIExtract(file);
+
+        // fill form
+        tipo.value = data.tipo;
+        monto.value = data.monto;
+        fecha.value = data.fecha;
+        comercio.value = data.comercio;
+        categoria.value = data.categoria;
+        metodo.value = data.metodo;
+        nota.value = data.nota;
+
+        statusEl.textContent = 'Listo ✅ Avanzando a revisión…';
+
+        // auto-next
+        setTimeout(() => {
+          statusEl.classList.remove('show');
+          setStep(2);
+        }, 450);
+
+      }catch(e){
+        statusEl.textContent = 'No pudimos leer el recibo. Intenta otra foto o llena manual.';
+      }
+    }
+
+    fileCamera.addEventListener('change', e => handleSelected(e.target.files[0]));
+    fileUpload.addEventListener('change', e => handleSelected(e.target.files[0]));
+
+    btnSave.addEventListener('click', () => {
+      // validación mínima
+      toast.classList.remove('show');
+      const missing = [];
+      if(!monto.value) missing.push('monto');
+      if(!fecha.value) missing.push('fecha');
+      if(!comercio.value.trim()) missing.push('comercio');
+      if(!categoria.value) missing.push('categoría');
+
+      if(missing.length){
+        toast.textContent = 'Completa: ' + missing.join(', ') + '.';
+        toast.style.borderColor = 'rgba(239,68,68,.25)';
+        toast.style.background = 'rgba(239,68,68,.10)';
+        toast.style.color = '#7f1d1d';
+        toast.classList.add('show');
+        return;
+      }
+
+      // guardar (demo)
+      toast.textContent = 'Guardado ✅ (demo)';
+      toast.style.borderColor = 'rgba(16,185,129,.22)';
+      toast.style.background = 'rgba(16,185,129,.10)';
+      toast.style.color = '#064e3b';
+      toast.classList.add('show');
+    });
+
+    // init
+    bar.style.width = '50%';
   </script>
 </body>
 </html>
