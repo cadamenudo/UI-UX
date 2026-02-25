@@ -1,325 +1,620 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>AI – Nueva transacción | Cada Menudo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI – Nueva Transacción</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --primary:#3956E8;
-      --secondary:#7459D9;
-      --yellow:#E8C239;
-      --gray:#64748B;
-      --muted:#EEF0F6;
-      --bg:#F7F8FC;
-      --card:#FFFFFF;
-      --text:#0F172A;
-      --border:#E5E7EB;
-      --shadow:0 6px 18px rgba(17,24,39,.06);
-      --radius:18px;
+    body {
+      font-family: 'Nunito Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #F7F8FC;
+      margin: 0;
+      padding: 1.25rem;
+      color: #111;
     }
-    *{box-sizing:border-box}
-    body{
+
+    /* ===== Wizard shell ===== */
+    .wizard {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .wizard-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 12px;
+      gap:10px;
+    }
+    .wizard-top .backTop{
+      width:44px;height:44px;border-radius:14px;
+      border:1px solid #E5E7EB;background:#fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      cursor:pointer;font-weight:700;
+    }
+    .wizard-top .titles{
+      flex:1;
+      text-align:center;
+      padding-right:44px;
+    }
+    .wizard-top h1{
       margin:0;
-      background:var(--bg);
-      font-family:"Nunito",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
+      font-size: 1.05rem;
+      font-weight: 800;
     }
-    .wrap{ max-width:430px; margin:0 auto; padding:16px 16px 28px; }
+    .wizard-top p{
+      margin:4px 0 0;
+      color:#64748B;
+      font-size:.9rem;
+    }
 
-    /* top */
-    .top{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:12px;
-    }
-    .backBtn{
-      width:44px; height:44px; border-radius:14px;
-      border:1px solid var(--border);
-      background:#fff;
-      box-shadow:0 4px 14px rgba(15,23,42,.06);
-      font-weight:900; cursor:pointer;
-    }
-    .topTitle{ flex:1; text-align:center; padding-right:44px; }
-    .topTitle h1{ margin:0; font-size:1.05rem; font-weight:900; }
-    .topTitle p{ margin:3px 0 0; color:var(--gray); font-size:.88rem; }
-
-    /* progress */
     .progress{
-      display:flex; gap:10px; align-items:center;
-      margin:10px 0 14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin: 10px 0 14px;
     }
-    .pill{
+    .bar{
       flex:1;
       height:8px;
       border-radius:999px;
       background:#e9edf8;
-      overflow:hidden;
       border:1px solid rgba(57,86,232,.12);
+      overflow:hidden;
     }
-    .pill > i{
+    .bar i{
       display:block;
       height:100%;
-      width:0%;
-      background:linear-gradient(135deg,var(--primary),#4d6bff);
+      width:50%;
+      background: linear-gradient(135deg,#3956E8,#4d6bff);
       border-radius:999px;
       transition:width .25s ease;
     }
     .stepLabel{
-      font-weight:900;
-      color:var(--gray);
+      font-weight:800;
+      color:#64748B;
       font-size:.85rem;
       white-space:nowrap;
     }
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:16px;
+    /* ===== Step cards ===== */
+    .step{
+      display:none;
     }
-    .help{
-      margin:0;
-      color:var(--gray);
-      font-size:.94rem;
-      line-height:1.35;
+    .step.show{
+      display:block;
     }
 
-    .btnCol{ display:grid; gap:10px; margin-top:14px; }
+    .card {
+      background:#fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 1.25rem;
+      box-sizing:border-box;
+      border:1px solid #E5E7EB;
+    }
+
+    .helptext{
+      color:#64748B;
+      font-size:.95rem;
+      line-height:1.35;
+      margin:0;
+    }
+
+    .btnCol{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
     .btn{
       width:100%;
-      border:1px solid var(--border);
+      padding: .85rem 1rem;
+      border-radius: 12px;
+      border:1px solid #E5E7EB;
       background:#fff;
-      border-radius:16px;
-      padding:14px 14px;
-      font-weight:900;
-      font-size:1rem;
       cursor:pointer;
-      box-shadow:0 4px 14px rgba(15,23,42,.06);
-      display:flex; align-items:center; justify-content:space-between;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-size:.95rem;
     }
-    .btn:active{ transform:translateY(1px); }
     .btnPrimary{
-      background:linear-gradient(135deg,var(--primary),#4d6bff);
+      background:#3956E8;
       color:#fff;
-      border-color:rgba(255,255,255,.15);
-      box-shadow:0 12px 22px rgba(57,86,232,.22);
+      border-color:#3956E8;
     }
     .btnGhost{
       background:transparent;
-      box-shadow:none;
     }
+    .btn:active{ transform: translateY(1px); }
 
     input[type="file"]{ display:none; }
 
     .preview{
       margin-top:12px;
-      border-radius:16px;
+      border-radius:14px;
       overflow:hidden;
-      border:1px solid var(--border);
+      border:1px solid #E5E7EB;
       background:#000;
       display:none;
     }
-    .preview img{ width:100%; display:block; max-height:320px; object-fit:cover; }
+    .preview img{
+      width:100%;
+      display:block;
+      max-height:320px;
+      object-fit:cover;
+    }
 
     .status{
       display:none;
       margin-top:12px;
       padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(116,89,217,.25);
-      background:rgba(116,89,217,.08);
+      border-radius:12px;
+      border:1px solid rgba(89,74,226,.25);
+      background: rgba(89,74,226,.08);
       color:#1f1b33;
-      font-weight:900;
+      font-weight:800;
       font-size:.9rem;
     }
     .status.show{ display:block; }
 
-    /* steps */
-    .step{ display:none; }
-    .step.show{ display:block; }
+    /* ======= TU TEMPLATE (formulario) ======= */
+    .formulario {
+      position: relative;
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-sizing: border-box;
+      max-height: 90vh;
+      overflow-y: auto;
+      border:1px solid #E5E7EB;
+    }
+    h2 {
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .campo-con-icono {
+      position: relative;
+    }
+    .campo-con-icono input {
+      padding-right: 3rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .icono-fecha {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 1.1rem;
+      color: #64748B;
+    }
+    input[type="date"] { width: 100%; box-sizing: border-box; }
 
-    /* form */
-    .grid{ display:grid; gap:10px; margin-top:12px; }
-    .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    @media (max-width:360px){ .row2{ grid-template-columns:1fr; } }
-    label{ font-size:.82rem; color:var(--gray); font-weight:900; }
-    .control{
+    .monto {
+      font-size: 3rem;
+      text-align: center;
+      color: #64748B;
+      margin: 1.5rem auto;
+      background: transparent;
+      border: none;
+      outline: none;
+      max-width: 180%;
+      display: block;
+      caret-color: auto;
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      gap: 10px;
+    }
+    .acciones button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .acciones .btn-registrar {
+      background: #594AE2;
+      color: #fff;
+      padding: 0.6rem 1.4rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .acciones .subir-foto {
+      color: #594AE2;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      cursor:pointer;
+      user-select:none;
+    }
+    .acciones .subir-foto::before {
+      content: "\1F4CE";
+      font-size: 1.1rem;
+      color: #3956E8;
+    }
+
+    /* Modal de Categorías */
+    .modal-categorias {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-contenido {
+      background: #fff;
+      width: 100%;
+      max-width: 350px;
+      max-height: 80vh;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      border:1px solid #E5E7EB;
+    }
+    .grupo { margin-bottom: 1rem; }
+    .grupo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #F3F4F6;
+      margin-top: 0.5rem;
+    }
+    .circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .contenido {
+      display: none;
+      margin-left: 1rem;
+      margin-top: 0.5rem;
+    }
+    .subtitulo {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-top: 0.8rem;
+    }
+    ul { list-style: none; padding: 0; margin: 0.3rem 0; }
+    li {
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      background: #F9FAFB;
+      margin-bottom: 0.3rem;
+      cursor: pointer;
+    }
+    li:hover { background: #E5E7EB; }
+
+    .cerrar-modal {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 2rem;
+      color: #64748B;
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+      z-index: 10;
+    }
+    .cerrar-categorias {
+      position: sticky;
+      top: 0;
+      right: 0;
+      font-size: 2rem;
+      color: #64748B;
+      background: #fff;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      display: block;
+      margin-left: auto;
+      padding: 0.5rem 1rem;
+      line-height: 1;
+    }
+
+    /* wizard-only: back to receipt inside step2 */
+    .backToReceipt{
       width:100%;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:#fff;
-      font-family:inherit;
-      font-size:1rem;
-      outline:none;
+      margin-top: 10px;
+      padding:.75rem 1rem;
+      border-radius:12px;
+      border:1px solid #E5E7EB;
+      background: transparent;
+      cursor:pointer;
+      font-weight:800;
     }
-    .control:focus{
-      border-color:rgba(57,86,232,.55);
-      box-shadow:0 0 0 4px rgba(57,86,232,.12);
-    }
-
-    .note{
-      margin-top:10px;
-      font-size:.78rem;
-      color:var(--gray);
-      line-height:1.35;
-    }
-
-    .toast{
-      margin-top:12px;
-      display:none;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(16,185,129,.22);
-      background:rgba(16,185,129,.10);
-      color:#064e3b;
-      font-weight:900;
-      font-size:.9rem;
-    }
-    .toast.show{ display:block; }
   </style>
 </head>
 
 <body>
-  <main class="wrap">
+  <div class="wizard">
 
-    <!-- Header -->
-    <div class="top">
-      <button class="backBtn" id="topBack" type="button" aria-label="Atrás">←</button>
-      <div class="topTitle">
+    <div class="wizard-top">
+      <button class="backTop" id="topBack" type="button">←</button>
+      <div class="titles">
         <h1>AI · Nueva transacción</h1>
         <p id="subTitle">Paso 1 de 2 · Subir recibo</p>
       </div>
     </div>
 
-    <!-- Progress -->
     <div class="progress">
-      <div class="pill" aria-hidden="true"><i id="bar"></i></div>
+      <div class="bar"><i id="barFill"></i></div>
       <div class="stepLabel" id="stepLabel">1/2</div>
     </div>
 
-    <!-- STEP 1: Upload -->
-    <section class="card step show" id="step1">
-      <p class="help">
-        Sube tu recibo y te pre-llenamos la transacción.
-        Luego podrás <strong>revisar</strong> y <strong>editar</strong> antes de guardar.
-      </p>
+    <!-- ================= STEP 1: UPLOAD ================= -->
+    <section class="step show" id="step1">
+      <div class="card">
+        <p class="helptext">
+          Sube tu recibo y te pre-llenamos la transacción. Luego podrás <b>revisar</b> y <b>editar</b> antes de guardar.
+        </p>
 
-      <div class="btnCol">
-        <button class="btn btnPrimary" id="btnCamera" type="button">
-          <span>Tomar foto</span><span>📸</span>
-        </button>
+        <div class="btnCol">
+          <button class="btn btnPrimary" id="btnCamera" type="button">
+            <span>Tomar foto</span><span>📸</span>
+          </button>
+          <button class="btn" id="btnUpload" type="button">
+            <span>Subir foto</span><span>🖼️</span>
+          </button>
+        </div>
 
-        <button class="btn" id="btnUpload" type="button">
-          <span>Subir foto</span><span>🖼️</span>
-        </button>
-      </div>
+        <input id="fileCamera" type="file" accept="image/*" capture="environment">
+        <input id="fileUpload" type="file" accept="image/*">
 
-      <input id="fileCamera" type="file" accept="image/*" capture="environment">
-      <input id="fileUpload" type="file" accept="image/*">
+        <div class="preview" id="preview">
+          <img id="previewImg" alt="Vista previa del recibo">
+        </div>
 
-      <div class="preview" id="preview">
-        <img id="previewImg" alt="Vista previa del recibo">
-      </div>
-
-      <div class="status" id="status">Analizando recibo…</div>
-
-      <div class="note">
-        La AI sugiere datos. Tú confirmas antes de guardar.
+        <div class="status" id="status">Analizando recibo…</div>
       </div>
     </section>
 
-    <!-- STEP 2: Review -->
-    <section class="card step" id="step2">
-      <p class="help">
-        Revisa la información sugerida. Puedes editar cualquier campo.
-      </p>
+    <!-- ================= STEP 2: REVIEW (TU FORM) ================= -->
+    <section class="step" id="step2">
+      <div class="formulario">
+        <button class="cerrar-modal" onclick="cerrarModal()">x</button>
+        <h2>Nueva Transacción</h2>
 
-      <div class="grid">
-        <div>
-          <label for="tipo">Tipo</label>
-          <select class="control" id="tipo">
-            <option value="gasto">Gasto</option>
-            <option value="ingreso">Ingreso</option>
-            <option value="ahorro">Ahorro</option>
-          </select>
+        <input
+          type="text"
+          class="monto"
+          id="monto"
+          inputmode="numeric"
+          placeholder="$0.00"
+        />
+
+        <input type="text" id="categoria" readonly placeholder="Seleccionar categoría" onclick="abrirModalCategorias()">
+
+        <div class="campo-con-icono">
+          <input type="date" id="fecha">
+          <span class="icono-fecha"></span>
         </div>
 
-        <div class="row2">
-          <div>
-            <label for="monto">Monto</label>
-            <input class="control" id="monto" type="number" inputmode="decimal" placeholder="0.00">
-          </div>
-          <div>
-            <label for="fecha">Fecha</label>
-            <input class="control" id="fecha" type="date">
-          </div>
+        <!-- OJO: para poder llenar por JS, le agrego IDs -->
+        <input type="text" id="comercio" placeholder="Comercio">
+        <textarea rows="3" id="comentario" placeholder="Comentario opcional"></textarea>
+
+        <div class="acciones">
+          <span class="subir-foto" id="linkCambiarFoto">Cambiar foto</span>
+          <button class="btn-registrar" id="btnRegistrar">Registrar</button>
         </div>
 
-        <div>
-          <label for="comercio">Comercio / Descripción</label>
-          <input class="control" id="comercio" type="text" placeholder="Ej. Publix, Uber, Netflix…">
-        </div>
-
-        <div class="row2">
-          <div>
-            <label for="categoria">Categoría</label>
-            <select class="control" id="categoria">
-              <option value="">Selecciona</option>
-              <option>Supermercado</option>
-              <option>Restaurantes</option>
-              <option>Transporte</option>
-              <option>Hogar</option>
-              <option>Salud</option>
-              <option>Entretenimiento</option>
-              <option>Servicios</option>
-              <option>Otros</option>
-            </select>
-          </div>
-          <div>
-            <label for="metodo">Método</label>
-            <select class="control" id="metodo">
-              <option>Efectivo</option>
-              <option>Tarjeta</option>
-              <option>Cuenta bancaria</option>
-              <option>Otro</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label for="nota">Nota (opcional)</label>
-          <textarea class="control" id="nota" rows="3" placeholder="Opcional…"></textarea>
-        </div>
+        <button class="backToReceipt" id="btnBackToUpload" type="button">← Volver al recibo</button>
       </div>
 
-      <div class="btnCol" style="margin-top:14px;">
-        <button class="btn btnGhost" id="btnBackToUpload" type="button">
-          ← Volver al recibo
-        </button>
-        <button class="btn btnPrimary" id="btnSave" type="button">
-          Guardar
-        </button>
-      </div>
+      <!-- MODAL CATEGORÍAS (TU MISMO) -->
+      <div id="modalCategorias" class="modal-categorias">
+        <div class="modal-contenido">
+          <button class="cerrar-categorias" onclick="cerrarModalCategorias()">×</button>
+          <h3>Selecciona una subcategoría</h3>
 
-      <div class="toast" id="toast">Guardado ✅ (demo)</div>
+          <!-- INGRESOS -->
+          <div class="grupo">
+            <div class="grupo-header" onclick="toggleGrupo(this)">
+              <div style="display:flex;align-items:center;">
+                <div class="circle" style="background:#3956E8;"></div>
+                Ingresos
+              </div>
+              <span>⌄</span>
+            </div>
+            <div class="contenido">
+              <div class="subtitulo">Pago por trabajo</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Bono')">Bono</li>
+                <li onclick="seleccionarSubcategoria('Comisión')">Comisión</li>
+                <li onclick="seleccionarSubcategoria('Ganancia empleado cuenta propia')">Ganancia empleado cuenta propia</li>
+                <li onclick="seleccionarSubcategoria('Pago por hora')">Pago por hora</li>
+                <li onclick="seleccionarSubcategoria('Propina')">Propina</li>
+                <li onclick="seleccionarSubcategoria('Salario')">Salario</li>
+              </ul>
+              <div class="subtitulo">Ganancia de capital</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Acciones')">Acciones</li>
+                <li onclick="seleccionarSubcategoria('Auto')">Auto</li>
+                <li onclick="seleccionarSubcategoria('Bonos o renta fija')">Bonos o renta fija</li>
+                <li onclick="seleccionarSubcategoria('Casa/Apartamento/Tierra')">Casa/Apartamento/Tierra</li>
+                <li onclick="seleccionarSubcategoria('ETF, fondo mutuo, etc.')">ETF, fondo mutuo, etc.</li>
+              </ul>
+              <div class="subtitulo">Ingreso pasivo</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Anualidad')">Anualidad</li>
+                <li onclick="seleccionarSubcategoria('Dividendos e Intereses')">Dividendos e Intereses</li>
+                <li onclick="seleccionarSubcategoria('Pensión')">Pensión</li>
+                <li onclick="seleccionarSubcategoria('Renta inmueble')">Renta inmueble</li>
+                <li onclick="seleccionarSubcategoria('Seguro Social')">Seguro Social</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- GASTOS -->
+          <div class="grupo">
+            <div class="grupo-header" onclick="toggleGrupo(this)">
+              <div style="display:flex;align-items:center;">
+                <div class="circle" style="background:#6B7280;"></div>
+                Gastos
+              </div>
+              <span>⌄</span>
+            </div>
+            <div class="contenido">
+              <div class="subtitulo">Alimentación</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Supermercado')">Supermercado</li>
+                <li onclick="seleccionarSubcategoria('Comidas fuera')">Comidas fuera</li>
+                <li onclick="seleccionarSubcategoria('Pedido a domicilio')">Pedido a domicilio</li>
+              </ul>
+              <div class="subtitulo">Casa</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Hipoteca / Alquiler')">Hipoteca / Alquiler</li>
+                <li onclick="seleccionarSubcategoria('Servicios básicos')">Servicios básicos</li>
+                <li onclick="seleccionarSubcategoria('Mantenimiento')">Mantenimiento</li>
+              </ul>
+              <div class="subtitulo">Impuestos</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Seguro social')">Seguro social</li>
+                <li onclick="seleccionarSubcategoria('Propiedad')">Propiedad</li>
+                <li onclick="seleccionarSubcategoria('Venta')">Venta</li>
+                <li onclick="seleccionarSubcategoria('Estatales')">Estatales</li>
+                <li onclick="seleccionarSubcategoria('Federales')">Federales</li>
+                <li onclick="seleccionarSubcategoria('Municipales')">Municipales</li>
+              </ul>
+              <div class="subtitulo">Transportación</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Gasolina')">Gasolina</li>
+                <li onclick="seleccionarSubcategoria('Mantenimiento')">Mantenimiento</li>
+                <li onclick="seleccionarSubcategoria('Transporte público / Uber')">Transporte público / Uber</li>
+              </ul>
+              <div class="subtitulo">Seguros</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Salud')">Salud</li>
+                <li onclick="seleccionarSubcategoria('Auto')">Auto</li>
+                <li onclick="seleccionarSubcategoria('Vida')">Vida</li>
+              </ul>
+              <div class="subtitulo">Regalos y donaciones</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Familia')">Familia</li>
+                <li onclick="seleccionarSubcategoria('Amigos')">Amigos</li>
+                <li onclick="seleccionarSubcategoria('Instituciones')">Instituciones</li>
+              </ul>
+              <div class="subtitulo">Gastos Médicos</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Consultas')">Consultas</li>
+                <li onclick="seleccionarSubcategoria('Medicamentos')">Medicamentos</li>
+                <li onclick="seleccionarSubcategoria('Procedimientos')">Procedimientos</li>
+              </ul>
+              <div class="subtitulo">Cuidado Personal</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Peluquería')">Peluquería</li>
+                <li onclick="seleccionarSubcategoria('Cosméticos')">Cosméticos</li>
+                <li onclick="seleccionarSubcategoria('Spa / Barbería')">Spa / Barbería</li>
+              </ul>
+              <div class="subtitulo">Dependientes</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Cuidado de niños')">Cuidado de niños</li>
+                <li onclick="seleccionarSubcategoria('Cuidado de mayores')">Cuidado de mayores</li>
+                <li onclick="seleccionarSubcategoria('Educación')">Educación</li>
+              </ul>
+              <div class="subtitulo">Deuda</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Tarjetas de crédito')">Tarjetas de crédito</li>
+                <li onclick="seleccionarSubcategoria('Préstamos estudiantiles')">Préstamos estudiantiles</li>
+                <li onclick="seleccionarSubcategoria('Otros préstamos')">Otros préstamos</li>
+              </ul>
+              <div class="subtitulo">Entretenimiento</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Cine')">Cine</li>
+                <li onclick="seleccionarSubcategoria('Conciertos')">Conciertos</li>
+                <li onclick="seleccionarSubcategoria('Streaming')">Streaming</li>
+              </ul>
+              <div class="subtitulo">Telecomunicaciones</div>
+              <ul>
+                <li onclick="seleccionarSubcategoria('Teléfono')">Teléfono</li>
+                <li onclick="seleccionarSubcategoria('Internet')">Internet</li>
+                <li onclick="seleccionarSubcategoria('TV')">TV</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- AHORRO -->
+          <div class="grupo">
+            <div class="grupo-header" onclick="toggleGrupo(this)">
+              <div style="display:flex;align-items:center;">
+                <div class="circle" style="background:#E8C239;"></div>
+                Ahorro
+              </div>
+              <span>⌄</span>
+            </div>
+            <div class="contenido">
+              <ul>
+                <li onclick="seleccionarSubcategoria('Contribución al retiro')">Contribución al retiro</li>
+                <li onclick="seleccionarSubcategoria('Cuenta hijo(a)')">Cuenta hijo(a)</li>
+                <li onclick="seleccionarSubcategoria('Reserva emergencia')">Reserva emergencia</li>
+                <li onclick="seleccionarSubcategoria('Cuenta de ahorro')">Cuenta de ahorro</li>
+                <li onclick="seleccionarSubcategoria('Contribución del empleador')">Contribución del empleador</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </section>
-  </main>
+
+  </div>
 
   <script>
-    // Step state
+    /* ================= Wizard logic ================= */
     let currentStep = 1;
     let receiptFile = null;
 
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
+
     const subTitle = document.getElementById('subTitle');
     const stepLabel = document.getElementById('stepLabel');
-    const bar = document.getElementById('bar');
+    const barFill = document.getElementById('barFill');
+
+    const topBack = document.getElementById('topBack');
+    const btnBackToUpload = document.getElementById('btnBackToUpload');
+    const linkCambiarFoto = document.getElementById('linkCambiarFoto');
 
     const btnCamera = document.getElementById('btnCamera');
     const btnUpload = document.getElementById('btnUpload');
@@ -330,27 +625,6 @@
     const previewImg = document.getElementById('previewImg');
     const statusEl = document.getElementById('status');
 
-    const topBack = document.getElementById('topBack');
-    const btnBackToUpload = document.getElementById('btnBackToUpload');
-    const btnSave = document.getElementById('btnSave');
-    const toast = document.getElementById('toast');
-
-    // form fields
-    const tipo = document.getElementById('tipo');
-    const monto = document.getElementById('monto');
-    const fecha = document.getElementById('fecha');
-    const comercio = document.getElementById('comercio');
-    const categoria = document.getElementById('categoria');
-    const metodo = document.getElementById('metodo');
-    const nota = document.getElementById('nota');
-
-    function todayISO(){
-      const d = new Date();
-      const pad = n => String(n).padStart(2,'0');
-      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-    }
-    fecha.value = todayISO();
-
     function setStep(n){
       currentStep = n;
       step1.classList.toggle('show', n === 1);
@@ -359,22 +633,22 @@
       if(n === 1){
         subTitle.textContent = 'Paso 1 de 2 · Subir recibo';
         stepLabel.textContent = '1/2';
-        bar.style.width = '50%';
+        barFill.style.width = '50%';
       }else{
         subTitle.textContent = 'Paso 2 de 2 · Revisar y guardar';
         stepLabel.textContent = '2/2';
-        bar.style.width = '100%';
+        barFill.style.width = '100%';
       }
       window.scrollTo({top:0, behavior:'smooth'});
     }
 
-    // top back: if step2 -> step1, else go back in history
     topBack.addEventListener('click', () => {
       if(currentStep === 2) setStep(1);
       else history.back();
     });
 
     btnBackToUpload.addEventListener('click', () => setStep(1));
+    linkCambiarFoto.addEventListener('click', () => setStep(1));
 
     btnCamera.addEventListener('click', () => fileCamera.click());
     btnUpload.addEventListener('click', () => fileUpload.click());
@@ -385,25 +659,40 @@
       preview.style.display = 'block';
     }
 
+    function todayISO(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,'0');
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
+
+    // Set default date
+    document.getElementById('fecha').value = todayISO();
+
+    // Convert number -> monto input format handler expects typing
+    function setMontoNumber(num){
+      // num like 28.73 -> rawValue in cents
+      const cents = Math.round((Number(num) || 0) * 100);
+      rawValue = String(cents);   // rawValue is used by your keyboard handler below
+      actualizarMonto();
+    }
+
     async function mockAIExtract(file){
-      // Simulación: reemplaza por tu endpoint real (OCR/Vision/LLM)
+      // Reemplaza esto por tu endpoint real (OCR/Vision/LLM)
       await new Promise(r => setTimeout(r, 900));
 
       const name = (file?.name || '').toLowerCase();
-      let cat = 'Otros';
-      let merchant = 'Comercio detectado (revisar)';
-      if(name.includes('uber') || name.includes('lyft')) { cat='Transporte'; merchant='Uber'; }
-      if(name.includes('publix') || name.includes('walmart') || name.includes('target')) { cat='Supermercado'; merchant='Supermercado'; }
-      if(name.includes('netflix') || name.includes('spotify')) { cat='Entretenimiento'; merchant='Suscripción'; }
+      let categoria = 'Otros';
+      let comercio = 'Comercio detectado (revisar)';
+      if(name.includes('uber') || name.includes('lyft')) { categoria='Transporte público / Uber'; comercio='Uber'; }
+      if(name.includes('publix') || name.includes('walmart') || name.includes('target')) { categoria='Supermercado'; comercio='Supermercado'; }
+      if(name.includes('netflix') || name.includes('spotify')) { categoria='Streaming'; comercio='Suscripción'; }
 
       return {
-        tipo:'gasto',
         monto: 28.73,
+        categoria,
         fecha: todayISO(),
-        comercio: merchant,
-        categoria: cat,
-        metodo: 'Tarjeta',
-        nota: 'Sugerido por AI. Confirma antes de guardar.'
+        comercio,
+        comentario: 'Sugerido por AI. Confirma antes de guardar.'
       };
     }
 
@@ -418,59 +707,117 @@
       try{
         const data = await mockAIExtract(file);
 
-        // fill form
-        tipo.value = data.tipo;
-        monto.value = data.monto;
-        fecha.value = data.fecha;
-        comercio.value = data.comercio;
-        categoria.value = data.categoria;
-        metodo.value = data.metodo;
-        nota.value = data.nota;
+        // Fill your form
+        setMontoNumber(data.monto);
+        document.getElementById('categoria').value = data.categoria;
+        document.getElementById('fecha').value = data.fecha;
+        document.getElementById('comercio').value = data.comercio;
+        document.getElementById('comentario').value = data.comentario;
 
         statusEl.textContent = 'Listo ✅ Avanzando a revisión…';
 
-        // auto-next
         setTimeout(() => {
           statusEl.classList.remove('show');
           setStep(2);
         }, 450);
 
       }catch(e){
-        statusEl.textContent = 'No pudimos leer el recibo. Intenta otra foto o llena manual.';
+        statusEl.textContent = 'No pudimos leer el recibo. Intenta otra foto.';
       }
     }
 
     fileCamera.addEventListener('change', e => handleSelected(e.target.files[0]));
     fileUpload.addEventListener('change', e => handleSelected(e.target.files[0]));
 
-    btnSave.addEventListener('click', () => {
-      // validación mínima
-      toast.classList.remove('show');
-      const missing = [];
-      if(!monto.value) missing.push('monto');
-      if(!fecha.value) missing.push('fecha');
-      if(!comercio.value.trim()) missing.push('comercio');
-      if(!categoria.value) missing.push('categoría');
+    /* ================= TU TEMPLATE JS (categorías + monto) ================= */
 
-      if(missing.length){
-        toast.textContent = 'Completa: ' + missing.join(', ') + '.';
-        toast.style.borderColor = 'rgba(239,68,68,.25)';
-        toast.style.background = 'rgba(239,68,68,.10)';
-        toast.style.color = '#7f1d1d';
-        toast.classList.add('show');
+    function cerrarModal() {
+      // Si está embebido en un modal padre
+      try{
+        const el = window.parent?.document?.getElementById('modalRegistrar');
+        if(el) el.style.display = 'none';
+        else history.back();
+      }catch(e){
+        history.back();
+      }
+    }
+
+    function abrirModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'flex';
+    }
+    function cerrarModalCategorias() {
+      document.getElementById('modalCategorias').style.display = 'none';
+    }
+    function seleccionarSubcategoria(nombre) {
+      document.getElementById('categoria').value = nombre;
+      cerrarModalCategorias();
+    }
+    function toggleGrupo(header) {
+      const contenido = header.nextElementSibling;
+      const abierto = contenido.style.display === 'block';
+      document.querySelectorAll('.contenido').forEach(c => c.style.display = 'none');
+      contenido.style.display = abierto ? 'none' : 'block';
+    }
+
+    // Monto formatter (tu lógica)
+    const montoInput = document.getElementById('monto');
+    let rawValue = '0';
+
+    function actualizarMonto() {
+      const numeric = rawValue === '' ? 0 : parseFloat(rawValue);
+      const number = numeric / 100;
+      montoInput.value = `$${number.toFixed(2)}`;
+    }
+
+    montoInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace') {
+        rawValue = rawValue.slice(0, -1);
+        actualizarMonto();
+        e.preventDefault();
+        return;
+      }
+      if (/^[0-9]$/.test(e.key)) {
+        rawValue += e.key;
+        actualizarMonto();
+        e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+    });
+
+    montoInput.addEventListener('focus', function () {
+      setTimeout(() => {
+        montoInput.selectionStart = montoInput.selectionEnd = montoInput.value.length;
+      }, 0);
+    });
+
+    // Inicializa
+    actualizarMonto();
+
+    // Registrar (tu lógica, con IDs)
+    document.getElementById('btnRegistrar').addEventListener('click', function () {
+      const montoTexto = document.getElementById('monto').value.replace(/[^0-9.]/g, '');
+      const monto = parseFloat(montoTexto) || 0;
+      const categoria = document.getElementById('categoria').value;
+      const fecha = document.getElementById('fecha').value;
+      const comercio = document.getElementById('comercio').value;
+      const comentario = document.getElementById('comentario').value;
+
+      if (!monto || categoria.trim() === '') {
+        alert("Por favor, ingresa un monto y selecciona una categoría.");
         return;
       }
 
-      // guardar (demo)
-      toast.textContent = 'Guardado ✅ (demo)';
-      toast.style.borderColor = 'rgba(16,185,129,.22)';
-      toast.style.background = 'rgba(16,185,129,.10)';
-      toast.style.color = '#064e3b';
-      toast.classList.add('show');
+      const transaccion = { monto, categoria, fecha, comercio, comentario };
+      console.log('📌 Transacción registrada:', transaccion);
+      alert('✅ Transacción registrada correctamente.');
+
+      // Aquí conectas backend
+      // fetch('/api/guardar-transaccion', {...})
     });
 
-    // init
-    bar.style.width = '50%';
+    // init progress
+    barFill.style.width = '50%';
   </script>
 </body>
 </html>
