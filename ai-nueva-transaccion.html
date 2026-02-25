@@ -11,7 +11,6 @@
     :root{
       --primary:#3956E8;
       --secondary:#7459D9;
-      --yellow:#E8C239;
       --gray:#64748B;
       --muted:#EEF0F6;
       --bg:#F7F8FC;
@@ -21,6 +20,7 @@
       --shadow:0 6px 18px rgba(17,24,39,.06);
       --radius:18px;
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -28,7 +28,9 @@
       font-family:"Nunito",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
     }
+
     .wrap{ max-width:420px; margin:0 auto; padding:18px; }
+
     .card{
       background:var(--card);
       border:1px solid var(--border);
@@ -36,10 +38,12 @@
       box-shadow:var(--shadow);
       padding:16px;
     }
+
     h1{ margin:0 0 6px; font-size:1.15rem; font-weight:900; }
     p{ margin:0; color:var(--gray); font-size:.95rem; }
 
     .btnCol{ display:grid; gap:10px; margin-top:14px; }
+
     .btn{
       width:100%;
       border:1px solid var(--border);
@@ -52,13 +56,16 @@
       box-shadow:0 4px 14px rgba(15,23,42,.06);
       display:flex; align-items:center; justify-content:space-between;
     }
+
     .btn:active{ transform:translateY(1px); }
+
     .btnPrimary{
       background:linear-gradient(135deg, var(--primary), #4d6bff);
       color:#fff;
       border-color:rgba(255,255,255,.15);
       box-shadow:0 12px 22px rgba(57,86,232,.22);
     }
+
     .pill{
       font-size:.8rem;
       font-weight:900;
@@ -75,6 +82,7 @@
       border-top:1px dashed var(--border);
       padding-top:12px;
     }
+
     .sub.show{ display:block; }
 
     .hint{
@@ -102,29 +110,30 @@
 
         <button class="btn" id="btnManual" type="button">
           <span>Entrada manual</span>
-          <span aria-hidden="true">→</span>
+          <span>→</span>
         </button>
       </div>
 
-      <!-- Opciones cuando elige automática -->
+      <!-- Opciones automática -->
       <div class="sub" id="autoOptions">
         <div class="btnCol" style="margin-top:0;">
           <button class="btn" id="btnCamera" type="button">
             <span>Tomar foto</span>
-            <span aria-hidden="true">📸</span>
+            <span>📸</span>
           </button>
 
           <button class="btn" id="btnGallery" type="button">
             <span>Escoger foto</span>
-            <span aria-hidden="true">🖼️</span>
+            <span>🖼️</span>
           </button>
         </div>
 
-        <!-- Inputs ocultos para cámara/galería -->
         <input id="fileCamera" type="file" accept="image/*" capture="environment"/>
         <input id="fileGallery" type="file" accept="image/*"/>
 
-        <div class="hint">Luego de seleccionar la foto, se procesa y se pre-llena el formulario (siguiente pantalla).</div>
+        <div class="hint">
+          Luego de seleccionar la foto, se procesa y se pre-llena el formulario.
+        </div>
       </div>
     </section>
   </main>
@@ -139,22 +148,23 @@
     const fileCamera = document.getElementById('fileCamera');
     const fileGallery = document.getElementById('fileGallery');
 
+    // Mostrar opciones automática
     btnAuto.addEventListener('click', () => {
       autoOptions.classList.toggle('show');
     });
 
+    // Redirección manual
     btnManual.addEventListener('click', () => {
-      // Aquí navegas a tu pantalla/formulario manual
-      alert('Ir a formulario manual (placeholder).');
+      window.location.href = "https://cadamenudo.github.io/UI-UX/nueva-transaccion.html";
     });
 
+    // Activar inputs ocultos
     btnCamera.addEventListener('click', () => fileCamera.click());
     btnGallery.addEventListener('click', () => fileGallery.click());
 
     function onSelected(file){
       if(!file) return;
-      // Aquí navegas a tu pantalla de "Procesando" y luego "Formulario pre-llenado"
-      alert('Foto seleccionada: ' + file.name + ' (placeholder).');
+      alert('Foto seleccionada: ' + file.name + ' (placeholder procesamiento AI)');
     }
 
     fileCamera.addEventListener('change', (e) => onSelected(e.target.files[0]));
