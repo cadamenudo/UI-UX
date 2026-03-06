@@ -99,14 +99,14 @@
     /* ===== WELCOME SCREEN ===== */
     .welcome-hero{
       flex:1;display:flex;flex-direction:column;
-      align-items:center;justify-content:center;
-      padding:32px 24px;text-align:center;
+      align-items:center;justify-content:flex-start;
+      padding:20px 24px 0;text-align:center;
     }
     .hero-icon{
       width:88px;height:88px;border-radius:28px;
       background:linear-gradient(135deg,#594AE2,#7459D9);
       display:grid;place-items:center;font-size:40px;
-      margin-bottom:24px;
+      margin-bottom:16px;
       box-shadow:0 12px 32px rgba(89,74,226,.35);
     }
     .hero-title{font-size:26px;font-weight:900;line-height:1.2;margin-bottom:10px}
@@ -351,11 +351,6 @@
      SCREEN 0 — WELCOME
 ═══════════════════════════════════════════════════════ -->
 <div class="screen active" id="s0">
-  <div class="app-header">
-    <img src="https://cadamenudo.github.io/UI-UX/assets/icons/nueva.png" alt="Cada Menudo"/>
-    <div class="avatar"></div>
-  </div>
-
   <div class="welcome-hero">
     <div class="hero-icon anim-in">💳</div>
     <h1 class="hero-title anim-in d1">Tu <span>Plan de Deuda</span><br/>empieza hoy</h1>
@@ -375,11 +370,10 @@
         <span class="feat-text">Proyecciones para terminar antes</span>
       </div>
     </div>
-  </div>
 
-  <div class="sticky-footer" style="flex-direction:column;gap:8px">
-    <button class="btn-primary" onclick="startFlow()">Empezar mi plan →</button>
-    <button class="btn-link" onclick="goToPlan()">Ya registré mis deudas antes → entrar directo</button>
+    <button onclick="startFlow()" class="anim-in d4" style="margin-top:20px;margin-bottom:24px;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 6px 16px rgba(89,74,226,.3)">
+      Empezar mi plan →
+    </button>
   </div>
 </div>
 
@@ -689,17 +683,10 @@
 
   function updateDetectedBtn(){
     const btn = document.getElementById('btnConfirmDetected');
-    const anySelected = selectedDts.size > 0;
-    // Check that all selected have orig > 0
-    let allFilled = true;
-    selectedDts.forEach(id => {
-      const v = Number(document.getElementById('dt-orig-'+id)?.value || 0);
-      if(v <= 0) allFilled = false;
-    });
-    btn.disabled = !anySelected || !allFilled;
+    btn.disabled = selectedDts.size === 0;
     btn.textContent = selectedDts.size > 0
-      ? `Confirmar ${selectedDts.size} deuda${selectedDts.size!==1?'s':'s'} →`
-      : 'Confirmar seleccionadas →';
+      ? `Continuar con ${selectedDts.size} deuda${selectedDts.size!==1?'s':''} →`
+      : 'Selecciona al menos una';
   }
 
   function confirmDetected(){
