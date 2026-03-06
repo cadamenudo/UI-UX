@@ -302,13 +302,44 @@
     .source-note strong{color:var(--primary)}
     .history-list{display:flex;flex-direction:column;gap:7px}
     .tx{
-      display:flex;align-items:center;justify-content:space-between;
       padding:10px 12px;background:#fff;border:1px solid var(--border);
       border-radius:12px;
     }
+    .tx.negative{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.25)}
+    .tx-top{display:flex;align-items:center;justify-content:space-between}
     .tx-date{font-size:13px;font-weight:900}
     .tx-note{font-size:12px;font-weight:700;color:var(--gray);margin-top:1px}
     .tx-amt{font-size:14px;font-weight:900;color:#15803d}
+    .tx-amt.negative{color:var(--red)}
+    .tx-breakdown{
+      display:grid;grid-template-columns:1fr 1fr;gap:4px;
+      margin-top:8px;padding-top:8px;border-top:1px solid var(--border);
+    }
+    .tx-split{
+      display:flex;flex-direction:column;
+      padding:5px 8px;border-radius:8px;background:var(--bg);
+    }
+    .tx-split.interest{background:rgba(249,115,22,.07)}
+    .tx-split.principal{background:rgba(34,197,94,.07)}
+    .tx-split-lbl{font-size:10px;font-weight:900;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+    .tx-split-val{font-size:13px;font-weight:900}
+    .tx-split.interest .tx-split-val{color:var(--orange)}
+    .tx-split.principal .tx-split-val{color:#15803d}
+    .tx-split.principal .tx-split-val.negative{color:var(--red)}
+    .tx-warn{
+      margin-top:7px;padding:5px 8px;border-radius:8px;
+      background:rgba(239,68,68,.08);
+      font-size:11px;font-weight:800;color:var(--red);line-height:1.4;
+    }
+    /* Disclaimer note */
+    .amort-disclaimer{
+      display:flex;gap:8px;align-items:flex-start;
+      padding:10px 12px;margin-bottom:10px;
+      background:rgba(89,74,226,.05);border:1px solid rgba(89,74,226,.15);
+      border-radius:12px;font-size:12px;font-weight:700;
+      color:var(--gray);line-height:1.5;
+    }
+    .amort-disclaimer strong{color:var(--primary)}
 
     /* Edit button */
     .edit-btn{
@@ -577,6 +608,10 @@
       <div class="history-header">
         <div class="history-title">Historial de abonos</div>
         <div class="history-total" id="historyTotal" style="display:none"></div>
+      </div>
+      <div class="amort-disclaimer" id="amortDisclaimer" style="display:none">
+        <span>ℹ️</span>
+        <span>El desglose interés/principal se calcula asumiendo el <strong>APR actual como constante</strong> y un pago por mes. Para el resultado exacto confirma con tu acreedor — las tasas variables y cargos reales pueden diferir.</span>
       </div>
       <div class="source-note">
         <span>📥</span>
@@ -874,12 +909,52 @@
     }
     ht.style.display = 'block';
     ht.textContent = `Total: ${money(s.paid)}`;
+
+    // Add disclaimer if APR > 0
+    const disc = document.getElementById('amortDisclaimer');
+    if(d.apr > 0){
+      disc.style.display = 'flex';
+    } else {
+      disc.style.display = 'none';
+    }
+
+    // Build amortization for history display
+    const amort = amortize(d);
+    const amortMap = {};
+    amort.forEach(a => { amortMap[a.date + '_' + a.amount] = a; });
+
     sorted.forEach(p => {
+      const key = p.date + '_' + p.amount;
+      const a   = amortMap[key];
       const row = document.createElement('div');
-      row.className = 'tx';
+      const isNeg = a && a.principal < 0;
+      row.className = 'tx' + (isNeg ? ' negative' : '');
+
+      let breakdownHTML = '';
+      if(d.apr > 0 && a){
+        const principalClass = a.principal < 0 ? ' negative' : '';
+        breakdownHTML = `
+          <div class="tx-breakdown">
+            <div class="tx-split interest">
+              <span class="tx-split-lbl">Interés</span>
+              <span class="tx-split-val">${money(a.interest)}</span>
+            </div>
+            <div class="tx-split principal">
+              <span class="tx-split-lbl">Principal</span>
+              <span class="tx-split-val${principalClass}">${money(a.principal)}</span>
+            </div>
+          </div>`;
+        if(isNeg){
+          breakdownHTML += `<div class="tx-warn">⚠️ Pago insuficiente — la deuda creció ${money(Math.abs(a.principal))} este mes.</div>`;
+        }
+      }
+
       row.innerHTML = `
-        <div><div class="tx-date">${fmtDate(p.date)}</div><div class="tx-note">${esc(p.note||'Abono')}</div></div>
-        <div class="tx-amt">${money(p.amount)}</div>`;
+        <div class="tx-top">
+          <div><div class="tx-date">${fmtDate(p.date)}</div><div class="tx-note">${esc(p.note||'Abono')}</div></div>
+          <div class="tx-amt${isNeg?' negative':''}">${money(p.amount)}</div>
+        </div>
+        ${breakdownHTML}`;
       hl.appendChild(row);
     });
   }
@@ -947,19 +1022,50 @@
   });
 
   // ===== UTILS =====
+
+  // Amortization: for each payment calculates interest, principal and running balance
+  function amortize(d){
+    const apr = Number(d.apr || 0);
+    const monthlyRate = apr / 100 / 12;
+    let balance = Number(d.original || 0);
+    const sorted = [...(d.payments||[])].sort((a,b) => a.date > b.date ? 1 : -1);
+    return sorted.map(p => {
+      const amount   = Number(p.amount || 0);
+      const interest = apr > 0 ? balance * monthlyRate : 0;
+      const principal = amount - interest;
+      balance = balance - principal; // can go up if principal < 0
+      return {
+        date: p.date,
+        amount,
+        interest: Math.round(interest * 100) / 100,
+        principal: Math.round(principal * 100) / 100,
+        balanceAfter: Math.max(0, Math.round(balance * 100) / 100),
+        isNegative: principal < 0,
+      };
+    });
+  }
+
   function compute(d){
-    const paid    = totalPaid(d);
-    const balance = Math.max(0, Number(d.original||0) - paid);
-    const pct     = d.original > 0 ? paid/d.original*100 : 0;
+    const paid = totalPaid(d);
+    let balance;
+    if(d.apr > 0 && (d.payments||[]).length > 0){
+      const amort = amortize(d);
+      balance = Math.max(0, amort[amort.length - 1].balanceAfter);
+    } else {
+      balance = Math.max(0, Number(d.original||0) - paid);
+    }
+    const pct = d.original > 0 ? ((d.original - balance) / d.original * 100) : 0;
     return {paid, balance, pct};
   }
+
   function totalPaid(d){ return (d.payments||[]).reduce((s,p) => s+Number(p.amount||0), 0); }
+
   function getStatus(d){
-    const b = d.original - totalPaid(d);
-    if(b <= 0)           return {cls:'ok',   label:'Pagada ✓'};
-    if(d.apr > 20)       return {cls:'over', label:'APR alto'};
-    if(d.payments?.length) return {cls:'ok', label:'Al día'};
-    return                      {cls:'none', label:'Sin abonos'};
+    const s = compute(d);
+    if(s.balance <= 0)         return {cls:'ok',   label:'Pagada ✓'};
+    if(d.apr > 20)             return {cls:'over', label:'APR alto'};
+    if(d.payments?.length)     return {cls:'ok',   label:'Al día'};
+    return                            {cls:'none', label:'Sin abonos'};
   }
   function getCat(id){ return BASE_CATEGORIES.find(c=>c.id===id)?.name || 'Otro'; }
   function clamp(n,a,b){ return Math.min(b,Math.max(a,n)); }
