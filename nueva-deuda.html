@@ -22,8 +22,6 @@
       --text:#0F172A;
       --border:#E5E7EB;
       --shadow:0 4px 14px rgba(17,24,39,.07);
-      --header-h:56px;
-      --footer-h:80px;
     }
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
     html{height:100%}
@@ -34,29 +32,24 @@
       max-width:430px;margin:0 auto;
     }
 
-    /* ===== HEADER ===== */
-    .app-header{
-      position:fixed;top:0;left:0;right:0;
-      max-width:430px;margin:0 auto;
-      height:var(--header-h);
-      background:#594AE2;z-index:100;
-      display:flex;align-items:center;gap:12px;
-      padding:0 16px;
-      box-shadow:0 2px 8px rgba(0,0,0,.15);
+    /* ===== INLINE NAV ===== */
+    .inline-nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 16px 6px;
     }
-    .back-btn{
+    .inav-back{
       width:36px;height:36px;border-radius:10px;
-      background:rgba(255,255,255,.15);border:none;
-      display:grid;place-items:center;cursor:pointer;
-      color:#fff;font-size:20px;line-height:1;flex:0 0 36px;
+      background:var(--muted);border:1px solid var(--border);
+      color:var(--text);font-size:22px;display:grid;place-items:center;
+      cursor:pointer;line-height:1;
     }
-    .header-info{flex:1}
-    .header-title{font-size:17px;font-weight:900;color:#fff}
-    .header-sub{font-size:11px;font-weight:700;color:rgba(255,255,255,.7);margin-top:1px}
+    .inav-center{text-align:center;flex:1}
+    .inav-title{font-size:15px;font-weight:900;color:var(--text)}
+    .inav-sub{font-size:11px;font-weight:800;color:var(--gray);margin-top:1px}
 
     /* ===== SCROLL BODY ===== */
     .scroll-body{
-      padding:calc(var(--header-h) + 14px) 14px calc(var(--footer-h) + 14px);
+      padding:0 14px 20px;
     }
 
     /* ===== CARD ===== */
@@ -171,32 +164,7 @@
     .sum-row.total .sum-lbl{font-size:14px;font-weight:900;color:var(--text)}
     .sum-row.total .sum-val{font-size:18px;font-weight:900;color:var(--primary)}
 
-    /* ===== STICKY FOOTER ===== */
-    .sticky-footer{
-      position:fixed;bottom:0;left:0;right:0;
-      max-width:430px;margin:0 auto;
-      background:#fff;border-top:1px solid var(--border);
-      padding:12px 14px;
-      padding-bottom:max(12px, env(safe-area-inset-bottom));
-      z-index:100;
-      display:flex;gap:8px;
-    }
-    .btn-save{
-      flex:1;border:none;border-radius:14px;
-      padding:15px;background:var(--primary);color:#fff;
-      font-family:"Nunito",sans-serif;font-size:16px;font-weight:900;
-      cursor:pointer;box-shadow:0 8px 20px rgba(89,74,226,.3);
-      transition:opacity .15s,transform .1s;
-    }
-    .btn-save:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
-    .btn-save:active:not(:disabled){transform:scale(.98)}
-    .btn-cancel{
-      border:1.5px solid var(--border);border-radius:14px;
-      padding:15px 18px;background:#fff;
-      font-family:"Nunito",sans-serif;font-size:15px;font-weight:900;
-      color:var(--gray);cursor:pointer;
-    }
-    .btn-cancel:active{background:var(--muted)}
+
 
     /* ===== SUCCESS SHEET ===== */
     .success-overlay{
@@ -259,42 +227,79 @@
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="app-header">
-  <button class="back-btn" onclick="goBack()">‹</button>
-  <div class="header-info">
-    <div class="header-title">Nueva deuda</div>
-    <div class="header-sub">Agregar al Plan de Deuda</div>
-  </div>
-</header>
-
-<!-- SCROLL BODY -->
 <div class="scroll-body">
+  <div class="inline-nav">
+    <button class="inav-back" onclick="goBack()">‹</button>
+    <div class="inav-center">
+      <div class="inav-title">Nueva deuda</div>
+      <div class="inav-sub">Agregar al Plan de Deuda</div>
+    </div>
+    <div style="width:36px"></div>
+  </div>
 
-  <!-- PASO 1: DATOS -->
+  <!-- PASO 1: TIPO -->
   <div class="card">
     <div class="card-title">
       <div class="step-num">1</div>
+      Tipo de deuda
+    </div>
+
+    <div class="cat-grid" role="radiogroup">
+      <button class="cat-btn" data-cat="tarjetas" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">💳</span>
+        <span class="cat-label">Tarjetas de crédito</span>
+      </button>
+      <button class="cat-btn" data-cat="linea_personal" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🏦</span>
+        <span class="cat-label">Línea crédito personal</span>
+      </button>
+      <button class="cat-btn" data-cat="linea_propiedad" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🏘️</span>
+        <span class="cat-label">Línea crédito propiedad</span>
+      </button>
+      <button class="cat-btn" data-cat="casa" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🏠</span>
+        <span class="cat-label">Casa</span>
+      </button>
+      <button class="cat-btn" data-cat="otras_propiedades" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">⛵</span>
+        <span class="cat-label">Otras propiedades</span>
+      </button>
+      <button class="cat-btn" data-cat="auto" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🚗</span>
+        <span class="cat-label">Auto</span>
+      </button>
+      <button class="cat-btn" data-cat="educacion" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🎓</span>
+        <span class="cat-label">Educación</span>
+      </button>
+      <button class="cat-btn" data-cat="muebles" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🛋️</span>
+        <span class="cat-label">Muebles y Enseres</span>
+      </button>
+      <button class="cat-btn" data-cat="mejoras" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🔨</span>
+        <span class="cat-label">Mejoras al hogar</span>
+      </button>
+      <button class="cat-btn" data-cat="seguro_vida" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">🛡️</span>
+        <span class="cat-label">Seguro de vida</span>
+      </button>
+      <button class="cat-btn" data-cat="margen_broker" type="button" onclick="selectCat(this)">
+        <span class="cat-icon">📈</span>
+        <span class="cat-label">Margen corretaje</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 2: DATOS -->
+  <div class="card">
+    <div class="card-title">
+      <div class="step-num">2</div>
       Datos de la deuda
     </div>
-
     <div class="field">
-      <label for="debtSelector">Nombre de la deuda</label>
-      <div class="select-wrap">
-        <select id="debtSelector" onchange="onDebtSelectorChange()">
-          <option value="">— Selecciona o crea —</option>
-          <optgroup label="Deudas en tus categorías">
-            <option value="visa_popular">Visa – Banco Popular</option>
-            <option value="prestamo_auto">Préstamo Auto – FirstBankPR</option>
-            <option value="sallie_mae">Sallie Mae – Student Loan</option>
-          </optgroup>
-          <option value="__nueva__">➕ Escribir nombre nuevo…</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="field" id="newNameField" style="display:none">
-      <label for="debtName">Nombre de la nueva deuda</label>
+      <label for="debtName">Nombre de la deuda</label>
       <input id="debtName" type="text"
              placeholder="Ej. Visa Banco Popular…"
              oninput="updateSummary(); checkSave();"/>
@@ -347,61 +352,6 @@
     </div>
   </div>
 
-  <!-- PASO 2: TIPO -->
-  <div class="card">
-    <div class="card-title">
-      <div class="step-num">2</div>
-      Tipo de deuda
-    </div>
-
-    <div class="cat-grid" role="radiogroup">
-      <button class="cat-btn" data-cat="tarjetas" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">💳</span>
-        <span class="cat-label">Tarjetas de crédito</span>
-      </button>
-      <button class="cat-btn" data-cat="linea_personal" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🏦</span>
-        <span class="cat-label">Línea crédito personal</span>
-      </button>
-      <button class="cat-btn" data-cat="linea_propiedad" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🏘️</span>
-        <span class="cat-label">Línea crédito propiedad</span>
-      </button>
-      <button class="cat-btn" data-cat="casa" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🏠</span>
-        <span class="cat-label">Casa</span>
-      </button>
-      <button class="cat-btn" data-cat="otras_propiedades" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">⛵</span>
-        <span class="cat-label">Otras propiedades</span>
-      </button>
-      <button class="cat-btn" data-cat="auto" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🚗</span>
-        <span class="cat-label">Auto</span>
-      </button>
-      <button class="cat-btn" data-cat="educacion" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🎓</span>
-        <span class="cat-label">Educación</span>
-      </button>
-      <button class="cat-btn" data-cat="muebles" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🛋️</span>
-        <span class="cat-label">Muebles y Enseres</span>
-      </button>
-      <button class="cat-btn" data-cat="mejoras" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🔨</span>
-        <span class="cat-label">Mejoras al hogar</span>
-      </button>
-      <button class="cat-btn" data-cat="seguro_vida" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">🛡️</span>
-        <span class="cat-label">Seguro de vida</span>
-      </button>
-      <button class="cat-btn" data-cat="margen_broker" type="button" onclick="selectCat(this)">
-        <span class="cat-icon">📈</span>
-        <span class="cat-label">Margen corretaje</span>
-      </button>
-    </div>
-  </div>
-
   <!-- PASO 3: RESUMEN -->
   <div class="card">
     <div class="card-title">
@@ -439,10 +389,10 @@
 
 </div>
 
-<!-- STICKY FOOTER -->
-<div class="sticky-footer">
-  <button class="btn-cancel" onclick="goBack()">Cancelar</button>
-  <button class="btn-save" id="btnSave" onclick="saveDebt()" disabled>
+<!-- INLINE SAVE BUTTON -->
+<div style="text-align:center;padding:8px 14px 32px">
+  <button id="btnSave" onclick="saveDebt()" disabled
+    style="padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 6px 16px rgba(89,74,226,.3);opacity:.4;transition:opacity .15s">
     Agregar al Plan
   </button>
 </div>
@@ -487,30 +437,7 @@
 
   let selectedCat = null;
 
-  // ===== SELECTOR =====
-  function onDebtSelectorChange(){
-    const val = document.getElementById('debtSelector').value;
-    const nf  = document.getElementById('newNameField');
-    const ni  = document.getElementById('debtName');
 
-    if(val === '__nueva__'){
-      nf.style.display = 'block';
-      ni.value = '';
-      setTimeout(() => ni.focus(), 60);
-    } else {
-      nf.style.display = 'none';
-      ni.value = '';
-    }
-
-    if(PRESET_DEBTS[val]){
-      document.querySelectorAll('.cat-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.cat === PRESET_DEBTS[val].cat);
-      });
-      selectedCat = PRESET_DEBTS[val].cat;
-    }
-    updateSummary();
-    checkSave();
-  }
 
   // ===== CATEGORY =====
   function selectCat(btn){
@@ -567,10 +494,7 @@
 
   // ===== SUMMARY =====
   function getDebtName(){
-    const val = document.getElementById('debtSelector').value;
-    if(!val) return '';
-    if(val === '__nueva__') return document.getElementById('debtName').value.trim();
-    return PRESET_DEBTS[val]?.name || '';
+    return (document.getElementById('debtName')?.value || '').trim();
   }
 
   function updateSummary(){
@@ -600,10 +524,12 @@
   function checkSave(){
     const name = getDebtName();
     const orig = Number(document.getElementById('debtOriginal').value || 0);
-    document.getElementById('btnSave').disabled = !(name && orig > 0 && selectedCat);
+    const btn  = document.getElementById('btnSave');
+    const ok   = !!(name && orig > 0 && selectedCat);
+    btn.disabled = !ok;
+    btn.style.opacity  = ok ? '1' : '.4';
+    btn.style.cursor   = ok ? 'pointer' : 'not-allowed';
   }
-
-  document.getElementById('debtSelector').addEventListener('change', checkSave);
 
   // ===== SAVE =====
   function saveDebt(){
@@ -618,11 +544,11 @@
   }
 
   function goToPlan(){
-    window.location.href = 'https://cadamenudo.github.io/UI-UX/bajar-deudas.html';
+    window.location.href = 'bajar-deuda-mobile.html';
   }
 
   function goBack(){
-    window.location.href = 'https://cadamenudo.github.io/UI-UX/bajar-deudas.html';
+    window.location.href = 'bajar-deuda-mobile.html';
   }
 
   function registerAnother(){
