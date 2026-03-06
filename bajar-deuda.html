@@ -62,7 +62,7 @@
     /* ===== VIEWS (slide navigation) ===== */
     .views{
       position:fixed;
-      top:var(--header-h);bottom:var(--bottom-h);
+      top:0;bottom:0;
       left:0;right:0;
       max-width:430px;margin:0 auto;
       overflow:hidden;
@@ -114,7 +114,7 @@
 
     /* ===== FAB ===== */
     .fab{
-      position:fixed;bottom:calc(var(--bottom-h) + 14px);right:16px;
+      position:fixed;bottom:28px;right:16px;
       width:52px;height:52px;border-radius:16px;
       background:var(--primary);color:#fff;border:none;
       font-size:24px;font-weight:900;cursor:pointer;
@@ -449,7 +449,7 @@
 
     /* ===== TOAST ===== */
     .toast{
-      position:fixed;bottom:calc(var(--bottom-h) + 12px);left:50%;
+      position:fixed;bottom:28px;left:50%;
       transform:translateX(-50%) translateY(20px);
       background:#1e293b;color:#fff;
       padding:11px 18px;border-radius:12px;
@@ -475,16 +475,6 @@
   </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header class="app-header">
-  <button class="back-btn" onclick="closeDetail()">‹</button>
-  <div class="logo">
-    <img src="https://cadamenudo.github.io/UI-UX/assets/icons/nueva.png" alt="Cada Menudo"/>
-  </div>
-  <div class="header-title" id="headerTitle">Plan de Deuda</div>
-  <div class="avatar"></div>
-</header>
 
 <!-- VIEWS -->
 <div class="views">
@@ -626,26 +616,6 @@
 
 <!-- FAB -->
 <button class="fab" onclick="window.location.href='https://cadamenudo.github.io/UI-UX/nueva-deuda.html'" title="Nueva deuda">+</button>
-
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <button class="nav-item" type="button">
-    <span class="ni-icon">🏠</span>
-    <span class="ni-label">Inicio</span>
-  </button>
-  <button class="nav-item active" type="button">
-    <span class="ni-icon">💳</span>
-    <span class="ni-label">Deudas</span>
-  </button>
-  <button class="nav-item" type="button">
-    <span class="ni-icon">📊</span>
-    <span class="ni-label">Gastos</span>
-  </button>
-  <button class="nav-item" type="button">
-    <span class="ni-icon">⚙️</span>
-    <span class="ni-label">Perfil</span>
-  </button>
-</nav>
 
 <!-- EDIT SHEET -->
 <div class="sheet-overlay" id="editOverlay">
