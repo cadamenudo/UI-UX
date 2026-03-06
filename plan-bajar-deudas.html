@@ -65,6 +65,21 @@
     .hdr-title{font-size:17px;font-weight:900;color:#fff}
     .hdr-step{font-size:12px;font-weight:800;color:rgba(255,255,255,.7);margin-top:1px;text-align:center}
 
+    /* ===== INLINE NAV (no background bar) ===== */
+    .inline-nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 16px 6px;flex:0 0 auto;
+    }
+    .inav-back{
+      width:36px;height:36px;border-radius:10px;
+      background:var(--muted);border:1px solid var(--border);
+      color:var(--text);font-size:22px;display:grid;place-items:center;
+      cursor:pointer;line-height:1;
+    }
+    .inav-center{text-align:center}
+    .inav-title{font-size:15px;font-weight:900;color:var(--text)}
+    .inav-step{font-size:11px;font-weight:800;color:var(--gray);margin-top:1px}
+
     /* ===== PROGRESS DOTS ===== */
     .progress-dots{
       display:flex;align-items:center;justify-content:center;
@@ -137,49 +152,61 @@
     .db-title{font-size:14px;font-weight:900;color:var(--primary);margin-bottom:3px}
     .db-sub{font-size:12px;font-weight:700;color:var(--gray);line-height:1.5}
 
-    .detected-debt{
+    /* accordion debt card */
+    .acc-card{
       background:#fff;border:1.5px solid var(--border);
-      border-radius:14px;padding:13px;margin-bottom:8px;
-      transition:border-color .15s,background .15s;
-      position:relative;
+      border-radius:14px;margin-bottom:8px;
+      overflow:hidden;transition:border-color .2s;
     }
-    .detected-debt.selected{
-      border-color:var(--primary);
-      background:rgba(89,74,226,.04);
+    .acc-card.selected{border-color:var(--primary)}
+    .acc-card.filled{border-color:rgba(34,197,94,.45)}
+
+    .acc-header{
+      display:flex;align-items:center;gap:10px;
+      padding:13px 14px;cursor:pointer;
+      user-select:none;
     }
-    .dd-top{display:flex;align-items:flex-start;gap:10px}
-    .dd-check{
-      width:22px;height:22px;border-radius:7px;
+    .acc-num{
+      width:24px;height:24px;border-radius:8px;flex:0 0 24px;
+      background:var(--muted);border:1px solid var(--border);
+      display:grid;place-items:center;
+      font-size:11px;font-weight:900;color:var(--gray);
+    }
+    .acc-card.selected .acc-num{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .acc-card.filled .acc-num{background:rgba(34,197,94,.15);color:#15803d;border-color:rgba(34,197,94,.4)}
+    .acc-info{flex:1;min-width:0}
+    .acc-name{font-size:14px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .acc-sub{font-size:11px;font-weight:700;color:var(--gray);margin-top:2px}
+    .acc-amt{
+      font-size:13px;font-weight:900;color:var(--gray);
+      white-space:nowrap;
+    }
+    .acc-card.selected .acc-amt{color:var(--primary)}
+    .acc-card.filled .acc-amt{color:#15803d}
+    .acc-chevron{
+      font-size:14px;color:var(--gray);flex:0 0 16px;
+      transition:transform .2s;
+    }
+    .acc-card.open .acc-chevron{transform:rotate(180deg)}
+
+    /* check pill inside header for detected debts */
+    .acc-check{
+      width:20px;height:20px;border-radius:6px;flex:0 0 20px;
       border:2px solid var(--border);background:#fff;
       display:grid;place-items:center;
-      flex:0 0 22px;margin-top:1px;cursor:pointer;
       transition:all .15s;
     }
-    .detected-debt.selected .dd-check{
-      background:var(--primary);border-color:var(--primary);
-    }
-    .dd-check::after{
-      content:'✓';color:#fff;font-size:12px;font-weight:900;
-      opacity:0;transition:opacity .15s;
-    }
-    .detected-debt.selected .dd-check::after{opacity:1}
-    .dd-info{flex:1}
-    .dd-name{font-size:14px;font-weight:900;margin-bottom:3px}
-    .dd-meta{font-size:12px;font-weight:700;color:var(--gray)}
-    .dd-paid{
-      font-size:12px;font-weight:900;
-      color:#15803d;
-      background:rgba(34,197,94,.1);
-      border:1px solid rgba(34,197,94,.25);
-      border-radius:8px;padding:2px 8px;
-      display:inline-block;margin-top:5px;
-    }
-    .dd-fields{
-      display:grid;grid-template-columns:1fr 1fr;gap:8px;
-      margin-top:12px;padding-top:12px;
+    .acc-card.selected .acc-check{background:var(--primary);border-color:var(--primary)}
+    .acc-check::after{content:'✓';color:#fff;font-size:11px;font-weight:900;opacity:0;transition:opacity .15s}
+    .acc-card.selected .acc-check::after{opacity:1}
+
+    .acc-body{
+      display:none;
+      padding:0 14px 14px;
       border-top:1px solid var(--border);
     }
-    .detected-debt:not(.selected) .dd-fields{display:none}
+    .acc-card.open .acc-body{display:block}
+    .acc-body-inner{padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
     /* ===== CATEGORY SELECTOR ===== */
     .cat-grid{
@@ -321,6 +348,24 @@
       text-align:center;padding:8px 0 4px;
     }
 
+    /* ===== MANUAL DEBT ROW ===== */
+    .manual-debt-row{
+      display:flex;align-items:center;justify-content:space-between;
+      background:#fff;border:1.5px solid rgba(34,197,94,.35);
+      border-radius:14px;padding:12px 14px;margin:0 14px 8px;
+    }
+    .mdr-left{display:flex;align-items:center;gap:10px}
+    .mdr-icon{font-size:20px}
+    .mdr-name{font-size:13px;font-weight:900}
+    .mdr-cat{font-size:11px;font-weight:700;color:var(--gray);margin-top:1px}
+    .mdr-amt{font-size:13px;font-weight:900;color:var(--primary)}
+    .mdr-remove{
+      background:none;border:none;cursor:pointer;
+      font-size:16px;color:#CBD5E1;padding:4px;
+      transition:color .15s;
+    }
+    .mdr-remove:hover{color:var(--red)}
+
     /* ===== CONFETTI ===== */
     .confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:400;overflow:hidden}
     .confetti-piece{
@@ -382,16 +427,15 @@
      SCREEN 1A — DETECTED TRANSACTIONS
 ═══════════════════════════════════════════════════════ -->
 <div class="screen" id="s1a">
-  <div class="app-header">
-    <button class="hdr-back" onclick="goBack('s0')">‹</button>
-    <div style="text-align:center">
-      <div class="hdr-title">Deudas detectadas</div>
-      <div class="hdr-step" id="s1a-step">Paso 1 de 3</div>
+  <div class="inline-nav">
+    <button class="inav-back" onclick="goBack('s0')">‹</button>
+    <div class="inav-center">
+      <div class="inav-title">Deudas detectadas</div>
+      <div class="inav-step">Paso 1 de 3</div>
     </div>
     <div style="width:36px"></div>
   </div>
 
-  <div class="progress-dots" id="dots1a"></div>
 
   <div class="scroll-body">
     <div class="detected-banner anim-in">
@@ -402,7 +446,10 @@
       </div>
     </div>
 
-    <div id="detectedList"></div>
+    <div id="detectedList" style="padding:0 14px"></div>
+
+    <!-- Manually added debts appear here -->
+    <div id="manualDebtsList" style="padding:0 14px"></div>
 
     <div style="padding:0 14px">
       <button class="btn-ghost" style="width:100%;margin-bottom:8px" onclick="goToS1b()">
@@ -423,16 +470,15 @@
      SCREEN 1B — FRESH START: CATEGORY PICKER
 ═══════════════════════════════════════════════════════ -->
 <div class="screen" id="s1b">
-  <div class="app-header">
-    <button class="hdr-back" id="s1b-back" onclick="goBack('s0')">‹</button>
-    <div style="text-align:center">
-      <div class="hdr-title">¿Qué deudas tienes?</div>
-      <div class="hdr-step">Paso 1 de 3</div>
+  <div class="inline-nav">
+    <button class="inav-back" id="s1b-back" onclick="goBack('s0')">‹</button>
+    <div class="inav-center">
+      <div class="inav-title">¿Qué deudas tienes?</div>
+      <div class="inav-step">Paso 1 de 3</div>
     </div>
     <div style="width:36px"></div>
   </div>
 
-  <div class="progress-dots" id="dots1b"></div>
 
   <div class="scroll-body padded">
     <div class="card anim-in" style="margin-bottom:12px">
@@ -458,16 +504,15 @@
      SCREEN 2 — DEBT DETAILS
 ═══════════════════════════════════════════════════════ -->
 <div class="screen" id="s2">
-  <div class="app-header">
-    <button class="hdr-back" id="s2-back" onclick="goToS1bFromS2()">‹</button>
-    <div style="text-align:center">
-      <div class="hdr-title">Cuéntame los detalles</div>
-      <div class="hdr-step">Paso 2 de 3</div>
+  <div class="inline-nav">
+    <button class="inav-back" id="s2-back" onclick="goToS1bFromS2()">‹</button>
+    <div class="inav-center">
+      <div class="inav-title">Cuéntame los detalles</div>
+      <div class="inav-step">Paso 2 de 3</div>
     </div>
     <div style="width:36px"></div>
   </div>
 
-  <div class="progress-dots" id="dots2"></div>
 
   <div class="scroll-body padded">
     <div class="card anim-in" style="margin-bottom:10px;background:rgba(89,74,226,.04);border:1px solid var(--primary-border)">
@@ -490,16 +535,15 @@
      SCREEN 3 — SUMMARY & CONFIRM
 ═══════════════════════════════════════════════════════ -->
 <div class="screen" id="s3">
-  <div class="app-header">
-    <button class="hdr-back" onclick="showScreen('s2')">‹</button>
-    <div style="text-align:center">
-      <div class="hdr-title">Tu punto de partida</div>
-      <div class="hdr-step">Paso 3 de 3</div>
+  <div class="inline-nav">
+    <button class="inav-back" onclick="showScreen('s2')">‹</button>
+    <div class="inav-center">
+      <div class="inav-title">Tu punto de partida</div>
+      <div class="inav-step">Paso 3 de 3</div>
     </div>
     <div style="width:36px"></div>
   </div>
 
-  <div class="progress-dots" id="dots3"></div>
 
   <div class="scroll-body padded">
     <div class="summary-hero anim-in">
@@ -574,12 +618,14 @@
   let selectedCats  = new Set();      // for fresh start flow
   let selectedDts   = new Set();      // detected transaction ids selected
   let finalDebts    = [];             // assembled debts to pass to plan
+  let manualDebts   = [];             // manually added debts
 
   const TOTAL_STEPS = 3;
 
   // ─── INIT ────────────────────────────────────────────────────────────────
   buildDetectedList();
   buildCatGrid();
+  updateContinueBtn();
   renderDots('dots1a', 1, TOTAL_STEPS);
   renderDots('dots1b', 1, TOTAL_STEPS);
   renderDots('dots2',  2, TOTAL_STEPS);
@@ -588,7 +634,7 @@
   // ─── SCREEN NAVIGATION ──────────────────────────────────────────────────
   function showScreen(id){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const scr = document.getElementById(id); if(scr) scr.classList.add('active');
     document.getElementById(id).scrollTop = 0;
   }
 
@@ -596,6 +642,7 @@
     if(hasDetected){
       showScreen('s1a');
     } else {
+      // No transactions: start at category picker, s1a revealed after first debt added
       showScreen('s1b');
     }
   }
@@ -636,38 +683,137 @@
   function buildDetectedList(){
     const el = document.getElementById('detectedList');
     el.innerHTML = '';
-    DETECTED_TRANSACTIONS.forEach(dt => {
+    DETECTED_TRANSACTIONS.forEach((dt, i) => {
       const totalPaid = dt.payments.reduce((s,p) => s+p.amount, 0);
       const meta = CAT_META[dt.categoryId] || {icon:'💳', label:'Deuda'};
 
       const card = document.createElement('div');
-      card.className = 'detected-debt card anim-in';
+      card.className = 'acc-card anim-in';
       card.dataset.id = dt.id;
       card.innerHTML = `
-        <div class="dd-top">
-          <div class="dd-check" onclick="toggleDetected('${dt.id}')"></div>
-          <div class="dd-info">
-            <div class="dd-name">${esc(dt.name)}</div>
-            <div class="dd-meta">${meta.icon} ${meta.label} · ${dt.payments.length} pago${dt.payments.length!==1?'s':''} detectado${dt.payments.length!==1?'s':''}</div>
-            <div class="dd-paid">✓ ${money(totalPaid)} ya pagado</div>
+        <div class="acc-header" onclick="toggleAccordion(this.closest('.acc-card'))">
+          <div class="acc-check" onclick="event.stopPropagation();toggleDetected('${dt.id}')"></div>
+          <div class="acc-num">${i+1}</div>
+          <div class="acc-info">
+            <div class="acc-name">${esc(dt.name)}</div>
+            <div class="acc-sub">${meta.icon} ${meta.label}</div>
           </div>
+          <div class="acc-amt" id="dt-display-${dt.id}">✓ ${money(totalPaid)}</div>
+          <span class="acc-chevron">▾</span>
         </div>
-        <div class="dd-fields">
-          <div class="field">
-            <label>Monto original ($)</label>
-            <input type="number" inputmode="decimal" placeholder="Ej. 8500"
-                   id="dt-orig-${dt.id}" oninput="updateDetectedBtn()"/>
-          </div>
-          <div class="field">
-            <label>APR (%) <span class="optional">Opc.</span></label>
-            <input type="number" inputmode="decimal" placeholder="24.99"
-                   id="dt-apr-${dt.id}"/>
+        <div class="acc-body">
+          <div class="acc-body-inner">
+            <div class="field">
+              <label>Monto total adeudado ($)</label>
+              <input type="number" inputmode="decimal" placeholder="Ej. 8500"
+                     id="dt-orig-${dt.id}" oninput="onDetectedOrigInput('${dt.id}')"/>
+            </div>
+            <div class="field">
+              <label>Pago mensual ($) <span class="optional">Opc.</span></label>
+              <input type="number" inputmode="decimal" placeholder="Ej. 250"
+                     id="dt-monthly-${dt.id}"/>
+            </div>
+            <div class="field">
+              <label>Interés APR (%) <span class="optional">Opc.</span></label>
+              <input type="number" inputmode="decimal" placeholder="24.99"
+                     id="dt-apr-${dt.id}"/>
+            </div>
+            ${dt.categoryId !== 'tarjetas' ? `
+            <div class="field">
+              <label>Meses restantes <span class="optional">Opc.</span></label>
+              <input type="number" inputmode="numeric" placeholder="Ej. 36"
+                     id="dt-term-${dt.id}"/>
+            </div>` : ''}
           </div>
         </div>
       `;
       el.appendChild(card);
     });
     updateDetectedBtn();
+    updateContinueBtn();
+  }
+
+  function onDetectedOrigInput(id){
+    const val = Number(document.getElementById('dt-orig-'+id)?.value || 0);
+    const display = document.getElementById('dt-display-'+id);
+    const card = document.querySelector('[data-id="'+id+'"]');
+    if(!card) return;
+    if(val > 0){
+      display.textContent = money(val);
+      card.classList.add('filled');
+    } else {
+      // fallback to paid amount
+      const dt = DETECTED_TRANSACTIONS.find(d => d.id === id);
+      const paid = dt ? dt.payments.reduce((s,p)=>s+p.amount,0) : 0;
+      display.textContent = '✓ ' + money(paid);
+      card.classList.remove('filled');
+    }
+    updateDetectedBtn();
+  }
+
+  function toggleAccordion(card){
+    if(!card) return;
+    card.classList.toggle('open');
+  }
+
+  function renderManualDebtsList(){
+    const el = document.getElementById('manualDebtsList');
+    if(!el) return;
+    el.innerHTML = '';
+    if(manualDebts.length === 0) return;
+
+    const detectedCount = DETECTED_TRANSACTIONS.length;
+
+    manualDebts.forEach((d, i) => {
+      const meta = CAT_META[d.categoryId] || {icon:'💳'};
+      const num = detectedCount + i + 1;
+      const card = document.createElement('div');
+      card.className = 'acc-card anim-in filled';
+      card.innerHTML = `
+        <div class="acc-header" onclick="toggleAccordion(this.closest('.acc-card'))">
+          <div class="acc-num">${num}</div>
+          <div class="acc-info">
+            <div class="acc-name">${esc(d.name)}</div>
+            <div class="acc-sub">${meta.icon} ${meta.label}</div>
+          </div>
+          <div class="acc-amt">${money(d.original)}</div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div style="padding-top:10px;display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:12px;font-weight:700;color:var(--gray);line-height:1.6">
+              ${d.monthlyPayment ? `Pago mensual: <strong>${money(d.monthlyPayment)}</strong><br>` : ''}
+              ${d.apr ? `APR: <strong>${d.apr}%</strong><br>` : ''}
+              ${d.months ? `Meses restantes: <strong>${d.months}</strong>` : ''}
+            </div>
+            <button onclick="removeManualDebt('${d.id}')"
+              style="background:none;border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:900;color:var(--red);cursor:pointer">
+              Quitar
+            </button>
+          </div>
+        </div>
+      `;
+      el.appendChild(card);
+    });
+  }
+
+  function removeManualDebt(id){
+    manualDebts = manualDebts.filter(d => d.id !== id);
+    renderManualDebtsList();
+    updateContinueBtn();
+  }
+
+  function updateContinueBtn(){
+    const btn = document.getElementById('btnConfirmDetected');
+    if(!btn) return;
+    const hasAny = selectedDts.size > 0 || manualDebts.length > 0;
+    btn.disabled = !hasAny;
+    btn.style.opacity = hasAny ? '1' : '.4';
+    btn.style.cursor  = hasAny ? 'pointer' : 'not-allowed';
+    const total = selectedDts.size + manualDebts.length;
+    btn.textContent = hasAny
+      ? `Continuar con ${total} deuda${total !== 1 ? 's' : ''} →`
+      : 'Selecciona o agrega al menos una';
   }
 
   function toggleDetected(id){
@@ -676,9 +822,13 @@
     } else {
       selectedDts.add(id);
     }
-    const card = document.querySelector(`.detected-debt[data-id="${id}"]`);
-    card.classList.toggle('selected', selectedDts.has(id));
+    const card = document.querySelector(`[data-id="${id}"]`);
+    if(card){
+      card.classList.toggle('selected', selectedDts.has(id));
+      if(selectedDts.has(id)) card.classList.add('open');
+    }
     updateDetectedBtn();
+    updateContinueBtn();
   }
 
   function updateDetectedBtn(){
@@ -703,11 +853,16 @@
         name: dt.name,
         categoryId: dt.categoryId,
         original: orig,
+        monthlyPayment: Number(document.getElementById('dt-monthly-'+dt.id)?.value || 0) || null,
         apr: Number(document.getElementById('dt-apr-'+dt.id)?.value || 0),
+        months: dt.categoryId !== 'tarjetas' ? (Number(document.getElementById('dt-term-'+dt.id)?.value || 0) || null) : null,
         note: 'Importado desde Mis Gastos',
         payments: dt.payments,
       });
     });
+    // Also include any manually added debts
+    manualDebts.forEach(d => finalDebts.push(d));
+
     buildSummaryScreen();
     showScreen('s3');
     triggerConfetti(false);
@@ -772,16 +927,29 @@
                    id="f-name-${catId}" oninput="checkFormFilled('${catId}')"/>
           </div>
           <div class="field">
-            <label>Monto actual ($)</label>
+            <label>Monto total adeudado ($)</label>
             <input type="number" inputmode="decimal" placeholder="0.00"
                    id="f-orig-${catId}" oninput="checkFormFilled('${catId}')"/>
           </div>
         </div>
-        <div class="field">
-          <label>APR / interés anual (%) <span class="optional">Opcional</span></label>
-          <input type="number" inputmode="decimal" placeholder="Ej. 24.99"
-                 id="f-apr-${catId}"/>
+        <div class="field-row" style="margin-top:10px">
+          <div class="field">
+            <label>Pago mensual ($) <span class="optional">Opcional</span></label>
+            <input type="number" inputmode="decimal" placeholder="Ej. 250"
+                   id="f-monthly-${catId}"/>
+          </div>
+          <div class="field">
+            <label>Interés APR (%) <span class="optional">Opcional</span></label>
+            <input type="number" inputmode="decimal" placeholder="Ej. 24.99"
+                   id="f-apr-${catId}"/>
+          </div>
         </div>
+        ${catId !== 'tarjetas' ? `
+        <div class="field" style="margin-top:10px">
+          <label>Meses restantes <span class="optional">Opcional</span></label>
+          <input type="number" inputmode="numeric" placeholder="Ej. 36"
+                 id="f-term-${catId}"/>
+        </div>` : ''}
       `;
       el.appendChild(card);
     });
@@ -791,7 +959,7 @@
     const name = (document.getElementById('f-name-'+catId)?.value || '').trim();
     const orig = Number(document.getElementById('f-orig-'+catId)?.value || 0);
     const card = document.querySelector(`.debt-quick-card[data-cat="${catId}"]`);
-    card.classList.toggle('filled', name.length > 0 && orig > 0);
+    if(card) card.classList.toggle('filled', name.length > 0 && orig > 0);
   }
 
   function goToS3(){
@@ -806,21 +974,42 @@
         name,
         categoryId: catId,
         original: orig,
+        monthlyPayment: Number(document.getElementById('f-monthly-'+catId)?.value || 0) || null,
         apr: Number(document.getElementById('f-apr-'+catId)?.value || 0),
+        months: catId !== 'tarjetas' ? (Number(document.getElementById('f-term-'+catId)?.value || 0) || null) : null,
         note: '',
         payments: [],
       });
     });
 
     if(formDebts.length === 0){
-      // nothing filled — still let them go but warn
       if(!confirm('No completaste ninguna deuda. ¿Continuar de todas formas?')) return;
     }
 
-    finalDebts = formDebts; // always replace, never accumulate
-    buildSummaryScreen();
-    showScreen('s3');
-    triggerConfetti(false);
+    // Add to manualDebts (avoid duplicates by replacing same catId)
+    formDebts.forEach(d => {
+      const idx = manualDebts.findIndex(m => m.categoryId === d.categoryId && m.name === d.name);
+      if(idx >= 0) manualDebts[idx] = d;
+      else manualDebts.push(d);
+    });
+
+    // Reset selections for next time
+    selectedCats.clear();
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('btnCatNext').disabled = true;
+    document.getElementById('btnCatNext').style.opacity = '.4';
+
+    renderManualDebtsList();
+    updateContinueBtn();
+
+    // Update s1a banner based on context
+    if(!hasDetected){
+      document.querySelector('#s1a .db-icon').textContent  = '📋';
+      document.querySelector('#s1a .db-title').textContent = 'Tu plan hasta ahora';
+      document.querySelector('#s1a .db-sub').textContent   = 'Puedes seguir agregando deudas o continuar cuando estés listo.';
+    }
+
+    showScreen('s1a');
   }
 
   // ─── SCREEN 3: SUMMARY ──────────────────────────────────────────────────
