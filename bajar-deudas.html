@@ -408,13 +408,13 @@
       <button class="btn-ghost" style="width:100%;margin-bottom:8px" onclick="goToS1b()">
         + Agregar otra deuda manualmente
       </button>
+      <div style="text-align:center;padding:4px 0 24px">
+        <button id="btnConfirmDetected" onclick="confirmDetected()" disabled
+          style="padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 6px 16px rgba(89,74,226,.3);opacity:.4;transition:opacity .15s">
+          Selecciona al menos una
+        </button>
+      </div>
     </div>
-  </div>
-
-  <div class="sticky-footer">
-    <button class="btn-primary" id="btnConfirmDetected" onclick="confirmDetected()">
-      Confirmar seleccionadas →
-    </button>
   </div>
 </div>
 
@@ -683,8 +683,11 @@
 
   function updateDetectedBtn(){
     const btn = document.getElementById('btnConfirmDetected');
-    btn.disabled = selectedDts.size === 0;
-    btn.textContent = selectedDts.size > 0
+    const has = selectedDts.size > 0;
+    btn.disabled = !has;
+    btn.style.opacity = has ? '1' : '.4';
+    btn.style.cursor = has ? 'pointer' : 'not-allowed';
+    btn.textContent = has
       ? `Continuar con ${selectedDts.size} deuda${selectedDts.size!==1?'s':''} →`
       : 'Selecciona al menos una';
   }
