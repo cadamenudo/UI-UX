@@ -347,6 +347,14 @@
     .check-list li { display: flex; gap: 8px; align-items: center; font-size: .875rem; }
     .check-list li .ck { color: var(--primary); font-weight: 700; font-size: 1rem; }
 
+    /* ── Transactions 2-col layout ── */
+    .txn-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
     /* ── Testimonials ── */
     .testimonials-grid {
       display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
@@ -522,15 +530,148 @@
     }
     .footer-bottom span { font-size: .8rem; color: rgba(255,255,255,.7); }
 
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-mockup-wrap { display: none; }
-      .auth-grid { grid-template-columns: 1fr; }
-      .dash-charts { flex-direction: column; }
+    /* ── Hamburger button ── */
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      background: none; border: none;
+      cursor: pointer; padding: 4px; z-index: 200;
     }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Mobile drawer ── */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; top: 64px;
+      background: rgba(247,248,252,.98);
+      backdrop-filter: blur(16px);
+      z-index: 99;
+      flex-direction: column;
+      padding: 32px 24px;
+      gap: 8px;
+      border-top: 1.5px solid var(--border);
+      overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--text); text-decoration: none;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      display: block;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu .mobile-cta {
+      margin-top: 24px;
+      background: var(--gradient-primary); color: #fff;
+      padding: 15px; border-radius: 14px;
+      text-align: center; font-weight: 800;
+      font-size: 1rem; text-decoration: none;
+      display: block; border-bottom: none;
+    }
+
+    /* ── Tablet: 900px ── */
+    @media (max-width: 900px) {
+      /* nav */
+      nav, .nav-actions .nav-link { display: none; }
+      .hamburger { display: flex; }
+      .nav-actions { gap: 8px; }
+
+      /* hero */
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-mockup-wrap { display: none; }
+      #hero { padding: 60px 20px 70px; }
+
+      /* dashboard charts */
+      .dash-charts { flex-direction: column; }
+      .dash-donut { width: 100%; flex-direction: row; align-items: center; gap: 20px; }
+      .dash-donut .chart-title { display: none; }
+
+      /* auth */
+      .auth-grid { grid-template-columns: 1fr; }
+
+      /* transactions */
+      .txn-2col { grid-template-columns: 1fr; gap: 32px; }
+
+      /* footer */
+      .footer-top { flex-direction: column; gap: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 6px; }
+    }
+
+    /* ── Mobile: 640px ── */
     @media (max-width: 640px) {
-      nav { display: none; }
+      /* global spacing */
+      section { padding-left: 16px !important; padding-right: 16px !important; }
+      section[style*="padding:100px"] { padding-top: 64px !important; padding-bottom: 64px !important; }
+      #hero { padding: 48px 16px 60px; }
+
+      /* stats */
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .stat-number { font-size: 1.9rem; }
+
+      /* hero text */
+      h1 { font-size: 2.2rem; }
+      .hero-desc { font-size: .95rem; }
+      .hero-ctas { flex-direction: column; }
+      .hero-ctas a { text-align: center; width: 100%; }
+      .hero-trust { gap: 12px; }
+      .hero-trust span { font-size: .75rem; }
+
+      /* section titles */
+      .section-title { font-size: 1.7rem !important; }
+
+      /* features: 1 col */
+      .features-grid { grid-template-columns: 1fr; }
+
+      /* steps */
+      .steps-grid { grid-template-columns: 1fr; gap: 24px; }
+
+      /* transactions: stack */
+      .txn-2col { grid-template-columns: 1fr; gap: 32px; }
+
+      /* testimonials: 1 col */
+      .testimonials-grid { grid-template-columns: 1fr; }
+
+      /* videos: 1 col */
+      .videos-grid { grid-template-columns: 1fr; }
+
+      /* auth */
+      .login-card, .signup-card { padding: 24px; }
+      .form-title { font-size: 1.2rem; }
+
+      /* dashboard mockup — simplify */
+      .dash-mockup { padding: 16px; }
+      .kpi-row { gap: 10px; }
+      .kpi-card .kpi-val { font-size: 16px; }
+      .kpi-card .kpi-delta { display: none; }
+
+      /* cta band */
+      #cta-band { padding: 60px 16px; }
+      .btn-yellow { padding: 14px 28px; font-size: .9rem; }
+
+      /* footer */
+      .footer-links { flex-direction: column; gap: 28px; }
+      footer { padding: 36px 16px 24px; }
+
+      /* nav */
+      .btn-primary { display: none; }
+
+      /* hide orbs on mobile (performance) */
+      .orb { display: none; }
+    }
+
+    /* ── Extra small: 400px ── */
+    @media (max-width: 400px) {
+      h1 { font-size: 1.9rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .stat-number { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -554,9 +695,22 @@
     <div class="nav-actions">
       <a href="#login" class="nav-link">Ingresar</a>
       <a href="#signup" class="btn-primary">Crear cuenta</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- Mobile drawer -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#hero"          onclick="closeMobileMenu()">Inicio</a>
+  <a href="#features"      onclick="closeMobileMenu()">Features</a>
+  <a href="#como-funciona" onclick="closeMobileMenu()">Cómo funciona</a>
+  <a href="#learn"         onclick="closeMobileMenu()">Aprende</a>
+  <a href="#login"         onclick="closeMobileMenu()">Ingresar</a>
+  <a href="#signup" class="mobile-cta" onclick="closeMobileMenu()">Crear cuenta gratis →</a>
+</div>
 
 <!-- ── HERO ────────────────────────────────────────────── -->
 <section id="hero">
@@ -752,7 +906,7 @@
 
 <!-- ── TRANSACTIONS ───────────────────────────────────────── -->
 <section style="padding:100px 24px;background:var(--muted);">
-  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+  <div style="max-width:1100px;margin:0 auto;" class="txn-2col">
 
     <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 12px 40px rgba(0,0,0,.06);">
       <div style="font-weight:700;margin-bottom:16px;">Transacciones recientes</div>
@@ -908,6 +1062,26 @@
 </footer>
 
 <script>
+/* ── Hamburger menu ─────────────────────────────────────── */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+
+function closeMobileMenu() {
+  mobileMenu.classList.remove('open');
+  hamburger.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on resize to desktop
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 900) closeMobileMenu();
+});
 /* ── Bar charts ─────────────────────────────────────────── */
 function renderBars(containerId, data, color) {
   const el = document.getElementById(containerId);
