@@ -346,8 +346,10 @@
     #chat-win {
       display: none; position: fixed;
       bottom: calc(var(--bottom-nav-h) + 74px); right: 12px;
-      z-index: 198; width: calc(100vw - 24px); max-width: 360px;
-      height: 420px; background: #fff; border-radius: 18px;
+      z-index: 198;
+      width: calc(100vw - 24px); max-width: 340px;
+      height: min(420px, calc(100dvh - var(--bottom-nav-h) - 90px));
+      background: #fff; border-radius: 18px;
       box-shadow: 0 16px 52px rgba(0,0,0,.18);
       border: 1.5px solid var(--border); flex-direction: column; overflow: hidden;
       animation: fadeUp .3s ease both;
