@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aprende — Cada Menudo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:          #3956E8;
+      --secondary:        #7459D9;
+      --yellow:           #E8C239;
+      --gray:             #64748B;
+      --muted:            #EEF0F6;
+      --bg:               #F7F8FC;
+      --card:             #FFFFFF;
+      --text:             #0F172A;
+      --border:           #E5E7EB;
+      --gradient-primary: linear-gradient(135deg, #3956E8 0%, #7459D9 100%);
+      --navy:             #1E1B4B;
+      --bottom-nav-h:     64px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      padding-bottom: var(--bottom-nav-h);
+    }
+
+    ::-webkit-scrollbar { display: none; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp  { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes pulse   { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:.4; transform:scale(.85); } }
+    @keyframes shimmer { 0%{ background-position:-400px 0; } 100%{ background-position:400px 0; } }
+    @keyframes slideIn { from { transform:translateX(100%); } to { transform:translateX(0); } }
+
+    .fade-up { animation: fadeUp .5s ease both; }
+    .delay-1 { animation-delay: .08s; }
+    .delay-2 { animation-delay: .16s; }
+    .delay-3 { animation-delay: .24s; }
+
+    /* ── TOP NAV ── */
+    header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(247,248,252,.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid var(--border);
+    }
+    .nav-inner {
+      padding: 0 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); }
+    .nav-logo-icon { width: 30px; height: 30px; border-radius: 9px; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo span { font-weight: 800; font-size: 1rem; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .btn-primary-sm {
+      background: var(--gradient-primary); color: #fff;
+      padding: 7px 14px; border-radius: 9px;
+      font-family: 'Nunito', sans-serif; font-size: .8rem; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer; display: inline-block;
+    }
+    .hamburger { display: flex; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; z-index: 300; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: transform .3s, opacity .3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── MOBILE DRAWER ── */
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; top: 56px;
+      background: rgba(247,248,252,.98); backdrop-filter: blur(16px);
+      z-index: 199; flex-direction: column; padding: 24px 20px;
+      border-top: 1.5px solid var(--border); overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; animation: slideIn .25s ease; }
+    .mobile-menu a {
+      font-size: 1.1rem; font-weight: 700; color: var(--text);
+      text-decoration: none; padding: 15px 0;
+      border-bottom: 1px solid var(--border); display: block;
+    }
+    .mobile-menu a:last-of-type { border-bottom: none; }
+    .mobile-menu .mcta {
+      margin-top: 20px; background: var(--gradient-primary); color: #fff;
+      padding: 14px; border-radius: 12px; text-align: center;
+      font-weight: 800; font-size: .95rem; text-decoration: none;
+      display: block; border-bottom: none;
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--bottom-nav-h); z-index: 200;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(16px);
+      border-top: 1.5px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .bn-items { display: flex; width: 100%; }
+    .bn-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 3px; text-decoration: none;
+      padding: 8px 4px; cursor: pointer; border: none; background: none;
+      font-family: 'Nunito', sans-serif; color: var(--gray);
+      transition: color .2s; position: relative;
+    }
+    .bn-item.active { color: var(--primary); }
+    .bn-item .bn-icon { font-size: 20px; line-height: 1; }
+    .bn-item .bn-label { font-size: .62rem; font-weight: 700; }
+    .bn-item.active::after {
+      content: ''; position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 24px; height: 3px; border-radius: 0 0 4px 4px;
+      background: var(--primary);
+    }
+
+    /* ── SECTION UTILS ── */
+    .section-label { font-size: .72rem; font-weight: 700; color: var(--primary); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; }
+    .section-sub { color: var(--gray); margin-top: 10px; line-height: 1.65; font-size: .9rem; }
+    .section-center { text-align: center; }
+    .px { padding-left: 16px; padding-right: 16px; }
+
+    /* ── HERO ── */
+    #learn-hero {
+      background: var(--gradient-primary);
+      padding: 40px 16px 48px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    #learn-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content { position: relative; z-index: 1; }
+    #learn-hero h1 { font-size: 1.75rem; font-weight: 900; color: #fff; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 12px; }
+    #learn-hero p  { font-size: .88rem; color: rgba(255,255,255,.82); line-height: 1.6; margin-bottom: 24px; }
+    .hero-tabs {
+      display: flex; gap: 6px;
+      overflow-x: auto; padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .hero-tabs::-webkit-scrollbar { display: none; }
+    .hero-tab {
+      flex-shrink: 0; padding: 7px 14px; border-radius: 100px;
+      font-size: .78rem; font-weight: 700; cursor: pointer;
+      border: 1.5px solid rgba(255,255,255,.3); color: rgba(255,255,255,.8);
+      background: rgba(255,255,255,.1); text-decoration: none; transition: all .2s;
+      white-space: nowrap;
+    }
+    .hero-tab.active, .hero-tab:hover { background: #fff; color: var(--primary); border-color: #fff; }
+
+    /* ── QUICK STATS scroll strip ── */
+    .stats-strip {
+      background: #fff; border-bottom: 1.5px solid var(--border);
+      padding: 0;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .stats-strip::-webkit-scrollbar { display: none; }
+    .stats-strip-inner { display: flex; padding: 14px 16px; gap: 0; min-width: max-content; }
+    .qs-item { display: flex; align-items: center; gap: 8px; padding-right: 20px; margin-right: 20px; border-right: 1px solid var(--border); }
+    .qs-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+    .qs-icon { font-size: 18px; }
+    .qs-val   { font-size: .95rem; font-weight: 800; color: var(--primary); }
+    .qs-label { font-size: .7rem; color: var(--gray); font-weight: 600; }
+
+    /* ── FEATURED VIDEO ── */
+    #featured { padding: 28px 0 0; background: #fff; }
+    .featured-card {
+      margin: 0 16px;
+      border-radius: 18px; overflow: hidden;
+      background: var(--navy);
+      box-shadow: 0 12px 40px rgba(0,0,0,.15);
+    }
+    .featured-player {
+      height: 200px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--gradient-primary);
+    }
+    .featured-emoji { font-size: 60px; opacity: .7; }
+    .featured-play {
+      position: absolute; width: 60px; height: 60px; border-radius: 50%;
+      background: rgba(255,255,255,.92); display: flex; align-items: center;
+      justify-content: center; font-size: 22px; padding-left: 3px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.25); cursor: pointer;
+    }
+    .featured-badge { position: absolute; top: 12px; left: 12px; background: var(--yellow); color: var(--text); font-size: .68rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; }
+    .featured-body { padding: 20px; }
+    .featured-label { font-size: .68rem; font-weight: 700; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+    .featured-title { font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 8px; }
+    .featured-desc  { font-size: .8rem; color: rgba(255,255,255,.65); line-height: 1.5; margin-bottom: 14px; }
+    .featured-meta  { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+    .featured-meta span { font-size: .75rem; color: rgba(255,255,255,.55); }
+    .btn-watch { display: inline-flex; align-items: center; gap: 6px; background: var(--yellow); color: var(--text); padding: 11px 22px; border-radius: 10px; font-weight: 800; font-size: .85rem; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; }
+
+    /* ── VIDEOS ── */
+    #videos { padding: 32px 0; background: #fff; }
+    .section-header { padding: 0 16px 16px; }
+    .video-filter-scroll {
+      display: flex; gap: 6px; padding: 0 16px 16px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .video-filter-scroll::-webkit-scrollbar { display: none; }
+    .vf-btn {
+      flex-shrink: 0; padding: 7px 16px; border-radius: 100px;
+      font-size: .78rem; font-weight: 700; cursor: pointer;
+      border: 1.5px solid var(--border); color: var(--gray);
+      background: #fff; font-family: 'Nunito', sans-serif;
+      transition: all .2s; white-space: nowrap;
+    }
+    .vf-btn.active { background: var(--gradient-primary); color: #fff; border-color: transparent; }
+    .videos-list { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
+    .video-row {
+      background: #fff; border-radius: 14px; border: 1.5px solid var(--border);
+      display: flex; align-items: center; gap: 12px; overflow: hidden;
+      cursor: pointer; transition: box-shadow .2s;
+    }
+    .video-row:active { box-shadow: 0 4px 16px rgba(57,86,232,.12); }
+    .video-row-thumb {
+      width: 80px; height: 72px; flex-shrink: 0;
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; position: relative;
+    }
+    .vr-play { position: absolute; width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.85); display: flex; align-items: center; justify-content: center; font-size: 10px; padding-left: 2px; }
+    .vr-dur { position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,.55); color: #fff; font-size: .58rem; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+    .video-row-info { flex: 1; padding: 10px 10px 10px 0; }
+    .video-row-title { font-size: .82rem; font-weight: 700; line-height: 1.35; margin-bottom: 4px; }
+    .video-row-meta  { display: flex; align-items: center; gap: 8px; }
+    .vr-views { font-size: .68rem; color: var(--gray); }
+    .video-level { font-size: .62rem; font-weight: 700; padding: 2px 7px; border-radius: 5px; }
+    .level-beginner { background: #dcfce7; color: #16a34a; }
+    .level-inter    { background: #dbeafe; color: #1d4ed8; }
+    .level-advanced { background: #fce7f3; color: #9d174d; }
+
+    /* ── HOW IT WORKS ── */
+    #how-it-works { padding: 40px 0; background: var(--muted); }
+    .steps-list { padding: 0 16px; display: flex; flex-direction: column; gap: 0; margin-top: 28px; }
+    .step-item { display: flex; gap: 14px; position: relative; }
+    .step-item:not(:last-child) { padding-bottom: 28px; }
+    .step-item:not(:last-child)::before { content: ''; position: absolute; left: 19px; top: 44px; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--primary), var(--muted)); }
+    .step-dot { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .85rem; flex-shrink: 0; box-shadow: 0 4px 16px rgba(57,86,232,.3); }
+    .step-body { flex: 1; background: #fff; border-radius: 14px; padding: 16px; border: 1.5px solid var(--border); }
+    .step-body h3 { font-size: .9rem; font-weight: 800; margin-bottom: 6px; }
+    .step-body p  { font-size: .8rem; color: var(--gray); line-height: 1.6; margin-bottom: 10px; }
+    .step-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .step-chip { background: var(--muted); border-radius: 6px; padding: 4px 9px; font-size: .7rem; font-weight: 600; }
+
+    /* ── FEATURES ── */
+    #features-detail { padding: 40px 0; background: #fff; }
+    .ftabs-scroll {
+      display: flex; gap: 6px; padding: 0 16px 20px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .ftabs-scroll::-webkit-scrollbar { display: none; }
+    .ftab {
+      flex-shrink: 0; padding: 8px 16px; border-radius: 100px;
+      font-size: .8rem; font-weight: 700; cursor: pointer;
+      border: 1.5px solid var(--border); color: var(--gray);
+      background: #fff; font-family: 'Nunito', sans-serif;
+      transition: all .2s; white-space: nowrap;
+    }
+    .ftab.active { background: var(--gradient-primary); color: #fff; border-color: transparent; }
+    .feature-panel { display: none; padding: 0 16px; }
+    .feature-panel.active { display: block; }
+    .feature-mockup-card { background: var(--muted); border-radius: 16px; padding: 16px; margin-bottom: 20px; }
+    .feature-mockup-inner { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+    .feature-panel-text h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+    .feature-panel-text p  { font-size: .85rem; color: var(--gray); line-height: 1.65; margin-bottom: 16px; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .feature-list li { display: flex; gap: 8px; align-items: flex-start; font-size: .82rem; line-height: 1.5; }
+    .feature-list li .fi { color: var(--primary); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── FAQ ── */
+    #faq { padding: 40px 0; background: var(--muted); }
+    .faq-cats-scroll {
+      display: flex; gap: 6px; padding: 0 16px 20px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .faq-cats-scroll::-webkit-scrollbar { display: none; }
+    .faq-cat-btn {
+      flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 100px; font-size: .78rem; font-weight: 700;
+      cursor: pointer; border: 1.5px solid var(--border); background: #fff;
+      font-family: 'Nunito', sans-serif; color: var(--gray); transition: all .2s;
+      white-space: nowrap;
+    }
+    .faq-cat-btn.active { background: var(--gradient-primary); color: #fff; border-color: transparent; }
+    .faq-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+    .faq-item { background: #fff; border-radius: 14px; border: 1.5px solid var(--border); overflow: hidden; }
+    .faq-item.open { border-color: var(--primary); box-shadow: 0 4px 20px rgba(57,86,232,.1); }
+    .faq-q { display: flex; align-items: center; justify-content: space-between; padding: 15px 16px; cursor: pointer; gap: 10px; }
+    .faq-q span { font-size: .85rem; font-weight: 700; line-height: 1.4; }
+    .faq-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; transition: background .2s, transform .3s; }
+    .faq-item.open .faq-icon { background: var(--primary); color: #fff; transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+    .faq-a p { font-size: .82rem; color: var(--gray); line-height: 1.7; padding: 0 16px 16px; }
+    .faq-item.open .faq-a { max-height: 300px; }
+
+    /* ── GLOSSARY ── */
+    #glossary { padding: 40px 0; background: #fff; }
+    .glossary-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+    .glossary-card { background: var(--muted); border-radius: 12px; padding: 14px 16px; border-left: 4px solid var(--primary); }
+    .glossary-term { font-size: .88rem; font-weight: 800; margin-bottom: 4px; }
+    .glossary-def  { font-size: .78rem; color: var(--gray); line-height: 1.6; }
+
+    /* ── CTA ── */
+    #learn-cta {
+      padding: 52px 16px;
+      background: var(--gradient-primary);
+      text-align: center;
+    }
+    #learn-cta h2 { font-size: 1.6rem; font-weight: 900; color: #fff; letter-spacing: -.02em; margin-bottom: 12px; }
+    #learn-cta p  { font-size: .88rem; color: rgba(255,255,255,.8); max-width: 340px; margin: 0 auto 28px; line-height: 1.65; }
+    .cta-btns { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .btn-white { background: #fff; color: var(--primary); padding: 13px 28px; border-radius: 12px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem; text-decoration: none; display: inline-block; width: 100%; max-width: 280px; }
+    .btn-ghost { background: rgba(255,255,255,.15); color: #fff; padding: 13px 28px; border-radius: 12px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .9rem; text-decoration: none; border: 1.5px solid rgba(255,255,255,.3); display: inline-block; width: 100%; max-width: 280px; }
+
+    /* ── FLOATING CHAT ── */
+    #chat-fab {
+      position: fixed; bottom: calc(var(--bottom-nav-h) + 14px); right: 16px; z-index: 199;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--gradient-primary); border: none;
+      box-shadow: 0 6px 22px rgba(57,86,232,.45);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    #chat-badge {
+      display: none; position: absolute; top: -2px; right: -2px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #ef4444; border: 2px solid #fff;
+      font-size: 9px; font-weight: 800; color: #fff;
+      align-items: center; justify-content: center;
+    }
+    #chat-win {
+      display: none; position: fixed;
+      bottom: calc(var(--bottom-nav-h) + 74px); right: 12px;
+      z-index: 198; width: calc(100vw - 24px); max-width: 360px;
+      height: 420px; background: #fff; border-radius: 18px;
+      box-shadow: 0 16px 52px rgba(0,0,0,.18);
+      border: 1.5px solid var(--border); flex-direction: column; overflow: hidden;
+      animation: fadeUp .3s ease both;
+    }
+    .fab-header { background: var(--gradient-primary); padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+    .fab-avatar { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .fab-name   { font-weight: 800; color: #fff; font-size: .9rem; }
+    .fab-status { font-size: .68rem; color: rgba(255,255,255,.75); display: flex; align-items: center; gap: 4px; }
+    .fab-close  { background: rgba(255,255,255,.15); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-left: auto; }
+    #fab-messages { flex: 1; overflow-y: auto; padding: 14px; background: #f8f9fc; display: flex; flex-direction: column; }
+    #fab-quick { padding: 8px 10px; border-top: 1px solid var(--border); background: #fff; display: flex; gap: 5px; flex-wrap: wrap; }
+    .fab-input-row { padding: 10px 12px; border-top: 1.5px solid var(--border); background: #fff; display: flex; gap: 7px; align-items: center; }
+    #fab-input { flex: 1; border: 1.5px solid var(--border); border-radius: 9px; padding: 8px 11px; font-size: .8rem; font-family: 'Nunito', sans-serif; outline: none; background: #fff; color: var(--text); }
+    #fab-input:focus { border-color: var(--primary); }
+    #fab-send { width: 34px; height: 34px; border-radius: 9px; background: var(--gradient-primary); border: none; color: #fff; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP HEADER ─────────────────────────────────────────── -->
+<header>
+  <div class="nav-inner">
+    <a href="cada-menudo-desktop.html" class="nav-logo">
+      <div class="nav-logo-icon">💰</div>
+      <span>Cada Menudo</span>
+    </a>
+    <div class="nav-right">
+      <a href="cada-menudo-desktop.html#signup" class="btn-primary-sm">Crear cuenta</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="cada-menudo-desktop.html#hero"          onclick="closeMobileMenu()">Inicio</a>
+  <a href="cada-menudo-desktop.html#features"      onclick="closeMobileMenu()">Features</a>
+  <a href="cada-menudo-desktop.html#como-funciona" onclick="closeMobileMenu()">Cómo funciona</a>
+  <a href="cada-menudo-desktop.html#ai-chat"       onclick="closeMobileMenu()">Chat IA</a>
+  <a href="#"                                       onclick="closeMobileMenu()">Aprende</a>
+  <a href="cada-menudo-desktop.html#login"         onclick="closeMobileMenu()">Ingresar</a>
+  <a href="cada-menudo-desktop.html#signup" class="mcta" onclick="closeMobileMenu()">Crear cuenta gratis →</a>
+</div>
+
+<!-- ── HERO ───────────────────────────────────────────────── -->
+<section id="learn-hero">
+  <div class="hero-content">
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:100px;padding:5px 12px;margin-bottom:14px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 2s infinite;"></span>
+      <span style="font-size:.72rem;font-weight:700;color:rgba(255,255,255,.9);">Centro de aprendizaje</span>
+    </div>
+    <h1 class="fade-up">Aprende a dominar<br>tus finanzas</h1>
+    <p class="fade-up delay-1">Videos, tutoriales y guías para sacarle el máximo a Cada Menudo y tomar el control real de tu dinero.</p>
+    <div class="hero-tabs fade-up delay-2">
+      <a href="#videos"           class="hero-tab active">📹 Videos</a>
+      <a href="#how-it-works"     class="hero-tab">⚙️ Cómo funciona</a>
+      <a href="#features-detail"  class="hero-tab">✨ Features</a>
+      <a href="#faq"              class="hero-tab">❓ FAQ</a>
+      <a href="#glossary"         class="hero-tab">📖 Glosario</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS STRIP ─────────────────────────────────────────── -->
+<div class="stats-strip">
+  <div class="stats-strip-inner">
+    <div class="qs-item"><span class="qs-icon">📹</span><div><div class="qs-val">12</div><div class="qs-label">Videos</div></div></div>
+    <div class="qs-item"><span class="qs-icon">⏱</span><div><div class="qs-val">45 min</div><div class="qs-label">Contenido</div></div></div>
+    <div class="qs-item"><span class="qs-icon">❓</span><div><div class="qs-val">24</div><div class="qs-label">FAQ</div></div></div>
+    <div class="qs-item"><span class="qs-icon">⭐</span><div><div class="qs-val">4.9</div><div class="qs-label">Rating</div></div></div>
+    <div class="qs-item"><span class="qs-icon">🇲🇽</span><div><div class="qs-val">100%</div><div class="qs-label">Español</div></div></div>
+  </div>
+</div>
+
+<!-- ── FEATURED VIDEO ──────────────────────────────────────── -->
+<section id="featured" style="padding:28px 0 0;background:#fff;">
+  <div class="section-header px">
+    <div class="section-label">Destacado</div>
+    <div class="section-title" style="font-size:1.3rem;">Video esencial</div>
+  </div>
+  <div style="padding:14px 16px 0;">
+    <div class="featured-card">
+      <div class="featured-player">
+        <div class="featured-emoji">💰</div>
+        <div class="featured-play">▶</div>
+        <div class="featured-badge">⭐ Destacado</div>
+      </div>
+      <div class="featured-body">
+        <div class="featured-label">Serie de inicio · Episodio 1</div>
+        <div class="featured-title">Guía completa: de cero a controlar tus finanzas en 15 min</div>
+        <div class="featured-desc">Configura tu cuenta, registra tus primeros movimientos y entiende tu dashboard desde el día uno.</div>
+        <div class="featured-meta">
+          <span>⏱ 15:42</span>
+          <span>👁 23.4K vistas</span>
+          <span>⭐ 4.9</span>
+        </div>
+        <button class="btn-watch">▶ Ver ahora</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VIDEOS ──────────────────────────────────────────────── -->
+<section id="videos" style="padding:32px 0;background:#fff;">
+  <div class="section-header px" style="padding-bottom:14px;">
+    <div class="section-label">Tutoriales</div>
+    <div class="section-title" style="font-size:1.3rem;">Todos los videos</div>
+  </div>
+  <div class="video-filter-scroll">
+    <button class="vf-btn active" onclick="filterVideos('all',this)">Todos</button>
+    <button class="vf-btn" onclick="filterVideos('inicio',this)">🚀 Primeros pasos</button>
+    <button class="vf-btn" onclick="filterVideos('gastos',this)">💸 Gastos</button>
+    <button class="vf-btn" onclick="filterVideos('ahorro',this)">🎯 Ahorro</button>
+    <button class="vf-btn" onclick="filterVideos('ia',this)">🤖 IA & Auto</button>
+    <button class="vf-btn" onclick="filterVideos('avanzado',this)">⚡ Avanzado</button>
+  </div>
+  <div class="videos-list" id="videos-list"></div>
+</section>
+
+<!-- ── HOW IT WORKS ────────────────────────────────────────── -->
+<section id="how-it-works" style="padding:40px 0;background:var(--muted);">
+  <div class="section-header px" style="text-align:center;padding-bottom:0;">
+    <div class="section-label">Proceso</div>
+    <div class="section-title">¿Cómo funciona?</div>
+    <p class="section-sub">Guía paso a paso desde que creas tu cuenta.</p>
+  </div>
+  <div class="steps-list" style="margin-top:24px;">
+
+    <div class="step-item">
+      <div class="step-dot">01</div>
+      <div class="step-body">
+        <h3>Crea tu cuenta en 60 segundos</h3>
+        <p>Solo email y contraseña. Sin tarjeta, sin banco. Gratis para siempre.</p>
+        <div class="step-chips">
+          <div class="step-chip">📧 Solo email</div>
+          <div class="step-chip">🚫 Sin tarjeta</div>
+          <div class="step-chip">⚡ &lt;60 segundos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-dot">02</div>
+      <div class="step-body">
+        <h3>Configura tus categorías</h3>
+        <p>Edita las predeterminadas o crea las tuyas con colores e íconos propios.</p>
+        <div class="step-chips">
+          <div class="step-chip">🗂️ Predeterminadas incluidas</div>
+          <div class="step-chip">🎨 Personalizables</div>
+          <div class="step-chip">🤖 Categorización con IA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-dot">03</div>
+      <div class="step-body">
+        <h3>Registra ingresos y gastos</h3>
+        <p>Manual, escaneando recibos con la cámara, o con entradas recurrentes automáticas.</p>
+        <div class="step-chips">
+          <div class="step-chip">✍️ Manual</div>
+          <div class="step-chip">📸 Escaneo IA</div>
+          <div class="step-chip">🔄 Recurrentes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-dot">04</div>
+      <div class="step-body">
+        <h3>Crea metas de ahorro</h3>
+        <p>Define monto, plazo y recibe recordatorios automáticos para llegar a tiempo.</p>
+        <div class="step-chips">
+          <div class="step-chip">🎯 Múltiples metas</div>
+          <div class="step-chip">🔔 Recordatorios</div>
+          <div class="step-chip">📊 Progreso visual</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-dot">05</div>
+      <div class="step-body">
+        <h3>Analiza con el dashboard</h3>
+        <p>Balance total, gráficas de barras, donut por categorías y últimos movimientos en tiempo real.</p>
+        <div class="step-chips">
+          <div class="step-chip">📊 Gráficas</div>
+          <div class="step-chip">💡 KPIs automáticos</div>
+          <div class="step-chip">📈 Tendencias</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-dot">06</div>
+      <div class="step-body">
+        <h3>Exporta tu información</h3>
+        <p>Descarga todo en CSV o Excel cuando quieras. Tus datos siempre son tuyos.</p>
+        <div class="step-chips">
+          <div class="step-chip">📥 CSV y Excel</div>
+          <div class="step-chip">🗓️ Filtrar fechas</div>
+          <div class="step-chip">🔐 Datos tuyos</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FEATURES ────────────────────────────────────────────── -->
+<section id="features-detail" style="padding:40px 0;background:#fff;">
+  <div class="section-header px" style="text-align:center;padding-bottom:0;">
+    <div class="section-label">Funciones</div>
+    <div class="section-title">Explora cada feature</div>
+  </div>
+  <div class="ftabs-scroll" style="margin-top:20px;">
+    <button class="ftab active" onclick="showFeature('dashboard',this)">📊 Dashboard</button>
+    <button class="ftab" onclick="showFeature('metas',this)">🎯 Metas</button>
+    <button class="ftab" onclick="showFeature('ia',this)">🤖 IA</button>
+    <button class="ftab" onclick="showFeature('alertas',this)">🔔 Alertas</button>
+    <button class="ftab" onclick="showFeature('export',this)">📥 Exportar</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="feature-panel active" id="panel-dashboard">
+    <div class="feature-mockup-card">
+      <div class="feature-mockup-inner">
+        <div style="font-size:.7rem;font-weight:700;color:var(--gray);margin-bottom:10px;">DASHBOARD · Marzo 2026</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <div style="flex:1;background:var(--muted);border-radius:8px;padding:8px;border-top:3px solid var(--primary);"><div style="font-size:.6rem;color:var(--gray);">Ingresos</div><div style="font-size:.9rem;font-weight:800;">$18,000</div><div style="font-size:.6rem;color:#22c55e;font-weight:600;">+8%</div></div>
+          <div style="flex:1;background:var(--muted);border-radius:8px;padding:8px;border-top:3px solid #f87171;"><div style="font-size:.6rem;color:var(--gray);">Gastos</div><div style="font-size:.9rem;font-weight:800;">$8,420</div><div style="font-size:.6rem;color:#ef4444;font-weight:600;">-3%</div></div>
+          <div style="flex:1;background:var(--muted);border-radius:8px;padding:8px;border-top:3px solid #34d399;"><div style="font-size:.6rem;color:var(--gray);">Ahorros</div><div style="font-size:.9rem;font-weight:800;">$9,580</div><div style="font-size:.6rem;color:#22c55e;font-weight:600;">+14%</div></div>
+        </div>
+        <div style="background:var(--muted);border-radius:8px;padding:10px;">
+          <div style="font-size:.65rem;font-weight:700;margin-bottom:6px;">Por categoría</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;align-items:center;gap:6px;font-size:.68rem;"><div style="width:7px;height:7px;border-radius:2px;background:var(--primary);flex-shrink:0;"></div>Comida<div style="flex:1;height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden;margin-left:auto;"><div style="height:100%;width:38%;background:var(--primary);border-radius:2px;"></div></div><span style="color:var(--gray);width:24px;text-align:right;">38%</span></div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.68rem;"><div style="width:7px;height:7px;border-radius:2px;background:var(--yellow);flex-shrink:0;"></div>Transporte<div style="flex:1;height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden;margin-left:auto;"><div style="height:100%;width:22%;background:var(--yellow);border-radius:2px;"></div></div><span style="color:var(--gray);width:24px;text-align:right;">22%</span></div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.68rem;"><div style="width:7px;height:7px;border-radius:2px;background:#34d399;flex-shrink:0;"></div>Hogar<div style="flex:1;height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden;margin-left:auto;"><div style="height:100%;width:25%;background:#34d399;border-radius:2px;"></div></div><span style="color:var(--gray);width:24px;text-align:right;">25%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-panel-text">
+      <h3>Dashboard en tiempo real</h3>
+      <p>Tu centro de control financiero. Ve todo lo que entra, sale y queda en tu bolsillo sin hacer un solo cálculo.</p>
+      <ul class="feature-list">
+        <li><span class="fi">✓</span> Balance total actualizado al instante</li>
+        <li><span class="fi">✓</span> KPIs con comparativa vs mes anterior</li>
+        <li><span class="fi">✓</span> Gráfica de barras de hasta 12 meses</li>
+        <li><span class="fi">✓</span> Donut chart por categorías</li>
+        <li><span class="fi">✓</span> Lista de últimas transacciones</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Metas -->
+  <div class="feature-panel" id="panel-metas">
+    <div class="feature-mockup-card">
+      <div class="feature-mockup-inner">
+        <div style="font-size:.7rem;font-weight:700;color:var(--gray);margin-bottom:10px;">MIS METAS DE AHORRO</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:var(--muted);border-radius:10px;padding:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.78rem;font-weight:700;">✈️ Vacaciones</span><span style="font-size:.68rem;color:var(--primary);font-weight:700;">68%</span></div><div style="height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:4px;"><div style="width:68%;height:100%;background:var(--gradient-primary);border-radius:3px;"></div></div><div style="font-size:.64rem;color:var(--gray);">$6,800 de $10,000 · 62 días</div></div>
+          <div style="background:var(--muted);border-radius:10px;padding:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.78rem;font-weight:700;">🚨 Fondo emergencia</span><span style="font-size:.68rem;color:#22c55e;font-weight:700;">100%</span></div><div style="height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:4px;"><div style="width:100%;height:100%;background:#22c55e;border-radius:3px;"></div></div><div style="font-size:.64rem;color:#22c55e;font-weight:600;">✅ ¡Meta cumplida!</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-panel-text">
+      <h3>Metas con seguimiento real</h3>
+      <p>Pon nombre a tus sueños y Cada Menudo te ayuda a hacerlos realidad.</p>
+      <ul class="feature-list">
+        <li><span class="fi">✓</span> Nombre, monto objetivo y fecha límite</li>
+        <li><span class="fi">✓</span> Cálculo automático de ahorro semanal</li>
+        <li><span class="fi">✓</span> Recordatorios si te quedas atrás</li>
+        <li><span class="fi">✓</span> Múltiples metas activas al mismo tiempo</li>
+        <li><span class="fi">✓</span> Celebración al cumplir una meta 🎉</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- IA -->
+  <div class="feature-panel" id="panel-ia">
+    <div class="feature-mockup-card">
+      <div class="feature-mockup-inner">
+        <div style="font-size:.7rem;font-weight:700;color:var(--gray);margin-bottom:10px;">📸 ESCANEO CON IA</div>
+        <div style="background:linear-gradient(135deg,#f0f3ff,#e8ecff);border-radius:10px;padding:14px;text-align:center;margin-bottom:10px;"><div style="font-size:28px;margin-bottom:4px;">🧾</div><div style="font-size:.68rem;color:var(--primary);font-weight:700;">IA procesando recibo...</div><div style="margin-top:6px;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden;"><div style="width:75%;height:100%;background:var(--gradient-primary);border-radius:2px;"></div></div></div>
+        <div style="background:var(--muted);border-radius:10px;padding:10px;"><div style="font-size:.64rem;color:var(--gray);margin-bottom:5px;">✅ Detectado automáticamente:</div><div style="display:flex;flex-direction:column;gap:3px;"><div style="display:flex;justify-content:space-between;font-size:.68rem;"><span>🏪 Comercio</span><span style="font-weight:700;">Walmart</span></div><div style="display:flex;justify-content:space-between;font-size:.68rem;"><span>💰 Monto</span><span style="font-weight:700;color:#ef4444;">-$842.50</span></div><div style="display:flex;justify-content:space-between;font-size:.68rem;"><span>🗂️ Categoría</span><span style="font-weight:700;color:var(--primary);">Comida</span></div></div></div>
+      </div>
+    </div>
+    <div class="feature-panel-text">
+      <h3>IA que registra por ti</h3>
+      <p>Saca foto al recibo y la IA extrae monto, comercio, fecha y categoría en segundos.</p>
+      <ul class="feature-list">
+        <li><span class="fi">✓</span> Escaneo de recibos físicos</li>
+        <li><span class="fi">✓</span> Extracción automática de datos</li>
+        <li><span class="fi">✓</span> Categorización inteligente</li>
+        <li><span class="fi">✓</span> Editable antes de confirmar</li>
+        <li><span class="fi">✓</span> Español e inglés</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Alertas -->
+  <div class="feature-panel" id="panel-alertas">
+    <div class="feature-mockup-card">
+      <div class="feature-mockup-inner">
+        <div style="font-size:.7rem;font-weight:700;color:var(--gray);margin-bottom:10px;">🔔 ALERTAS</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div style="background:#fef9ec;border:1.5px solid #f59e0b;border-radius:8px;padding:8px;display:flex;gap:6px;"><span style="font-size:14px;">⚠️</span><div><div style="font-size:.7rem;font-weight:700;color:#92400e;">Límite cercano</div><div style="font-size:.64rem;color:#78350f;">Comida: 85% del límite</div></div></div>
+          <div style="background:#f0fdf4;border:1.5px solid #22c55e;border-radius:8px;padding:8px;display:flex;gap:6px;"><span style="font-size:14px;">🎯</span><div><div style="font-size:.7rem;font-weight:700;color:#14532d;">¡Meta al 70%!</div><div style="font-size:.64rem;color:#166534;">Vacaciones · $7,000 ahorrados</div></div></div>
+          <div style="background:#eff6ff;border:1.5px solid #3b82f6;border-radius:8px;padding:8px;display:flex;gap:6px;"><span style="font-size:14px;">📅</span><div><div style="font-size:.7rem;font-weight:700;color:#1e3a8a;">Pago próximo</div><div style="font-size:.64rem;color:#1d4ed8;">Netflix · $219 · en 3 días</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-panel-text">
+      <h3>Alertas que te mantienen al tanto</h3>
+      <p>Nunca más te agarres de sorpresa. Sabe qué pasa con tu dinero antes de que sea problema.</p>
+      <ul class="feature-list">
+        <li><span class="fi">✓</span> Alerta cuando te acercas al límite de categoría</li>
+        <li><span class="fi">✓</span> Recordatorio de pagos 3 días antes</li>
+        <li><span class="fi">✓</span> Progreso de metas de ahorro</li>
+        <li><span class="fi">✓</span> Insights semanales de hábitos</li>
+        <li><span class="fi">✓</span> 100% configurables</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Export -->
+  <div class="feature-panel" id="panel-export">
+    <div class="feature-mockup-card">
+      <div class="feature-mockup-inner">
+        <div style="font-size:.7rem;font-weight:700;color:var(--gray);margin-bottom:10px;">📥 EXPORTAR DATOS</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div style="background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">📊</span><div style="flex:1;"><div style="font-size:.75rem;font-weight:700;">Excel con gráficas</div><div style="font-size:.64rem;color:var(--gray);">Totales por categoría incluidos</div></div><span style="font-size:.64rem;background:#dcfce7;color:#16a34a;font-weight:700;padding:2px 6px;border-radius:4px;">Popular</span></div>
+          <div style="background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">📋</span><div><div style="font-size:.75rem;font-weight:700;">CSV básico</div><div style="font-size:.64rem;color:var(--gray);">Compatible con cualquier herramienta</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-panel-text">
+      <h3>Tus datos siempre en tus manos</h3>
+      <p>Exporta tu información financiera en el formato que necesites, cuando quieras.</p>
+      <ul class="feature-list">
+        <li><span class="fi">✓</span> Excel con gráficas y totales precalculados</li>
+        <li><span class="fi">✓</span> CSV para análisis propios</li>
+        <li><span class="fi">✓</span> Filtrar por rango de fechas</li>
+        <li><span class="fi">✓</span> Útil para contadores o asesores</li>
+        <li><span class="fi">✓</span> Sin límite de exportaciones</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ────────────────────────────────────────────────── -->
+<section id="faq" style="padding:40px 0;background:var(--muted);">
+  <div class="section-header px" style="text-align:center;padding-bottom:0;">
+    <div class="section-label">Preguntas frecuentes</div>
+    <div class="section-title">¿Tienes dudas?</div>
+    <p class="section-sub">Respuestas a las preguntas más comunes.</p>
+  </div>
+  <div class="faq-cats-scroll" style="margin-top:20px;">
+    <button class="faq-cat-btn active" onclick="filterFaq('general',this)">💬 General</button>
+    <button class="faq-cat-btn" onclick="filterFaq('cuenta',this)">👤 Cuenta</button>
+    <button class="faq-cat-btn" onclick="filterFaq('seguridad',this)">🔒 Seguridad</button>
+    <button class="faq-cat-btn" onclick="filterFaq('funciones',this)">⚙️ Funciones</button>
+    <button class="faq-cat-btn" onclick="filterFaq('precios',this)">💰 Precios</button>
+    <button class="faq-cat-btn" onclick="filterFaq('tecnico',this)">🛠️ Técnico</button>
+  </div>
+  <div class="faq-list" id="faq-list"></div>
+</section>
+
+<!-- ── GLOSSARY ────────────────────────────────────────────── -->
+<section id="glossary" style="padding:40px 0;background:#fff;">
+  <div class="section-header px" style="text-align:center;">
+    <div class="section-label">Glosario</div>
+    <div class="section-title">Términos clave</div>
+    <p class="section-sub">Conceptos financieros en lenguaje simple.</p>
+  </div>
+  <div class="glossary-list">
+    <div class="glossary-card"><div class="glossary-term">💰 Presupuesto</div><div class="glossary-def">Plan que define cuánto puedes gastar en cada categoría durante un periodo. Te ayuda a no gastar más de lo que ganas.</div></div>
+    <div class="glossary-card"><div class="glossary-term">📊 Flujo de efectivo</div><div class="glossary-def">Diferencia entre ingresos y gastos. Si ganas más de lo que gastas, tienes flujo positivo.</div></div>
+    <div class="glossary-card"><div class="glossary-term">🚨 Fondo de emergencia</div><div class="glossary-def">Ahorro reservado para imprevistos. Se recomienda tener 3-6 meses de gastos básicos guardados.</div></div>
+    <div class="glossary-card"><div class="glossary-term">💸 Gasto fijo</div><div class="glossary-def">Gasto que se repite con el mismo monto cada mes: renta, suscripciones, créditos.</div></div>
+    <div class="glossary-card"><div class="glossary-term">📉 Gasto variable</div><div class="glossary-def">Gasto que cambia cada mes: comida, entretenimiento, ropa. Los más fáciles de reducir.</div></div>
+    <div class="glossary-card"><div class="glossary-term">🎯 Meta financiera</div><div class="glossary-def">Objetivo de ahorro con monto y plazo definido. Ej: ahorrar $10,000 en 6 meses para vacaciones.</div></div>
+    <div class="glossary-card"><div class="glossary-term">📈 Ingreso activo</div><div class="glossary-def">Dinero que recibes a cambio de tu trabajo: salario, honorarios, pagos por servicios.</div></div>
+    <div class="glossary-card"><div class="glossary-term">⚖️ Balance financiero</div><div class="glossary-def">Diferencia entre lo que tienes y lo que debes. Un balance positivo indica salud financiera.</div></div>
+    <div class="glossary-card"><div class="glossary-term">🔄 Gasto recurrente</div><div class="glossary-def">Pago periódico automático o programado: Netflix, gimnasio, servicios de streaming.</div></div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────────── -->
+<section id="learn-cta">
+  <div style="font-size:44px;margin-bottom:14px;">🚀</div>
+  <h2>¿Listo para empezar?</h2>
+  <p>Ya tienes todo el conocimiento. Tu cuenta gratis te espera.</p>
+  <div class="cta-btns">
+    <a href="cada-menudo-desktop.html#signup" class="btn-white">Crear cuenta gratis →</a>
+    <a href="cada-menudo-desktop.html#ai-chat" class="btn-ghost">Preguntarle a Menudito 💬</a>
+  </div>
+  <p style="font-size:.75rem;color:rgba(255,255,255,.5);margin-top:16px;">Sin tarjeta · Sin banco · Siempre gratis</p>
+</section>
+
+<!-- ── BOTTOM NAV ──────────────────────────────────────────── -->
+<nav class="bottom-nav">
+  <div class="bn-items">
+    <a href="cada-menudo-desktop.html#hero" class="bn-item"><span class="bn-icon">🏠</span><span class="bn-label">Inicio</span></a>
+    <a href="cada-menudo-desktop.html#features" class="bn-item"><span class="bn-icon">✨</span><span class="bn-label">Features</span></a>
+    <a href="#" class="bn-item active"><span class="bn-icon">📚</span><span class="bn-label">Aprende</span></a>
+    <a href="cada-menudo-desktop.html#ai-chat" class="bn-item"><span class="bn-icon">💬</span><span class="bn-label">Chat IA</span></a>
+    <a href="cada-menudo-desktop.html#signup" class="bn-item"><span class="bn-icon">👤</span><span class="bn-label">Cuenta</span></a>
+  </div>
+</nav>
+
+<!-- ── FLOATING CHAT ───────────────────────────────────────── -->
+<button id="chat-fab" aria-label="Chat">💬<div id="chat-badge">1</div></button>
+<div id="chat-win">
+  <div class="fab-header">
+    <div class="fab-avatar">💰</div>
+    <div><div class="fab-name">Menudito</div><div class="fab-status"><span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;"></span> En línea</div></div>
+    <button class="fab-close" id="fab-close">✕</button>
+  </div>
+  <div id="fab-messages"></div>
+  <div id="fab-quick"></div>
+  <div class="fab-input-row">
+    <input id="fab-input" type="text" placeholder="Escribe tu pregunta..." />
+    <button id="fab-send">➤</button>
+  </div>
+</div>
+
+<!-- ── SCRIPTS ─────────────────────────────────────────────── -->
+<script>
+/* ── Hamburger ───────────────────────────────────────────── */
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+hamburger.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+function closeMobileMenu() {
+  mobileMenu.classList.remove('open');
+  hamburger.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── Video data ──────────────────────────────────────────── */
+const VIDEOS = [
+  { cat:'inicio',   emoji:'🚀', title:'Primeros pasos: configura tu cuenta',       dur:'5:12', views:'18.4K', level:'beginner' },
+  { cat:'inicio',   emoji:'🗂️', title:'Crear y personalizar tus categorías',       dur:'4:30', views:'12.1K', level:'beginner' },
+  { cat:'inicio',   emoji:'📱', title:'Usar Cada Menudo en móvil y desktop',       dur:'3:50', views:'10.5K', level:'beginner' },
+  { cat:'gastos',   emoji:'📊', title:'Configurar tu primer presupuesto mensual',  dur:'8:24', views:'9.8K',  level:'inter'    },
+  { cat:'gastos',   emoji:'💸', title:'Registrar gastos rápidamente',              dur:'3:15', views:'14.2K', level:'beginner' },
+  { cat:'ahorro',   emoji:'🎯', title:'Crear y cumplir metas de ahorro',           dur:'6:11', views:'11.3K', level:'inter'    },
+  { cat:'ahorro',   emoji:'🚨', title:'Construir tu fondo de emergencia',          dur:'7:44', views:'8.9K',  level:'inter'    },
+  { cat:'ia',       emoji:'🧾', title:'Escanear recibos con IA',                   dur:'4:55', views:'16.7K', level:'beginner' },
+  { cat:'ia',       emoji:'🤖', title:'Categorización automática con IA',          dur:'5:38', views:'7.6K',  level:'inter'    },
+  { cat:'avanzado', emoji:'📈', title:'Análisis avanzado del dashboard',           dur:'9:20', views:'6.2K',  level:'advanced' },
+  { cat:'avanzado', emoji:'📥', title:'Exportar y analizar tus datos',             dur:'6:45', views:'5.4K',  level:'advanced' },
+  { cat:'avanzado', emoji:'⚡', title:'Automatizar entradas recurrentes',          dur:'4:10', views:'9.1K',  level:'inter'    },
+];
+const LEVEL_CSS    = { beginner:'level-beginner', inter:'level-inter', advanced:'level-advanced' };
+const LEVEL_LABELS = { beginner:'Principiante', inter:'Intermedio', advanced:'Avanzado' };
+
+function filterVideos(cat, btn) {
+  document.querySelectorAll('.vf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const list = cat === 'all' ? VIDEOS : VIDEOS.filter(v => v.cat === cat);
+  document.getElementById('videos-list').innerHTML = list.map(v => `
+    <div class="video-row">
+      <div class="video-row-thumb">
+        ${v.emoji}
+        <div class="vr-play">▶</div>
+        <div class="vr-dur">${v.dur}</div>
+      </div>
+      <div class="video-row-info">
+        <div class="video-row-title">${v.title}</div>
+        <div class="video-row-meta">
+          <span class="vr-views">👁 ${v.views}</span>
+          <span class="video-level ${LEVEL_CSS[v.level]}">${LEVEL_LABELS[v.level]}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+filterVideos('all', document.querySelector('.vf-btn'));
+
+/* ── Feature panels ──────────────────────────────────────── */
+function showFeature(id, btn) {
+  document.querySelectorAll('.feature-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── FAQ ─────────────────────────────────────────────────── */
+const FAQS = [
+  { cat:'general',    q:'¿Qué es Cada Menudo?',                   a:'App de tracking de gastos personales para entender en qué se va tu dinero y tomar el control de tus finanzas. Sin banco, sin pago.' },
+  { cat:'general',    q:'¿Para quién está diseñada?',              a:'Para cualquier persona que quiera claridad sobre sus finanzas. No necesitas saber de finanzas ni conectar un banco.' },
+  { cat:'general',    q:'¿En qué se diferencia de otras apps?',    a:'No requiere banco, es 100% gratis sin funciones ocultas, y tiene una interfaz simple que te hace entender tu dinero en segundos.' },
+  { cat:'precios',    q:'¿Cuánto cuesta?',                         a:'Completamente gratis. Sin plan premium, sin funciones bloqueadas, sin tarjeta de crédito. Gratis para siempre.' },
+  { cat:'precios',    q:'¿Habrá planes de pago en el futuro?',     a:'Actualmente no. Si en el futuro existiera algún plan, todas las funciones actuales siempre serán gratuitas.' },
+  { cat:'cuenta',     q:'¿Cómo creo mi cuenta?',                   a:'Solo nombre, email y contraseña. Menos de 60 segundos, sin tarjeta ni acceso bancario.' },
+  { cat:'cuenta',     q:'¿Funciona en varios dispositivos?',        a:'Sí. Accede desde móvil, tablet o desktop con el mismo email. Todo se sincroniza automáticamente.' },
+  { cat:'cuenta',     q:'¿Puedo eliminar mi cuenta?',               a:'Sí. Desde configuración puedes solicitar eliminación completa. Datos borrados en 48 horas.' },
+  { cat:'seguridad',  q:'¿Están seguros mis datos?',               a:'Encriptados con AES-256 en tránsito y reposo. Nunca compartidos con terceros ni anunciantes.' },
+  { cat:'seguridad',  q:'¿Necesito conectar mi banco?',             a:'No. Cada Menudo no requiere acceso a cuentas bancarias ni tarjetas. Tú registras lo que quieres.' },
+  { cat:'seguridad',  q:'¿Quién puede ver mis datos?',              a:'Solo tú. Nuestro equipo nunca accede a tus transacciones individuales.' },
+  { cat:'funciones',  q:'¿Cómo funciona el escaneo con IA?',       a:'Tomas foto al recibo con tu cámara. La IA extrae monto, comercio, fecha y categoría automáticamente. Puedes editar antes de confirmar.' },
+  { cat:'funciones',  q:'¿Puedo crear categorías personalizadas?',  a:'Sí. Edita las predeterminadas o crea las tuyas con nombre, color e ícono propio.' },
+  { cat:'funciones',  q:'¿Cómo funcionan las metas de ahorro?',    a:'Creas una meta con monto y plazo. La app calcula el ahorro semanal necesario y te manda recordatorios si te retrasas.' },
+  { cat:'funciones',  q:'¿Puedo exportar mis datos?',               a:'Sí. CSV o Excel cuando quieras, filtrando por fechas. Sin límite de exportaciones.' },
+  { cat:'tecnico',    q:'¿Funciona sin internet?',                  a:'El registro básico funciona offline y sincroniza al reconectar. IA y escaneo requieren conexión.' },
+  { cat:'tecnico',    q:'¿En qué plataformas está disponible?',     a:'PWA — funciona en cualquier navegador moderno en iOS, Android, macOS y Windows.' },
+  { cat:'tecnico',    q:'¿Cómo reporto un problema?',               a:'Usa el chat (Menudito) en la app o escribe a soporte@cadamenudo.com. Respondemos en 24h hábiles.' },
+];
+
+function filterFaq(cat, btn) {
+  document.querySelectorAll('.faq-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const list = document.getElementById('faq-list');
+  list.innerHTML = FAQS.filter(f => f.cat === cat).map((f, i) => `
+    <div class="faq-item" id="fi-${i}">
+      <div class="faq-q" onclick="toggleFaq(${i})">
+        <span>${f.q}</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a"><p>${f.a}</p></div>
+    </div>`).join('');
+}
+function toggleFaq(i) {
+  const item = document.getElementById('fi-' + i);
+  const was  = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+  if (!was) item.classList.add('open');
+}
+filterFaq('general', document.querySelector('.faq-cat-btn'));
+
+/* ── Bot logic ───────────────────────────────────────────── */
+function getBotResponse(text) {
+  const t = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  if (/hola|buenas|hey/.test(t))                    return '¡Hola! 👋 Soy <strong>Menudito</strong>. ¿En qué puedo ayudarte?';
+  if (/precio|costo|cobr|plan/.test(t))             return 'Cada Menudo es <strong>100% gratis</strong> 🎉 Sin tarjeta, sin trampas.';
+  if (/gratis|free/.test(t))                        return 'Completamente <strong>gratis</strong> para siempre 🎉';
+  if (/banco|conect/.test(t))                       return 'No necesitas banco. Registra <strong>manualmente</strong> o con escaneo IA 🔒';
+  if (/segur|privad/.test(t))                       return 'Tus datos son 100% privados y encriptados 🔒';
+  if (/meta|objetivo/.test(t))                      return '<strong>Metas de ahorro</strong> 🎯 con monto, plazo y recordatorios automáticos.';
+  if (/gasto/.test(t))                              return 'Categoriza gastos y ve <strong>exactamente en qué se va tu dinero</strong> 📊';
+  if (/scan|escaner|recibo|ia/.test(t))             return 'Toma foto al recibo y la IA registra <strong>todo automáticamente</strong> 🧾';
+  if (/export|csv|excel/.test(t))                   return 'Exporta en <strong>CSV o Excel</strong> cuando quieras 📥';
+  if (/movil|telefon|celular/.test(t))              return 'Funciona en <strong>móvil, tablet y desktop</strong> 📱';
+  if (/empezar|inicio|comenzar/.test(t))            return '¡Muy fácil! <strong>Crea tu cuenta</strong> arriba y en 5 min tienes tu dashboard 👆';
+  if (/gracias/.test(t))                            return '¡Con gusto! 😊 ¿Algo más en que pueda ayudarte?';
+  return 'Buena pregunta 🤔 Te recomiendo <strong>crear tu cuenta gratis</strong> y explorar la app.';
+}
+
+/* ── Floating chat ───────────────────────────────────────── */
+const chatFab    = document.getElementById('chat-fab');
+const chatWin    = document.getElementById('chat-win');
+const fabClose   = document.getElementById('fab-close');
+const fabInput   = document.getElementById('fab-input');
+const fabSendBtn = document.getElementById('fab-send');
+const fabMsgs    = document.getElementById('fab-messages');
+const fabQuick   = document.getElementById('fab-quick');
+const chatBadge  = document.getElementById('chat-badge');
+let chatOpen = false, firstOpen = true;
+
+function makeBubble(html, isUser) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `display:flex;gap:6px;align-items:flex-end;justify-content:${isUser?'flex-end':'flex-start'};margin-bottom:10px;`;
+  if (!isUser) {
+    const av = document.createElement('div');
+    av.style.cssText = 'width:24px;height:24px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;';
+    av.textContent = '💰'; wrap.appendChild(av);
+  }
+  const b = document.createElement('div');
+  b.style.cssText = `max-width:82%;padding:9px 12px;border-radius:${isUser?'14px 14px 4px 14px':'14px 14px 14px 4px'};font-size:.78rem;line-height:1.5;background:${isUser?'var(--gradient-primary)':'#fff'};color:${isUser?'#fff':'var(--text)'};border:${isUser?'none':'1.5px solid var(--border)'};`;
+  b.innerHTML = html; wrap.appendChild(b); return wrap;
+}
+
+function makeTyping() {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'display:flex;gap:6px;align-items:flex-end;margin-bottom:10px;';
+  wrap.innerHTML = `<div style="width:24px;height:24px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">💰</div><div style="background:#fff;border:1.5px solid var(--border);border-radius:14px 14px 14px 4px;padding:9px 12px;display:flex;gap:4px;align-items:center;"><span style="width:5px;height:5px;border-radius:50%;background:var(--gray);animation:pulse 1s infinite 0s both;display:block;"></span><span style="width:5px;height:5px;border-radius:50%;background:var(--gray);animation:pulse 1s infinite .2s both;display:block;"></span><span style="width:5px;height:5px;border-radius:50%;background:var(--gray);animation:pulse 1s infinite .4s both;display:block;"></span></div>`;
+  return wrap;
+}
+
+function fabBotMsg(html) {
+  const t = makeTyping(); fabMsgs.appendChild(t); fabMsgs.scrollTop = 9999;
+  setTimeout(() => { t.remove(); fabMsgs.appendChild(makeBubble(html, false)); fabMsgs.scrollTop = 9999; }, 900);
+}
+
+function renderFabChips() {
+  fabQuick.innerHTML = '';
+  ['¿Es gratis?','¿Necesito banco?','Metas','¿Cómo empiezo?'].forEach(label => {
+    const c = document.createElement('button');
+    c.style.cssText = 'background:#fff;border:1.5px solid var(--border);border-radius:100px;padding:4px 10px;font-size:.7rem;font-weight:600;font-family:\'Nunito\',sans-serif;color:var(--primary);cursor:pointer;';
+    c.textContent = label;
+    c.onclick = () => { fabQuick.innerHTML = ''; fabSend(label); };
+    fabQuick.appendChild(c);
+  });
+}
+
+function fabSend(text) {
+  if (!text.trim()) return;
+  fabMsgs.appendChild(makeBubble(text, true)); fabMsgs.scrollTop = 9999;
+  fabInput.value = '';
+  fabBotMsg(getBotResponse(text));
+}
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  chatWin.style.display = chatOpen ? 'flex' : 'none';
+  chatBadge.style.display = 'none';
+  if (chatOpen && firstOpen) {
+    firstOpen = false;
+    setTimeout(() => fabBotMsg('¡Hola! 👋 Soy <strong>Menudito</strong>. ¿En qué puedo ayudarte?'), 400);
+    setTimeout(() => renderFabChips(), 900);
+  }
+  if (chatOpen) fabInput.focus();
+}
+
+chatFab.addEventListener('click', toggleChat);
+fabClose.addEventListener('click', toggleChat);
+fabSendBtn.addEventListener('click', () => fabSend(fabInput.value));
+fabInput.addEventListener('keydown', e => { if (e.key === 'Enter') fabSend(fabInput.value); });
+setTimeout(() => { if (!chatOpen) chatBadge.style.display = 'flex'; }, 3000);
+</script>
+</body>
+</html>
