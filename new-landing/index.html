@@ -1163,6 +1163,260 @@ const obs = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.5 });
 counters.forEach(c => obs.observe(c));
+
+/* ── AI Chat Widget ─────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+
+const MOCK_RESPONSES = {
+  default: [
+    "¡Hola! Soy el asistente de Cada Menudo 💰 ¿En qué puedo ayudarte hoy?",
+    "Puedo ayudarte con dudas sobre la app, tus finanzas o cómo empezar.",
+  ],
+  greet: ["¡Hola! 👋 Soy Menudito, tu asistente financiero. ¿Cómo puedo ayudarte?"],
+  precio: ["Cada Menudo es <strong>100% gratis</strong> 🎉 Sin planes de pago, sin tarjeta de crédito, sin sorpresas."],
+  gratis: ["Cada Menudo es <strong>100% gratis</strong> 🎉 Sin planes de pago, sin tarjeta de crédito, sin sorpresas."],
+  banco: ["No necesitas conectar tu banco. Puedes registrar tus movimientos <strong>manualmente</strong> o escaneando recibos con IA. Tus datos siempre son privados 🔒"],
+  segur: ["Tus datos son 100% privados. No compartimos información con terceros ni requerimos acceso a tu cuenta bancaria 🔒"],
+  ahorro: ["Puedes crear <strong>metas de ahorro personalizadas</strong> 🎯, definir montos, plazos y ver tu progreso en tiempo real. ¡La app te manda recordatorios para mantenerte en camino!"],
+  meta: ["Puedes crear <strong>metas de ahorro personalizadas</strong> 🎯, definir montos, plazos y ver tu progreso en tiempo real. ¡La app te manda recordatorios para mantenerte en camino!"],
+  gastos: ["Con Cada Menudo puedes categorizar todos tus gastos, ver gráficas por mes y descubrir exactamente <strong>en qué se va tu dinero</strong> 📊"],
+  categoria: ["Puedes crear <strong>categorías personalizadas</strong> para ingresos y gastos 🗂️. También vienen categorías predeterminadas como Comida, Transporte, Hogar, Ocio y más."],
+  exportar: ["Sí, puedes exportar toda tu información en <strong>CSV o Excel</strong> 📥 cuando quieras. Tus datos siempre disponibles."],
+  movil: ["Cada Menudo funciona en <strong>móvil, tablet y desktop</strong> 📱 Sin descargas obligatorias, directo desde el navegador."],
+  ia: ["Nuestra IA puede <strong>escanear recibos</strong> 🧾 y registrar transacciones automáticamente. También categoriza tus gastos de forma inteligente."],
+  recibo: ["Nuestra IA puede <strong>escanear recibos</strong> 🧾 y registrar transacciones automáticamente. También categoriza tus gastos de forma inteligente."],
+  empezar: ["¡Es muy fácil! Solo <strong>crea tu cuenta gratis</strong> arriba 👆, registra tu primer ingreso y empieza a categorizar tus gastos. En 5 minutos ya tienes tu dashboard listo."],
+  cuenta: ["Crear una cuenta es <strong>gratis y toma menos de 60 segundos</strong> ⚡ Solo necesitas tu nombre, email y contraseña. Sin tarjeta."],
+  gracias: ["¡Con gusto! 😊 Si tienes más preguntas, aquí estoy. ¡Mucho éxito con tus finanzas!"],
+};
+
+function getBotResponse(text) {
+  const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (/hola|buenas|hey|hi/.test(t)) return MOCK_RESPONSES.greet[0];
+  if (/precio|costo|pagar|cobr|plan/.test(t)) return MOCK_RESPONSES.precio[0];
+  if (/gratis|free/.test(t)) return MOCK_RESPONSES.gratis[0];
+  if (/banco|conect|link/.test(t)) return MOCK_RESPONSES.banco[0];
+  if (/segur|privad|datos/.test(t)) return MOCK_RESPONSES.segur[0];
+  if (/meta|objetivo/.test(t)) return MOCK_RESPONSES.meta[0];
+  if (/ahorro|ahorrar/.test(t)) return MOCK_RESPONSES.ahorro[0];
+  if (/gasto|gast/.test(t)) return MOCK_RESPONSES.gastos[0];
+  if (/categor/.test(t)) return MOCK_RESPONSES.categoria[0];
+  if (/export|descargar|csv|excel/.test(t)) return MOCK_RESPONSES.exportar[0];
+  if (/movil|telefon|celular|tablet|desktop/.test(t)) return MOCK_RESPONSES.movil[0];
+  if (/ia|inteligencia|scan|escaner|recibo/.test(t)) return MOCK_RESPONSES.ia[0];
+  if (/empezar|inicio|comenzar|start/.test(t)) return MOCK_RESPONSES.empezar[0];
+  if (/cuenta|registro|registrar/.test(t)) return MOCK_RESPONSES.cuenta[0];
+  if (/gracias|thanks/.test(t)) return MOCK_RESPONSES.gracias[0];
+  return "Buena pregunta 🤔 Para eso te recomiendo <strong>crear tu cuenta gratis</strong> y explorar la app. Si tienes otra duda, ¡con gusto te ayudo!";
+}
+
+const chatBtn     = document.getElementById('chat-btn');
+const chatWindow  = document.getElementById('chat-window');
+const chatClose   = document.getElementById('chat-close');
+const chatInput   = document.getElementById('chat-input');
+const chatSend    = document.getElementById('chat-send');
+const chatMessages= document.getElementById('chat-messages');
+const chatBadge   = document.getElementById('chat-badge');
+
+let chatOpen = false;
+let firstOpen = true;
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  chatWindow.style.display = chatOpen ? 'flex' : 'none';
+  chatBtn.style.transform = chatOpen ? 'scale(0.9)' : 'scale(1)';
+  if (chatOpen) {
+    chatBadge.style.display = 'none';
+    chatInput.focus();
+    if (firstOpen) {
+      firstOpen = false;
+      setTimeout(() => addBotMessage("¡Hola! 👋 Soy <strong>Menudito</strong>, el asistente de Cada Menudo.<br>¿En qué puedo ayudarte hoy?"), 400);
+      setTimeout(() => addSuggestions(), 900);
+    }
+  }
+}
+
+function addMessage(html, isUser) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `display:flex;gap:8px;align-items:flex-end;justify-content:${isUser?'flex-end':'flex-start'};margin-bottom:12px;`;
+
+  if (!isUser) {
+    const av = document.createElement('div');
+    av.style.cssText = 'width:28px;height:28px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;';
+    av.textContent = '💰';
+    wrap.appendChild(av);
+  }
+
+  const bubble = document.createElement('div');
+  bubble.style.cssText = `
+    max-width:78%;padding:10px 14px;border-radius:${isUser?'16px 16px 4px 16px':'16px 16px 16px 4px'};
+    font-size:.83rem;line-height:1.5;
+    background:${isUser?'var(--gradient-primary)':'#fff'};
+    color:${isUser?'#fff':'var(--text)'};
+    border:${isUser?'none':'1.5px solid var(--border)'};
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    animation:fadeUp .3s ease both;
+  `;
+  bubble.innerHTML = html;
+  wrap.appendChild(bubble);
+  chatMessages.appendChild(wrap);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addBotMessage(html) {
+  // typing indicator
+  const typing = document.createElement('div');
+  typing.id = 'typing';
+  typing.style.cssText = 'display:flex;gap:8px;align-items:flex-end;margin-bottom:12px;';
+  typing.innerHTML = `
+    <div style="width:28px;height:28px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">💰</div>
+    <div style="background:#fff;border:1.5px solid var(--border);border-radius:16px 16px 16px 4px;padding:10px 16px;display:flex;gap:5px;align-items:center;">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--gray);animation:pulse 1s infinite .0s both;display:block;"></span>
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--gray);animation:pulse 1s infinite .2s both;display:block;"></span>
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--gray);animation:pulse 1s infinite .4s both;display:block;"></span>
+    </div>`;
+  chatMessages.appendChild(typing);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  setTimeout(() => {
+    typing.remove();
+    addMessage(html, false);
+  }, 900);
+}
+
+function addSuggestions() {
+  const chips = ['¿Es gratis?', '¿Necesito banco?', 'Metas de ahorro', '¿Cómo empiezo?'];
+  const row = document.createElement('div');
+  row.id = 'suggestions';
+  row.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding-left:36px;';
+  chips.forEach(label => {
+    const chip = document.createElement('button');
+    chip.style.cssText = `
+      background:#fff;border:1.5px solid var(--border);
+      border-radius:100px;padding:5px 12px;
+      font-size:.75rem;font-weight:600;font-family:'Nunito',sans-serif;
+      color:var(--primary);cursor:pointer;
+      transition:background .2s,color .2s;
+    `;
+    chip.textContent = label;
+    chip.onmouseenter = () => { chip.style.background='var(--primary)'; chip.style.color='#fff'; };
+    chip.onmouseleave = () => { chip.style.background='#fff'; chip.style.color='var(--primary)'; };
+    chip.onclick = () => { row.remove(); sendMessage(label); };
+    row.appendChild(chip);
+  });
+  chatMessages.appendChild(row);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function sendMessage(text) {
+  if (!text.trim()) return;
+  addMessage(text, true);
+  chatInput.value = '';
+  const response = getBotResponse(text);
+  addBotMessage(response);
+}
+
+chatBtn.addEventListener('click', toggleChat);
+chatClose.addEventListener('click', toggleChat);
+chatSend.addEventListener('click', () => sendMessage(chatInput.value));
+chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(chatInput.value); });
+
+// Show badge after 3s
+setTimeout(() => {
+  if (!chatOpen) chatBadge.style.display = 'flex';
+}, 3000);
+
+// Open chat on first interaction (click or touch anywhere)
+function onFirstInteraction() {
+  if (!chatOpen) toggleChat();
+  document.removeEventListener('click', onFirstInteraction);
+  document.removeEventListener('touchstart', onFirstInteraction);
+}
+document.addEventListener('click', onFirstInteraction);
+document.addEventListener('touchstart', onFirstInteraction);
+
+}); // end DOMContentLoaded
 </script>
+<!-- ── AI CHAT WIDGET ─────────────────────────────────────── -->
+
+<!-- Floating button -->
+<button id="chat-btn" aria-label="Abrir chat" style="
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--gradient-primary);border:none;
+  box-shadow:0 8px 28px rgba(57,86,232,.45);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:24px;transition:transform .25s,box-shadow .25s;
+" onmouseenter="this.style.transform='scale(1.1)';this.style.boxShadow='0 12px 36px rgba(57,86,232,.55)'"
+   onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 8px 28px rgba(57,86,232,.45)'">
+  💬
+  <!-- Notification badge -->
+  <div id="chat-badge" style="
+    display:none;position:absolute;top:-2px;right:-2px;
+    width:18px;height:18px;border-radius:50%;
+    background:#ef4444;border:2px solid #fff;
+    font-size:10px;font-weight:800;color:#fff;
+    align-items:center;justify-content:center;
+    font-family:'Nunito',sans-serif;
+  ">1</div>
+</button>
+
+<!-- Chat window -->
+<div id="chat-window" style="
+  display:none;
+  position:fixed;bottom:92px;right:24px;z-index:998;
+  width:340px;height:480px;
+  background:#fff;border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.18);
+  border:1.5px solid var(--border);
+  flex-direction:column;overflow:hidden;
+  animation:fadeUp .3s ease both;
+  font-family:'Nunito',sans-serif;
+">
+  <!-- Header -->
+  <div style="
+    background:var(--gradient-primary);
+    padding:16px 18px;
+    display:flex;align-items:center;gap:12px;
+  ">
+    <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">💰</div>
+    <div style="flex:1;">
+      <div style="font-weight:800;color:#fff;font-size:.95rem;">Menudito</div>
+      <div style="font-size:.72rem;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:5px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;"></span>
+        Asistente de Cada Menudo
+      </div>
+    </div>
+    <button id="chat-close" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .2s;"
+      onmouseenter="this.style.background='rgba(255,255,255,.3)'"
+      onmouseleave="this.style.background='rgba(255,255,255,.15)'">✕</button>
+  </div>
+
+  <!-- Messages -->
+  <div id="chat-messages" style="
+    flex:1;overflow-y:auto;padding:16px;
+    background:#f8f9fc;
+    display:flex;flex-direction:column;
+  "></div>
+
+  <!-- Input -->
+  <div style="padding:12px 14px;border-top:1.5px solid var(--border);background:#fff;display:flex;gap:8px;align-items:center;">
+    <input id="chat-input" type="text" placeholder="Escribe tu pregunta..." style="
+      flex:1;border:1.5px solid var(--border);border-radius:10px;
+      padding:9px 12px;font-size:.83rem;font-family:'Nunito',sans-serif;
+      outline:none;background:#fff;color:var(--text);transition:border-color .2s;
+    "
+      onfocus="this.style.borderColor='var(--primary)'"
+      onblur="this.style.borderColor='var(--border)'"
+    />
+    <button id="chat-send" style="
+      width:36px;height:36px;border-radius:10px;
+      background:var(--gradient-primary);border:none;color:#fff;
+      font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;transition:opacity .2s;
+    " onmouseenter="this.style.opacity='.85'" onmouseleave="this.style.opacity='1'">➤</button>
+  </div>
+</div>
+
 </body>
 </html>
