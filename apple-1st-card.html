@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cada Menudo</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .phone {
+      width: 347px;
+      height: 661px;
+      border-radius: 28px;
+      overflow: hidden;
+      background: #3956E8;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      color: white;
+    }
+
+    /* Header */
+    .header {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px 10px;
+      background: #5342e8;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .header img {
+      height: 64px;
+      margin-top: -8px;
+      margin-bottom: -8px;
+    }
+
+    .signin {
+      background: white;
+      color: #3956E8;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Background */
+    .background {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 0;
+    }
+
+    .background img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(57,86,232,0.2),
+        rgba(116,89,217,0.15),
+        rgba(47,63,196,0.25)
+      );
+    }
+
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 20px 80px;
+      text-align: center;
+    }
+
+    .card {
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .card h1 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .card p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* Button */
+    .btn {
+      background: white;
+      color: #3956E8;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .subtext {
+      margin-top: 12px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="phone">
+
+  <!-- Header -->
+  <div class="header">
+    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cada%20menudo%20logo%20WHITE.png"/>
+    <button class="signin">Sign In</button>
+  </div>
+
+  <!-- Background -->
+  <div class="background">
+    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/CM-app-image.png"/>
+    <div class="overlay"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <div class="card">
+      <h1>Tu dinero, claro en segundos</h1>
+      <p>
+        Registra ingresos, gastos y ahorros. 
+        Visualiza tu dinero y toma mejores decisiones.
+      </p>
+    </div>
+
+    <button class="btn">Comenzar</button>
+
+    <div class="subtext">
+      Crea o renueva tu membresía
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
