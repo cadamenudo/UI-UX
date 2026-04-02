@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #3956E8;
+      background: #5342e8; /* 🔥 color unificado */
     }
 
     .app {
@@ -20,6 +20,7 @@
       color: white;
       display: flex;
       flex-direction: column;
+      background: #5342e8; /* 🔥 mismo tono que header */
     }
 
     a {
@@ -27,6 +28,7 @@
       display: inline-block;
     }
 
+    /* Header */
     .header {
       z-index: 20;
       display: flex;
@@ -49,6 +51,7 @@
       font-weight: 600;
     }
 
+    /* Background */
     .background {
       position: absolute;
       top: 70px;
@@ -69,12 +72,13 @@
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(57,86,232,0.2),
-        rgba(116,89,217,0.15),
-        rgba(47,63,196,0.25)
+        rgba(83,66,232,0.2),
+        rgba(83,66,232,0.15),
+        rgba(83,66,232,0.25)
       );
     }
 
+    /* Content */
     .content {
       position: relative;
       z-index: 10;
@@ -107,6 +111,7 @@
       color: rgba(255,255,255,0.9);
     }
 
+    /* Button */
     .btn {
       background: white;
       color: #3956E8;
@@ -129,6 +134,7 @@
       font-size: 12px;
       color: rgba(255,255,255,0.8);
     }
+
   </style>
 </head>
 
@@ -136,6 +142,7 @@
 
 <div class="app">
 
+  <!-- Header -->
   <div class="header">
     <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cada%20menudo%20logo%20WHITE.png" alt="Cada Menudo"/>
     
@@ -144,11 +151,13 @@
     </a>
   </div>
 
+  <!-- Background -->
   <div class="background">
     <img src="https://cadamenudo.github.io/UI-UX/assets/logo/CM-app-image.png" alt="App Cada Menudo"/>
     <div class="overlay"></div>
   </div>
 
+  <!-- Content -->
   <div class="content">
 
     <div class="card">
