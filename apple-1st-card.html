@@ -2,28 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Cada Menudo</title>
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: #3956E8;
     }
 
-    .phone {
-      width: 347px;
-      height: 661px;
-      border-radius: 28px;
-      overflow: hidden;
-      background: #3956E8;
+    .app {
+      width: 100vw;
+      height: 100dvh;
       position: relative;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
       color: white;
       display: flex;
       flex-direction: column;
@@ -34,21 +27,18 @@
       display: inline-block;
     }
 
-    /* Header */
     .header {
       z-index: 20;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
+      padding: env(safe-area-inset-top) 16px 10px;
       background: #5342e8;
       box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
 
     .header img {
-      height: 64px;
-      margin-top: -6px;
-      margin-bottom: -6px;
+      height: 50px;
     }
 
     .signin {
@@ -59,10 +49,9 @@
       font-weight: 600;
     }
 
-    /* Background */
     .background {
       position: absolute;
-      top: 60px;
+      top: 70px;
       bottom: 0;
       left: 0;
       right: 0;
@@ -86,7 +75,6 @@
       );
     }
 
-    /* Content */
     .content {
       position: relative;
       z-index: 10;
@@ -94,7 +82,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 0 20px 30px;
+      padding: 0 20px calc(20px + env(safe-area-inset-bottom));
       text-align: center;
     }
 
@@ -119,16 +107,21 @@
       color: rgba(255,255,255,0.9);
     }
 
-    /* Button */
     .btn {
       background: white;
       color: #3956E8;
-      padding: 12px;
-      border-radius: 10px;
+      padding: 14px;
+      border-radius: 12px;
       font-weight: bold;
       font-size: 16px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
       margin-top: 10px;
+    }
+
+    .arrow {
+      font-size: 18px;
+      margin-left: 6px;
+      font-weight: bold;
     }
 
     .subtext {
@@ -136,42 +129,38 @@
       font-size: 12px;
       color: rgba(255,255,255,0.8);
     }
-
   </style>
 </head>
 
 <body>
 
-<div class="phone">
+<div class="app">
 
-  <!-- Header -->
   <div class="header">
-    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cada%20menudo%20logo%20WHITE.png"/>
+    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cada%20menudo%20logo%20WHITE.png" alt="Cada Menudo"/>
     
     <a href="https://cadamenudo.github.io/UI-UX/iniciar_sesion.html" class="signin">
       Sign In
     </a>
   </div>
 
-  <!-- Background -->
   <div class="background">
-    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/CM-app-image.png"/>
+    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/CM-app-image.png" alt="App Cada Menudo"/>
     <div class="overlay"></div>
   </div>
 
-  <!-- Content -->
   <div class="content">
 
     <div class="card">
       <h1>Tu dinero, claro en segundos</h1>
       <p>
-        Registra ingresos, gastos y ahorros. 
+        Registra ingresos, gastos y ahorros.
         Visualiza tu dinero y toma mejores decisiones.
       </p>
     </div>
 
     <a href="https://cadamenudo.github.io/UI-UX/apple-2nd-card.html" class="btn">
-      Comenzar
+      Comenzar <span class="arrow">›</span>
     </a>
 
     <div class="subtext">
