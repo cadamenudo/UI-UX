@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cada Menudo</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -21,7 +21,8 @@
       max-width: 400px;
       width: 100%;
       text-align: center;
-      padding: 2rem 1.5rem;
+      padding: 2rem 1.5rem 2.5rem;
+      box-sizing: border-box;
     }
 
     .logo {
@@ -37,13 +38,14 @@
 
     .btn {
       width: 100%;
-      padding: 0.9rem;
-      border-radius: 12px;
+      padding: 0.95rem;
+      border-radius: 14px;
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 700;
       border: none;
       cursor: pointer;
       margin-bottom: 1rem;
+      font-family: inherit;
     }
 
     .btn-primary {
@@ -57,44 +59,72 @@
       border: 2px solid #3956E8;
     }
 
-    /* FOOTER */
+    /* FOOTER NUEVO */
     .footer {
-      margin-top: 40px;
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #E5E7EB;
       text-align: center;
     }
 
     .support-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #6B7280;
-      margin-bottom: 4px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 0.2rem;
     }
 
-    .support-text {
-      font-size: 12px;
-      color: #6B7280;
-      margin: 2px 0;
+    .support-subtitle {
+      font-size: 0.8rem;
+      color: #64748B;
+      margin-bottom: 1rem;
     }
 
-    .support-text a {
-      color: #3956E8;
+    .support-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .support-link {
+      display: block;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 0.75rem;
       text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #3956E8;
+    }
+
+    /* WhatsApp destacado */
+    .whatsapp {
+      border-color: #25D366;
+      color: #25D366;
+    }
+
+    /* Email neutral */
+    .email-link {
+      color: #111827;
     }
 
     .legal-links {
-      margin-top: 8px;
-      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      font-size: 0.8rem;
     }
 
     .legal-links a {
-      color: #3956E8;
+      color: #64748B;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 700;
     }
 
-    .legal-links span {
-      margin: 0 6px;
-      color: #9CA3AF;
+    .legal-dot {
+      color: #CBD5E1;
     }
   </style>
 </head>
@@ -103,7 +133,7 @@
 
 <div class="container">
 
-  <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" class="logo">
+  <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" class="logo" alt="Cada Menudo">
 
   <h1>Bienvenido a Cada Menudo</h1>
 
@@ -111,27 +141,42 @@
     Crear una cuenta en Cada Menudo
   </button>
 
-  <!-- ✅ LINK CORREGIDO -->
   <button class="btn btn-secondary" onclick="location.href='https://cadamenudo.github.io/UI-UX/iniciar_sesion.html'">
     Ingresar a la app
   </button>
 
   <!-- FOOTER -->
   <div class="footer">
-    <p class="support-title">¿Preguntas?</p>
-    <p class="support-text">Servicio al consumidor</p>
-    <p class="support-text">
-      <a href="tel:+17862029171">+1 (786) 202-9171</a> & 
-      <a href="tel:+18507400274">+1 (850) 740-0274</a>
-    </p>
-    <p class="support-text">
-      <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
-    </p>
+
+    <p class="support-title">¿Necesitas ayuda?</p>
+    <p class="support-subtitle">Servicio al consumidor</p>
+
+    <div class="support-group">
+
+      <!-- WhatsApp -->
+      <a class="support-link whatsapp"
+         href="https://wa.me/17862029171?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo">
+        Enviar mensaje por WhatsApp
+      </a>
+
+      <!-- Llamada -->
+      <a class="support-link" href="tel:+18507400274">
+        Llamar al +1 (850) 740-0274
+      </a>
+
+      <!-- Email -->
+      <a class="support-link email-link" href="mailto:tech@cadamenudo.com">
+        tech@cadamenudo.com
+      </a>
+
+    </div>
+
     <div class="legal-links">
       <a href="terminos.html">Términos</a>
-      <span>•</span>
+      <span class="legal-dot">•</span>
       <a href="privacidad.html">Privacidad</a>
     </div>
+
   </div>
 
 </div>
