@@ -613,12 +613,7 @@ document.addEventListener('click',e=>{
 // BUDGET TAB
 function renderB(area){
   const el=$('b-'+area); el.innerHTML='';
-  if(BUD[area].length===0){
-    el.innerHTML=`<div style="text-align:center;padding:20px 0;color:var(--muted);font-size:.83rem">
-      Sin categorías todavía — usa el asistente o toca "+ Añadir".
-    </div>`;
-    return;
-  }
+  if(BUD[area].length===0) return;
   BUD[area].forEach((item,i)=>{
     const row = document.createElement('div');
     row.className = 'brow';
