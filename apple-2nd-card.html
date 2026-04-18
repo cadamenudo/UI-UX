@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- IMPORTANTE para iPhone notch -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
   <title>Cada Menudo</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -21,7 +24,7 @@
       max-width: 400px;
       width: 100%;
       text-align: center;
-      padding: 2rem 1.5rem 2.5rem;
+      padding: calc(2.5rem + env(safe-area-inset-top)) 1.5rem 2.5rem;
       box-sizing: border-box;
     }
 
@@ -88,7 +91,7 @@
     .support-icons {
       display: flex;
       justify-content: center;
-      gap: 28px;
+      gap: 32px;
       margin-bottom: 1.2rem;
     }
 
@@ -106,19 +109,19 @@
       justify-content: center;
       background: #3956E8;
       border-radius: 50%;
-      box-shadow: 0 8px 18px rgba(57, 86, 232, 0.22);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-shadow: 0 6px 14px rgba(57, 86, 232, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
       -webkit-tap-highlight-color: transparent;
     }
 
     .icon-item a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(57, 86, 232, 0.28);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(57, 86, 232, 0.22);
     }
 
     .icon-item a:active {
       transform: scale(0.94);
-      box-shadow: 0 6px 12px rgba(57, 86, 232, 0.2);
+      box-shadow: 0 4px 10px rgba(57, 86, 232, 0.15);
     }
 
     .icon-item img {
@@ -176,6 +179,7 @@
 
     <div class="support-icons">
 
+      <!-- Mensaje -->
       <div class="icon-item">
         <a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo" target="_blank">
           <img src="https://cadamenudo.github.io/UI-UX/assets/icons/WS_blue_icon.png" alt="Mensaje">
@@ -183,6 +187,7 @@
         <span>Mensaje</span>
       </div>
 
+      <!-- Email -->
       <div class="icon-item">
         <a href="mailto:tech@cadamenudo.com">
           <img src="https://cadamenudo.github.io/UI-UX/assets/icons/email_blue_icon.png" alt="Email">
@@ -190,6 +195,7 @@
         <span>Email</span>
       </div>
 
+      <!-- Llamar -->
       <div class="icon-item">
         <a href="tel:+18507400274">
           <img src="https://cadamenudo.github.io/UI-UX/assets/icons/phone_blue_icon.png" alt="Llamar">
