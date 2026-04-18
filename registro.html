@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro - Cada Menudo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Crear cuenta</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -13,6 +13,7 @@
       background: #FFFFFF;
       margin: 0;
       padding: 0;
+      color: #111827;
       display: flex;
       justify-content: center;
     }
@@ -20,21 +21,21 @@
     .registro-container {
       max-width: 400px;
       width: 100%;
-      background: #fff;
-      border-radius: 16px;
-      padding: 1vh 1.5rem;
-      margin-top: 1vh;
+      padding: calc(2rem + env(safe-area-inset-top)) 1.5rem 2.5rem;
       box-sizing: border-box;
       text-align: center;
     }
 
     .logo {
-      width: 300px;
-      margin-bottom: 0.25rem;
+      width: 260px;
+      margin-bottom: 0.75rem;
     }
 
     h2 {
-      margin-bottom: 1rem;
+      font-size: 1.35rem;
+      margin-bottom: 1.75rem;
+      color: #6B7280;
+      font-weight: 700;
     }
 
     form {
@@ -44,20 +45,114 @@
     }
 
     .input-group {
+      width: 100%;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1.5px solid #D1D5DB;
+      border-radius: 18px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      outline: none;
+      font-family: inherit;
+      color: #111827;
+      background: #fff;
+    }
+
+    .input-group input::placeholder {
+      color: #9CA3AF;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: #3956E8;
+    }
+
+    .row {
       display: flex;
-      flex-direction: column;
+      gap: 0.9rem;
       align-items: flex-start;
+    }
+
+    .country-wrap {
+      width: 38%;
+      text-align: left;
+    }
+
+    .phone-wrap {
+      width: 62%;
+    }
+
+    .field-top-label {
+      display: block;
+      font-size: 0.9rem;
+      color: #4B5563;
+      margin-bottom: 0.35rem;
+      padding-left: 0.2rem;
+      line-height: 1;
+    }
+
+    .invisible-label {
+      visibility: hidden;
+    }
+
+    .country-box {
+      position: relative;
       width: 100%;
     }
 
-    .input-group input {
-      padding: 0.75rem 1rem;
-      border: 1px solid #D1D5DB;
-      border-radius: 10px;
+    .country-select {
       width: 100%;
+      height: 56px;
+      padding: 0 2.8rem 0 4.1rem;
+      border: 1.5px solid #D1D5DB;
+      border-radius: 18px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #111827;
+      background: #FFFFFF;
+      box-sizing: border-box;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
 
-    .input-password {
+    .country-select:focus {
+      border-color: #3956E8;
+    }
+
+    .phone-wrap input {
+      height: 56px;
+    }
+
+    .flag {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.35rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .caret {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 8px solid #9CA3AF;
+      pointer-events: none;
+    }
+
+    .password-wrap {
       position: relative;
     }
 
@@ -67,149 +162,273 @@
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
+      color: #6B7280;
+      font-size: 1.2rem;
+      user-select: none;
     }
 
-    button {
-      background-color: #3956E8;
-      color: white;
-      padding: 0.75rem;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      text-align: left;
+      margin-top: 0.25rem;
     }
 
-    .login-link {
-      margin-top: 1rem;
-      font-size: 0.9rem;
+    .terms input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      margin-top: 0.15rem;
+      accent-color: #3956E8;
+      flex-shrink: 0;
     }
 
-    .login-link a {
-      color: #3956E8;
-      font-weight: bold;
+    .terms label {
+      font-size: 0.95rem;
+      line-height: 1.35;
+      color: #64748B;
+    }
+
+    .terms a {
+      color: #4F46E5;
       text-decoration: none;
     }
 
-    /* FOOTER */
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: none;
+      border-radius: 10px;
+      background: #E5E7EB;
+      color: #9CA3AF;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: not-allowed;
+      font-family: inherit;
+      margin-top: 0.25rem;
+      transition: all 0.18s ease;
+    }
+
+    .btn-submit.active {
+      background: #3956E8;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(57, 86, 232, 0.18);
+    }
+
+    .btn-submit.active:active {
+      transform: scale(0.98);
+    }
+
     .footer {
-      margin-top: 25px;
+      margin-top: 2rem;
+      border-top: 1px solid #E5E7EB;
+      padding-top: 1.2rem;
       text-align: center;
     }
 
     .support-title {
-      font-size: 13px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .support-subtitle {
+      font-size: 0.75rem;
+      color: #64748B;
+      margin-bottom: 1rem;
+    }
+
+    .support-icons {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 1rem;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .icon-item a {
+      width: 56px;
+      height: 56px;
+      background: #3956E8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(57, 86, 232, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .icon-item a:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(57, 86, 232, 0.22);
+    }
+
+    .icon-item a:active {
+      transform: scale(0.94);
+      box-shadow: 0 4px 10px rgba(57, 86, 232, 0.15);
+    }
+
+    .icon-item img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .icon-item span {
+      font-size: 11px;
+      color: #64748B;
+      margin-top: 6px;
       font-weight: 600;
-      color: #6B7280;
-    }
-
-    .support-text {
-      font-size: 12px;
-      color: #6B7280;
-    }
-
-    .support-text a {
-      color: #3956E8;
-      text-decoration: none;
     }
 
     .legal-links {
-      margin-top: 8px;
       font-size: 12px;
     }
 
     .legal-links a {
       color: #3956E8;
       text-decoration: none;
+      font-weight: 500;
     }
 
     .legal-links span {
       margin: 0 6px;
+      color: #9CA3AF;
     }
-
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 99;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background: white;
-      margin: 10% auto;
-      padding: 1rem;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-    }
-
   </style>
 </head>
-
 <body>
+  <div class="registro-container">
 
-<div class="registro-container">
+    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Logo Cada Menudo" class="logo" />
 
-  <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" class="logo">
+    <h2>Crea tu cuenta</h2>
 
-  <h2>Crea una cuenta</h2>
+    <form id="registroForm">
+      <div class="input-group">
+        <input type="text" id="nombre" placeholder="Nombre" />
+      </div>
 
-  <form>
+      <div class="input-group">
+        <input type="text" id="usuario" placeholder="Nombre de usuario (o Email)" />
+      </div>
 
-    <div class="input-group">
-      <input type="text" placeholder="Nombre">
+      <div class="row">
+        <div class="country-wrap">
+          <label class="field-top-label" for="pais">País</label>
+          <div class="country-box">
+            <span class="flag">🇺🇸</span>
+            <select id="pais" class="country-select">
+              <option value="+1">+1</option>
+              <option value="+52">+52</option>
+              <option value="+34">+34</option>
+              <option value="+57">+57</option>
+              <option value="+58">+58</option>
+              <option value="+51">+51</option>
+              <option value="+54">+54</option>
+              <option value="+593">+593</option>
+            </select>
+            <span class="caret"></span>
+          </div>
+        </div>
+
+        <div class="phone-wrap input-group">
+          <label class="field-top-label invisible-label">Teléfono</label>
+          <input type="tel" id="telefono" placeholder="Teléfono" />
+        </div>
+      </div>
+
+      <div class="input-group password-wrap">
+        <input type="password" id="password" placeholder="Contraseña" />
+        <span class="toggle-password" onclick="togglePassword()">👁</span>
+      </div>
+
+      <div class="terms">
+        <input type="checkbox" id="terms" />
+        <label for="terms">
+          He leído y acepto los <a href="terminos.html">Términos</a> y <a href="privacidad.html">Políticas</a>
+        </label>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-submit">REGISTRAR</button>
+    </form>
+
+    <div class="footer">
+      <p class="support-title">¿Necesitas ayuda?</p>
+      <p class="support-subtitle">Servicio al consumidor</p>
+
+      <div class="support-icons">
+        <div class="icon-item">
+          <a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo" target="_blank">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/WS_blue_icon.png" alt="Mensaje">
+          </a>
+          <span>Mensaje</span>
+        </div>
+
+        <div class="icon-item">
+          <a href="mailto:tech@cadamenudo.com">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/email_blue_icon.png" alt="Email">
+          </a>
+          <span>Email</span>
+        </div>
+
+        <div class="icon-item">
+          <a href="tel:+18507400274">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/phone_blue_icon.png" alt="Llamar">
+          </a>
+          <span>Llamar</span>
+        </div>
+      </div>
+
+      <div class="legal-links">
+        <a href="terminos.html">Términos</a>
+        <span>•</span>
+        <a href="privacidad.html">Privacidad</a>
+      </div>
     </div>
 
-    <div class="input-group">
-      <input type="email" placeholder="Correo">
-    </div>
-
-    <div class="input-group input-password">
-      <input type="password" placeholder="Contraseña">
-      <span class="toggle-password" onclick="togglePassword()">👁</span>
-    </div>
-
-    <label>
-      <input type="checkbox" required>
-      Acepto <a href="#">Términos</a> y <a href="#">Privacidad</a>
-    </label>
-
-    <button>REGISTRARSE</button>
-
-  </form>
-
-  <p class="login-link">
-    ¿Ya tienes una cuenta? 
-    <a href="https://cadamenudo.github.io/UI-UX/iniciar_sesion.html">Inicia sesión</a>
-  </p>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    <p class="support-title">¿Preguntas?</p>
-    <p class="support-text">Servicio al consumidor</p>
-    <p class="support-text">
-      <a href="tel:+17862029171">+1 (786) 202-9171</a> & 
-      <a href="tel:+18507400274">+1 (850) 740-0274</a>
-    </p>
-    <p class="support-text">
-      <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
-    </p>
-    <div class="legal-links">
-      <a href="#">Términos</a>
-      <span>•</span>
-      <a href="#">Privacidad</a>
-    </div>
   </div>
 
-</div>
+  <script>
+    const form = document.getElementById("registroForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const terms = document.getElementById("terms");
 
-<script>
-function togglePassword() {
-  const input = document.querySelector('input[type="password"]');
-  input.type = input.type === "password" ? "text" : "password";
-}
-</script>
+    function togglePassword() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    }
 
+    function validarFormulario() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const usuario = document.getElementById("usuario").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (nombre && usuario && telefono && password && terms.checked) {
+        submitBtn.classList.add("active");
+      } else {
+        submitBtn.classList.remove("active");
+      }
+    }
+
+    form.addEventListener("input", validarFormulario);
+    terms.addEventListener("change", validarFormulario);
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      if (!submitBtn.classList.contains("active")) return;
+      alert("Registro simulado");
+    });
+  </script>
 </body>
 </html>
