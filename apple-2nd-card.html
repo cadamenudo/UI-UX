@@ -59,7 +59,7 @@
       border: 2px solid #3956E8;
     }
 
-    /* FOOTER NUEVO */
+    /* FOOTER */
     .footer {
       margin-top: 2.5rem;
       padding-top: 1.25rem;
@@ -80,34 +80,45 @@
       margin-bottom: 1rem;
     }
 
-    .support-group {
+    /* ICONOS */
+    .support-icons {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin-bottom: 1.2rem;
+    }
+
+    .icon-item {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      align-items: center;
     }
 
-    .support-link {
-      display: block;
-      background: #FFFFFF;
-      border: 1px solid #E5E7EB;
-      border-radius: 12px;
-      padding: 0.75rem;
-      text-decoration: none;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #3956E8;
+    .icon-item a {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F1F5F9;
+      border-radius: 50%;
+      transition: transform 0.15s ease;
     }
 
-    /* WhatsApp destacado */
-    .whatsapp {
-      border-color: #25D366;
-      color: #25D366;
+    .icon-item a:hover {
+      transform: scale(1.1);
     }
 
-    /* Email neutral */
-    .email-link {
-      color: #111827;
+    .icon-item img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .icon-item span {
+      font-size: 11px;
+      color: #64748B;
+      margin-top: 6px;
+      font-weight: 600;
     }
 
     .legal-links {
@@ -133,7 +144,7 @@
 
 <div class="container">
 
-  <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" class="logo" alt="Cada Menudo">
+  <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" class="logo">
 
   <h1>Bienvenido a Cada Menudo</h1>
 
@@ -151,23 +162,31 @@
     <p class="support-title">¿Necesitas ayuda?</p>
     <p class="support-subtitle">Servicio al consumidor</p>
 
-    <div class="support-group">
+    <div class="support-icons">
 
-      <!-- WhatsApp -->
-      <a class="support-link whatsapp"
-         href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo">
-        Enviar mensaje por WhatsApp
-      </a>
-
-      <!-- Llamada -->
-      <a class="support-link" href="tel:+18507400274">
-        Llamar al +1 (850) 740-0274
-      </a>
+      <!-- Mensaje -->
+      <div class="icon-item">
+        <a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo" target="_blank">
+          <img src="https://cadamenudo.github.io/UI-UX/assets/icons/WS_blue_icon.png" alt="Mensaje">
+        </a>
+        <span>Mensaje</span>
+      </div>
 
       <!-- Email -->
-      <a class="support-link email-link" href="mailto:tech@cadamenudo.com">
-        tech@cadamenudo.com
-      </a>
+      <div class="icon-item">
+        <a href="mailto:tech@cadamenudo.com">
+          <img src="https://cadamenudo.github.io/UI-UX/assets/icons/email_blue_icon.png" alt="Email">
+        </a>
+        <span>Email</span>
+      </div>
+
+      <!-- Llamar -->
+      <div class="icon-item">
+        <a href="tel:+18507400274">
+          <img src="https://cadamenudo.github.io/UI-UX/assets/icons/phone_blue_icon.png" alt="Llamar">
+        </a>
+        <span>Llamar</span>
+      </div>
 
     </div>
 
