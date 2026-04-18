@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Restablecer Contraseña</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -20,17 +21,14 @@
     .registro-container {
       max-width: 400px;
       width: 100%;
-      background: #fff;
-      border-radius: 16px;
-      padding: 1vh 1.5rem;
-      margin-top: 1vh;
+      padding: calc(2rem + env(safe-area-inset-top)) 1.5rem 2.5rem;
       box-sizing: border-box;
       text-align: center;
     }
 
     .logo {
-      width: 300px;
-      margin-bottom: 0.25rem;
+      width: 260px;
+      margin-bottom: 1rem;
     }
 
     h2 {
@@ -110,6 +108,12 @@
       margin-top: 0.5rem;
       width: 100%;
       box-sizing: border-box;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 10px 20px rgba(57, 86, 232, 0.18);
+    }
+
+    button[type="submit"]:active {
+      transform: scale(0.98);
     }
 
     .login-link {
@@ -123,11 +127,98 @@
       text-decoration: none;
       font-weight: bold;
     }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 2rem;
+      border-top: 1px solid #E5E7EB;
+      padding-top: 1.2rem;
+      text-align: center;
+    }
+
+    .support-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .support-subtitle {
+      font-size: 0.75rem;
+      color: #64748B;
+      margin-bottom: 1rem;
+    }
+
+    .support-icons {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 1rem;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .icon-item a {
+      width: 56px;
+      height: 56px;
+      background: #3956E8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(57, 86, 232, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .icon-item a:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(57, 86, 232, 0.22);
+    }
+
+    .icon-item a:active {
+      transform: scale(0.94);
+      box-shadow: 0 4px 10px rgba(57, 86, 232, 0.15);
+    }
+
+    .icon-item img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .icon-item span {
+      font-size: 11px;
+      color: #64748B;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .legal-links {
+      font-size: 12px;
+    }
+
+    .legal-links a {
+      color: #3956E8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .legal-links span {
+      margin: 0 6px;
+      color: #9CA3AF;
+    }
   </style>
 </head>
 <body>
   <div class="registro-container">
     <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Logo Cada Menudo" class="logo" />
+
     <h2>Restablecer contraseña</h2>
 
     <form>
@@ -142,6 +233,40 @@
 
     <div class="login-link">
       ¿Ya tienes una cuenta? <a href="#">Inicia sesión</a>
+    </div>
+
+    <div class="footer">
+      <p class="support-title">¿Necesitas ayuda?</p>
+      <p class="support-subtitle">Servicio al consumidor</p>
+
+      <div class="support-icons">
+        <div class="icon-item">
+          <a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo" target="_blank">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/WS_blue_icon.png" alt="Mensaje">
+          </a>
+          <span>Mensaje</span>
+        </div>
+
+        <div class="icon-item">
+          <a href="mailto:tech@cadamenudo.com">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/email_blue_icon.png" alt="Email">
+          </a>
+          <span>Email</span>
+        </div>
+
+        <div class="icon-item">
+          <a href="tel:+18507400274">
+            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/phone_blue_icon.png" alt="Llamar">
+          </a>
+          <span>Llamar</span>
+        </div>
+      </div>
+
+      <div class="legal-links">
+        <a href="terminos.html">Términos</a>
+        <span>•</span>
+        <a href="privacidad.html">Privacidad</a>
+      </div>
     </div>
   </div>
 
@@ -169,7 +294,7 @@
       if (!emailInput.value.trim()) {
         emailGroup.classList.add("error");
       } else {
-        alert("Enlace para restablecer la contraseña enviado (simulado).");
+        alert("Enlace para restablecer la contraseña enviado.");
       }
     });
   </script>
