@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Safe area iPhone -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
   <title>Iniciar Sesión</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -21,17 +24,14 @@
     .login-container {
       max-width: 400px;
       width: 100%;
-      background: #fff;
-      border-radius: 16px;
-      padding: 2vh 1.5rem;
-      margin-top: 1vh;
+      padding: calc(2rem + env(safe-area-inset-top)) 1.5rem 2.5rem;
       box-sizing: border-box;
       text-align: center;
     }
 
     .logo {
-      width: 300px;
-      margin-bottom: 0.25rem;
+      width: 260px;
+      margin-bottom: 1rem;
     }
 
     h2 {
@@ -45,20 +45,12 @@
       gap: 1rem;
     }
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-    }
-
     .input-group input {
       padding: 0.75rem 1rem;
       border: 1px solid #D1D5DB;
       border-radius: 10px;
       font-size: 1rem;
       width: 100%;
-      outline: none;
       box-sizing: border-box;
     }
 
@@ -76,10 +68,6 @@
       cursor: pointer;
     }
 
-    .input-password input {
-      padding-right: 2.5rem;
-    }
-
     button[type="submit"] {
       background-color: #3956E8;
       color: white;
@@ -92,7 +80,6 @@
 
     .registro-link, .forgot-link {
       font-size: 0.9rem;
-      text-align: center;
     }
 
     .registro-link a, .forgot-link a {
@@ -101,32 +88,67 @@
       font-weight: bold;
     }
 
-    /* FOOTER */
+    /* FOOTER NUEVO */
     .footer {
-      margin-top: 25px;
-      text-align: center;
+      margin-top: 2rem;
+      border-top: 1px solid #E5E7EB;
+      padding-top: 1.2rem;
     }
 
     .support-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #6B7280;
+      font-size: 0.9rem;
+      font-weight: 700;
       margin-bottom: 4px;
     }
 
-    .support-text {
-      font-size: 12px;
-      color: #6B7280;
-      margin: 2px 0;
+    .support-subtitle {
+      font-size: 0.75rem;
+      color: #64748B;
+      margin-bottom: 1rem;
     }
 
-    .support-text a {
-      color: #3956E8;
-      text-decoration: none;
+    .support-icons {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 1rem;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .icon-item a {
+      width: 56px;
+      height: 56px;
+      background: #3956E8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(57, 86, 232, 0.18);
+      transition: transform 0.18s ease;
+    }
+
+    .icon-item a:active {
+      transform: scale(0.94);
+    }
+
+    .icon-item img {
+      width: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    .icon-item span {
+      font-size: 11px;
+      color: #64748B;
+      margin-top: 6px;
+      font-weight: 600;
     }
 
     .legal-links {
-      margin-top: 8px;
       font-size: 12px;
     }
 
@@ -139,38 +161,6 @@
     .legal-links span {
       margin: 0 6px;
       color: #9CA3AF;
-    }
-
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 99;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 1.5rem;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 500px;
-    }
-
-    .close {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      background: #3956E8;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
     }
   </style>
 </head>
@@ -208,51 +198,49 @@
 
   <!-- FOOTER -->
   <div class="footer">
-    <p class="support-title">¿Preguntas?</p>
-    <p class="support-text">Servicio al consumidor</p>
-    <p class="support-text">
-      <a href="tel:+17862029171">+1 (786) 202-9171</a> & 
-      <a href="tel:+18507400274">+1 (850) 740-0274</a>
-    </p>
-    <p class="support-text">
-      <a href="mailto:tech@cadamenudo.com">tech@cadamenudo.com</a>
-    </p>
-    <div class="legal-links">
-      <a href="#" onclick="abrirModal('modalTerminos')">Términos</a>
-      <span>•</span>
-      <a href="#" onclick="abrirModal('modalPrivacidad')">Privacidad</a>
+
+    <p class="support-title">¿Necesitas ayuda?</p>
+    <p class="support-subtitle">Servicio al consumidor</p>
+
+    <div class="support-icons">
+
+      <div class="icon-item">
+        <a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo">
+          <img src="https://cadamenudo.github.io/UI-UX/assets/icons/WS_blue_icon.png">
+        </a>
+        <span>Mensaje</span>
+      </div>
+
+      <div class="icon-item">
+        <a href="mailto:tech@cadamenudo.com">
+          <img src="https://cadamenudo.github.io/UI-UX/assets/icons/email_blue_icon.png">
+        </a>
+        <span>Email</span>
+      </div>
+
+      <div class="icon-item">
+        <a href="tel:+18507400274">
+          <img src="https://cadamenudo.github.io/UI-UX/assets/icons/phone_blue_icon.png">
+        </a>
+        <span>Llamar</span>
+      </div>
+
     </div>
+
+    <div class="legal-links">
+      <a href="#">Términos</a>
+      <span>•</span>
+      <a href="#">Privacidad</a>
+    </div>
+
   </div>
 
-</div>
-
-<!-- MODALES -->
-<div id="modalTerminos" class="modal">
-  <div class="modal-content">
-    <button class="close" onclick="cerrarModal('modalTerminos')">X</button>
-    <iframe src="terminos.html" width="100%" height="300"></iframe>
-  </div>
-</div>
-
-<div id="modalPrivacidad" class="modal">
-  <div class="modal-content">
-    <button class="close" onclick="cerrarModal('modalPrivacidad')">X</button>
-    <iframe src="privacidad.html" width="100%" height="300"></iframe>
-  </div>
 </div>
 
 <script>
 function togglePassword() {
   const input = document.querySelector('input[type="password"]');
   input.type = input.type === "password" ? "text" : "password";
-}
-
-function abrirModal(id) {
-  document.getElementById(id).style.display = "block";
-}
-
-function cerrarModal(id) {
-  document.getElementById(id).style.display = "none";
 }
 </script>
 
