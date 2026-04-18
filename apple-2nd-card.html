@@ -46,11 +46,17 @@
       cursor: pointer;
       margin-bottom: 1rem;
       font-family: inherit;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
     }
 
     .btn-primary {
       background: #3956E8;
       color: white;
+      box-shadow: 0 10px 20px rgba(57, 86, 232, 0.18);
     }
 
     .btn-secondary {
@@ -59,7 +65,6 @@
       border: 2px solid #3956E8;
     }
 
-    /* FOOTER */
     .footer {
       margin-top: 2.5rem;
       padding-top: 1.25rem;
@@ -80,11 +85,10 @@
       margin-bottom: 1rem;
     }
 
-    /* ICONOS */
     .support-icons {
       display: flex;
       justify-content: center;
-      gap: 36px;
+      gap: 28px;
       margin-bottom: 1.2rem;
     }
 
@@ -95,30 +99,40 @@
     }
 
     .icon-item a {
-      width: 52px;
-      height: 52px;
+      width: 56px;
+      height: 56px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #F1F5F9;
+      background: #3956E8;
       border-radius: 50%;
-      transition: transform 0.15s ease;
+      box-shadow: 0 8px 18px rgba(57, 86, 232, 0.22);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .icon-item a:hover {
-      transform: scale(1.1);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(57, 86, 232, 0.28);
+    }
+
+    .icon-item a:active {
+      transform: scale(0.94);
+      box-shadow: 0 6px 12px rgba(57, 86, 232, 0.2);
     }
 
     .icon-item img {
       width: 24px;
       height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
     }
 
     .icon-item span {
       font-size: 11px;
       color: #64748B;
-      margin-top: 6px;
-      font-weight: 600;
+      margin-top: 8px;
+      font-weight: 700;
     }
 
     .legal-links {
@@ -144,7 +158,7 @@
 
 <div class="container">
 
-  <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" class="logo">
+  <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" class="logo" alt="Cada Menudo">
 
   <h1>Bienvenido a Cada Menudo</h1>
 
@@ -156,15 +170,12 @@
     Ingresar
   </button>
 
-  <!-- FOOTER -->
   <div class="footer">
-
     <p class="support-title">¿Necesitas ayuda?</p>
     <p class="support-subtitle">Servicio al consumidor</p>
 
     <div class="support-icons">
 
-      <!-- Mensaje -->
       <div class="icon-item">
         <a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo" target="_blank">
           <img src="https://cadamenudo.github.io/UI-UX/assets/icons/WS_blue_icon.png" alt="Mensaje">
@@ -172,7 +183,6 @@
         <span>Mensaje</span>
       </div>
 
-      <!-- Email -->
       <div class="icon-item">
         <a href="mailto:tech@cadamenudo.com">
           <img src="https://cadamenudo.github.io/UI-UX/assets/icons/email_blue_icon.png" alt="Email">
@@ -180,7 +190,6 @@
         <span>Email</span>
       </div>
 
-      <!-- Llamar -->
       <div class="icon-item">
         <a href="tel:+18507400274">
           <img src="https://cadamenudo.github.io/UI-UX/assets/icons/phone_blue_icon.png" alt="Llamar">
@@ -195,7 +204,6 @@
       <span class="legal-dot">•</span>
       <a href="privacidad.html">Privacidad</a>
     </div>
-
   </div>
 
 </div>
