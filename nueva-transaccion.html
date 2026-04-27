@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Cada Menudo AI - Nueva transacción</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,58 +17,62 @@
 }
 
 html,body{
-  font-family:'Nunito',sans-serif !important;
+  width:100%;
+  min-height:100%;
+  font-family:'Nunito',sans-serif;
   background:#ffffff;
   color:#1d1d1f;
 }
 
-body,
-button,
-input,
-label,
-span,
-div,
-p,
-h1{
-  font-family:'Nunito',sans-serif !important;
+body{
+  display:flex;
+  justify-content:center;
+}
+
+/* IPHONE SIZE */
+.phone{
+  width:100%;
+  max-width:430px;   /* iPhone Pro Max width */
+  min-height:100vh;
+  background:#fff;
 }
 
 .screen{
-  min-height:100vh;
-  max-width:760px;
-  margin:auto;
-  padding:70px 24px 40px;
+  padding:52px 16px 34px;
 }
 
+/* HEADER */
 .header{
   text-align:center;
 }
 
 .header h1{
-  font-size:32px;
+  font-size:22px;
   font-weight:700;
   color:#43434a;
+  line-height:1.25;
   margin-bottom:8px;
 }
 
 .header p{
-  font-size:22px;
+  font-size:16px;
   font-weight:600;
   color:#7280a1;
 }
 
+/* PROGRESS */
 .progress-row{
-  margin-top:22px;
+  margin-top:18px;
   display:flex;
   align-items:center;
-  gap:16px;
+  gap:10px;
 }
 
 .progress-track{
   flex:1;
-  height:7px;
+  height:6px;
   background:#ddd9ff;
-  border-radius:20px;
+  border-radius:99px;
   overflow:hidden;
 }
 
@@ -79,81 +83,81 @@ h1{
 }
 
 .step{
-  font-size:22px;
+  font-size:14px;
   font-weight:800;
   color:#666;
 }
 
+/* CARD */
 .card{
-  margin-top:38px;
+  margin-top:24px;
   background:#fff;
-  border-radius:34px;
-  box-shadow:0 18px 35px rgba(0,0,0,.08);
-  padding:34px 28px 30px;
+  border-radius:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  padding:22px 18px 22px;
   position:relative;
 }
 
 .close{
   position:absolute;
-  top:24px;
-  right:24px;
-  width:56px;
-  height:56px;
+  top:18px;
+  right:18px;
+  width:42px;
+  height:42px;
   border:none;
   border-radius:10px;
   background:#e63950;
   color:#fff;
-  font-size:34px;
-  font-weight:800;
+  font-size:26px;
+  font-weight:900;
   cursor:pointer;
 }
 
 .title{
-  margin-top:82px;
+  margin-top:62px;
   text-align:center;
-  font-size:31px;
+  font-size:24px;
   line-height:1.35;
   font-weight:900;
-  margin-bottom:34px;
+  margin-bottom:24px;
 }
 
+/* BUTTONS */
 .photo-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-  margin-bottom:22px;
+  grid-template-columns:1fr;
+  gap:12px;
+  margin-bottom:16px;
 }
 
 .photo-btn{
+  width:100%;
   background:#3956E8;
   color:#fff;
   border:none;
-  border-radius:22px;
-  min-height:78px;
-  padding:14px 18px;
+  border-radius:18px;
+  min-height:62px;
+  padding:0 16px;
   display:flex;
-  flex-direction:row;
   align-items:center;
-  justify-content:center;
   gap:12px;
-  text-align:center;
   cursor:pointer;
 }
 
 .icon{
-  width:36px;
-  height:36px;
-  min-width:36px;
+  width:30px;
+  height:30px;
+  min-width:30px;
   background:#fff;
-  border-radius:10px;
+  border-radius:8px;
   display:flex;
   align-items:center;
   justify-content:center;
 }
 
 .icon svg{
-  width:18px;
-  height:18px;
+  width:16px;
+  height:16px;
   stroke:#3956E8;
   fill:none;
   stroke-width:2;
@@ -162,27 +166,26 @@ h1{
 }
 
 .photo-btn span{
-  font-size:18px;
+  font-size:17px;
   font-weight:800;
-  line-height:1.2;
 }
 
 .manual{
   width:100%;
-  height:72px;
-  border-radius:22px;
+  height:60px;
+  border-radius:18px;
   border:2px solid #3956E8;
   background:#fff;
   color:#3956E8;
-  font-size:20px;
+  font-size:18px;
   font-weight:900;
   cursor:pointer;
-  margin-bottom:24px;
+  margin-bottom:18px;
 }
 
 .note{
-  font-size:18px;
-  line-height:1.55;
+  font-size:16px;
+  line-height:1.45;
   font-weight:600;
   color:#7280a1;
 }
@@ -190,54 +193,12 @@ h1{
 input[type=file]{
   display:none;
 }
-
-@media(max-width:640px){
-
-  .screen{
-    padding:50px 16px 30px;
-  }
-
-  .header h1{
-    font-size:24px;
-  }
-
-  .header p{
-    font-size:18px;
-  }
-
-  .title{
-    font-size:25px;
-    margin-top:72px;
-  }
-
-  .photo-grid{
-    grid-template-columns:1fr;
-  }
-
-  .photo-btn{
-    min-height:72px;
-    justify-content:flex-start;
-  }
-
-  .photo-btn span{
-    font-size:17px;
-  }
-
-  .manual{
-    font-size:18px;
-    height:64px;
-  }
-
-  .close{
-    width:48px;
-    height:48px;
-    font-size:28px;
-  }
-}
 </style>
 </head>
 
 <body>
+
+<div class="phone">
 
 <div class="screen">
 
@@ -301,6 +262,7 @@ input[type=file]{
 
   </div>
 
+</div>
 </div>
 
 </body>
