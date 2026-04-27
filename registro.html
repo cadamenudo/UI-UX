@@ -1,434 +1,298 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Crear cuenta</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Crear cuenta</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: #FFFFFF;
-      margin: 0;
-      padding: 0;
-      color: #111827;
-      display: flex;
-      justify-content: center;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    .registro-container {
-      max-width: 400px;
-      width: 100%;
-      padding: calc(2rem + env(safe-area-inset-top)) 1.5rem 2.5rem;
-      box-sizing: border-box;
-      text-align: center;
-    }
+body{
+  font-family:'Nunito',sans-serif;
+  background:#ffffff;
+  color:#111827;
+  display:flex;
+  justify-content:center;
+}
 
-    .logo {
-      width: 260px;
-      margin-bottom: 0.75rem;
-    }
+.registro-container{
+  width:100%;
+  max-width:420px;
+  padding:2rem 1.5rem 3rem;
+}
 
-    h2 {
-      font-size: 1.35rem;
-      margin-bottom: 1.75rem;
-      color: #6B7280;
-      font-weight: 700;
-    }
+.logo{
+  width:250px;
+  display:block;
+  margin:0 auto 1rem;
+}
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+h2{
+  text-align:center;
+  color:#6B7280;
+  margin-bottom:1.5rem;
+  font-size:1.4rem;
+}
 
-    .input-group {
-      width: 100%;
-    }
+form{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+}
 
-    .input-group input,
-    .input-group select {
-      width: 100%;
-      padding: 0.95rem 1rem;
-      border: 1.5px solid #D1D5DB;
-      border-radius: 18px;
-      font-size: 1rem;
-      box-sizing: border-box;
-      outline: none;
-      font-family: inherit;
-      color: #111827;
-      background: #fff;
-    }
+input,select{
+  width:100%;
+  padding:1rem;
+  border:1.5px solid #D1D5DB;
+  border-radius:16px;
+  font-size:1rem;
+  font-family:inherit;
+}
 
-    .input-group input::placeholder {
-      color: #9CA3AF;
-    }
+input:focus,
+select:focus{
+  outline:none;
+  border-color:#3956E8;
+}
 
-    .input-group input:focus,
-    .input-group select:focus {
-      border-color: #3956E8;
-    }
+.row{
+  display:flex;
+  gap:.75rem;
+}
 
-    .row {
-      display: flex;
-      gap: 0.9rem;
-      align-items: flex-start;
-    }
+.small{
+  width:38%;
+}
 
-    .country-wrap {
-      width: 38%;
-      text-align: left;
-    }
+.big{
+  width:62%;
+}
 
-    .phone-wrap {
-      width: 62%;
-    }
+.password-wrap{
+  position:relative;
+}
 
-    .field-top-label {
-      display: block;
-      font-size: 0.9rem;
-      color: #4B5563;
-      margin-bottom: 0.35rem;
-      padding-left: 0.2rem;
-      line-height: 1;
-    }
+.eye{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:1.1rem;
+}
 
-    .invisible-label {
-      visibility: hidden;
-    }
+.terms{
+  display:flex;
+  align-items:flex-start;
+  gap:.7rem;
+}
 
-    .country-box {
-      position: relative;
-      width: 100%;
-    }
+.terms input{
+  width:22px;
+  height:22px;
+  margin-top:3px;
+  accent-color:#3956E8;
+  flex-shrink:0;
+}
 
-    .country-select {
-      width: 100%;
-      height: 56px;
-      padding: 0 2.8rem 0 4.1rem;
-      border: 1.5px solid #D1D5DB;
-      border-radius: 18px;
-      font-size: 1rem;
-      font-family: inherit;
-      color: #111827;
-      background: #FFFFFF;
-      box-sizing: border-box;
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-    }
+.terms label{
+  font-size:.92rem;
+  line-height:1.42;
+  color:#64748B;
+}
 
-    .country-select:focus {
-      border-color: #3956E8;
-    }
+.terms a{
+  color:#3956E8;
+  font-weight:700;
+  text-decoration:none;
+}
 
-    .phone-wrap input {
-      height: 56px;
-    }
+button{
+  border:none;
+  padding:1rem;
+  border-radius:12px;
+  font-size:1rem;
+  font-weight:800;
+  background:#E5E7EB;
+  color:#9CA3AF;
+}
 
-    .flag {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.35rem;
-      line-height: 1;
-      pointer-events: none;
-    }
+button.active{
+  background:#3956E8;
+  color:#ffffff;
+  cursor:pointer;
+}
 
-    .caret {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 7px solid transparent;
-      border-right: 7px solid transparent;
-      border-top: 8px solid #9CA3AF;
-      pointer-events: none;
-    }
+/* MODAL */
 
-    .password-wrap {
-      position: relative;
-    }
+.sms-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:1rem;
+}
 
-    .toggle-password {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #6B7280;
-      font-size: 1.2rem;
-      user-select: none;
-    }
+.sms-modal.active{
+  display:flex;
+}
 
-    .terms {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      text-align: left;
-      margin-top: 0.25rem;
-    }
+.sms-box{
+  width:100%;
+  max-width:420px;
+  height:85vh;
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+}
 
-    .terms input[type="checkbox"] {
-      width: 24px;
-      height: 24px;
-      margin-top: 0.15rem;
-      accent-color: #3956E8;
-      flex-shrink: 0;
-    }
+.sms-box iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
 
-    .terms label {
-      font-size: 0.95rem;
-      line-height: 1.35;
-      color: #64748B;
-    }
-
-    .terms a {
-      color: #4F46E5;
-      text-decoration: none;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 0.9rem 1rem;
-      border: none;
-      border-radius: 10px;
-      background: #E5E7EB;
-      color: #9CA3AF;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: not-allowed;
-      font-family: inherit;
-      margin-top: 0.25rem;
-      transition: all 0.18s ease;
-    }
-
-    .btn-submit.active {
-      background: #3956E8;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 10px 20px rgba(57, 86, 232, 0.18);
-    }
-
-    .btn-submit.active:active {
-      transform: scale(0.98);
-    }
-
-    .footer {
-      margin-top: 2rem;
-      border-top: 1px solid #E5E7EB;
-      padding-top: 1.2rem;
-      text-align: center;
-    }
-
-    .support-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #111827;
-    }
-
-    .support-subtitle {
-      font-size: 0.75rem;
-      color: #64748B;
-      margin-bottom: 1rem;
-    }
-
-    .support-icons {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      margin-bottom: 1rem;
-    }
-
-    .icon-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .icon-item a {
-      width: 56px;
-      height: 56px;
-      background: #3956E8;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 6px 14px rgba(57, 86, 232, 0.18);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .icon-item a:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 18px rgba(57, 86, 232, 0.22);
-    }
-
-    .icon-item a:active {
-      transform: scale(0.94);
-      box-shadow: 0 4px 10px rgba(57, 86, 232, 0.15);
-    }
-
-    .icon-item img {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-    }
-
-    .icon-item span {
-      font-size: 11px;
-      color: #64748B;
-      margin-top: 6px;
-      font-weight: 600;
-    }
-
-    .legal-links {
-      font-size: 12px;
-    }
-
-    .legal-links a {
-      color: #3956E8;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .legal-links span {
-      margin: 0 6px;
-      color: #9CA3AF;
-    }
-  </style>
+.close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:50%;
+  background:#3956E8;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+  z-index:10;
+}
+</style>
 </head>
+
 <body>
-  <div class="registro-container">
 
-    <img src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png" alt="Logo Cada Menudo" class="logo" />
+<div class="registro-container">
 
-    <h2>Crea tu cuenta</h2>
+<img class="logo" src="https://cadamenudo.github.io/UI-UX/assets/logo/cadamenudo_logo_BLUE.png">
 
-    <form id="registroForm">
-      <div class="input-group">
-        <input type="text" id="nombre" placeholder="Nombre" />
-      </div>
+<h2>Crea tu cuenta</h2>
 
-      <div class="input-group">
-        <input type="text" id="usuario" placeholder="Nombre de usuario (o Email)" />
-      </div>
+<form id="registroForm">
 
-      <div class="row">
-        <div class="country-wrap">
-          <label class="field-top-label" for="pais">País</label>
-          <div class="country-box">
-            <span class="flag">🇺🇸</span>
-            <select id="pais" class="country-select">
-              <option value="+1">+1</option>
-              <option value="+52">+52</option>
-              <option value="+34">+34</option>
-              <option value="+57">+57</option>
-              <option value="+58">+58</option>
-              <option value="+51">+51</option>
-              <option value="+54">+54</option>
-              <option value="+593">+593</option>
-            </select>
-            <span class="caret"></span>
-          </div>
-        </div>
+<input type="text" id="nombre" placeholder="Nombre">
 
-        <div class="phone-wrap input-group">
-          <label class="field-top-label invisible-label">Teléfono</label>
-          <input type="tel" id="telefono" placeholder="Teléfono" />
-        </div>
-      </div>
+<input type="text" id="usuario" placeholder="Nombre de usuario (o Email)">
 
-      <div class="input-group password-wrap">
-        <input type="password" id="password" placeholder="Contraseña" />
-        <span class="toggle-password" onclick="togglePassword()">👁</span>
-      </div>
-
-      <div class="terms">
-        <input type="checkbox" id="terms" />
-        <label for="terms">
-          He leído y acepto los <a href="terminos.html">Términos</a> y <a href="privacidad.html">Políticas</a>
-        </label>
-      </div>
-
-      <button type="submit" id="submitBtn" class="btn-submit">REGISTRAR</button>
-    </form>
-
-    <div class="footer">
-      <p class="support-title">¿Necesitas ayuda?</p>
-      <p class="support-subtitle">Servicio al consumidor</p>
-
-      <div class="support-icons">
-        <div class="icon-item">
-          <a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo" target="_blank">
-            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/WS_blue_icon.png" alt="Mensaje">
-          </a>
-          <span>Mensaje</span>
-        </div>
-
-        <div class="icon-item">
-          <a href="mailto:tech@cadamenudo.com">
-            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/email_blue_icon.png" alt="Email">
-          </a>
-          <span>Email</span>
-        </div>
-
-        <div class="icon-item">
-          <a href="tel:+18507400274">
-            <img src="https://cadamenudo.github.io/UI-UX/assets/icons/phone_blue_icon.png" alt="Llamar">
-          </a>
-          <span>Llamar</span>
-        </div>
-      </div>
-
-      <div class="legal-links">
-        <a href="terminos.html">Términos</a>
-        <span>•</span>
-        <a href="privacidad.html">Privacidad</a>
-      </div>
-    </div>
-
+<div class="row">
+  <div class="small">
+    <select id="pais">
+      <option value="+1">🇺🇸 +1</option>
+      <option value="+1">🇵🇷 +1</option>
+      <option value="+52">🇲🇽 +52</option>
+      <option value="+34">🇪🇸 +34</option>
+      <option value="+58">🇻🇪 +58</option>
+    </select>
   </div>
 
-  <script>
-    const form = document.getElementById("registroForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const terms = document.getElementById("terms");
+  <div class="big">
+    <input type="tel" id="telefono" placeholder="Teléfono">
+  </div>
+</div>
 
-    function togglePassword() {
-      const input = document.getElementById("password");
-      input.type = input.type === "password" ? "text" : "password";
-    }
+<div class="password-wrap">
+  <input type="password" id="password" placeholder="Contraseña">
+  <span class="eye" onclick="togglePassword()">👁</span>
+</div>
 
-    function validarFormulario() {
-      const nombre = document.getElementById("nombre").value.trim();
-      const usuario = document.getElementById("usuario").value.trim();
-      const telefono = document.getElementById("telefono").value.trim();
-      const password = document.getElementById("password").value.trim();
+<div class="terms">
+  <input type="checkbox" id="terms">
 
-      if (nombre && usuario && telefono && password && terms.checked) {
-        submitBtn.classList.add("active");
-      } else {
-        submitBtn.classList.remove("active");
-      }
-    }
+  <label for="terms">
+    He leído y acepto los
+    <a href="terminos.html">Términos</a> y
+    <a href="privacidad.html">Políticas</a>
+  </label>
+</div>
 
-    form.addEventListener("input", validarFormulario);
-    terms.addEventListener("change", validarFormulario);
+<div class="terms">
+  <input type="checkbox" id="smsConsent">
 
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-      if (!submitBtn.classList.contains("active")) return;
-      alert("Registro simulado");
-    });
-  </script>
+  <label for="smsConsent">
+    Al proporcionar su número de teléfono, usted acepta recibir mensajes de texto informativos de Cada Menudo. El consentimiento no es una condición de compra. Pueden aplicarse la frecuencia de mensajes y tarifas por mensajes y datos. Responda HELP para ayuda y STOP para cancelar.
+    
+    <a href="#" onclick="abrirSMS();return false;">SMS Terms</a>
+  </label>
+</div>
+
+<button type="submit" id="submitBtn">REGISTRAR</button>
+
+</form>
+</div>
+
+<!-- MODAL -->
+
+<div class="sms-modal" id="smsModal">
+  <div class="sms-box">
+    <button class="close" onclick="cerrarSMS()">×</button>
+
+    <iframe src="https://cadamenudo.github.io/UI-UX/sms-terms.html"></iframe>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById("registroForm");
+const btn = document.getElementById("submitBtn");
+
+function togglePassword(){
+  const p = document.getElementById("password");
+  p.type = p.type === "password" ? "text" : "password";
+}
+
+function validar(){
+  const nombre = document.getElementById("nombre").value.trim();
+  const usuario = document.getElementById("usuario").value.trim();
+  const telefono = document.getElementById("telefono").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const terms = document.getElementById("terms").checked;
+  const sms = document.getElementById("smsConsent").checked;
+
+  if(nombre && usuario && telefono && password && terms && sms){
+    btn.classList.add("active");
+  }else{
+    btn.classList.remove("active");
+  }
+}
+
+form.addEventListener("input", validar);
+form.addEventListener("change", validar);
+
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  if(!btn.classList.contains("active")) return;
+
+  alert("Registro simulado");
+});
+
+function abrirSMS(){
+  document.getElementById("smsModal").classList.add("active");
+}
+
+function cerrarSMS(){
+  document.getElementById("smsModal").classList.remove("active");
+}
+</script>
+
 </body>
 </html>
