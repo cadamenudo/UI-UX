@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Crear cuenta</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 *{
@@ -39,6 +39,7 @@ h2{
   color:#6B7280;
   margin-bottom:1.5rem;
   font-size:1.4rem;
+  font-weight:800;
 }
 
 form{
@@ -54,6 +55,7 @@ input,select{
   border-radius:16px;
   font-size:1rem;
   font-family:inherit;
+  background:#fff;
 }
 
 input:focus,
@@ -80,6 +82,7 @@ select:focus{
   top:50%;
   transform:translateY(-50%);
   cursor:pointer;
+  color:#64748B;
 }
 
 .terms{
@@ -98,13 +101,13 @@ select:focus{
 
 .terms label{
   font-size:.92rem;
-  line-height:1.42;
+  line-height:1.45;
   color:#64748B;
 }
 
 .terms a{
   color:#3956E8;
-  font-weight:700;
+  font-weight:800;
   text-decoration:none;
 }
 
@@ -113,9 +116,10 @@ button{
   padding:1rem;
   border-radius:12px;
   font-size:1rem;
-  font-weight:800;
+  font-weight:900;
   background:#E5E7EB;
   color:#9CA3AF;
+  transition:.2s;
 }
 
 button.active{
@@ -166,8 +170,8 @@ button.active{
   display:flex;
   align-items:center;
   justify-content:center;
-  text-decoration:none;
   color:#fff;
+  text-decoration:none;
   font-size:1.25rem;
 }
 
@@ -185,7 +189,7 @@ button.active{
 .legal-links a{
   color:#3956E8;
   text-decoration:none;
-  font-weight:700;
+  font-weight:800;
 }
 
 .legal-links span{
@@ -212,7 +216,7 @@ button.active{
 
 .sms-box{
   width:100%;
-  max-width:420px;
+  max-width:430px;
   height:85vh;
   background:#fff;
   border-radius:18px;
@@ -258,6 +262,7 @@ button.active{
 <input type="text" id="usuario" placeholder="Nombre de usuario (o Email)">
 
 <div class="row">
+
 <div class="small">
 <select id="pais">
 <option>🇺🇸 +1</option>
@@ -271,6 +276,7 @@ button.active{
 <div class="big">
 <input type="tel" id="telefono" placeholder="Teléfono">
 </div>
+
 </div>
 
 <div class="password-wrap">
@@ -332,6 +338,7 @@ Al proporcionar su número de teléfono, usted acepta recibir mensajes de texto 
 </div>
 
 </div>
+
 </div>
 
 <!-- MODAL -->
@@ -348,40 +355,40 @@ const form=document.getElementById("registroForm");
 const btn=document.getElementById("submitBtn");
 
 function togglePassword(){
-const p=document.getElementById("password");
-p.type=p.type==="password"?"text":"password";
+  const p=document.getElementById("password");
+  p.type=p.type==="password"?"text":"password";
 }
 
 function validar(){
-const nombre=document.getElementById("nombre").value.trim();
-const usuario=document.getElementById("usuario").value.trim();
-const telefono=document.getElementById("telefono").value.trim();
-const password=document.getElementById("password").value.trim();
-const terms=document.getElementById("terms").checked;
-const sms=document.getElementById("smsConsent").checked;
+  const nombre=document.getElementById("nombre").value.trim();
+  const usuario=document.getElementById("usuario").value.trim();
+  const telefono=document.getElementById("telefono").value.trim();
+  const password=document.getElementById("password").value.trim();
+  const terms=document.getElementById("terms").checked;
+  const sms=document.getElementById("smsConsent").checked;
 
-if(nombre && usuario && telefono && password && terms && sms){
-btn.classList.add("active");
-}else{
-btn.classList.remove("active");
-}
+  if(nombre && usuario && telefono && password && terms && sms){
+    btn.classList.add("active");
+  }else{
+    btn.classList.remove("active");
+  }
 }
 
 form.addEventListener("input",validar);
 form.addEventListener("change",validar);
 
 form.addEventListener("submit",function(e){
-e.preventDefault();
-if(!btn.classList.contains("active")) return;
-alert("Registro simulado");
+  e.preventDefault();
+  if(!btn.classList.contains("active")) return;
+  alert("Registro simulado");
 });
 
 function abrirSMS(){
-document.getElementById("smsModal").classList.add("active");
+  document.getElementById("smsModal").classList.add("active");
 }
 
 function cerrarSMS(){
-document.getElementById("smsModal").classList.remove("active");
+  document.getElementById("smsModal").classList.remove("active");
 }
 </script>
 
