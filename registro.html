@@ -67,13 +67,8 @@ select:focus{
   gap:.75rem;
 }
 
-.small{
-  width:38%;
-}
-
-.big{
-  width:62%;
-}
+.small{width:38%;}
+.big{width:62%;}
 
 .password-wrap{
   position:relative;
@@ -85,13 +80,12 @@ select:focus{
   top:50%;
   transform:translateY(-50%);
   cursor:pointer;
-  font-size:1.1rem;
 }
 
 .terms{
   display:flex;
-  align-items:flex-start;
   gap:.7rem;
+  align-items:flex-start;
 }
 
 .terms input{
@@ -126,8 +120,77 @@ button{
 
 button.active{
   background:#3956E8;
-  color:#ffffff;
+  color:#fff;
   cursor:pointer;
+}
+
+/* FOOTER */
+
+.footer{
+  margin-top:2rem;
+  border-top:1px solid #E5E7EB;
+  padding-top:1.2rem;
+  text-align:center;
+}
+
+.support-title{
+  font-size:.92rem;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.support-subtitle{
+  font-size:.78rem;
+  color:#64748B;
+  margin-bottom:1rem;
+}
+
+.support-icons{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+  margin-bottom:1rem;
+}
+
+.icon-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.icon-item a{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:#3956E8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:#fff;
+  font-size:1.25rem;
+}
+
+.icon-item span{
+  font-size:11px;
+  color:#64748B;
+  margin-top:6px;
+  font-weight:700;
+}
+
+.legal-links{
+  font-size:12px;
+}
+
+.legal-links a{
+  color:#3956E8;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.legal-links span{
+  margin:0 6px;
+  color:#9CA3AF;
 }
 
 /* MODAL */
@@ -195,102 +258,130 @@ button.active{
 <input type="text" id="usuario" placeholder="Nombre de usuario (o Email)">
 
 <div class="row">
-  <div class="small">
-    <select id="pais">
-      <option value="+1">🇺🇸 +1</option>
-      <option value="+1">🇵🇷 +1</option>
-      <option value="+52">🇲🇽 +52</option>
-      <option value="+34">🇪🇸 +34</option>
-      <option value="+58">🇻🇪 +58</option>
-    </select>
-  </div>
+<div class="small">
+<select id="pais">
+<option>🇺🇸 +1</option>
+<option>🇵🇷 +1</option>
+<option>🇲🇽 +52</option>
+<option>🇪🇸 +34</option>
+<option>🇻🇪 +58</option>
+</select>
+</div>
 
-  <div class="big">
-    <input type="tel" id="telefono" placeholder="Teléfono">
-  </div>
+<div class="big">
+<input type="tel" id="telefono" placeholder="Teléfono">
+</div>
 </div>
 
 <div class="password-wrap">
-  <input type="password" id="password" placeholder="Contraseña">
-  <span class="eye" onclick="togglePassword()">👁</span>
+<input type="password" id="password" placeholder="Contraseña">
+<span class="eye" onclick="togglePassword()">👁</span>
 </div>
 
 <div class="terms">
-  <input type="checkbox" id="terms">
-
-  <label for="terms">
-    He leído y acepto los
-    <a href="terminos.html">Términos</a> y
-    <a href="privacidad.html">Políticas</a>
-  </label>
+<input type="checkbox" id="terms">
+<label for="terms">
+He leído y acepto los
+<a href="terminos.html">Términos</a> y
+<a href="privacidad.html">Políticas</a>
+</label>
 </div>
 
 <div class="terms">
-  <input type="checkbox" id="smsConsent">
-
-  <label for="smsConsent">
-    Al proporcionar su número de teléfono, usted acepta recibir mensajes de texto informativos de Cada Menudo. El consentimiento no es una condición de compra. Pueden aplicarse la frecuencia de mensajes y tarifas por mensajes y datos. Responda HELP para ayuda y STOP para cancelar.
-    
-    <a href="#" onclick="abrirSMS();return false;">SMS Terms</a>
-  </label>
+<input type="checkbox" id="smsConsent">
+<label for="smsConsent">
+Al proporcionar su número de teléfono, usted acepta recibir mensajes de texto informativos de Cada Menudo. El consentimiento no es una condición de compra. Pueden aplicarse la frecuencia de mensajes y tarifas por mensajes y datos. Responda HELP para ayuda y STOP para cancelar.
+<a href="#" onclick="abrirSMS();return false;">SMS Terms</a>
+</label>
 </div>
 
 <button type="submit" id="submitBtn">REGISTRAR</button>
 
 </form>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+<p class="support-title">¿Necesitas ayuda?</p>
+<p class="support-subtitle">Servicio al consumidor</p>
+
+<div class="support-icons">
+
+<div class="icon-item">
+<a href="https://wa.me/17862027191?text=Hola%20necesito%20ayuda%20con%20Cada%20Menudo" target="_blank">💬</a>
+<span>Mensaje</span>
+</div>
+
+<div class="icon-item">
+<a href="mailto:tech@cadamenudo.com">✉️</a>
+<span>Email</span>
+</div>
+
+<div class="icon-item">
+<a href="tel:+18507400274">📞</a>
+<span>Llamar</span>
+</div>
+
+</div>
+
+<div class="legal-links">
+<a href="terminos.html">Términos</a>
+<span>•</span>
+<a href="privacidad.html">Privacidad</a>
+</div>
+
+</div>
 </div>
 
 <!-- MODAL -->
 
 <div class="sms-modal" id="smsModal">
-  <div class="sms-box">
-    <button class="close" onclick="cerrarSMS()">×</button>
-
-    <iframe src="https://cadamenudo.github.io/UI-UX/sms-terms.html"></iframe>
-  </div>
+<div class="sms-box">
+<button class="close" onclick="cerrarSMS()">×</button>
+<iframe src="https://cadamenudo.github.io/UI-UX/sms-terms.html"></iframe>
+</div>
 </div>
 
 <script>
-const form = document.getElementById("registroForm");
-const btn = document.getElementById("submitBtn");
+const form=document.getElementById("registroForm");
+const btn=document.getElementById("submitBtn");
 
 function togglePassword(){
-  const p = document.getElementById("password");
-  p.type = p.type === "password" ? "text" : "password";
+const p=document.getElementById("password");
+p.type=p.type==="password"?"text":"password";
 }
 
 function validar(){
-  const nombre = document.getElementById("nombre").value.trim();
-  const usuario = document.getElementById("usuario").value.trim();
-  const telefono = document.getElementById("telefono").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const terms = document.getElementById("terms").checked;
-  const sms = document.getElementById("smsConsent").checked;
+const nombre=document.getElementById("nombre").value.trim();
+const usuario=document.getElementById("usuario").value.trim();
+const telefono=document.getElementById("telefono").value.trim();
+const password=document.getElementById("password").value.trim();
+const terms=document.getElementById("terms").checked;
+const sms=document.getElementById("smsConsent").checked;
 
-  if(nombre && usuario && telefono && password && terms && sms){
-    btn.classList.add("active");
-  }else{
-    btn.classList.remove("active");
-  }
+if(nombre && usuario && telefono && password && terms && sms){
+btn.classList.add("active");
+}else{
+btn.classList.remove("active");
+}
 }
 
-form.addEventListener("input", validar);
-form.addEventListener("change", validar);
+form.addEventListener("input",validar);
+form.addEventListener("change",validar);
 
-form.addEventListener("submit", function(e){
-  e.preventDefault();
-
-  if(!btn.classList.contains("active")) return;
-
-  alert("Registro simulado");
+form.addEventListener("submit",function(e){
+e.preventDefault();
+if(!btn.classList.contains("active")) return;
+alert("Registro simulado");
 });
 
 function abrirSMS(){
-  document.getElementById("smsModal").classList.add("active");
+document.getElementById("smsModal").classList.add("active");
 }
 
 function cerrarSMS(){
-  document.getElementById("smsModal").classList.remove("active");
+document.getElementById("smsModal").classList.remove("active");
 }
 </script>
 
