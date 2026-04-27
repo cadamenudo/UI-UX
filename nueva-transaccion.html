@@ -14,12 +14,12 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
+  font-family:'Nunito',sans-serif !important;
 }
 
 html,body{
   width:100%;
   min-height:100%;
-  font-family:'Nunito',sans-serif;
   background:#ffffff;
   color:#1d1d1f;
 }
@@ -27,12 +27,26 @@ html,body{
 body{
   display:flex;
   justify-content:center;
+  font-family:'Nunito',sans-serif !important;
 }
 
-/* IPHONE SIZE */
+button,
+input,
+label,
+textarea,
+select,
+span,
+p,
+div,
+h1,
+h2,
+h3{
+  font-family:'Nunito',sans-serif !important;
+}
+
 .phone{
   width:100%;
-  max-width:430px;   /* iPhone Pro Max width */
+  max-width:430px;
   min-height:100vh;
   background:#fff;
 }
@@ -42,6 +56,7 @@ body{
 }
 
 /* HEADER */
+
 .header{
   text-align:center;
 }
@@ -61,6 +76,7 @@ body{
 }
 
 /* PROGRESS */
+
 .progress-row{
   margin-top:18px;
   display:flex;
@@ -89,6 +105,7 @@ body{
 }
 
 /* CARD */
+
 .card{
   margin-top:24px;
   background:#fff;
@@ -122,32 +139,34 @@ body{
   margin-bottom:24px;
 }
 
-/* BUTTONS */
+/* BUTTONS SIDE BY SIDE */
+
 .photo-grid{
   display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
   margin-bottom:16px;
 }
 
 .photo-btn{
   width:100%;
+  min-height:64px;
   background:#3956E8;
-  color:#fff;
   border:none;
   border-radius:18px;
-  min-height:62px;
-  padding:0 16px;
+  color:#fff;
+  padding:10px 12px;
   display:flex;
   align-items:center;
-  gap:12px;
+  justify-content:center;
+  gap:10px;
   cursor:pointer;
 }
 
 .icon{
-  width:30px;
-  height:30px;
-  min-width:30px;
+  width:28px;
+  height:28px;
+  min-width:28px;
   background:#fff;
   border-radius:8px;
   display:flex;
@@ -156,8 +175,8 @@ body{
 }
 
 .icon svg{
-  width:16px;
-  height:16px;
+  width:15px;
+  height:15px;
   stroke:#3956E8;
   fill:none;
   stroke-width:2;
@@ -166,13 +185,16 @@ body{
 }
 
 .photo-btn span{
-  font-size:17px;
+  font-size:15px;
   font-weight:800;
+  line-height:1.2;
 }
+
+/* SECONDARY BUTTON */
 
 .manual{
   width:100%;
-  height:60px;
+  height:58px;
   border-radius:18px;
   border:2px solid #3956E8;
   background:#fff;
@@ -199,7 +221,6 @@ input[type=file]{
 <body>
 
 <div class="phone">
-
 <div class="screen">
 
   <div class="header">
@@ -244,7 +265,7 @@ input[type=file]{
             <path d="M7 16l4-4 3 3 3-2 2 3"/>
           </svg>
         </div>
-        <span>Elegir galería</span>
+        <span>Galería</span>
       </label>
 
       <input type="file" id="galleryInput" accept="image/*">
