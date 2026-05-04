@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cada Menudo - Onboarding Primera Transacción</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:#f4f5f8;
+  display:flex;
+  justify-content:center;
+}
+
+.phone{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  background:#f7f8fb;
+  position:relative;
+  overflow:hidden;
+}
+
+/* HEADER HOME */
+
+.header{
+  background:#5A49E8;
+  color:#fff;
+  padding:48px 24px 72px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:900;
+  line-height:.9;
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:18px;
+}
+
+.avatar{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:#22c7a9;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  border:2px solid white;
+}
+
+/* SUMMARY */
+
+.summary{
+  background:#fff;
+  margin:-40px 0 28px;
+  border-radius:32px;
+  padding:20px 24px;
+  display:flex;
+  justify-content:space-between;
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
+  position:relative;
+  z-index:1;
+}
+
+.summary-item{
+  font-size:14px;
+}
+
+.summary-item strong{
+  display:block;
+  font-size:20px;
+  margin-top:4px;
+}
+
+/* HOME */
+
+.content{
+  padding:0 20px 90px;
+}
+
+.welcome h1{
+  font-size:34px;
+  font-weight:500;
+  margin-bottom:6px;
+}
+
+.welcome p{
+  color:#7280a1;
+  font-size:18px;
+}
+
+.grid{
+  margin-top:34px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.home-card{
+  height:170px;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 10px 26px rgba(0,0,0,.06);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:#5A49E8;
+  font-size:24px;
+  font-weight:900;
+  text-align:center;
+}
+
+.home-card small{
+  font-size:14px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:72px;
+  background:#5A49E8;
+  color:#fff;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  font-size:28px;
+}
+
+/* MODAL */
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.modal{
+  background:#fff;
+  border-radius:26px;
+  padding:28px 22px;
+  text-align:center;
+  box-shadow:0 18px 45px rgba(0,0,0,.25);
+}
+
+.modal h2{
+  font-size:26px;
+  margin-bottom:14px;
+}
+
+.modal p{
+  color:#5f6b85;
+  font-size:17px;
+  line-height:1.45;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:16px;
+  font-size:17px;
+  font-weight:800;
+  margin-top:16px;
+  cursor:pointer;
+}
+
+.primary{
+  background:#3956E8;
+  color:#fff;
+}
+
+.secondary{
+  background:#fff;
+  color:#3956E8;
+  border:2px solid #3956E8;
+}
+
+/* SCREENS */
+
+.screen{
+  display:none;
+}
+
+.screen.active{
+  display:block;
+}
+
+/* AI SCREEN */
+
+.ai-screen{
+  padding:52px 18px;
+  background:#fff;
+  min-height:100vh;
+}
+
+.ai-header{
+  text-align:center;
+}
+
+.ai-header h1{
+  font-size:23px;
+  font-weight:700;
+  color:#43434a;
+  margin-bottom:8px;
+}
+
+.ai-header p{
+  color:#7280a1;
+  font-size:17px;
+  font-weight:700;
+}
+
+.progress-row{
+  margin-top:20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.progress-track{
+  flex:1;
+  height:6px;
+  background:#ddd9ff;
+  border-radius:99px;
+}
+
+.progress-fill{
+  height:100%;
+  width:50%;
+  background:#5A49E8;
+}
+
+.step{
+  font-size:16px;
+  font-weight:800;
+  color:#666;
+}
+
+.ai-card{
+  margin-top:28px;
+  background:#fff;
+  border-radius:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  padding:26px 18px;
+  text-align:center;
+}
+
+.ai-card h2{
+  margin:54px 0 28px;
+  font-size:27px;
+  line-height:1.35;
+}
+
+.close{
+  width:46px;
+  height:46px;
+  border-radius:10px;
+  background:#e63950;
+  color:#fff;
+  font-size:30px;
+  margin:0 0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.ai-note{
+  margin-top:18px;
+  text-align:left;
+  color:#7280a1;
+  font-size:17px;
+  line-height:1.5;
+}
+
+/* REVIEW */
+
+.form-card{
+  margin-top:28px;
+  border-radius:26px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  padding:24px 18px;
+}
+
+.form-card h2{
+  font-size:28px;
+  margin-bottom:22px;
+}
+
+.amount-row{
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  font-size:44px;
+  color:#777;
+  margin-bottom:18px;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:14px;
+  margin:8px 0 14px;
+  border:1.5px solid #bbb;
+  border-radius:10px;
+  font-size:18px;
+}
+
+textarea{
+  height:90px;
+}
+
+/* SUCCESS */
+
+.success{
+  position:absolute;
+  inset:0;
+  background:#fff;
+  z-index:20;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+  text-align:center;
+}
+
+.success h1{
+  font-size:32px;
+  color:#3956E8;
+  margin-bottom:12px;
+}
+
+.success p{
+  color:#5f6b85;
+  font-size:18px;
+  line-height:1.45;
+}
+
+/* TRANSACTIONS */
+
+.transactions-page{
+  padding-bottom:90px;
+}
+
+.date-box{
+  background:#fff;
+  margin:30px 16px;
+  padding:22px;
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  color:#444;
+  font-size:20px;
+}
+
+.tx-header{
+  padding:0 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.tx-header h2{
+  font-size:25px;
+}
+
+.tx-actions{
+  display:flex;
+  gap:10px;
+}
+
+.small-btn{
+  width:auto;
+  padding:12px 18px;
+  margin:0;
+  border-radius:12px;
+  background:#5A49E8;
+  color:white;
+}
+
+.tabs{
+  margin:16px 16px 20px;
+  background:#fff;
+  border-radius:18px;
+  display:flex;
+  justify-content:space-around;
+  padding:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  font-size:18px;
+  font-weight:800;
+}
+
+.tab-active{
+  border-bottom:4px solid #5A49E8;
+  padding-bottom:8px;
+}
+
+.tx-list{
+  padding:0 16px;
+}
+
+.tx-item{
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:20px;
+}
+
+.tx-item.new{
+  border:3px solid #E8C239;
+  background:#fffbea;
+  animation:pulse 1.2s ease-in-out 2;
+}
+
+.new-tag{
+  display:inline-block;
+  background:#E8C239;
+  color:#000;
+  font-size:11px;
+  font-weight:900;
+  padding:4px 8px;
+  border-radius:999px;
+  margin-bottom:6px;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.02);}
+  100%{transform:scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+  <!-- HOME -->
+  <section id="homeScreen" class="screen active">
+
+    <div class="header">
+      <div class="logo">Cada<br>menudo</div>
+      <div class="user">
+        <div class="avatar">X</div>
+        <span>Xavier Serbia</span>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-item">Ingresos <strong>$0.00</strong></div>
+      <div class="summary-item">Gastos <strong id="homeGastos">$4,384.00</strong></div>
+      <div class="summary-item">Ahorros <strong>$0.00</strong></div>
+    </div>
+
+    <div class="content">
+      <div class="welcome">
+        <h1>¡Bienvenido, Xavier Serbia</h1>
+        <p>¿A dónde quieres ir hoy?</p>
+      </div>
+
+      <div class="grid">
+        <div class="home-card">⌂<br>Tablero</div>
+        <div class="home-card">☷<br>Transacciones</div>
+        <div class="home-card" onclick="goAI()">💼<br>Registrar <small>nueva transacción</small></div>
+        <div class="home-card">▥<br>Metas</div>
+        <div class="home-card">▷<br>Videos</div>
+        <div class="home-card">🛒<br>Categorías</div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <span>⌂</span><span>☰</span><span>＋</span><span>▥</span><span>⌕</span>
+    </div>
+
+    <!-- MODAL ONBOARDING SOBRE HOME -->
+    <div class="overlay" id="firstModal">
+      <div class="modal">
+        <h2>Empieza aquí 👇</h2>
+        <p>
+          Registra tu primera transacción para comenzar a ver
+          en qué se te va el dinero.
+        </p>
+        <button class="primary" onclick="goAI()">Registrar primera transacción</button>
+        <button class="secondary" onclick="closeModal()">Ahora no</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- AI STEP 1 -->
+  <section id="aiScreen" class="screen ai-screen">
+
+    <div class="ai-header">
+      <h1>Cada Menudo AI - Nueva transacción</h1>
+      <p>Paso 1 de 2 · Subir recibo</p>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <div class="step">1 / 2</div>
+    </div>
+
+    <div class="ai-card">
+      <button class="close" onclick="goHome()">×</button>
+
+      <h2>¿Quieres que Cada Menudo lo haga por ti?</h2>
+
+      <div class="photo-grid">
+        <button class="primary" onclick="simulatePhoto()">📷 Tomar foto</button>
+        <button class="primary" onclick="simulatePhoto()">🖼 Galería</button>
+      </div>
+
+      <button class="secondary" onclick="manualFlow()">No, prefiero hacerlo manual</button>
+
+      <div class="ai-note">
+        Sube tu recibo y pre-llenamos la transacción.<br>
+        Luego podrás revisar y editar antes de guardar.
+      </div>
+    </div>
+
+  </section>
+
+  <!-- REVIEW STEP 2 -->
+  <section id="reviewScreen" class="screen ai-screen">
+
+    <div class="ai-header">
+      <h1>Cada Menudo AI - Nueva transacción</h1>
+      <p>Paso 2 de 2 · Revisar y guardar</p>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" style="width:100%;"></div></div>
+      <div class="step">2 / 2</div>
+    </div>
+
+    <div class="form-card">
+      <button class="close" onclick="goHome()">×</button>
+
+      <h2>Nueva Transacción</h2>
+
+      <div class="amount-row">
+        <span>USD</span>
+        <span id="reviewAmountDisplay">32.75</span>
+      </div>
+
+      <label>Categoría</label>
+      <input id="categoryInput" value="Alimentación" />
+
+      <label>Fecha</label>
+      <input id="dateInput" value="05/04/2026" />
+
+      <label>Comercio</label>
+      <input id="merchantInput" value="Starbucks" />
+
+      <label>Comentario</label>
+      <textarea id="commentInput">Detectado desde recibo</textarea>
+
+      <button class="primary" onclick="saveTransaction()">Registrar</button>
+      <button class="secondary" onclick="goAI()">← Volver al recibo</button>
+    </div>
+
+  </section>
+
+  <!-- SUCCESS -->
+  <div class="success" id="successScreen">
+    <div>
+      <h1>¡Listo! 👇</h1>
+      <p>
+        Tu primera transacción ya quedó registrada.<br><br>
+        Ahora puedes verla en tus transacciones.
+      </p>
+      <button class="primary" onclick="goTransactions()">Ver transacciones</button>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS PAGE -->
+  <section id="transactionsScreen" class="screen transactions-page">
+
+    <div class="header">
+      <div class="logo">Cada<br>menudo</div>
+      <div class="user">
+        <div class="avatar">X</div>
+        <span>Xavier Serbia</span>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-item">Ingresos <strong>$0.00</strong></div>
+      <div class="summary-item">Gastos <strong id="txGastosTotal">$4,416.75</strong></div>
+      <div class="summary-item">Ahorros <strong>$0.00</strong></div>
+    </div>
+
+    <div class="date-box">
+      Fecha &nbsp; 1/5/2026 &nbsp; → &nbsp; 4/5/2026
+    </div>
+
+    <div class="tx-header">
+      <h2>Transacciones</h2>
+      <div class="tx-actions">
+        <button class="small-btn" onclick="goAI()">+ Nueva</button>
+        <button class="small-btn">▣</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <span>● Ingresos</span>
+      <span class="tab-active">● Gastos</span>
+      <span>● Ahorro</span>
+    </div>
+
+    <div class="tx-list">
+
+      <div class="tx-item new">
+        <div>
+          <span class="new-tag">NUEVA</span>
+          <div id="newMerchant">Starbucks</div>
+          <small id="newCategory">Alimentación</small>
+        </div>
+        <strong id="newAmount">$32.75</strong>
+      </div>
+
+      <div class="tx-item">
+        <span>Alimentación</span>
+        <strong>$395.09</strong>
+      </div>
+
+      <div class="tx-item">
+        <span>Amazon</span>
+        <strong>$111.40</strong>
+      </div>
+
+      <div class="tx-item">
+        <span>Casa</span>
+        <strong>$103.72</strong>
+      </div>
+
+      <div class="tx-item">
+        <span>Cuidado Personal</span>
+        <strong>$197.95</strong>
+      </div>
+
+      <div class="tx-item">
+        <span>Dani 100%</span>
+        <strong>$43.98</strong>
+      </div>
+
+    </div>
+
+    <div class="bottom-nav">
+      <span>⌂</span><span>☰</span><span>＋</span><span>▥</span><span>⌕</span>
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+let newTransaction = {
+  amount: 32.75,
+  category: "Alimentación",
+  merchant: "Starbucks"
+};
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function closeModal(){
+  document.getElementById("firstModal").style.display = "none";
+}
+
+function goHome(){
+  showScreen("homeScreen");
+}
+
+function goAI(){
+  closeModal();
+  showScreen("aiScreen");
+}
+
+function simulatePhoto(){
+  newTransaction = {
+    amount: 32.75,
+    category: "Alimentación",
+    merchant: "Starbucks"
+  };
+
+  document.getElementById("reviewAmountDisplay").innerText = newTransaction.amount.toFixed(2);
+  document.getElementById("categoryInput").value = newTransaction.category;
+  document.getElementById("merchantInput").value = newTransaction.merchant;
+
+  showScreen("reviewScreen");
+}
+
+function manualFlow(){
+  newTransaction = {
+    amount: 12.50,
+    category: "Alimentación",
+    merchant: "Manual"
+  };
+
+  document.getElementById("reviewAmountDisplay").innerText = newTransaction.amount.toFixed(2);
+  document.getElementById("categoryInput").value = newTransaction.category;
+  document.getElementById("merchantInput").value = newTransaction.merchant;
+  document.getElementById("commentInput").value = "Registrado manualmente";
+
+  showScreen("reviewScreen");
+}
+
+function saveTransaction(){
+  const amount = parseFloat(document.getElementById("reviewAmountDisplay").innerText);
+  const category = document.getElementById("categoryInput").value;
+  const merchant = document.getElementById("merchantInput").value;
+
+  newTransaction = { amount, category, merchant };
+
+  document.getElementById("successScreen").style.display = "flex";
+}
+
+function goTransactions(){
+  document.getElementById("successScreen").style.display = "none";
+
+  document.getElementById("newMerchant").innerText = newTransaction.merchant;
+  document.getElementById("newCategory").innerText = newTransaction.category;
+  document.getElementById("newAmount").innerText = "$" + newTransaction.amount.toFixed(2);
+
+  document.getElementById("txGastosTotal").innerText = "$4,416.75";
+  document.getElementById("homeGastos").innerText = "$4,416.75";
+
+  showScreen("transactionsScreen");
+}
+</script>
+
+</body>
+</html>
