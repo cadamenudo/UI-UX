@@ -317,17 +317,31 @@
       .nav-inner { height: 56px; padding: 0 16px; }
       .nav-logo img { height: 64px; }
 
-      /* Hero */
-      #hero { padding: 48px 16px 64px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 32px; }
-      .hero-inner h1 { font-size: 2.2rem; }
-      .hero-desc { font-size: .95rem; }
+      /* Hero — reorder: title → phone → desc → buttons */
+      #hero { padding: 36px 16px 56px; }
+      .hero-inner {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0;
+      }
+      .hero-left {
+        display: flex;
+        flex-direction: column;
+      }
+      .hero-order-badge  { order: 5; display: none; } /* hide badge on mobile */
+      .hero-order-title  { order: 1; margin-bottom: 0; }
+      .hero-order-phone  { order: 2; margin: 16px auto; }
+      .hero-order-desc   { order: 3; margin-top: 12px !important; }
+      .hero-order-buttons{ order: 4; }
+
+      .hero-inner h1 { font-size: 2rem; }
+      .hero-desc { font-size: .93rem; }
       .hero-ctas { flex-direction: column; gap: 10px; }
       .btn-primary-lg { width: 100%; text-align: center; padding: 14px 20px; }
       .btn-outline { width: 100%; text-align: center; padding: 13px 20px; }
-      .hero-trust { gap: 12px; }
-      .hero-mockup-wrap { justify-content: center; margin-top: 8px; }
-      .hero-mockup-wrap img { width: 220px; }
+      .hero-trust { gap: 12px; margin-top: 16px; }
+      .hero-mockup-wrap { justify-content: center; }
+      .hero-mockup-wrap img { width: 200px; }
       .badge-gold { top: -10px; right: -8px; font-size: .7rem; padding: 8px 10px; }
       .badge-white { bottom: 10px; left: -8px; font-size: .7rem; padding: 8px 10px; }
 
@@ -343,8 +357,13 @@
       .section-title { font-size: 1.7rem; }
       .section-sub { font-size: .88rem; }
 
-      /* Features */
-      .features-grid { grid-template-columns: 1fr; gap: 14px; }
+      /* Features — 2 col compact on mobile */
+      .features-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .feat-card { padding: 18px 14px 14px; }
+      .feat-card p { display: none; }
+      .feat-card .icon { margin-bottom: 8px; }
+      .feat-card .icon img { width: 32px; height: 32px; }
+      .feat-card h3 { font-size: .82rem; font-weight: 700; line-height: 1.3; }
 
       /* Steps */
       .steps-grid { grid-template-columns: 1fr; gap: 24px; }
@@ -440,45 +459,54 @@
   <div class="orb" style="width:500px;height:500px;background:var(--primary);top:-200px;right:-100px;z-index:0;"></div>
   <div class="orb" style="width:300px;height:300px;background:var(--yellow);bottom:-100px;left:0;z-index:0;"></div>
   <div class="hero-inner" style="position:relative;z-index:1;">
-    <div>
-      <div class="hero-badge fade-up">
+
+    <!-- LEFT column (desktop) / reordered on mobile -->
+    <div class="hero-left">
+      <!-- Badge — hidden on mobile -->
+      <div class="hero-badge fade-up hero-order-badge">
         <div class="pulse-dot" style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;"></div>
         <span>Disponible en iOS y Android</span>
       </div>
-      <h1 class="fade-up delay-1">Tu dinero.<br><span class="accent">Claro.</span><br>Sin excusas.</h1>
-      <p class="hero-desc fade-up delay-2">Cada Menudo te ayuda a entender exactamente en qué se va tu dinero, organizar tus gastos y tomar control real de tus finanzas personales.</p>
-      <div class="hero-ctas fade-up delay-3">
-        <a href="#signup" class="btn-primary-lg">Crear cuenta →</a>
-        <a href="#features" class="btn-outline">Ver features</a>
-      </div>
-
-      <!-- App store badges -->
-      <div class="fade-up delay-4" style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;align-items:center;">
-        <a href="https://apps.apple.com" target="_blank" rel="noopener"
-           style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;transition:opacity .2s;"
-           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          <div style="line-height:1.2;">
-            <div style="font-size:.6rem;opacity:.8;">Disponible en</div>
-            <div style="font-size:.85rem;font-weight:700;font-family:'Nunito',sans-serif;">App Store</div>
-          </div>
-        </a>
-        <a href="https://play.google.com" target="_blank" rel="noopener"
-           style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;transition:opacity .2s;"
-           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.22.99.14l12.12-6.99-2.55-2.55-10.56 9.4zM.94 1.07C.36 1.4 0 2.01 0 2.78v18.44c0 .77.36 1.38.94 1.71l.1.06 10.33-10.33v-.24L1.04 1.01l-.1.06zM22.35 10.55l-2.9-1.67-2.87 2.87 2.87 2.87 2.92-1.68c.83-.48.83-1.92-.02-2.39zM3.18.24l12.12 6.99-2.55 2.55L2.19.38 3.18.24z"/></svg>
-          <div style="line-height:1.2;">
-            <div style="font-size:.6rem;opacity:.8;">Disponible en</div>
-            <div style="font-size:.85rem;font-weight:700;font-family:'Nunito',sans-serif;">Google Play</div>
-          </div>
-        </a>
-      </div>
-      <div class="hero-trust fade-up delay-4">
-        <span>✅ Sin conexión bancaria</span>
-        <span>✅ Datos privados</span>
+      <!-- 1. Title -->
+      <h1 class="fade-up delay-1 hero-order-title">Tu dinero.<br><span class="accent">Claro.</span><br>Sin excusas.</h1>
+      <!-- 3. Description -->
+      <p class="hero-desc fade-up delay-2 hero-order-desc">Cada Menudo te ayuda a entender exactamente en qué se va tu dinero, organizar tus gastos y tomar control real de tus finanzas personales.</p>
+      <!-- 4. Buttons -->
+      <div class="hero-order-buttons">
+        <div class="hero-ctas fade-up delay-3">
+          <a href="#signup" class="btn-primary-lg">Crear cuenta →</a>
+          <a href="#features" class="btn-outline">Ver features</a>
+        </div>
+        <!-- App store badges -->
+        <div class="fade-up delay-4" style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;align-items:center;">
+          <a href="https://apps.apple.com" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;transition:opacity .2s;"
+             onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div style="line-height:1.2;">
+              <div style="font-size:.6rem;opacity:.8;">Disponible en</div>
+              <div style="font-size:.85rem;font-weight:700;font-family:'Nunito',sans-serif;">App Store</div>
+            </div>
+          </a>
+          <a href="https://play.google.com" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;transition:opacity .2s;"
+             onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.22.99.14l12.12-6.99-2.55-2.55-10.56 9.4zM.94 1.07C.36 1.4 0 2.01 0 2.78v18.44c0 .77.36 1.38.94 1.71l.1.06 10.33-10.33v-.24L1.04 1.01l-.1.06zM22.35 10.55l-2.9-1.67-2.87 2.87 2.87 2.87 2.92-1.68c.83-.48.83-1.92-.02-2.39zM3.18.24l12.12 6.99-2.55 2.55L2.19.38 3.18.24z"/></svg>
+            <div style="line-height:1.2;">
+              <div style="font-size:.6rem;opacity:.8;">Disponible en</div>
+              <div style="font-size:.85rem;font-weight:700;font-family:'Nunito',sans-serif;">Google Play</div>
+            </div>
+          </a>
+        </div>
+        <div class="hero-trust fade-up delay-4">
+          <span>✅ Sin conexión bancaria</span>
+          <span>✅ Datos privados</span>
+        </div>
       </div>
     </div>
-    <div class="hero-mockup-wrap float">
+
+    <!-- 2. Phone mockup -->
+    <div class="hero-mockup-wrap float hero-order-phone">
       <div style="position:absolute;inset:-30px;background:radial-gradient(ellipse at center,rgba(57,86,232,.15) 0%,transparent 70%);border-radius:50%;"></div>
       <img src="https://cadamenudo.github.io/UI-UX/assets/logo/CM_homepage.png" alt="Cada Menudo App" style="width:300px;max-width:100%;display:block;position:relative;z-index:1;filter:drop-shadow(0 24px 48px rgba(0,0,0,.28));" />
       <div class="badge-gold float2">💰 +$500 hoy</div>
@@ -487,6 +515,7 @@
         <div class="prog-row"><div class="prog-bar"><div class="prog-fill" style="width:68%"></div></div><span class="prog-pct">68%</span></div>
       </div>
     </div>
+
   </div>
 </section>
 
