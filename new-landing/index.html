@@ -314,28 +314,28 @@
       /* Nav */
       nav, .nav-actions { display: none; }
       .hamburger { display: flex; }
-      .nav-inner { height: 56px; padding: 0 16px; }
-      .nav-logo img { height: 64px; }
+      .nav-inner { height: 56px; padding: 0 8px 0 0; }
+      .nav-logo img { height: 56px; }
 
-      /* Hero — reorder: title → phone → desc → buttons */
-      #hero { padding: 36px 16px 56px; }
+      /* Hero — reorder: title → phone → desc → buttons
+         display:contents on .hero-left makes all children
+         direct flex items of .hero-inner so order works   */
+      #hero { padding: 28px 16px 56px; }
       .hero-inner {
         display: flex !important;
         flex-direction: column;
         gap: 0;
       }
-      .hero-left {
-        display: flex;
-        flex-direction: column;
-      }
-      .hero-order-badge  { order: 5; display: none; } /* hide badge on mobile */
-      .hero-order-title  { order: 1; margin-bottom: 0; }
-      .hero-order-phone  { order: 2; margin: 16px auto; }
-      .hero-order-desc   { order: 3; margin-top: 12px !important; }
-      .hero-order-buttons{ order: 4; }
+      .hero-left { display: contents; }
+
+      .hero-order-badge   { order: 5; display: none; }
+      .hero-order-title   { order: 1; }
+      .hero-order-phone   { order: 2; margin: 20px auto; }
+      .hero-order-desc    { order: 3; }
+      .hero-order-buttons { order: 4; margin-top: 16px; }
 
       .hero-inner h1 { font-size: 2rem; }
-      .hero-desc { font-size: .93rem; }
+      .hero-desc { font-size: .93rem; margin-top: 0 !important; }
       .hero-ctas { flex-direction: column; gap: 10px; }
       .btn-primary-lg { width: 100%; text-align: center; padding: 14px 20px; }
       .btn-outline { width: 100%; text-align: center; padding: 13px 20px; }
@@ -357,13 +357,20 @@
       .section-title { font-size: 1.7rem; }
       .section-sub { font-size: .88rem; }
 
-      /* Features — 2 col compact on mobile */
+      /* Features — 2 col, icon left + title right */
       .features-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .feat-card { padding: 18px 14px 14px; }
+      .feat-card {
+        padding: 14px 12px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+      }
+      .feat-card .accent-blob { display: none; }
       .feat-card p { display: none; }
-      .feat-card .icon { margin-bottom: 8px; }
-      .feat-card .icon img { width: 32px; height: 32px; }
-      .feat-card h3 { font-size: .82rem; font-weight: 700; line-height: 1.3; }
+      .feat-card .icon { margin-bottom: 0; flex-shrink: 0; }
+      .feat-card .icon img { width: 30px; height: 30px; }
+      .feat-card h3 { font-size: .78rem; font-weight: 700; line-height: 1.3; margin-bottom: 0; }
 
       /* Steps */
       .steps-grid { grid-template-columns: 1fr; gap: 24px; }
