@@ -349,8 +349,12 @@
       .badge-gold { top: -10px; right: -8px; font-size: .7rem; padding: 8px 10px; }
       .badge-white { bottom: 10px; left: -8px; font-size: .7rem; padding: 8px 10px; }
 
-      /* App store badges */
-      .app-store-row { justify-content: center; }
+      /* Force title visible on load — no layout shift */
+      #hero { scroll-margin-top: 0; }
+      .hero-order-title { min-height: 80px; }
+      .hero-inner { overflow: visible; }
+      /* Prevent badges from shifting layout on load */
+      .badge-gold, .badge-white { position: absolute; }
 
       /* General sections */
       section { padding-left: 16px !important; padding-right: 16px !important; }
@@ -480,7 +484,7 @@
   <div style="display:flex;flex-direction:column;gap:12px;padding:20px 24px;width:100%;margin-top:8px;">
     <a href="https://cadamenudo.com/register" target="_blank" onclick="closeMobileMenu()"
        style="display:flex;align-items:center;justify-content:center;background:var(--gradient-primary);color:#fff;padding:15px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;text-decoration:none;box-shadow:0 8px 24px rgba(57,86,232,.3);">
-      Crear cuenta →
+      Crear cuenta
     </a>
     <a href="https://cadamenudo.com/login" target="_blank" onclick="closeMobileMenu()"
        style="display:flex;align-items:center;justify-content:center;background:#fff;color:var(--text);padding:15px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;text-decoration:none;border:2px solid var(--border);">
@@ -508,9 +512,9 @@
       <!-- 3. Description -->
       <p class="hero-desc fade-up delay-2 hero-order-desc">Cada Menudo te ayuda a entender exactamente en qué se va tu dinero, organizar tus gastos y tomar control real de tus finanzas personales.</p>
       <!-- 4. Buttons -->
-      <div class="hero-order-buttons">
+  <div id="hero-cta-section" class="hero-order-buttons">
         <div class="hero-ctas fade-up delay-3">
-          <a href="https://cadamenudo.com/register" target="_blank" class="btn-primary-lg">Crear cuenta →</a>
+          <a href="https://cadamenudo.com/register" target="_blank" class="btn-primary-lg">Crear cuenta</a>
           <a href="https://cadamenudo.com/login" target="_blank" class="btn-outline">Iniciar sesión</a>
         </div>
         <!-- App store badges -->
@@ -788,7 +792,7 @@
          style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--gradient-primary);color:#fff;padding:16px 28px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;text-decoration:none;box-shadow:0 8px 24px rgba(57,86,232,.35);transition:transform .2s,box-shadow .2s;"
          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 32px rgba(57,86,232,.45)'"
          onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 24px rgba(57,86,232,.35)'">
-        Registrarse →
+        Crear cuenta
       </a>
       <a href="https://cadamenudo.com/login" target="_blank" rel="noopener"
          style="display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:var(--text);padding:16px 28px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;text-decoration:none;border:2px solid var(--border);transition:transform .2s,border-color .2s;"
@@ -1303,6 +1307,14 @@ fabSendBtn.addEventListener('click', function(){ fabSend(fabInput.value); });
 fabInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') fabSend(fabInput.value); });
 
 setTimeout(function(){ if (!chatOpen) chatBadge.style.display = 'flex'; }, 3000);
+
+// ── Force scroll to top on load ──
+window.addEventListener('load', function() {
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+});
+history.scrollRestoration = 'manual';
 
 // ── Hamburger menu ──
 var hamburger = document.getElementById('hamburger');
