@@ -445,8 +445,8 @@
       <a href="#learn"         class="nav-link">Aprende</a>
     </nav>
     <div class="nav-actions">
-      <a href="#login"  class="nav-link">Ingresar</a>
-      <a href="#signup" class="btn-primary">Crear cuenta</a>
+      <a href="https://cadamenudo.com/login"    target="_blank" class="nav-link">Ingresar</a>
+      <a href="https://cadamenudo.com/register" target="_blank" class="btn-primary">Crear cuenta</a>
     </div>
     <!-- Hamburger -->
     <button class="hamburger" id="hamburger" aria-label="Menú">
@@ -462,8 +462,17 @@
   <a href="#como-funciona" onclick="closeMobileMenu()">Cómo funciona</a>
   <a href="#ai-chat"       onclick="closeMobileMenu()">Chat IA</a>
   <a href="#learn"         onclick="closeMobileMenu()">Aprende</a>
-  <a href="#login"         onclick="closeMobileMenu()">Ingresar</a>
-  <a href="#signup"        onclick="closeMobileMenu()" class="mobile-cta">Crear cuenta →</a>
+  <!-- Auth buttons -->
+  <div style="display:flex;flex-direction:column;gap:12px;padding:20px 24px;width:100%;margin-top:8px;">
+    <a href="https://cadamenudo.com/register" target="_blank" onclick="closeMobileMenu()"
+       style="display:flex;align-items:center;justify-content:center;background:var(--gradient-primary);color:#fff;padding:15px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;text-decoration:none;box-shadow:0 8px 24px rgba(57,86,232,.3);">
+      Crear cuenta →
+    </a>
+    <a href="https://cadamenudo.com/login" target="_blank" onclick="closeMobileMenu()"
+       style="display:flex;align-items:center;justify-content:center;background:#fff;color:var(--text);padding:15px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;text-decoration:none;border:2px solid var(--border);">
+      Iniciar sesión
+    </a>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
@@ -487,8 +496,8 @@
       <!-- 4. Buttons -->
       <div class="hero-order-buttons">
         <div class="hero-ctas fade-up delay-3">
-          <a href="#signup" class="btn-primary-lg">Crear cuenta →</a>
-          <a href="#features" class="btn-outline">Ver features</a>
+          <a href="https://cadamenudo.com/register" target="_blank" class="btn-primary-lg">Crear cuenta →</a>
+          <a href="https://cadamenudo.com/login" target="_blank" class="btn-outline">Iniciar sesión</a>
         </div>
         <!-- App store badges -->
         <div class="fade-up delay-4" style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;align-items:center;">
@@ -754,51 +763,25 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════ LOGIN / SIGNUP ═══════════════════════════════ -->
-<section id="login" style="padding:100px 24px;background:var(--muted);">
-  <div style="max-width:880px;margin:0 auto;">
-    <div style="text-align:center;margin-bottom:48px;">
-      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;letter-spacing:-.02em;">Tu cuenta te espera</h2>
-    </div>
-    <div class="auth-grid">
-      <div class="login-card">
-        <div class="form-eyebrow">Ya tienes cuenta</div>
-        <div class="form-title">Iniciar sesión</div>
-        <div class="form-fields">
-          <input class="cm-input" type="email" placeholder="tu@email.com" />
-          <input class="cm-input" type="password" placeholder="Contraseña" />
-          <button class="btn-login" style="background:var(--gradient-primary);border-radius:12px;padding:14px;font-size:.95rem;font-weight:700;color:#fff;border:none;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">Entrar →</button>
-          <p class="form-footer">¿Olvidaste tu contraseña? <a href="#">Recuperar</a></p>
-        </div>
-      </div>
-      <div class="signup-card" id="signup">
-        <div class="form-eyebrow">Nuevo aquí</div>
-        <div class="form-title">Crear cuenta</div>
-        <div class="form-fields">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <input class="cm-input light" type="text" placeholder="Nombre" />
-            <input class="cm-input light" type="text" placeholder="Apellido" />
-          </div>
-          <input class="cm-input light" type="email" placeholder="tu@email.com" />
-          <div style="display:grid;grid-template-columns:90px 1fr;gap:10px;">
-            <input class="cm-input light" type="text" placeholder="+1" style="text-align:center;" />
-            <input class="cm-input light" type="tel" placeholder="Teléfono" />
-          </div>
-          <input class="cm-input light" type="password" placeholder="Contraseña (mín. 8 caracteres)" />
-          <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;margin-top:2px;">
-            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-              <input type="checkbox" style="width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:#fff;cursor:pointer;" />
-              <span style="font-size:.78rem;color:rgba(255,255,255,.9);line-height:1.5;">Acepto los <a href="/terms" style="color:#fff;font-weight:700;text-decoration:underline;">Términos y Políticas</a></span>
-            </label>
-            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-              <input type="checkbox" style="width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:#fff;cursor:pointer;" />
-              <span style="font-size:.75rem;color:rgba(255,255,255,.82);line-height:1.5;">Al proporcionar su número de teléfono, usted acepta recibir mensajes de texto informativos de Cada Menudo. El consentimiento no es una condición de compra. Responda <strong style="color:#fff;">HELP</strong> para ayuda y <strong style="color:#fff;">STOP</strong> para cancelar. <a href="/sms-terms" style="color:#fff;font-weight:700;text-decoration:underline;">SMS Terms</a></span>
-            </label>
-          </div>
-          <button class="btn-signup" style="margin-top:4px;">Empezar →</button>
-          <p class="form-footer">Sin tarjeta de crédito requerida.</p>
-        </div>
-      </div>
+<!-- ═══════════════════════════════ CTA BUTTONS ═══════════════════════════════ -->
+<section id="login" style="padding:80px 24px;background:var(--muted);">
+  <div style="max-width:480px;margin:0 auto;text-align:center;">
+    <div class="section-label">Únete</div>
+    <h2 style="font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:12px;">Tu cuenta te espera</h2>
+    <p style="color:var(--gray);font-size:.95rem;line-height:1.7;margin-bottom:36px;">Entra a tu cuenta o crea una nueva y empieza a tomar control de tu dinero hoy.</p>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <a href="https://cadamenudo.com/register" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--gradient-primary);color:#fff;padding:16px 28px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;text-decoration:none;box-shadow:0 8px 24px rgba(57,86,232,.35);transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 32px rgba(57,86,232,.45)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 24px rgba(57,86,232,.35)'">
+        Registrarse →
+      </a>
+      <a href="https://cadamenudo.com/login" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:var(--text);padding:16px 28px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;text-decoration:none;border:2px solid var(--border);transition:transform .2s,border-color .2s;"
+         onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--primary)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.borderColor='var(--border)'">
+        Iniciar sesión
+      </a>
     </div>
   </div>
 </section>
