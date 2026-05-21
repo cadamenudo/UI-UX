@@ -297,6 +297,8 @@
       padding:16px 32px !important;
     }
 
+    .mobile-auth-btns { display: none; }
+
     /* ══════════════════════════════
        TABLET — 900px
     ══════════════════════════════ */
@@ -314,7 +316,8 @@
       /* Nav */
       nav, .nav-actions { display: none; }
       .hamburger { display: flex; }
-      .nav-inner { height: 56px; padding: 0 8px 0 0; }
+      .mobile-auth-btns { display: flex; gap: 8px; align-items: center; }
+      .nav-inner { height: 56px; padding: 0 8px 0 0; justify-content: space-between; }
       .nav-logo img { height: 56px; }
 
       /* Hero — reorder: title → phone → desc → buttons
@@ -447,6 +450,17 @@
     <div class="nav-actions">
       <a href="https://cadamenudo.com/login"    target="_blank" class="nav-link">Ingresar</a>
       <a href="https://cadamenudo.com/register" target="_blank" class="btn-primary">Crear cuenta</a>
+    </div>
+    <!-- Mobile auth buttons (visible on mobile, hidden on desktop via hamburger) -->
+    <div class="mobile-auth-btns">
+      <a href="https://cadamenudo.com/login" target="_blank"
+         style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:10px;background:#fff;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;">
+        Ingresar
+      </a>
+      <a href="https://cadamenudo.com/register" target="_blank"
+         style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:10px;background:var(--gradient-primary);font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;">
+        Registrar
+      </a>
     </div>
     <!-- Hamburger -->
     <button class="hamburger" id="hamburger" aria-label="Menú">
