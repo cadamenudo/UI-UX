@@ -183,8 +183,8 @@
     .clear-btn { background: var(--muted); border: none; border-radius: 8px; padding: 6px 12px; font-size: .75rem; font-weight: 600; color: var(--gray); cursor: pointer; font-family: 'Nunito', sans-serif; transition: background .2s; }
     .clear-btn:hover { background: var(--border); }
 
-    #chat-fab { position:static; bottom:auto; right:auto; z-index:auto; width: 56px; height: 56px; border-radius: 50%; background: var(--gradient-primary); border: none; box-shadow: 0 8px 28px rgba(57,86,232,.45); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: transform .25s, box-shadow .25s; }
-    #chat-fab:hover { transform: scale(1.1); box-shadow: 0 12px 36px rgba(57,86,232,.55); }
+    #chat-fab { position:static; bottom:auto; right:auto; z-index:auto; width:48px; height:48px; border-radius:50%; background:#fff; border:1.5px solid var(--border); box-shadow:0 4px 16px rgba(57,86,232,.25); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .25s,box-shadow .25s; padding:0; overflow:hidden; }
+    #chat-fab:hover { transform: scale(1.12); box-shadow: 0 6px 20px rgba(57,86,232,.4); }
     #chat-badge { display: none; position: absolute; top: -2px; right: -2px; width: 18px; height: 18px; border-radius: 50%; background: #ef4444; border: 2px solid #fff; font-size: 10px; font-weight: 800; color: #fff; align-items: center; justify-content: center; font-family: 'Nunito', sans-serif; }
     #chat-win { display: none; position: fixed; bottom: 200px; right: 20px; z-index: 998; width: 340px; height: 480px; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,.18); border: 1.5px solid var(--border); flex-direction: column; overflow: hidden; animation: fadeUp .3s ease both; font-family: 'Nunito', sans-serif; }
     .fab-header { background: var(--gradient-primary); padding: 16px 18px; display: flex; align-items: center; gap: 12px; }
@@ -656,21 +656,6 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════ TESTIMONIOS ═══════════════════════════════ -->
-<section style="padding:100px 24px;background:#fff;">
-  <div style="max-width:1100px;margin:0 auto;">
-    <div class="section-center" style="margin-bottom:52px;">
-      <div class="section-label">Testimonios</div>
-      <h2 class="section-title">Lo que dicen nuestros usuarios</h2>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testi-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p>"Por fin entiendo en qué se va mi dinero. Cada Menudo cambió completamente cómo manejo mis finanzas personales."</p><div class="testi-author"><div class="testi-avatar">V</div><div><div class="testi-name">Valeria Morales</div><div class="testi-role">Freelance diseñadora</div></div></div></div>
-      <div class="testi-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p>"El dashboard es clarísimo. En 5 minutos ya tenía todo configurado y vi cosas que no sabía de mis gastos."</p><div class="testi-author"><div class="testi-avatar">R</div><div><div class="testi-name">Rodrigo Salinas</div><div class="testi-role">Emprendedor</div></div></div></div>
-      <div class="testi-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p>"Al fin una app de finanzas que no necesita conectarse al banco. Perfecta para registrar todo manualmente."</p><div class="testi-author"><div class="testi-avatar">C</div><div><div class="testi-name">Camila Torres</div><div class="testi-role">Estudiante universitaria</div></div></div></div>
-    </div>
-  </div>
-</section>
-
 <!-- ═══════════════════════════════ APRENDE / VIMEO ═══════════════════════════════ -->
 <section id="learn" style="padding:100px 24px;background:var(--muted);">
   <div style="max-width:1100px;margin:0 auto;text-align:center;">
@@ -709,12 +694,16 @@
 <script src="https://player.vimeo.com/api/player.js"></script>
 
 <!-- ═══════════════════════════════ CHAT IA ═══════════════════════════════ -->
-<section id="ai-chat" style="padding:64px 24px;background:#fff;">
-  <div style="max-width:1100px;margin:0 auto;">
-    <!-- Title only — no description, no badges -->
+<section id="ai-chat" style="padding:64px 24px;background:var(--navy);position:relative;overflow:hidden;">
+  <!-- decorative orbs -->
+  <div style="position:absolute;width:400px;height:400px;background:var(--secondary);border-radius:50%;filter:blur(80px);opacity:.25;top:-160px;left:50%;transform:translateX(-50%);pointer-events:none;"></div>
+  <div style="position:absolute;width:240px;height:240px;background:var(--yellow);border-radius:50%;filter:blur(80px);opacity:.1;bottom:-80px;right:-60px;pointer-events:none;"></div>
+
+  <div style="max-width:1100px;margin:0 auto;position:relative;z-index:1;">
+    <!-- Title -->
     <div style="margin-bottom:32px;">
-      <div class="section-label">Asistente IA</div>
-      <h2 class="section-title">Menudito, tu asesor<br>financiero personal</h2>
+      <div class="section-label" style="color:var(--yellow);">Asistente IA</div>
+      <h2 class="section-title" style="color:#fff;">Menudito, tu asesor<br>financiero personal</h2>
     </div>
 
     <!-- Chat widget -->
@@ -758,19 +747,10 @@
 
     <!-- Preguntas populares — debajo del chat -->
     <div style="margin-top:28px;">
-      <div style="font-size:.78rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Preguntas populares</div>
+      <div style="font-size:.78rem;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Preguntas populares</div>
       <div id="section-chips" style="display:flex;flex-direction:column;gap:8px;"></div>
     </div>
 
-  </div>
-</section>
-<section id="cta-band">
-  <div class="orb" style="width:400px;height:400px;background:var(--secondary);top:-200px;left:50%;transform:translateX(-50%);"></div>
-  <div style="position:relative;z-index:1;">
-    <h2>Empieza hoy.<br><span class="gold">Tu yo del futuro</span> te lo agradecerá.</h2>
-    <p>Únete a miles de personas que ya tienen claridad total sobre su dinero.</p>
-    <a href="#signup" class="btn-yellow">Crear cuenta →</a>
-    <p class="sub">Sin tarjeta. Sin trampas.</p>
   </div>
 </section>
 
@@ -819,6 +799,21 @@
           <p class="form-footer">Sin tarjeta de crédito requerida.</p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ TESTIMONIOS ═══════════════════════════════ -->
+<section style="padding:80px 24px;background:#fff;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-center" style="margin-bottom:40px;">
+      <div class="section-label">Testimonios</div>
+      <h2 class="section-title">Lo que dicen nuestros usuarios</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p>"Por fin entiendo en qué se va mi dinero. Cada Menudo cambió completamente cómo manejo mis finanzas personales."</p><div class="testi-author"><div class="testi-avatar">V</div><div><div class="testi-name">Valeria Morales</div><div class="testi-role">Freelance diseñadora</div></div></div></div>
+      <div class="testi-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p>"El dashboard es clarísimo. En 5 minutos ya tenía todo configurado y vi cosas que no sabía de mis gastos."</p><div class="testi-author"><div class="testi-avatar">R</div><div><div class="testi-name">Rodrigo Salinas</div><div class="testi-role">Emprendedor</div></div></div></div>
+      <div class="testi-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p>"Al fin una app de finanzas que no necesita conectarse al banco. Perfecta para registrar todo manualmente."</p><div class="testi-author"><div class="testi-avatar">C</div><div><div class="testi-name">Camila Torres</div><div class="testi-role">Estudiante universitaria</div></div></div></div>
     </div>
   </div>
 </section>
@@ -1185,10 +1180,10 @@ TOPICS.forEach(function(t) {
 var chipsEl = document.getElementById('section-chips');
 CHIPS.forEach(function(label) {
   var btn = document.createElement('button');
-  btn.style.cssText = 'display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:11px 16px;cursor:pointer;width:100%;font-family:\'Nunito\',sans-serif;font-size:.85rem;font-weight:600;color:var(--text);transition:border-color .2s,background .2s;text-align:left;';
-  btn.innerHTML = '<span style="color:var(--primary);">→</span> '+label;
-  btn.addEventListener('mouseenter', function(){ btn.style.borderColor='var(--primary)'; btn.style.background='#f0f3ff'; });
-  btn.addEventListener('mouseleave', function(){ btn.style.borderColor='var(--border)'; btn.style.background='#fff'; });
+  btn.style.cssText = 'display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:12px;padding:11px 16px;cursor:pointer;width:100%;font-family:\'Nunito\',sans-serif;font-size:.85rem;font-weight:600;color:#fff;transition:border-color .2s,background .2s;text-align:left;';
+  btn.innerHTML = '<span style="color:var(--yellow);">→</span> '+label;
+  btn.addEventListener('mouseenter', function(){ btn.style.borderColor='var(--yellow)'; btn.style.background='rgba(255,255,255,.15)'; });
+  btn.addEventListener('mouseleave', function(){ btn.style.borderColor='rgba(255,255,255,.2)'; btn.style.background='rgba(255,255,255,.08)'; });
   btn.onclick = function(){ document.getElementById('ai-chat').scrollIntoView({behavior:'smooth'}); setTimeout(function(){ deskSend(label); }, 400); };
   chipsEl.appendChild(btn);
 });
