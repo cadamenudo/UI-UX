@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cada Menudo AI - Dictar</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0"/>
+<style>
+:root{
+  --blue:#3956E8;
+  --purple:#7459D9;
+  --yellow:#E8C239;
+  --text:#1f2937;
+  --muted:#64748B;
+  --border:#d1d5db;
+  --soft:#F4F6FF;
+  --green:#2f963c;
+  --red:#e72d45;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Nunito',sans-serif;
+  background:#fff;
+  color:var(--text);
+}
+.app{
+  max-width:430px;
+  min-height:100vh;
+  margin:0 auto;
+  padding:82px 24px 32px;
+}
+.header{text-align:center}
+.header h1{
+  font-size:24px;
+  font-weight:400;
+  margin:0 0 12px;
+}
+.step-text{
+  color:var(--muted);
+  font-size:18px;
+  margin-bottom:14px;
+}
+.progress-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:24px;
+}
+.progress{
+  height:5px;
+  flex:1;
+  background:#DED8FF;
+  border-radius:20px;
+  overflow:hidden;
+}
+.progress span{
+  display:block;
+  height:100%;
+  background:var(--purple);
+}
+.step-count{
+  font-size:20px;
+  color:#4b4b4b;
+}
+.card{
+  position:relative;
+  background:#fff;
+  border-radius:22px;
+  padding:54px 24px 24px;
+  box-shadow:0 14px 30px rgba(0,0,0,.13);
+}
+.close-btn{
+  position:absolute;
+  right:24px;
+  top:24px;
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:6px;
+  background:var(--red);
+  color:#fff;
+  font-size:32px;
+  line-height:1;
+}
+.title{
+  text-align:center;
+  font-size:25px;
+  font-weight:800;
+  margin:70px 0 34px;
+  line-height:1.35;
+}
+.btn{
+  border:none;
+  width:100%;
+  min-height:54px;
+  border-radius:12px;
+  background:var(--blue);
+  color:#fff;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+.btn.secondary{
+  background:#fff;
+  color:var(--blue);
+  border:1.5px solid var(--blue);
+}
+.btn.secondary .material-symbols-rounded{color:var(--blue)}
+.btn-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.btn-icon{
+  color:#fff;
+  font-size:30px!important;
+}
+.dictate-btn{
+  min-height:82px;
+  justify-content:flex-start;
+  align-items:center;
+  padding:0 22px;
+  text-align:left;
+}
+.dictate-btn .btn-icon{
+  font-size:42px!important;
+  margin-right:14px;
+}
+.btn-title{
+  font-size:24px;
+  font-weight:800;
+  color:#fff;
+  line-height:1;
+}
+.btn-subtitle{
+  font-size:14px;
+  color:rgba(255,255,255,.9);
+  margin-top:6px;
+  font-weight:400;
+}
+.note{
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.45;
+  margin:20px 0 0;
+}
+.center{text-align:center}
+.mt{margin-top:14px}
+.mic-circle{
+  width:126px;
+  height:126px;
+  border-radius:50%;
+  background:rgba(57,86,232,.12);
+  margin:34px auto 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.mic-inner{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.mic-inner .material-symbols-rounded{
+  font-size:44px!important;
+  color:#fff;
+}
+.examples{
+  background:var(--soft);
+  border-radius:14px;
+  padding:18px;
+  color:var(--muted);
+  text-align:left;
+  margin:24px 0;
+  font-size:16px;
+}
+.examples strong{color:var(--blue)}
+.examples ul{padding-left:20px;margin:10px 0 0}
+.timer{font-size:28px;margin-bottom:8px}
+.wave{
+  color:var(--blue);
+  font-size:28px;
+  letter-spacing:3px;
+  margin-bottom:28px;
+}
+.transcript-box{
+  border:1.5px solid var(--blue);
+  border-radius:12px;
+  padding:22px;
+  min-height:170px;
+  font-size:19px;
+  line-height:1.55;
+  margin:24px 0;
+  text-align:left;
+}
+.quote{
+  color:var(--blue);
+  font-size:34px;
+  font-weight:800;
+}
+.edit-link{
+  text-align:right;
+  color:var(--blue);
+  font-weight:700;
+  margin-top:16px;
+}
+.info-box{
+  background:var(--soft);
+  color:var(--muted);
+  padding:18px;
+  border-radius:14px;
+  margin-bottom:22px;
+  line-height:1.45;
+  text-align:left;
+}
+.success{text-align:center;margin-bottom:24px}
+.success-icon{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:var(--green);
+  color:#fff;
+  margin:0 auto 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.success-icon .material-symbols-rounded{
+  color:#fff;
+  font-size:42px!important;
+}
+.success h2{margin:0;font-size:24px;font-weight:800}
+.success p{color:var(--muted);font-size:17px;margin:10px 0 0}
+.form-title{font-size:24px;margin:12px 0 20px}
+.amount-row{
+  display:flex;
+  justify-content:center;
+  gap:58px;
+  align-items:center;
+  margin-bottom:20px;
+}
+.currency,.amount{
+  font-size:42px;
+  color:#777;
+  font-weight:400;
+}
+.amount.filled{color:var(--green)}
+.field{
+  position:relative;
+  border:1.3px solid var(--border);
+  border-radius:8px;
+  min-height:52px;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  padding:12px 46px 12px 14px;
+  font-size:18px;
+}
+.field.large{
+  min-height:92px;
+  align-items:flex-start;
+  line-height:1.45;
+}
+.field label{
+  position:absolute;
+  top:-13px;
+  left:12px;
+  background:#fff;
+  padding:0 6px;
+  font-size:14px;
+  font-weight:700;
+  color:#475569;
+}
+.field .right{
+  position:absolute;
+  right:14px;
+  color:#666;
+  font-size:24px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <h1>Cada Menudo AI - Nueva transacción</h1>
+    <div class="step-text">Paso 1 de 2 · Dictar transacción</div>
+    <div class="progress-row">
+      <div class="progress"><span style="width:50%"></span></div>
+      <div class="step-count">1 / 2</div>
+    </div>
+  </div>
+
+  <div class="card center">
+    <button class="close-btn">×</button>
+
+    <h2>Dicta tu transacción</h2>
+    <p class="note">Habla de forma natural y completaremos los datos por ti.</p>
+
+    <div class="examples">
+      <strong>Ejemplos:</strong>
+      <ul>
+        <li>Gasté 35 dólares en gasolina</li>
+        <li>Recibí 2,000 dólares de mi salario</li>
+        <li>Pagué 12 dólares en café</li>
+      </ul>
+    </div>
+
+    <div class="mic-circle">
+      <div class="mic-inner">
+        <span class="material-symbols-rounded">mic</span>
+      </div>
+    </div>
+
+    <div class="timer">00:00</div>
+    <div class="wave">···▂▆▂····▂▆▂···</div>
+
+    <a class="btn" href="03-transcripcion.html">
+      <span class="material-symbols-rounded btn-icon">stop_circle</span>
+      Detener dictado
+    </a>
+
+    <a class="btn secondary mt" href="01-elegir-metodo.html">
+      <span class="material-symbols-rounded">arrow_back</span>
+      Volver atrás
+    </a>
+  </div>
+</div>
+
+</body>
+</html>
