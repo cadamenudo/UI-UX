@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Metas de Ahorro – Cada Menudo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── PAGE SHELL ── */
+    html, body {
+      min-height: 100%;
+      background: #1a1a2e;
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px 16px 48px;
+    }
+
+    /* ── iPhone X FRAME ── */
+    .iphone-frame {
+      position: relative;
+      width: 375px;
+      height: 812px;
+      background: #1a1325;
+      border-radius: 54px;
+      border: 10px solid #2a2a3a;
+      box-shadow:
+        0 0 0 2px #444,
+        0 40px 80px rgba(0,0,0,0.7),
+        inset 0 0 0 2px #111;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    /* side buttons */
+    .iphone-frame::before {
+      content: '';
+      position: absolute;
+      left: -14px;
+      top: 120px;
+      width: 4px;
+      height: 36px;
+      background: #333;
+      border-radius: 2px 0 0 2px;
+      box-shadow: 0 50px 0 #333, 0 96px 0 #333;
+    }
+    .iphone-frame::after {
+      content: '';
+      position: absolute;
+      right: -14px;
+      top: 160px;
+      width: 4px;
+      height: 66px;
+      background: #333;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ── NOTCH ── */
+    .notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 30px;
+      background: #1a1325;
+      border-radius: 0 0 22px 22px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .notch-camera {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #0d0d1a;
+      border: 2px solid #333;
+    }
+    .notch-speaker {
+      width: 52px; height: 6px;
+      border-radius: 3px;
+      background: #0d0d1a;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      position: absolute;
+      top: 0;
+      left: 0; right: 0;
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 24px 6px;
+      z-index: 50;
+      background: #594AE2;
+    }
+    .status-time {
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+      padding-left: 8px;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding-right: 8px;
+    }
+    .status-icons .material-icons { font-size: 14px; color: white; }
+    .status-battery {
+      width: 20px; height: 10px;
+      border: 1.5px solid white;
+      border-radius: 2px;
+      position: relative;
+    }
+    .status-battery::after {
+      content: '';
+      position: absolute;
+      right: -5px; top: 50%;
+      transform: translateY(-50%);
+      width: 3px; height: 6px;
+      background: white;
+      border-radius: 0 1px 1px 0;
+    }
+    .status-battery-fill {
+      position: absolute;
+      left: 1px; top: 1px; bottom: 1px;
+      width: 80%;
+      background: white;
+      border-radius: 1px;
+    }
+
+    /* ── SCREEN ── */
+    .screen {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #F5F4FB;
+      border-radius: 44px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── SCROLLABLE CONTENT AREA ── */
+    .screen-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-top: 44px;
+      padding-bottom: 60px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .screen-scroll::-webkit-scrollbar { display: none; }
+
+    /* ── HEADER ── */
+    .header-bar {
+      background: #594AE2;
+      padding: 0 16px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 56px;
+      flex-shrink: 0;
+    }
+    .logo-text { font-weight: 800; font-size: 14px; line-height: 1.15; color: white; }
+    .user-info { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #3EC9A7; display:flex; align-items:center; justify-content:center; font-weight:800; color:white; font-size:13px; }
+
+    /* ── SUMMARY BAR ── */
+    .resumen-box {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 12px 10px;
+      margin: 10px 12px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .resumen-item { text-align: center; flex: 1; }
+    .resumen-label { font-size: 10px; color: #94A3B8; margin-bottom: 2px; }
+    .resumen-monto { font-size: 13px; font-weight: 800; color: #1a1a2e; }
+    .resumen-monto.neg { color: #E24B4A; }
+    .resumen-monto.pos { color: #1D9E75; }
+    .resumen-divider { width: 1px; height: 28px; background: #EEE; }
+
+    /* ── ALERTA ── */
+    .alerta-superavit {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 8px 12px 0;
+      padding: 8px 12px;
+      background: #D1FAE5;
+      color: #065F46;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .alerta-superavit .material-icons { font-size: 15px; color: #1D9E75; }
+
+    /* ── PAGE CONTENT ── */
+    .page-content { padding: 10px 12px 12px; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; background: #ECEAF8; border-radius: 10px; padding: 3px; margin-bottom: 10px; }
+    .tab {
+      flex: 1; text-align: center; font-size: 11px; font-weight: 700;
+      padding: 5px 0; border-radius: 8px; color: #9991d6;
+      cursor: pointer; border: none; background: transparent;
+      font-family: 'Nunito', sans-serif; transition: background 0.15s, color 0.15s;
+    }
+    .tab.active { background: white; color: #594AE2; box-shadow: 0 1px 4px rgba(89,74,226,0.12); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── SECTION HEADER ── */
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .section-title { font-size: 13px; font-weight: 800; color: #1a1a2e; }
+    .section-sub { font-size: 10px; color: #94A3B8; margin-top: 1px; }
+    .btn-nueva-meta {
+      background: #594AE2; color: white; border: none; border-radius: 9px;
+      padding: 5px 11px; font-size: 11px; font-weight: 700;
+      font-family: 'Nunito', sans-serif; cursor: pointer;
+      display: flex; align-items: center; gap: 3px;
+    }
+    .btn-nueva-meta .material-icons { font-size: 14px; }
+
+    /* ── REORDER HINT ── */
+    .reorder-hint { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #B0A8E0; font-weight: 700; margin-bottom: 8px; }
+    .reorder-hint .material-icons { font-size: 12px; }
+
+    /* ── GOAL CARDS ── */
+    .goal-card {
+      background: white; border-radius: 12px; padding: 11px 12px;
+      margin-bottom: 8px; border: 0.5px solid #e8e4f8;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .goal-card.sortable-ghost { opacity: 0.4; background: #EEEBfc; }
+    .goal-card.sortable-drag { box-shadow: 0 6px 20px rgba(89,74,226,0.18); transform: scale(1.02); }
+    .goal-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+    .goal-left { display: flex; align-items: center; gap: 8px; }
+    .drag-handle { color: #D1CCF4; cursor: grab; display: flex; align-items: center; touch-action: none; }
+    .drag-handle .material-icons { font-size: 16px; }
+    .goal-icon-wrap {
+      width: 32px; height: 32px; border-radius: 9px; background: #EEEBfc;
+      display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+    }
+    .goal-name { font-size: 12px; font-weight: 700; color: #1a1a2e; }
+    .goal-meta-label { font-size: 10px; color: #94A3B8; margin-top: 1px; }
+    .goal-actions { display: flex; align-items: center; gap: 5px; }
+    .goal-amount { font-size: 12px; font-weight: 800; color: #594AE2; text-align: right; }
+    .goal-badge { display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; margin-top: 2px; }
+    .badge-progress { background: #EEEBfc; color: #534AB7; }
+    .badge-done { background: #D1FAE5; color: #065F46; }
+    .badge-pending { background: #FEF3DC; color: #854F0B; }
+    .btn-icon {
+      width: 32px; height: 32px; border: none; cursor: pointer;
+      border-radius: 9px; display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.12s; flex-shrink: 0;
+    }
+    .btn-icon:active { opacity: 0.65; transform: scale(0.95); }
+    .btn-icon .material-icons { font-size: 16px; color: white; }
+    .btn-icon.edit { background: #594AE2; }
+    .btn-icon.del  { background: #E24B4A; }
+    .progress-bar-bg { background: #ECEAF8; border-radius: 99px; height: 6px; overflow: hidden; margin: 5px 0 3px; }
+    .progress-bar-fill { height: 6px; border-radius: 99px; background: #594AE2; transition: width 0.4s ease; }
+    .progress-footer { display: flex; justify-content: space-between; font-size: 10px; color: #94A3B8; }
+
+    /* ── ADD DASHED ── */
+    .add-meta-dashed {
+      border: 1.5px dashed #D1CCF4; background: #FAFAFE; border-radius: 12px;
+      padding: 10px; display: flex; align-items: center; justify-content: center;
+      gap: 6px; cursor: pointer; margin-bottom: 8px;
+    }
+    .add-meta-dashed .material-icons { color: #B0A8E0; font-size: 16px; }
+    .add-meta-dashed span { font-size: 11px; color: #B0A8E0; font-weight: 700; }
+
+    /* ── RESULTS CARD ── */
+    .results-card { background: white; border-radius: 12px; padding: 11px 12px; border: 0.5px solid #e8e4f8; margin-bottom: 8px; }
+    .results-card-title { font-size: 10px; font-weight: 800; color: #94A3B8; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 7px; }
+    .results-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid #F0EEf9; }
+    .results-row:last-child { border-bottom: none; }
+    .results-label { font-size: 11px; color: #64748B; display: flex; align-items: center; gap: 5px; }
+    .results-label .material-icons { font-size: 14px; }
+    .results-value { font-size: 12px; font-weight: 800; color: #1a1a2e; }
+    .results-value.pos { color: #1D9E75; }
+    .results-value.neg { color: #E24B4A; }
+    .results-value.accent { color: #594AE2; }
+
+    /* ── CHARTS ── */
+    .month-chart-wrap { display: flex; align-items: flex-end; gap: 4px; height: 54px; margin: 6px 0 3px; }
+    .m-bar { flex: 1; border-radius: 4px 4px 0 0; background: #CECBF6; }
+    .m-bar.current { background: #594AE2; }
+    .month-labels { display: flex; gap: 4px; margin-top: 3px; }
+    .m-lbl { flex: 1; text-align: center; font-size: 9px; color: #94A3B8; }
+    .m-lbl.current { color: #594AE2; font-weight: 700; }
+
+    /* ── MODAL OVERLAY ── (scoped inside .screen) */
+    .modal-overlay {
+      display: none; position: absolute; inset: 0;
+      background: rgba(30,20,80,0.42); z-index: 200;
+      align-items: flex-end; justify-content: center;
+      border-radius: 44px; overflow: hidden;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet {
+      background: white; border-radius: 20px 20px 0 0;
+      padding: 14px 14px 28px; width: 100%;
+      animation: slideUp 0.22s ease;
+      max-height: 85%; overflow-y: auto;
+    }
+    @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-handle { width: 32px; height: 4px; background: #E2E0F0; border-radius: 99px; margin: 0 auto 12px; }
+    .modal-title { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 800; color: #1a1a2e; margin-bottom: 12px; }
+    .modal-title .material-icons { color: #594AE2; font-size: 18px; }
+    .modal-label { font-size: 10px; font-weight: 700; color: #64748B; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 5px; }
+    .emoji-row { display: flex; gap: 7px; margin-bottom: 12px; flex-wrap: wrap; }
+    .emoji-opt {
+      width: 34px; height: 34px; border-radius: 9px; background: #F3F1FD;
+      border: 1.5px solid transparent; display: flex; align-items: center;
+      justify-content: center; font-size: 16px; cursor: pointer;
+    }
+    .emoji-opt.selected { border-color: #594AE2; background: #EEEBfc; }
+    .modal-input {
+      width: 100%; border: 1.5px solid #E0DDF6; border-radius: 9px;
+      padding: 9px 12px; font-size: 13px; font-family: 'Nunito', sans-serif;
+      color: #1a1a2e; margin-bottom: 10px; background: #FAFAFE; outline: none;
+    }
+    .modal-input:focus { border-color: #594AE2; }
+    .amount-wrap { position: relative; margin-bottom: 10px; }
+    .amount-prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-weight: 800; font-size: 13px; color: #594AE2; }
+    .amount-wrap .modal-input { padding-left: 22px; font-weight: 800; margin-bottom: 0; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 6px; }
+    .btn-cancelar { flex: 1; background: #F3F1FD; color: #594AE2; border: none; border-radius: 9px; padding: 10px; font-size: 12px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; }
+    .btn-guardar  { flex: 2; background: #594AE2; color: white; border: none; border-radius: 9px; padding: 10px; font-size: 12px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; }
+
+    /* ── CONFIRM MODAL ── */
+    .confirm-overlay {
+      display: none; position: absolute; inset: 0;
+      background: rgba(30,20,80,0.42); z-index: 300;
+      align-items: center; justify-content: center;
+      padding: 20px; border-radius: 44px;
+    }
+    .confirm-overlay.open { display: flex; }
+    .confirm-box { background: white; border-radius: 16px; padding: 20px 16px 16px; width: 100%; max-width: 280px; text-align: center; animation: popIn 0.18s ease; }
+    @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .confirm-icon { font-size: 28px; margin-bottom: 6px; }
+    .confirm-title { font-size: 13px; font-weight: 800; color: #1a1a2e; margin-bottom: 5px; }
+    .confirm-sub { font-size: 11px; color: #64748B; margin-bottom: 14px; line-height: 1.4; }
+    .confirm-actions { display: flex; gap: 8px; }
+    .btn-conf-cancel { flex: 1; background: #F3F1FD; color: #594AE2; border: none; border-radius: 9px; padding: 9px; font-size: 11px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; }
+    .btn-conf-delete { flex: 1; background: #E24B4A; color: white; border: none; border-radius: 9px; padding: 9px; font-size: 11px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; }
+
+    /* ── FOOTER ── */
+    .footer-menu {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      text-align: center; align-items: center;
+      padding: 6px 0 14px;
+      background: #594AE2;
+      border-radius: 0 0 44px 44px;
+      z-index: 50;
+    }
+    .footer-item { display: flex; flex-direction: column; align-items: center; gap: 2px; color: rgba(255,255,255,0.5); font-size: 9px; font-weight: 700; cursor: pointer; text-decoration: none; }
+    .footer-item.active { color: white; }
+    .footer-item img { height: 22px; width: auto; display: block; opacity: 0.55; filter: brightness(10); }
+    .footer-item.active img { opacity: 1; }
+    .footer-registrar-btn { width: 38px; height: 38px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; margin: -6px auto 2px; }
+    .footer-registrar-btn .material-icons { color: #594AE2; font-size: 20px; }
+
+    /* ── TOAST ── */
+    .toast {
+      display: none; position: absolute; bottom: 76px; left: 50%; transform: translateX(-50%);
+      background: #1a1a2e; color: white; padding: 7px 16px; border-radius: 16px;
+      font-size: 11px; font-weight: 700; z-index: 400; white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="iphone-frame">
+  <!-- Notch -->
+  <div class="notch">
+    <div class="notch-camera"></div>
+    <div class="notch-speaker"></div>
+  </div>
+
+  <div class="screen">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <span class="material-icons">signal_cellular_4_bar</span>
+        <span class="material-icons">wifi</span>
+        <div class="status-battery"><div class="status-battery-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- Scrollable area -->
+    <div class="screen-scroll">
+
+      <!-- Header -->
+      <div class="header-bar">
+        <div class="logo-text">Cada<br>menudo</div>
+        <div class="user-info">
+          <span>Hola Xavier</span>
+          <div class="user-avatar">X</div>
+        </div>
+      </div>
+
+      <!-- Resumen -->
+      <div class="resumen-box">
+        <div class="resumen-item">
+          <div class="resumen-label">Ingresos</div>
+          <div class="resumen-monto pos">$6,000.00</div>
+        </div>
+        <div class="resumen-divider"></div>
+        <div class="resumen-item">
+          <div class="resumen-label">Gastos</div>
+          <div class="resumen-monto neg">$3,531.23</div>
+        </div>
+        <div class="resumen-divider"></div>
+        <div class="resumen-item">
+          <div class="resumen-label">Ahorros</div>
+          <div class="resumen-monto pos">$600.00</div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="page-content">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('metas',this)">Metas</button>
+          <button class="tab" onclick="switchTab('resultado',this)">Resultado</button>
+        </div>
+
+        <!-- TAB METAS -->
+        <div id="panel-metas" class="tab-panel active">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Metas de ahorro</div>
+              <div class="section-sub" id="metas-count">1 meta activa</div>
+            </div>
+            <button class="btn-nueva-meta" onclick="abrirModalNueva()">
+              <span class="material-icons">add</span> Nueva meta
+            </button>
+          </div>
+
+          <div class="reorder-hint">
+            <span class="material-icons">drag_indicator</span>
+            <span>Mantén presionado para reordenar</span>
+          </div>
+
+          <div id="lista-metas">
+            <div class="goal-card" data-id="6" data-emoji="🎂" data-nombre="Fiesta cumple" data-monto="500" data-desc="">
+              <div class="goal-card-header">
+                <div class="goal-left">
+                  <span class="drag-handle"><span class="material-icons">drag_indicator</span></span>
+                  <div class="goal-icon-wrap">🎂</div>
+                  <div>
+                    <div class="goal-name">Fiesta cumple</div>
+                    <div class="goal-meta-label">Prioridad #1</div>
+                  </div>
+                </div>
+                <div class="goal-actions">
+                  <div style="text-align:right;margin-right:5px;">
+                    <div class="goal-amount">$500.00</div>
+                    <span class="goal-badge badge-progress">En progreso</span>
+                  </div>
+                  <button class="btn-icon edit" onclick="abrirModalEditar(this)"><span class="material-icons">edit</span></button>
+                  <button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>
+                </div>
+              </div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%"></div></div>
+              <div class="progress-footer"><span>$0.00 ahorrado</span><span>0% completado</span></div>
+            </div>
+          </div>
+
+          <div class="results-card">
+            <div class="results-row">
+              <span class="results-label"><span class="material-icons" style="color:#594AE2;">flag</span>Total de metas para el año</span>
+              <span class="results-value accent" id="res-meta-total">$500.00</span>
+            </div>
+            <div class="results-row">
+              <span class="results-label"><span class="material-icons" style="color:#64748B;">calendar_month</span>Ahorro mensual necesario</span>
+              <span class="results-value accent" id="res-mensual">$42/mes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB RESULTADO -->
+        <div id="panel-resultado" class="tab-panel">
+          <div class="results-card">
+            <div class="results-card-title">Desglose</div>
+            <div class="results-row">
+              <span class="results-label"><span class="material-icons" style="color:#594AE2;">flag</span>Meta total para el año</span>
+              <span class="results-value">$500.00</span>
+            </div>
+            <div class="results-row">
+              <span class="results-label"><span class="material-icons" style="color:#1D9E75;">savings</span>Ahorro acumulado</span>
+              <span class="results-value pos">$0.00</span>
+            </div>
+            <div class="results-row">
+              <span class="results-label"><span class="material-icons" style="color:#E24B4A;">balance</span>Balance vs metas</span>
+              <span class="results-value neg">-$500.00</span>
+            </div>
+          </div>
+
+          <!-- Gráfico Meta vs Progreso -->
+          <div class="results-card">
+            <div class="results-card-title">Meta para el año</div>
+            <div style="display:flex;align-items:flex-end;gap:14px;height:120px;padding:6px 10px 0;">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;">
+                <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
+                  <div id="bar-meta" style="width:100%;background:#D4B14A;border-radius:9px 9px 3px 3px;height:100%;"></div>
+                </div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;">
+                <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
+                  <div id="bar-progreso" style="width:100%;background:#AFA9EC;border-radius:9px 9px 3px 3px;height:0%;"></div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:14px;margin-top:6px;padding:0 10px;">
+              <div style="flex:1;text-align:center;font-size:10px;color:#64748B;font-weight:700;">Meta</div>
+              <div style="flex:1;text-align:center;font-size:10px;color:#64748B;font-weight:700;">Progreso</div>
+            </div>
+            <div style="display:flex;gap:14px;margin-top:3px;padding:0 10px 3px;">
+              <div style="flex:1;text-align:center;font-size:10px;color:#D4B14A;font-weight:800;" id="lbl-meta">$500</div>
+              <div style="flex:1;text-align:center;font-size:10px;color:#AFA9EC;font-weight:800;" id="lbl-progreso">$0</div>
+            </div>
+          </div>
+
+          <!-- Gráfico Ahorro por mes -->
+          <div class="results-card">
+            <div class="results-card-title">Ahorro por mes</div>
+            <div class="month-chart-wrap">
+              <div class="m-bar" style="height:28px;"></div>
+              <div class="m-bar" style="height:38px;"></div>
+              <div class="m-bar" style="height:22px;"></div>
+              <div class="m-bar" style="height:44px;"></div>
+              <div class="m-bar" style="height:16px;"></div>
+              <div class="m-bar current" style="height:54px;"></div>
+            </div>
+            <div class="month-labels">
+              <div class="m-lbl">Ene</div><div class="m-lbl">Feb</div>
+              <div class="m-lbl">Mar</div><div class="m-lbl">Abr</div>
+              <div class="m-lbl">May</div><div class="m-lbl current">Jun</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /screen-scroll -->
+
+    <!-- Footer -->
+    <footer class="footer-menu">
+      <a href="#" class="footer-item">
+        <img src="https://cadamenudo.github.io/UI-UX/assets/icons/home.png" alt="Tablero">
+        <span>Tablero</span>
+      </a>
+      <a href="#" class="footer-item">
+        <img src="https://cadamenudo.github.io/UI-UX/assets/icons/transacciones.png" alt="Transacciones">
+        <span>Transacciones</span>
+      </a>
+      <a href="#" class="footer-item">
+        <div class="footer-registrar-btn"><span class="material-icons">add</span></div>
+        <span style="color:rgba(255,255,255,0.85);font-size:9px;font-weight:700;">Registrar</span>
+      </a>
+      <a href="#" class="footer-item active">
+        <img src="https://cadamenudo.github.io/UI-UX/assets/icons/metas.png" alt="Metas">
+        <span>Metas</span>
+      </a>
+      <a href="#" class="footer-item">
+        <img src="https://cadamenudo.github.io/UI-UX/assets/icons/buscar.png" alt="Buscar">
+        <span>Buscar</span>
+      </a>
+    </footer>
+
+    <!-- Modal nueva/editar -->
+    <div class="modal-overlay" id="modal-meta" onclick="cerrarModalSiFondo(event)">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-title">
+          <span class="material-icons" id="modal-icon-title">track_changes</span>
+          <span id="modal-title-text">Nueva meta de ahorro</span>
+        </div>
+        <input type="hidden" id="edit-card-id" value="">
+        <div class="modal-label">Ícono</div>
+        <div class="emoji-row">
+          <div class="emoji-opt selected" data-emoji="🎂" onclick="selEmojiOpt(this)">🎂</div>
+          <div class="emoji-opt" data-emoji="🏖️" onclick="selEmojiOpt(this)">🏖️</div>
+          <div class="emoji-opt" data-emoji="🚗" onclick="selEmojiOpt(this)">🚗</div>
+          <div class="emoji-opt" data-emoji="🏠" onclick="selEmojiOpt(this)">🏠</div>
+          <div class="emoji-opt" data-emoji="📱" onclick="selEmojiOpt(this)">📱</div>
+          <div class="emoji-opt" data-emoji="✈️" onclick="selEmojiOpt(this)">✈️</div>
+          <div class="emoji-opt" data-emoji="🎓" onclick="selEmojiOpt(this)">🎓</div>
+          <div class="emoji-opt" data-emoji="💊" onclick="selEmojiOpt(this)">💊</div>
+        </div>
+        <div class="modal-label">Nombre</div>
+        <input type="text" class="modal-input" id="input-nombre" placeholder="Ej: Vacaciones, auto nuevo...">
+        <div class="modal-label">Monto objetivo</div>
+        <div class="amount-wrap">
+          <span class="amount-prefix">$</span>
+          <input type="number" class="modal-input" id="input-monto" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="modal-label">Descripción <span style="color:#CBD5E1;font-weight:400;text-transform:none;">(opcional)</span></div>
+        <textarea class="modal-input" id="input-desc" rows="2" placeholder="Ej: Para la fiesta de julio..." style="resize:none;height:52px;"></textarea>
+        <div class="modal-actions">
+          <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+          <button class="btn-guardar" id="btn-guardar-meta" onclick="guardarMeta()">Guardar meta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal confirmar eliminar -->
+    <div class="confirm-overlay" id="modal-confirmar">
+      <div class="confirm-box">
+        <div class="confirm-icon">🗑️</div>
+        <div class="confirm-title">¿Eliminar esta meta?</div>
+        <div class="confirm-sub" id="confirm-meta-nombre">Esta acción no se puede deshacer.</div>
+        <div class="confirm-actions">
+          <button class="btn-conf-cancel" onclick="cerrarConfirmar()">Cancelar</button>
+          <button class="btn-conf-delete" onclick="ejecutarEliminar()">Sí, eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+  </div><!-- /screen -->
+</div><!-- /iphone-frame -->
+
+<script>
+  var metaCounter = 7;
+  var selectedEmoji = '🎂';
+  var cardToDelete = null;
+  var editMode = false;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    Sortable.create(document.getElementById('lista-metas'), {
+      handle: '.drag-handle', animation: 180,
+      ghostClass: 'sortable-ghost', dragClass: 'sortable-drag',
+      onEnd: function() { actualizarPrioridades(); mostrarToast('Prioridades actualizadas'); }
+    });
+    // init chart
+    var meta = 500, progreso = 0, maxVal = Math.max(meta, progreso, 1);
+    document.getElementById('bar-meta').style.height = Math.round((meta/maxVal)*100)+'%';
+    document.getElementById('bar-progreso').style.height = Math.round((progreso/maxVal)*100)+'%';
+    document.getElementById('lbl-meta').textContent = '$'+meta.toLocaleString();
+    document.getElementById('lbl-progreso').textContent = '$'+progreso.toLocaleString();
+  });
+
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('panel-'+tab).classList.add('active');
+  }
+
+  function actualizarPrioridades() {
+    document.querySelectorAll('#lista-metas .goal-card').forEach(function(c,i){
+      c.querySelector('.goal-meta-label').textContent = 'Prioridad #'+(i+1);
+    });
+  }
+
+  function selEmojiOpt(el) {
+    document.querySelectorAll('.emoji-opt').forEach(function(e){ e.classList.remove('selected'); });
+    el.classList.add('selected'); selectedEmoji = el.dataset.emoji;
+  }
+
+  function abrirModalNueva() {
+    editMode = false;
+    document.getElementById('modal-title-text').textContent = 'Nueva meta de ahorro';
+    document.getElementById('modal-icon-title').textContent = 'track_changes';
+    document.getElementById('btn-guardar-meta').textContent = 'Guardar meta';
+    document.getElementById('edit-card-id').value = '';
+    document.getElementById('input-nombre').value = '';
+    document.getElementById('input-monto').value = '';
+    document.getElementById('input-desc').value = '';
+    document.querySelectorAll('.emoji-opt').forEach(function(e){ e.classList.remove('selected'); });
+    document.querySelector('.emoji-opt[data-emoji="🎂"]').classList.add('selected');
+    selectedEmoji = '🎂';
+    document.getElementById('modal-meta').classList.add('open');
+  }
+
+  function abrirModalEditar(btn) {
+    editMode = true;
+    var card = btn.closest('.goal-card');
+    document.getElementById('modal-title-text').textContent = 'Editar meta';
+    document.getElementById('modal-icon-title').textContent = 'edit';
+    document.getElementById('btn-guardar-meta').textContent = 'Guardar cambios';
+    document.getElementById('edit-card-id').value = card.dataset.id;
+    document.getElementById('input-nombre').value = card.dataset.nombre;
+    document.getElementById('input-monto').value = card.dataset.monto;
+    document.getElementById('input-desc').value = card.dataset.desc || '';
+    var emoji = card.dataset.emoji; selectedEmoji = emoji;
+    document.querySelectorAll('.emoji-opt').forEach(function(e){ e.classList.remove('selected'); });
+    var opt = document.querySelector('.emoji-opt[data-emoji="'+emoji+'"]');
+    if (opt) opt.classList.add('selected');
+    document.getElementById('modal-meta').classList.add('open');
+  }
+
+  function cerrarModal() { document.getElementById('modal-meta').classList.remove('open'); }
+  function cerrarModalSiFondo(e) { if (e.target===document.getElementById('modal-meta')) cerrarModal(); }
+
+  function guardarMeta() {
+    var nombre = document.getElementById('input-nombre').value.trim();
+    var monto = parseFloat(document.getElementById('input-monto').value);
+    var desc = document.getElementById('input-desc').value.trim();
+    if (!nombre) { mostrarToast('Escribe un nombre para la meta'); return; }
+    if (!monto || monto <= 0) { mostrarToast('Ingresa un monto válido'); return; }
+    var montoFmt = '$'+monto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+    if (editMode) {
+      var card = document.querySelector('.goal-card[data-id="'+document.getElementById('edit-card-id').value+'"]');
+      if (card) {
+        card.dataset.nombre=nombre; card.dataset.monto=monto; card.dataset.emoji=selectedEmoji; card.dataset.desc=desc;
+        card.querySelector('.goal-icon-wrap').textContent=selectedEmoji;
+        card.querySelector('.goal-name').textContent=nombre;
+        card.querySelector('.goal-amount').textContent=montoFmt;
+        mostrarToast('Meta "'+nombre+'" actualizada');
+      }
+    } else {
+      var id = metaCounter++;
+      var n = document.querySelectorAll('#lista-metas .goal-card').length+1;
+      var c = document.createElement('div');
+      c.className='goal-card'; c.dataset.id=id; c.dataset.emoji=selectedEmoji;
+      c.dataset.nombre=nombre; c.dataset.monto=monto; c.dataset.desc=desc;
+      c.innerHTML='<div class="goal-card-header"><div class="goal-left">'+
+        '<span class="drag-handle"><span class="material-icons">drag_indicator</span></span>'+
+        '<div class="goal-icon-wrap">'+selectedEmoji+'</div>'+
+        '<div><div class="goal-name">'+nombre+'</div><div class="goal-meta-label">Prioridad #'+n+'</div></div>'+
+        '</div><div class="goal-actions">'+
+        '<div style="text-align:right;margin-right:5px;"><div class="goal-amount">'+montoFmt+'</div>'+
+        '<span class="goal-badge badge-progress">En progreso</span></div>'+
+        '<button class="btn-icon edit" onclick="abrirModalEditar(this)"><span class="material-icons">edit</span></button>'+
+        '<button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>'+
+        '</div></div>'+
+        '<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%"></div></div>'+
+        '<div class="progress-footer"><span>$0.00 ahorrado</span><span>0% completado</span></div>';
+      document.getElementById('lista-metas').appendChild(c);
+      mostrarToast('Meta "'+nombre+'" guardada');
+    }
+    actualizarContador(); cerrarModal();
+  }
+
+  function confirmarEliminar(btn) {
+    cardToDelete = btn.closest('.goal-card');
+    document.getElementById('confirm-meta-nombre').textContent =
+      '¿Seguro que quieres eliminar "'+cardToDelete.dataset.nombre+'"? Esta acción no se puede deshacer.';
+    document.getElementById('modal-confirmar').classList.add('open');
+  }
+  function cerrarConfirmar() { document.getElementById('modal-confirmar').classList.remove('open'); cardToDelete=null; }
+  function ejecutarEliminar() {
+    if (cardToDelete) {
+      var n = cardToDelete.dataset.nombre; cardToDelete.remove(); cardToDelete=null;
+      actualizarPrioridades(); actualizarContador(); mostrarToast('"'+n+'" eliminada');
+    }
+    cerrarConfirmar();
+  }
+
+  function actualizarContador() {
+    var cards = document.querySelectorAll('#lista-metas .goal-card');
+    var count = cards.length;
+    document.getElementById('metas-count').textContent = count+' meta'+(count!==1?'s':'')+' activa'+(count!==1?'s':'');
+    var total = 0;
+    cards.forEach(function(c){ total += parseFloat(c.dataset.monto)||0; });
+    document.getElementById('res-meta-total').textContent = '$'+total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  }
+
+  function mostrarToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent=msg; t.style.display='block';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function(){ t.style.display='none'; }, 2500);
+  }
+</script>
+</body>
+</html>
