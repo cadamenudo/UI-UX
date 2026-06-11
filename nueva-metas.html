@@ -254,7 +254,6 @@
       width: 36px; height: 36px; border-radius: 9px; background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.10);
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      padding: 4px;
     }
     .goal-icon-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .goal-name { font-size: 12px; font-weight: 700; color: #1a1a2e; }
@@ -331,7 +330,7 @@
       width: 44px; height: 44px; border-radius: 10px; background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.10);
       border: 1.5px solid transparent; display: flex; align-items: center;
-      justify-content: center; cursor: pointer; padding: 6px;
+      justify-content: center; cursor: pointer;
     }
     .emoji-opt img { width: 100%; height: 100%; object-fit: contain; }
     .emoji-opt.selected { border-color: #594AE2; background: white; box-shadow: 0 2px 8px rgba(89,74,226,0.18); }
@@ -478,7 +477,6 @@
                 <div class="goal-actions">
                   <div style="text-align:right;margin-right:5px;">
                     <div class="goal-amount">$500.00</div>
-                    <span class="goal-badge badge-progress">En progreso</span>
                   </div>
                   <button class="btn-icon edit" onclick="abrirModalEditar(this)"><span class="material-icons">edit</span></button>
                   <button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>
@@ -753,8 +751,7 @@
         '<div class="goal-icon-wrap"><img src="'+iconBase+selectedEmoji+'.png" ></div>'+
         '<div><div class="goal-name">'+nombre+'</div><div class="goal-meta-label">Prioridad #'+n+'</div></div>'+
         '</div><div class="goal-actions">'+
-        '<div style="text-align:right;margin-right:5px;"><div class="goal-amount">'+montoFmt+'</div>'+
-        '<span class="goal-badge badge-progress">En progreso</span></div>'+
+        '<div style="text-align:right;margin-right:5px;"><div class="goal-amount">'+montoFmt+'</div></div>'+
         '<button class="btn-icon edit" onclick="abrirModalEditar(this)"><span class="material-icons">edit</span></button>'+
         '<button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>'+
         '</div></div>'+
