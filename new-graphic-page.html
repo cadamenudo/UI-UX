@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CadaMenudo – Gráficos</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0edf9; min-height: 100vh; }
+  .topbar {
+    background: #5b3fc8; color: #fff; padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 20;
+  }
+  .logo { font-size: 16px; font-weight: 700; line-height: 1.1; }
+  .logo small { font-size: 11px; font-weight: 400; opacity: .75; display: block; }
+  .topbar-right { display: flex; align-items: center; gap: 14px; }
+  .bell-wrap { position: relative; }
+  .bell-wrap .badge {
+    position: absolute; top: -4px; right: -5px;
+    background: #ff5e5e; color: #fff; font-size: 9px; font-weight: 700;
+    width: 14px; height: 14px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #1ec97e; color: #064; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hello { font-size: 13px; font-weight: 500; }
+  .summary {
+    background: #fff; display: flex; justify-content: space-around;
+    padding: 14px 12px; border-bottom: 1px solid #ede8fa; gap: 4px;
+  }
+  .sum-item { text-align: center; }
+  .sum-icon { font-size: 20px; margin-bottom: 3px; }
+  .sum-label { font-size: 10px; color: #9b93bc; margin-bottom: 2px; }
+  .sum-val { font-size: 13px; font-weight: 600; color: #2d1f5e; }
+  .date-bar {
+    margin: 14px 16px; background: #fff; border-radius: 12px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 8px;
+    border: 1px solid #e8e0f5;
+  }
+  .date-group { flex: 1; }
+  .date-group label { font-size: 10px; color: #9b93bc; display: block; margin-bottom: 2px; }
+  .date-group span { font-size: 13px; color: #2d1f5e; font-weight: 500; }
+  .date-arrow { color: #aaa; font-size: 18px; }
+  .date-bar .cal { color: #7b5ed4; font-size: 20px; margin-left: auto; }
+  .section {
+    background: #fff; margin: 0 16px 14px; border-radius: 16px;
+    padding: 18px 16px; border: 1px solid #ede8fa;
+  }
+  .sec-title { font-size: 16px; font-weight: 600; color: #2d1f5e; text-align: center; margin-bottom: 16px; }
+  .chart-wrap { position: relative; width: 100%; height: 230px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 14px; font-size: 12px; color: #7b6bb0; }
+  .leg { display: flex; align-items: center; gap: 5px; }
+  .leg-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .filter-row { margin-bottom: 14px; }
+  .filter-row select {
+    width: 100%; font-size: 13px; background: #f7f4fe; color: #2d1f5e;
+    border: 1px solid #e0d8f5; border-radius: 10px; padding: 8px 12px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237b5ed4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+  .navbar {
+    position: fixed; bottom: 0; left: 0; right: 0; background: #5b3fc8;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 0 18px; z-index: 20;
+  }
+  .nav-btn {
+    background: none; border: none; color: rgba(255,255,255,.55);
+    font-size: 24px; padding: 4px 14px; cursor: pointer; transition: color .2s; border-radius: 50%;
+  }
+  .nav-btn.active, .nav-btn:hover { color: #fff; }
+  .nav-add { background: rgba(255,255,255,.2); border-radius: 50%; padding: 6px 10px; }
+  .page-pad { padding-bottom: 80px; }
+  .cat-tag {
+    display: inline-block; background: #ede8fa; color: #5b3fc8;
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Cada<small>menudo 🔒</small></div>
+  <div class="topbar-right">
+    <div class="bell-wrap">
+      <i class="ti ti-bell" style="font-size:22px"></i>
+      <span class="badge">1</span>
+    </div>
+    <div class="avatar">H</div>
+    <span class="hello">Hello admin</span>
+  </div>
+</div>
+
+<div class="page-pad">
+
+  <div class="summary">
+    <div class="sum-item">
+      <div class="sum-icon" style="color:#9b93bc"><i class="ti ti-clock" aria-hidden="true"></i></div>
+      <div class="sum-label">Ingresos</div>
+      <div class="sum-val">$12,132.00</div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-icon" style="color:#9b93bc"><i class="ti ti-shopping-bag" aria-hidden="true"></i></div>
+      <div class="sum-label">Gastos</div>
+      <div class="sum-val">$455.53</div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-icon" style="color:#f0c030"><i class="ti ti-coin" aria-hidden="true"></i></div>
+      <div class="sum-label">Ahorros</div>
+      <div class="sum-val">$0.00</div>
+    </div>
+  </div>
+
+  <div class="date-bar">
+    <div class="date-group">
+      <label>Fecha</label>
+      <span>1/1/2026</span>
+    </div>
+    <span class="date-arrow">→</span>
+    <div class="date-group">
+      <label>&nbsp;</label>
+      <span>11/6/2026</span>
+    </div>
+    <i class="ti ti-calendar cal" aria-hidden="true"></i>
+  </div>
+
+  <!-- Ingresos -->
+  <div class="section">
+    <div class="sec-title">Ingresos Totales</div>
+    <div class="chart-wrap">
+      <canvas id="ingChart" role="img" aria-label="Dona de ingresos totales: Pensión $11,000, Trabajo $800, Freelance $332">Ingresos: Pensión $11,000, Trabajo $800, Freelance $332.</canvas>
+    </div>
+    <div class="legend" id="ingLegend"></div>
+  </div>
+
+  <!-- Gastos -->
+  <div class="section">
+    <div class="sec-title">Gastos Totales</div>
+    <div class="filter-row">
+      <select id="catSel" aria-label="Filtrar por categoría">
+        <option value="">Todas las categorías</option>
+        <option value="Alimentación">Alimentación</option>
+        <option value="Transporte">Transporte</option>
+        <option value="Salud">Salud</option>
+        <option value="Entretenimiento">Entretenimiento</option>
+        <option value="Servicios">Servicios</option>
+      </select>
+    </div>
+    <div id="catLabel"></div>
+    <div class="chart-wrap">
+      <canvas id="gasChart" role="img" aria-label="Dona de gastos por categoría">Gastos por categoría.</canvas>
+    </div>
+    <div class="legend" id="gasLegend"></div>
+  </div>
+
+</div>
+
+<nav class="navbar" aria-label="Navegación principal">
+  <button class="nav-btn active" aria-label="Inicio"><i class="ti ti-home" aria-hidden="true"></i></button>
+  <button class="nav-btn" aria-label="Lista"><i class="ti ti-list" aria-hidden="true"></i></button>
+  <button class="nav-btn nav-add" aria-label="Agregar"><i class="ti ti-plus" aria-hidden="true"></i></button>
+  <button class="nav-btn" aria-label="Estadísticas"><i class="ti ti-chart-bar" aria-hidden="true"></i></button>
+  <button class="nav-btn" aria-label="Perfil"><i class="ti ti-chart-pie" aria-hidden="true"></i></button>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── Ingresos ──────────────────────────────────────────────
+const ingColors = ['#4a8fe2','#f5a623','#7ed321','#d96f9c'];
+const ingLabels = ['Pensión','Trabajo','Freelance','Otros'];
+const ingVals   = [11000, 800, 332, 0];
+const ingTotal  = ingVals.reduce((a,b)=>a+b,0);
+
+const centerPlugin = (labelFn) => ({
+  id: 'center',
+  afterDraw(chart) {
+    const { ctx, chartArea: { left, top, width, height } } = chart;
+    const cx = left + width / 2, cy = top + height / 2;
+    const info = labelFn();
+    ctx.save();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '12px -apple-system,sans-serif'; ctx.fillStyle = '#9b93bc';
+    ctx.fillText(info.label, cx, cy - 14);
+    ctx.font = '600 20px -apple-system,sans-serif'; ctx.fillStyle = '#2d1f5e';
+    ctx.fillText(info.value, cx, cy + 10);
+    ctx.restore();
+  }
+});
+
+new Chart(document.getElementById('ingChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ingLabels,
+    datasets: [{ data: ingVals, backgroundColor: ingColors, borderWidth: 3, borderColor: '#fff', hoverOffset: 8 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '68%',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': $' + ctx.raw.toLocaleString() } } }
+  },
+  plugins: [centerPlugin(() => ({ label: 'Total', value: '$' + ingTotal.toLocaleString() }))]
+});
+
+const ingLeg = document.getElementById('ingLegend');
+ingLabels.forEach((l, i) => {
+  const pct = ingTotal > 0 ? Math.round(ingVals[i] / ingTotal * 100) : 0;
+  if (ingVals[i] === 0) return;
+  ingLeg.innerHTML += `<span class="leg"><span class="leg-sq" style="background:${ingColors[i]}"></span>${l}: $${ingVals[i].toLocaleString()} (${pct}%)</span>`;
+});
+
+// ── Gastos data ───────────────────────────────────────────
+const GASTOS = {
+  '': {
+    labels: ['Alimentación','Transporte','Salud','Entretenimiento','Servicios'],
+    vals:   [180, 95, 62, 48, 70],
+    colors: ['#5b3fc8','#4a8fe2','#f5a623','#7ed321','#d96f9c']
+  },
+  'Alimentación': {
+    labels: ['Supermercado','Restaurantes','Cafetería','Delivery'],
+    vals:   [90, 45, 25, 20],
+    colors: ['#5b3fc8','#7b5ed4','#9d82e0','#c3aff0']
+  },
+  'Transporte': {
+    labels: ['Gasolina','Uber/Taxi','Transporte público','Estacionamiento'],
+    vals:   [50, 22, 15, 8],
+    colors: ['#4a8fe2','#6aaae8','#8dc2f0','#b3d8f8']
+  },
+  'Salud': {
+    labels: ['Farmacia','Médico','Gimnasio','Suplementos'],
+    vals:   [28, 20, 10, 4],
+    colors: ['#f5a623','#f7bc55','#f9cf86','#fbe2b8']
+  },
+  'Entretenimiento': {
+    labels: ['Streaming','Cine','Videojuegos','Eventos'],
+    vals:   [18, 15, 8, 7],
+    colors: ['#7ed321','#9edc54','#bce887','#d9f3b9']
+  },
+  'Servicios': {
+    labels: ['Electricidad','Internet','Agua','Teléfono'],
+    vals:   [28, 22, 12, 8],
+    colors: ['#d96f9c','#e190b2','#e9b0c8','#f2d0de']
+  }
+};
+
+// ── Gastos donut ──────────────────────────────────────────
+let gasChart = null;
+
+function buildGastos(cat) {
+  const d = GASTOS[cat];
+  const total = d.vals.reduce((a,b)=>a+b,0);
+
+  if (gasChart) { gasChart.destroy(); }
+
+  gasChart = new Chart(document.getElementById('gasChart'), {
+    type: 'doughnut',
+    data: {
+      labels: d.labels,
+      datasets: [{ data: d.vals, backgroundColor: d.colors, borderWidth: 3, borderColor: '#fff', hoverOffset: 8 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '68%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': $' + ctx.raw.toLocaleString() } } }
+    },
+    plugins: [centerPlugin(() => ({ label: cat || 'Total', value: '$' + total.toLocaleString() }))]
+  });
+
+  const leg = document.getElementById('gasLegend');
+  leg.innerHTML = '';
+  d.labels.forEach((l, i) => {
+    const pct = total > 0 ? Math.round(d.vals[i] / total * 100) : 0;
+    leg.innerHTML += `<span class="leg"><span class="leg-sq" style="background:${d.colors[i]}"></span>${l}: $${d.vals[i]} (${pct}%)</span>`;
+  });
+
+  const tag = document.getElementById('catLabel');
+  tag.innerHTML = cat ? `<span class="cat-tag">${cat}</span>` : '';
+}
+
+buildGastos('');
+
+document.getElementById('catSel').addEventListener('change', e => buildGastos(e.target.value));
+</script>
+</body>
+</html>
