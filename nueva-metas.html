@@ -325,10 +325,11 @@
     .modal-label { font-size: 10px; font-weight: 700; color: #64748B; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 5px; }
     .emoji-row { display: flex; gap: 7px; margin-bottom: 12px; flex-wrap: wrap; }
     .emoji-opt {
-      width: 34px; height: 34px; border-radius: 9px; background: #F3F1FD;
+      width: 44px; height: 44px; border-radius: 10px; background: #F3F1FD;
       border: 1.5px solid transparent; display: flex; align-items: center;
-      justify-content: center; font-size: 16px; cursor: pointer;
+      justify-content: center; cursor: pointer; padding: 6px;
     }
+    .emoji-opt img { width: 100%; height: 100%; object-fit: contain; }
     .emoji-opt.selected { border-color: #594AE2; background: #EEEBfc; }
     .modal-input {
       width: 100%; border: 1.5px solid #E0DDF6; border-radius: 9px;
@@ -460,11 +461,11 @@
           </div>
 
           <div id="lista-metas">
-            <div class="goal-card" data-id="6" data-emoji="🎂" data-nombre="Fiesta cumple" data-monto="500" data-desc="">
+            <div class="goal-card" data-id="6" data-emoji="regalos" data-nombre="Fiesta cumple" data-monto="500" data-desc="">
               <div class="goal-card-header">
                 <div class="goal-left">
                   <span class="drag-handle"><span class="material-icons">drag_indicator</span></span>
-                  <div class="goal-icon-wrap">🎂</div>
+                  <div class="goal-icon-wrap"><img src="https://cadamenudo.github.io/icons/Metas/icono_regalos.png" style="width:22px;height:22px;object-fit:contain;"></div>
                   <div>
                     <div class="goal-name">Fiesta cumple</div>
                     <div class="goal-meta-label">Prioridad #1</div>
@@ -595,14 +596,22 @@
         <input type="hidden" id="edit-card-id" value="">
         <div class="modal-label">Ícono</div>
         <div class="emoji-row">
-          <div class="emoji-opt selected" data-emoji="🎂" onclick="selEmojiOpt(this)">🎂</div>
-          <div class="emoji-opt" data-emoji="🏖️" onclick="selEmojiOpt(this)">🏖️</div>
-          <div class="emoji-opt" data-emoji="🚗" onclick="selEmojiOpt(this)">🚗</div>
-          <div class="emoji-opt" data-emoji="🏠" onclick="selEmojiOpt(this)">🏠</div>
-          <div class="emoji-opt" data-emoji="📱" onclick="selEmojiOpt(this)">📱</div>
-          <div class="emoji-opt" data-emoji="✈️" onclick="selEmojiOpt(this)">✈️</div>
-          <div class="emoji-opt" data-emoji="🎓" onclick="selEmojiOpt(this)">🎓</div>
-          <div class="emoji-opt" data-emoji="💊" onclick="selEmojiOpt(this)">💊</div>
+          <div class="emoji-opt selected" data-emoji="auto" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_auto.png"></div>
+          <div class="emoji-opt" data-emoji="boda" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_boda.png"></div>
+          <div class="emoji-opt" data-emoji="casa" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_casa.png"></div>
+          <div class="emoji-opt" data-emoji="deuda" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_deuda.png"></div>
+          <div class="emoji-opt" data-emoji="educacion" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_educacion.png"></div>
+          <div class="emoji-opt" data-emoji="familia" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_familia.png"></div>
+          <div class="emoji-opt" data-emoji="inversion" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_inversion.png"></div>
+          <div class="emoji-opt" data-emoji="negocio" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_negocio.png"></div>
+          <div class="emoji-opt" data-emoji="otrameta" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_otrameta.png"></div>
+          <div class="emoji-opt" data-emoji="regalos" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_regalos.png"></div>
+          <div class="emoji-opt" data-emoji="reserva" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_reserva.png"></div>
+          <div class="emoji-opt" data-emoji="retiro" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_retiro.png"></div>
+          <div class="emoji-opt" data-emoji="salud" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_salud.png"></div>
+          <div class="emoji-opt" data-emoji="tecnologia" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_tecnologia.png"></div>
+          <div class="emoji-opt" data-emoji="vacaciones" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_vacaciones.png"></div>
+          <div class="emoji-opt" data-emoji="viaje" onclick="selEmojiOpt(this)"><img src="https://cadamenudo.github.io/icons/Metas/icono_viaje.png"></div>
         </div>
         <div class="modal-label">Nombre</div>
         <input type="text" class="modal-input" id="input-nombre" placeholder="Ej: Vacaciones, auto nuevo...">
@@ -641,7 +650,8 @@
 
 <script>
   var metaCounter = 7;
-  var selectedEmoji = '🎂';
+  var selectedEmoji = 'auto';
+  var iconBase = 'https://cadamenudo.github.io/icons/Metas/icono_';
   var cardToDelete = null;
   var editMode = false;
 
@@ -687,8 +697,8 @@
     document.getElementById('input-monto').value = '';
     document.getElementById('input-desc').value = '';
     document.querySelectorAll('.emoji-opt').forEach(function(e){ e.classList.remove('selected'); });
-    document.querySelector('.emoji-opt[data-emoji="🎂"]').classList.add('selected');
-    selectedEmoji = '🎂';
+    document.querySelector('.emoji-opt[data-emoji="auto"]').classList.add('selected');
+    selectedEmoji = 'auto';
     document.getElementById('modal-meta').classList.add('open');
   }
 
@@ -723,7 +733,7 @@
       var card = document.querySelector('.goal-card[data-id="'+document.getElementById('edit-card-id').value+'"]');
       if (card) {
         card.dataset.nombre=nombre; card.dataset.monto=monto; card.dataset.emoji=selectedEmoji; card.dataset.desc=desc;
-        card.querySelector('.goal-icon-wrap').textContent=selectedEmoji;
+        card.querySelector('.goal-icon-wrap').innerHTML = '<img src="'+iconBase+selectedEmoji+'.png" style="width:22px;height:22px;object-fit:contain;">';
         card.querySelector('.goal-name').textContent=nombre;
         card.querySelector('.goal-amount').textContent=montoFmt;
         mostrarToast('Meta "'+nombre+'" actualizada');
@@ -736,7 +746,7 @@
       c.dataset.nombre=nombre; c.dataset.monto=monto; c.dataset.desc=desc;
       c.innerHTML='<div class="goal-card-header"><div class="goal-left">'+
         '<span class="drag-handle"><span class="material-icons">drag_indicator</span></span>'+
-        '<div class="goal-icon-wrap">'+selectedEmoji+'</div>'+
+        '<div class="goal-icon-wrap"><img src="'+iconBase+selectedEmoji+'.png" style="width:22px;height:22px;object-fit:contain;"></div>'+
         '<div><div class="goal-name">'+nombre+'</div><div class="goal-meta-label">Prioridad #'+n+'</div></div>'+
         '</div><div class="goal-actions">'+
         '<div style="text-align:right;margin-right:5px;"><div class="goal-amount">'+montoFmt+'</div>'+
