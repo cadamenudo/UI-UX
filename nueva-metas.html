@@ -208,10 +208,10 @@
     .alerta-superavit .material-icons { font-size: 15px; color: #1D9E75; }
 
     /* ── PAGE CONTENT ── */
-    .page-content { padding: 10px 12px 12px; }
+    .page-content { padding: 16px 12px 12px; }
 
     /* ── TABS ── */
-    .tabs { display: flex; background: #F2F2F2; border-radius: 10px; padding: 3px; margin-bottom: 10px; }
+    .tabs { display: flex; background: #F2F2F2; border-radius: 10px; padding: 3px; margin-bottom: 16px; }
     .tab {
       flex: 1; text-align: center; font-size: 11px; font-weight: 700;
       padding: 5px 0; border-radius: 8px; color: #9991d6;
@@ -223,7 +223,7 @@
     .tab-panel.active { display: block; }
 
     /* ── SECTION HEADER ── */
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .section-title { font-size: 13px; font-weight: 800; color: #1a1a2e; }
     .section-sub { font-size: 10px; color: #94A3B8; margin-top: 1px; }
     .btn-nueva-meta {
@@ -241,11 +241,12 @@
     /* ── GOAL CARDS ── */
     .goal-card {
       background: white; border-radius: 12px; padding: 11px 12px;
-      margin-bottom: 8px; border: 0.5px solid #e8e4f8;
+      margin-bottom: 14px; border: 0.5px solid #e8e4f8;
       transition: box-shadow 0.15s, transform 0.15s;
     }
     .goal-card.sortable-ghost { opacity: 0.4; background: #F4F4F4; }
     .goal-card.sortable-drag { box-shadow: 0 6px 20px rgba(89,74,226,0.18); transform: scale(1.02); }
+    .goal-card.goal-card-done { background: #F0FBF4; border-color: #A7E3BE; }
     .goal-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
     .goal-left { display: flex; align-items: center; gap: 8px; }
     .drag-handle { color: #D1CCF4; cursor: grab; display: flex; align-items: center; touch-action: none; }
@@ -287,7 +288,7 @@
     .add-meta-dashed span { font-size: 11px; color: #B0A8E0; font-weight: 700; }
 
     /* ── RESULTS CARD ── */
-    .results-card { background: white; border-radius: 12px; padding: 11px 12px; border: 0.5px solid #e8e4f8; margin-bottom: 8px; }
+    .results-card { background: white; border-radius: 12px; padding: 11px 12px; border: 0.5px solid #e8e4f8; margin-bottom: 14px; }
     .results-card-title { font-size: 10px; font-weight: 800; color: #94A3B8; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 7px; }
     .results-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid #F0EEf9; }
     .results-row:last-child { border-bottom: none; }
@@ -450,28 +451,43 @@
         <div id="panel-metas" class="tab-panel active">
           <div class="section-header">
             <div>
-              <div class="section-title">Metas de ahorro</div>
-              <div class="section-sub" id="metas-count">1 meta activa</div>
+              <div class="section-title">Metas de ahorro para el año</div>
             </div>
             <button class="btn-nueva-meta" onclick="abrirModalNueva()">
               <span class="material-icons">add</span> Nueva meta
             </button>
           </div>
 
-          <div class="reorder-hint">
-            <span class="material-icons">drag_indicator</span>
-            <span>Mantén presionado para reordenar</span>
-          </div>
-
           <div id="lista-metas">
+
+            <!-- Meta completada — fondo verde claro (primera) -->
+            <div class="goal-card goal-card-done" data-id="8" data-emoji="reserva" data-nombre="Fondo emergencia" data-monto="1000" data-desc="">
+              <div class="goal-card-header">
+                <div class="goal-left">
+                  <span class="drag-handle"><span class="material-icons">drag_indicator</span></span>
+                  <div class="goal-icon-wrap"><img src="https://cadamenudo.github.io/UI-UX/icons/Metas/icono_reserva.png"></div>
+                  <div>
+                    <div class="goal-name">Fondo emergencia</div>
+                  </div>
+                </div>
+                <div class="goal-actions">
+                  <div style="text-align:right;margin-right:5px;">
+                    <div class="goal-amount" style="color:#1D9E75;">$1,000.00</div>
+                  </div>
+                  <button class="btn-icon edit" onclick="abrirModalEditar(this)"><span class="material-icons">edit</span></button>
+                  <button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Meta 2 -->
             <div class="goal-card" data-id="6" data-emoji="regalos" data-nombre="Fiesta cumple" data-monto="500" data-desc="">
               <div class="goal-card-header">
                 <div class="goal-left">
                   <span class="drag-handle"><span class="material-icons">drag_indicator</span></span>
-                  <div class="goal-icon-wrap"><img src="https://cadamenudo.github.io/UI-UX/icons/Metas/icono_regalos.png" ></div>
+                  <div class="goal-icon-wrap"><img src="https://cadamenudo.github.io/UI-UX/icons/Metas/icono_regalos.png"></div>
                   <div>
                     <div class="goal-name">Fiesta cumple</div>
-                    <div class="goal-meta-label">Prioridad #1</div>
                   </div>
                 </div>
                 <div class="goal-actions">
@@ -482,15 +498,34 @@
                   <button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>
                 </div>
               </div>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%"></div></div>
-              <div class="progress-footer"><span>$0.00 ahorrado</span><span>0% completado</span></div>
             </div>
-          </div>
+
+            <!-- Meta 3 -->
+            <div class="goal-card" data-id="7" data-emoji="vacaciones" data-nombre="Vacaciones" data-monto="1500" data-desc="">
+              <div class="goal-card-header">
+                <div class="goal-left">
+                  <span class="drag-handle"><span class="material-icons">drag_indicator</span></span>
+                  <div class="goal-icon-wrap"><img src="https://cadamenudo.github.io/UI-UX/icons/Metas/icono_vacaciones.png"></div>
+                  <div>
+                    <div class="goal-name">Vacaciones</div>
+                  </div>
+                </div>
+                <div class="goal-actions">
+                  <div style="text-align:right;margin-right:5px;">
+                    <div class="goal-amount">$1,500.00</div>
+                  </div>
+                  <button class="btn-icon edit" onclick="abrirModalEditar(this)"><span class="material-icons">edit</span></button>
+                  <button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /lista-metas -->
 
           <div class="results-card">
             <div class="results-row">
               <span class="results-label"><span class="material-icons" style="color:#594AE2;">flag</span>Total de metas para el año</span>
-              <span class="results-value accent" id="res-meta-total">$500.00</span>
+              <span class="results-value accent" id="res-meta-total">$3,000.00</span>
             </div>
             <div class="results-row">
               <span class="results-label"><span class="material-icons" style="color:#64748B;">calendar_month</span>Ahorro mensual necesario</span>
@@ -669,6 +704,8 @@
     document.getElementById('bar-progreso').style.height = Math.round((progreso/maxVal)*100)+'%';
     document.getElementById('lbl-meta').textContent = '$'+meta.toLocaleString();
     document.getElementById('lbl-progreso').textContent = '$'+progreso.toLocaleString();
+    // calcular ahorro mensual inicial
+    actualizarContador();
   });
 
   function switchTab(tab, btn) {
@@ -754,9 +791,7 @@
         '<div style="text-align:right;margin-right:5px;"><div class="goal-amount">'+montoFmt+'</div></div>'+
         '<button class="btn-icon edit" onclick="abrirModalEditar(this)"><span class="material-icons">edit</span></button>'+
         '<button class="btn-icon del" onclick="confirmarEliminar(this)"><span class="material-icons">close</span></button>'+
-        '</div></div>'+
-        '<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%"></div></div>'+
-        '<div class="progress-footer"><span>$0.00 ahorrado</span><span>0% completado</span></div>';
+        '</div></div>';
       document.getElementById('lista-metas').appendChild(c);
       mostrarToast('Meta "'+nombre+'" guardada');
     }
@@ -780,11 +815,15 @@
 
   function actualizarContador() {
     var cards = document.querySelectorAll('#lista-metas .goal-card');
-    var count = cards.length;
-    document.getElementById('metas-count').textContent = count+' meta'+(count!==1?'s':'')+' activa'+(count!==1?'s':'');
     var total = 0;
     cards.forEach(function(c){ total += parseFloat(c.dataset.monto)||0; });
     document.getElementById('res-meta-total').textContent = '$'+total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+
+    var hoy = new Date();
+    var mesesRestantes = 12 - hoy.getMonth();
+    if (mesesRestantes < 1) mesesRestantes = 1;
+    var mensual = total / mesesRestantes;
+    document.getElementById('res-mensual').textContent = '$'+mensual.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'/mes';
   }
 
   function mostrarToast(msg) {
