@@ -1,2043 +1,714 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Presupuesto móvil – Cada Menudo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
-  <!-- Nunito -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
-
+  <meta charset="UTF-8"/>
+  <title>Presupuesto – iPhone Mockup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-  :root{
-    --primary:#3956E8;
-    --secondary:#7459D9;
-    --bg:#F6F7FF;
-    --card:#FFFFFF;
-    --text:#0f172a;
-    --muted:#64748B;
-    --border:#E5E7EB;
-    --shadow:0 4px 12px rgba(0,0,0,0.06);
-    --radius:16px;
-    --tap:48px;
-    --success:#22C55E;
-    --warning:#F59E0B;
-    --danger:#EF4444;
-  }
-
-  *{box-sizing:border-box}
-  body{
-    font-family: Nunito, sans-serif;
-    background: var(--bg);
-    padding: 0;
-    margin: 0;
-    color: var(--text);
-    -webkit-tap-highlight-color: transparent;
-    overflow-x: hidden;
-  }
-
-  /* Sticky header */
-  .sticky-wrap{
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--bg);
-    padding: 14px 16px 10px;
-    border-bottom: 1px solid rgba(229,231,235,.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom: 10px;
-  }
-
-  h1{
-    font-size: 1.25rem;
-    font-weight: 900;
-    margin: 0;
-    letter-spacing: -0.4px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .toggle{
-    background: white;
-    border-radius: 999px;
-    padding: 4px;
-    display: flex;
-    gap: 4px;
-    border: 1px solid var(--border);
-    flex-shrink:0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .toggle span{
-    padding: 8px 14px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    min-height: 36px;
-    display:flex;align-items:center;justify-content:center;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 700;
-  }
-  .toggle .active{
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    font-weight: 900;
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(57,86,232,0.3);
-  }
-
-  .select-month{
-    background: white;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    font-size: 0.92rem;
-    width: 100%;
-    outline: none;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-    transition: all 0.2s ease;
-  }
-  .select-month:focus{
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(57,86,232,0.1);
-  }
-
-  /* Main content padding */
-  .page{
-    padding: 14px 16px 110px;
-  }
-
-  /* Sections */
-  .section{
-    background: var(--card);
-    padding: 12px 16px;
-    border-radius: 16px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(229,231,235,0.6);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .section.ingresos{ border-left: 4px solid var(--success); }
-  .section.gastos  { border-left: 4px solid #F97316; }
-  .section.ahorro  { border-left: 4px solid #3B82F6; }
-
-  .section-header-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    cursor:pointer;
-    padding: 8px 0;
-    min-height: var(--tap);
-    transition: opacity 0.2s ease;
-  }
-  .section-header-row:active{
-    opacity: 0.7;
-  }
-  .section-header{
-    font-weight: 900;
-    font-size: 1.05rem;
-    letter-spacing: -0.3px;
-  }
-  .section-label{
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-top: 3px;
-    font-weight: 600;
-  }
-  .accordion-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
-  .btn-add-section {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    font-size: 1.3rem;
-    font-weight: 900;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(57, 86, 232, 0.3);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    flex-shrink: 0;
-  }
-
-  .btn-add-section:active {
-    transform: scale(0.92);
-  }
-
-  .accordion-icon{
-    font-size: 1rem;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: bold;
-  }
-  .section.collapsed .accordion-icon{ transform: rotate(-90deg); }
-  .section-body{ 
-    margin-top: 8px;
-    max-height: 2000px;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 1;
-  }
-  .section.collapsed .section-body{ 
-    max-height: 0;
-    opacity: 0;
-  }
-
-  /* Nueva fila de input inline */
-  .input-row {
-    background: linear-gradient(135deg, #F0F9FF, #E0F2FE);
-    border: 2px solid var(--primary);
-    border-radius: 14px;
-    padding: 12px 14px;
-    margin-bottom: 12px;
-    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Nunito,sans-serif;
+      background:#e8eaf0;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:40px 20px 60px;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+    /* ── iPhone frame ── */
+    .iphone{
+      position:relative;width:375px;flex-shrink:0;
+      background:#1a1a1a;border-radius:54px;padding:14px;
+      box-shadow:0 0 0 1px #3a3a3a,0 60px 120px rgba(0,0,0,.45),inset 0 0 0 2px #2e2e2e;
     }
-  }
-
-  .input-row-label {
-    font-weight: 900;
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-
-  .input-row-field {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .input-row-monto {
-    flex: 1;
-    padding: 12px 14px;
-    border: 1.5px solid #D1D5DB;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    font-family: inherit;
-    outline: none;
-    transition: all 0.2s ease;
-  }
-
-  .input-row-monto:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(57, 86, 232, 0.1);
-  }
-
-  .input-row-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-
-  .input-row-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 900;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .input-row-btn.cancelar {
-    background: #F3F4F6;
-    color: var(--text);
-  }
-
-  .input-row-btn.guardar {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    box-shadow: 0 4px 12px rgba(57, 86, 232, 0.3);
-  }
-
-  .input-row-btn:active {
-    transform: scale(0.97);
-  }
-
-  /* Swipeable rows */
-  .row-wrapper{
-    position: relative;
-    margin-bottom: 6px;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .row-delete-bg{
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 80px;
-    background: linear-gradient(90deg, transparent, var(--danger));
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 20px;
-    color: white;
-    font-weight: 900;
-    font-size: 0.85rem;
-  }
-
-  .row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding: 12px 10px;
-    font-size: 0.95rem;
-    border-radius: 12px;
-    min-height: var(--tap);
-    background: white;
-    position: relative;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease;
-    cursor: pointer;
-    touch-action: pan-y;
-  }
-  .row:active{ background: #F9FAFB; }
-  .row span:first-child{ font-weight: 600; }
-  .row span:last-child{ font-weight: 900; }
-
-  /* Progress bars */
-  .progress-wrapper{
-    margin-top: 6px;
-    margin-bottom: 2px;
-  }
-  .progress-bar{
-    height: 4px;
-    background: #E5E7EB;
-    border-radius: 999px;
-    overflow: hidden;
-    position: relative;
-  }
-  .progress-fill{
-    height: 100%;
-    border-radius: 999px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
-    background: linear-gradient(90deg, var(--success), #22C55E);
-  }
-  .progress-fill.warning{
-    background: linear-gradient(90deg, var(--warning), #FBBF24);
-  }
-  .progress-fill.danger{
-    background: linear-gradient(90deg, var(--danger), #F87171);
-  }
-  .progress-label{
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-top: 2px;
-    font-weight: 700;
-  }
-
-  /* Category groups */
-  .cat-group{
-    background:#F9FAFB;
-    border-radius: 14px;
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    border: 1px solid rgba(229,231,235,.65);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .cat-group-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    cursor:pointer;
-    padding: 8px 6px;
-    min-height: var(--tap);
-    transition: opacity 0.2s ease;
-  }
-  .cat-group-header:active{
-    opacity: 0.7;
-  }
-  .cat-group-name{ font-size: 0.95rem; font-weight: 900; }
-  .cat-group-summary{ font-size: 0.78rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
-  .cat-group-total{ font-weight: 900; font-size: 0.95rem; }
-  .cat-group-arrow{ font-size: .9rem; margin-left: 8px; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-  .cat-group.collapsed .cat-group-body{ 
-    max-height: 0;
-    opacity: 0;
-  }
-  .cat-group.collapsed .cat-group-arrow{ transform: rotate(-90deg); }
-
-  .cat-group-body{
-    margin-top: 4px;
-    padding-top: 4px;
-    border-top: 1px dashed #E5E7EB;
-    max-height: 2000px;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 1;
-  }
-  .cat-sub-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding: 12px 8px;
-    font-size: 0.88rem;
-    border-radius: 12px;
-    min-height: var(--tap);
-    cursor:pointer;
-    transition: background 0.2s ease;
-  }
-  .cat-sub-row:active{ background: rgba(57,86,232,0.08); }
-  .cat-sub-row span:first-child{ font-weight: 600; }
-  .cat-sub-row span:last-child{ font-weight: 900; }
-
-  /* Totals collapsible */
-  .totals{
-    margin-top: 10px;
-    margin-bottom: 14px;
-    background: linear-gradient(135deg, #E8ECFF, #DDD6FE);
-    padding: 14px 16px;
-    border-radius: 16px;
-    border: 1px solid #C7D2FE;
-    box-shadow: 0 4px 12px rgba(116,89,217,0.12);
-  }
-  .totals-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap: 10px;
-    cursor:pointer;
-    min-height: var(--tap);
-    transition: opacity 0.2s ease;
-  }
-  .totals-top:active{
-    opacity: 0.7;
-  }
-  .totals-title{
-    font-weight: 900;
-    color: #1f2a5a;
-    font-size: 1rem;
-  }
-  .totals-chevron{
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 900;
-  }
-  .totals.collapsed .totals-chevron{ transform: rotate(-90deg); }
-  .totals-body{ 
-    margin-top: 8px;
-    max-height: 1000px;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 1;
-  }
-  .totals.collapsed .totals-body{ 
-    max-height: 0;
-    opacity: 0;
-  }
-  .totals .row{
-    padding: 10px 0;
-    min-height: auto;
-    background: transparent;
-  }
-  .totals .row span:first-child{ color: #4B5563; font-weight: 800; }
-  .totals .row span:last-child{ color: #111827; font-weight: 900; }
-
-  /* Save button */
-  .save{
-    margin-top: 12px;
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
-    color: white;
-    border-radius: 16px;
-    font-size: 1.05rem;
-    font-weight: 900;
-    border: none;
-    cursor: pointer;
-    min-height: 56px;
-    box-shadow: 0 10px 25px rgba(116,89,217,.25);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .save:active{
-    transform: scale(0.98);
-    box-shadow: 0 5px 15px rgba(116,89,217,.3);
-  }
-
-  /* Card base */
-  .card{
-    background: white;
-    padding: 16px;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    margin-bottom: 14px;
-    border: 1px solid rgba(229,231,235,0.6);
-  }
-  .card.comp-card{ margin-top: 14px; }
-
-  .comp-header{
-    margin-bottom: 12px;
-  }
-  .comp-title{ font-weight: 900; font-size: 1.05rem; letter-spacing: -0.3px; }
-  .chips{ 
-    display:flex; 
-    gap: 8px; 
-    flex-wrap: wrap; 
-    justify-content: center;
-    margin-bottom: 14px;
-  }
-  .chip{
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    background: #FFFFFF;
-    color: var(--muted);
-    min-height: 38px;
-    font-weight: 800;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .chip:active{
-    transform: scale(0.95);
-  }
-  .chip.active{
-    border-color: var(--primary);
-    background: linear-gradient(135deg, #E8ECFF, #DDD6FE);
-    color: var(--primary);
-    box-shadow: 0 2px 8px rgba(57,86,232,0.15);
-  }
-
-  /* Status banner */
-  .status-banner{
-    border-radius: 14px;
-    padding: 12px 12px;
-    font-size: 0.88rem;
-    margin-bottom: 12px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    border: 1px solid;
-  }
-  .status-banner.green{ background:#ECFDF3; color:#15803D; border-color: rgba(21,128,61,0.2); }
-  .status-banner.yellow{ background:#FEF9C3; color:#92400E; border-color: rgba(146,64,14,0.2); }
-  .status-banner.red{ background:#FEF2F2; color:#B91C1C; border-color: rgba(185,28,28,0.2); }
-  .status-banner strong{ font-weight: 900; }
-
-  .mini-summary .row{ font-size: 0.92rem; padding: 10px 0; min-height:auto; }
-  .mini-summary .row span:first-child{ color: var(--muted); font-weight: 800; }
-
-  #miniDiff.diff-positive{ color:#15803D; font-weight: 900; }
-  #miniDiff.diff-negative{ color:#B91C1C; font-weight: 900; }
-
-  /* Bullet Chart */
-  .bullet-chart {
-    margin: 1.2rem 0;
-  }
-
-  .bullet-chart-label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .bullet-chart-bar {
-    position: relative;
-    height: 40px;
-    background: #F3F4F6;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-
-  .bullet-budget {
-    position: absolute;
-    height: 100%;
-    background: linear-gradient(90deg, #E0E7FF, #C7D2FE);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 12px;
-    font-weight: 900;
-    font-size: 0.85rem;
-    color: var(--primary);
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .bullet-actual {
-    position: absolute;
-    height: 24px;
-    top: 8px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(57, 86, 232, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 10px;
-    font-weight: 900;
-    font-size: 0.85rem;
-    color: white;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .bullet-actual.over-budget {
-    background: linear-gradient(135deg, var(--danger), #F87171);
-  }
-
-  .bullet-actual.under-budget {
-    background: linear-gradient(135deg, var(--success), #22C55E);
-  }
-
-  .bullet-legend {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-  }
-
-  .bullet-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .bullet-legend-color {
-    width: 20px;
-    height: 12px;
-    border-radius: 4px;
-  }
-
-  .bullet-legend-color.budget {
-    background: linear-gradient(90deg, #E0E7FF, #C7D2FE);
-  }
-
-  .bullet-legend-color.actual {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-  }
-
-  canvas{ max-height: 260px; display:block; margin: 0 auto; }
-
-  .top-deviations{
-    border-top: 1px dashed #E5E7EB;
-    padding-top: 8px;
-    margin-top: 6px;
-    font-size: 0.85rem;
-  }
-  .top-dev-item{
-    display:flex;
-    justify-content:space-between;
-    padding: 10px 0;
-    gap: 10px;
-  }
-  .top-dev-name{ font-weight: 900; }
-  .top-dev-detail{ color: var(--muted); font-size: .78rem; font-weight: 700; margin-top: 2px; }
-  .top-dev-diff.positive{ color:#B91C1C; font-weight: 900; }
-  .top-dev-diff.negative{ color:#15803D; font-weight: 900; }
-
-  /* Modal Categorías */
-  .modal-categorias {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.6);
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-    z-index: 999;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
-  .modal-categorias.open {
-    display: flex;
-    animation: fadeIn 0.2s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .modal-categorias-content {
-    background: #fff;
-    border-radius: 24px 24px 0 0;
-    padding: 1.5rem 0 0;
-    width: 100%;
-    max-width: 100%;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-    max-height: 85vh;
-    overflow-y: auto;
-    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-
-  .modal-cat-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.3rem 1rem;
-    border-bottom: 1px solid #E5E7EB;
-  }
-
-  .modal-cat-title {
-    font-size: 1.2rem;
-    font-weight: 900;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
-
-  .btn-cerrar-cat {
-    background: none;
-    border: none;
-    font-size: 1.8rem;
-    color: var(--muted);
-    cursor: pointer;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-  }
-
-  .btn-cerrar-cat:active {
-    background: #F3F4F6;
-  }
-
-  .bloque-sector-modal {
-    border-bottom: 1px solid #F3F4F6;
-  }
-
-  .encabezado-modal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.3rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-
-  .encabezado-modal:active {
-    background: #F9FAFB;
-  }
-
-  .encabezado-left-modal {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .encabezado-title-modal {
-    font-size: 1.1rem;
-    font-weight: 900;
-    letter-spacing: -0.3px;
-  }
-
-  .icono-sector-modal {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background-size: 30px;
-    background-repeat: no-repeat;
-    background-position: center;
-    flex-shrink: 0;
-  }
-
-  .icono-ingresos-modal {
-    background-color: #ECFDF3;
-    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ingreso.png');
-  }
-
-  .icono-gastos-modal {
-    background-color: #FEF2F2;
-    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/gastos.png');
-  }
-
-  .icono-ahorro-modal {
-    background-color: #FEF9C3;
-    background-image: url('https://cadamenudo.github.io/UI-UX/assets/icons/ahorro.png');
-  }
-
-  .chevron-modal {
-    font-size: 1.1rem;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: var(--muted);
-    font-weight: 900;
-  }
-
-  .bloque-sector-modal.abierto .chevron-modal {
-    transform: rotate(180deg);
-  }
-
-  .contenido-bloque-modal {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .bloque-sector-modal.abierto .contenido-bloque-modal {
-    max-height: 2000px;
-  }
-
-  .contenido-inner-modal {
-    padding: 0 1.3rem 1rem;
-  }
-
-  .bloque-categoria-modal {
-    background: #F9FAFB;
-    border-radius: 14px;
-    padding: 1rem 1.1rem;
-    margin-bottom: 0.8rem;
-    border: 1px solid rgba(229, 231, 235, 0.7);
-  }
-
-  .titulo-categoria-modal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    padding: 0.3rem 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .titulo-categoria-modal:active {
-    opacity: 0.7;
-  }
-
-  .titulo-cat-nombre-modal {
-    font-weight: 900;
-    font-size: 1rem;
-    color: var(--text);
-  }
-
-  .subcategorias-modal {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-top: 0;
-  }
-
-  .subcategorias-modal.activo {
-    max-height: 1500px;
-    margin-top: 0.8rem;
-  }
-
-  .fila-sub-modal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.9rem 0.8rem;
-    border-radius: 10px;
-    margin-bottom: 0.4rem;
-    background: white;
-    transition: background 0.2s ease;
-    cursor: pointer;
-  }
-
-  .fila-sub-modal:active {
-    background: rgba(57,86,232,0.08);
-  }
-
-  .fila-sub-nombre-modal {
-    font-weight: 600;
-    font-size: 0.92rem;
-    color: var(--text);
-  }
-
-  /* Delete confirmation */
-  .delete-confirm{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 20px;
-    border-radius: 24px 24px 0 0;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
-    z-index: 1000;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .delete-confirm.show{
-    transform: translateY(0);
-  }
-  .delete-confirm-text{
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    color: #111827;
-  }
-  .delete-confirm-actions{
-    display: flex;
-    gap: 10px;
-  }
-  .delete-confirm-actions button{
-    flex: 1;
-    padding: 14px;
-    border: none;
-    border-radius: 14px;
-    font-weight: 900;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .btn-delete-cancel{
-    background: #F3F4F6;
-    color: #111827;
-  }
-  .btn-delete-confirm{
-    background: var(--danger);
-    color: white;
-  }
-  .delete-confirm-actions button:active{
-    transform: scale(0.98);
-  }
-
-  /* Toast */
-  .toast{
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 30px;
-    background: rgba(15,23,42,.95);
-    color: #fff;
-    padding: 12px 16px;
-    border-radius: 999px;
-    font-weight: 900;
-    font-size: .9rem;
-    display:none;
-    z-index: 1100;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  .toast.show{ 
-    display:block;
-    animation: toastIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  @keyframes toastIn {
-    from { 
-      opacity: 0;
-      transform: translateX(-50%) translateY(20px);
+    .btn-left{position:absolute;left:-3px;background:#2a2a2a;border-radius:2px 0 0 2px;width:3px}
+    .btn-left.mute{top:100px;height:34px}
+    .btn-left.vol1{top:150px;height:62px}
+    .btn-left.vol2{top:224px;height:62px}
+    .btn-right{position:absolute;right:-3px;top:180px;height:90px;width:3px;background:#2a2a2a;border-radius:0 2px 2px 0}
+    .screen-outer{background:#000;border-radius:44px;overflow:hidden;position:relative;}
+    .dynamic-island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:118px;height:34px;background:#000;border-radius:20px;z-index:30;}
+
+    /* ── App screen ── */
+    .app-screen{background:#F6F7FF;height:812px;overflow:hidden;position:relative;color:#0f172a;font-family:Nunito,sans-serif;}
+
+    /* Status bar */
+    .status-bar{height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 10px;}
+    .status-time{font-size:15px;font-weight:700;color:#0f172a;}
+    .status-icons{display:flex;align-items:center;gap:6px;}
+
+    /* App header */
+    .app-header{background:#F6F7FF;padding:10px 16px 10px;border-bottom:1px solid rgba(229,231,235,.8);}
+    .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .app-title{font-size:20px;font-weight:900;background:linear-gradient(135deg,#3956E8,#7459D9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.4px;}
+    .toggle-pill{background:white;border-radius:999px;padding:3px;display:flex;gap:3px;border:1px solid #E5E7EB;box-shadow:0 2px 6px rgba(0,0,0,.04);}
+    .toggle-pill span{padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;color:#64748B;cursor:pointer;}
+    .toggle-pill .active{background:linear-gradient(135deg,#3956E8,#7459D9);color:white;font-weight:900;}
+    .month-select{background:white;padding:10px 14px;border-radius:12px;border:1px solid #E5E7EB;font-size:14px;font-weight:700;width:100%;outline:none;font-family:Nunito,sans-serif;color:#0f172a;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+
+    /* Scrollable body */
+    .app-body{height:calc(812px - 54px - 94px - 10px);overflow-y:auto;overflow-x:hidden;padding:12px 14px 0;scrollbar-width:none;}
+    .app-body::-webkit-scrollbar{display:none;}
+
+    /* Section cards */
+    .section{background:white;border-radius:16px;margin-bottom:10px;border:1px solid rgba(229,231,235,.6);box-shadow:0 4px 12px rgba(0,0,0,.06);overflow:visible;}
+    .section.ingresos{border-left:4px solid #22C55E;}
+    .section.gastos{border-left:4px solid #F97316;}
+    .section.ahorro{border-left:4px solid #3B82F6;}
+    .section-header{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;cursor:pointer;user-select:none;}
+    .section-label{font-weight:900;font-size:15px;color:#0f172a;}
+    .section-sublabel{font-size:12px;color:#64748B;font-weight:600;margin-top:2px;}
+    .section-right{display:flex;align-items:center;gap:8px;}
+    .btn-add{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3956E8,#7459D9);border:none;color:white;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 10px rgba(57,86,232,.3);line-height:1;flex-shrink:0;}
+    .chevron{font-size:14px;color:#64748B;transition:transform .3s;display:inline-block;}
+    .section.collapsed .chevron{transform:rotate(-90deg);}
+    .section-body{padding:0 12px 12px;}
+    .section.collapsed .section-body{display:none;}
+
+    /* Row items */
+    .row-item{display:flex;justify-content:space-between;align-items:center;padding:11px 10px;background:#F9FAFB;border-radius:10px;margin-bottom:5px;}
+    .row-name{font-weight:600;font-size:14px;color:#0f172a;}
+    .row-amount{font-weight:900;font-size:14px;color:#0f172a;}
+
+    /* Cat groups */
+    .cat-group{background:#F9FAFB;border-radius:12px;padding:10px;margin-bottom:6px;border:1px solid rgba(229,231,235,.65);}
+    .cat-group-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+    .cat-group-name{font-size:14px;font-weight:900;color:#0f172a;}
+    .cat-group-count{font-size:11px;color:#64748B;font-weight:700;margin-top:2px;}
+    .cat-group-right{display:flex;align-items:center;gap:5px;}
+    .cat-group-total{font-size:14px;font-weight:900;color:#0f172a;}
+    .cat-arrow{font-size:12px;color:#64748B;}
+    .prog-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed #E5E7EB;}
+    .prog-bar{height:4px;background:#E5E7EB;border-radius:999px;overflow:hidden;}
+    .prog-fill{height:100%;border-radius:999px;}
+    .prog-fill.ok{background:linear-gradient(90deg,#22C55E,#4ADE80);}
+    .prog-fill.warn{background:linear-gradient(90deg,#F59E0B,#FBBF24);}
+    .prog-fill.danger{background:linear-gradient(90deg,#EF4444,#F87171);}
+    .prog-label{font-size:11px;color:#64748B;font-weight:700;margin-top:3px;}
+
+    /* Totals */
+    .totals{background:linear-gradient(135deg,#E8ECFF,#DDD6FE);border-radius:14px;border:1px solid #C7D2FE;padding:13px 14px;margin-bottom:10px;box-shadow:0 4px 12px rgba(116,89,217,.12);}
+    .totals-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:8px;}
+    .totals-title{font-weight:900;font-size:14px;color:#1f2a5a;}
+    .totals-row{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid rgba(199,210,254,.5);}
+    .totals-row span:first-child{font-size:13px;color:#4B5563;font-weight:800;}
+    .totals-row span:last-child{font-size:13px;font-weight:900;color:#111827;}
+    .totals-row.highlight span:last-child{color:#3956E8;}
+
+    /* Buttons */
+    .btn-save{width:100%;padding:14px;background:linear-gradient(135deg,#7459D9,#3956E8);color:white;border-radius:14px;font-size:15px;font-weight:900;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 10px 24px rgba(116,89,217,.25);margin-bottom:12px;}
+
+    /* Comparativo */
+    .comp-card{background:white;border-radius:16px;border:1px solid rgba(229,231,235,.6);box-shadow:0 4px 12px rgba(0,0,0,.06);padding:14px;margin-bottom:20px;}
+    .comp-title{font-weight:900;font-size:15px;color:#0f172a;margin-bottom:12px;}
+    .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+    .chip{border-radius:999px;border:1px solid #E5E7EB;padding:7px 12px;font-size:12px;font-weight:800;color:#64748B;background:white;cursor:pointer;font-family:Nunito,sans-serif;}
+    .chip.active{border-color:#3956E8;background:linear-gradient(135deg,#E8ECFF,#DDD6FE);color:#3956E8;}
+    .status-banner{border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid;}
+    .status-banner.green{background:#ECFDF3;color:#15803D;border-color:rgba(21,128,61,.2);}
+    .status-banner.yellow{background:#FEF9C3;color:#92400E;border-color:rgba(146,64,14,.2);}
+    .status-banner.red{background:#FEF2F2;color:#B91C1C;border-color:rgba(185,28,28,.2);}
+    .mini-row{display:flex;justify-content:space-between;padding:8px 0;}
+    .mini-row span:first-child{font-size:13px;color:#64748B;font-weight:800;}
+    .mini-row span:last-child{font-size:13px;font-weight:900;color:#0f172a;}
+    .diff-positive{color:#15803D;}
+    .diff-negative{color:#B91C1C;}
+    .bullet-wrap{margin:12px 0 0;}
+    .bullet-label{font-size:12px;font-weight:700;color:#64748B;margin-bottom:6px;}
+    .bullet-bar{position:relative;height:38px;background:#F3F4F6;border-radius:12px;overflow:hidden;}
+    .bullet-bg{position:absolute;height:100%;background:linear-gradient(90deg,#E0E7FF,#C7D2FE);border-radius:12px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;}
+    .bullet-bg span{font-weight:900;font-size:12px;color:#3956E8;}
+    .bullet-fg{position:absolute;height:24px;top:7px;background:linear-gradient(135deg,#22C55E,#4ADE80);border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;}
+    .bullet-fg span{font-weight:900;font-size:12px;color:white;}
+    .bullet-legend{display:flex;gap:12px;margin-top:8px;font-size:11px;font-weight:700;color:#64748B;}
+    .legend-dot{width:18px;height:10px;border-radius:3px;flex-shrink:0;}
+
+    /* Home indicator */
+    .home-indicator{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:130px;height:5px;background:rgba(0,0,0,.22);border-radius:999px;}
+
+    /* ══════════════════════════════════════
+       MODAL CATEGORÍAS — sheet that slides up
+       inside the app-screen container
+       ══════════════════════════════════════ */
+    .modal-overlay{
+      position:absolute;
+      inset:0;
+      background:rgba(15,23,42,.5);
+      z-index:100;
+      display:none;
+      align-items:flex-end;
+      border-radius:44px;       /* match screen corners */
+      overflow:hidden;
     }
-    to { 
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-  }
+    .modal-overlay.open{display:flex;}
 
-  /* Loading state */
-  .loading-overlay{
-    position: fixed;
-    inset: 0;
-    background: rgba(255,255,255,0.9);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-  .loading-overlay.show{
-    display: flex;
-  }
-  .spinner{
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(57,86,232,0.2);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+    .modal-sheet{
+      background:white;
+      border-radius:24px 24px 0 0;
+      width:100%;
+      max-height:78%;
+      display:flex;
+      flex-direction:column;
+      animation:slideUp .3s cubic-bezier(.4,0,.2,1);
+      overflow:hidden;
+    }
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+    .modal-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:10px auto 0;}
+    .modal-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 12px;border-bottom:1px solid #F3F4F6;flex-shrink:0;}
+    .modal-title{font-size:16px;font-weight:900;color:#0f172a;}
+    .modal-close{background:none;border:none;font-size:22px;color:#64748B;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:Nunito,sans-serif;}
+    .modal-close:hover{background:#F3F4F6;}
+
+    /* Scrollable content */
+    .modal-body{overflow-y:auto;flex:1;scrollbar-width:none;}
+    .modal-body::-webkit-scrollbar{display:none;}
+
+    /* Sector block */
+    .sector-block{border-bottom:1px solid #F3F4F6;}
+    .sector-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;}
+    .sector-left{display:flex;align-items:center;gap:10px;}
+    .sector-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .sector-icon.ing{background:#ECFDF3;}
+    .sector-icon.gas{background:#FEF2F2;}
+    .sector-icon.aho{background:#FEF9C3;}
+    .sector-name{font-size:15px;font-weight:900;color:#0f172a;}
+    .sector-chevron{font-size:13px;color:#64748B;transition:transform .3s;display:inline-block;}
+    .sector-block.open .sector-chevron{transform:rotate(180deg);}
+    .sector-content{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+    .sector-block.open .sector-content{max-height:1200px;}
+    .sector-inner{padding:0 14px 10px;}
+
+    /* Category accordion inside modal */
+    .cat-block{background:#F9FAFB;border-radius:12px;padding:10px 12px;margin-bottom:8px;border:1px solid rgba(229,231,235,.7);}
+    .cat-block-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:2px 0;user-select:none;}
+    .cat-block-name{font-size:14px;font-weight:900;color:#0f172a;}
+    .cat-chevron{font-size:12px;color:#64748B;transition:transform .3s;display:inline-block;}
+    .cat-block.open .cat-chevron{transform:rotate(180deg);}
+    .cat-subs{max-height:0;overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1);}
+    .cat-block.open .cat-subs{max-height:600px;}
+    .sub-row{display:flex;align-items:center;padding:11px 8px;border-radius:10px;cursor:pointer;transition:background .15s;margin-top:4px;}
+    .sub-row:hover,.sub-row:active{background:rgba(57,86,232,.07);}
+    .sub-row-name{font-size:13px;font-weight:600;color:#0f172a;flex:1;}
+    .sub-row-arrow{font-size:12px;color:#9CA3AF;}
+
+    /* ── Input amount sheet ── */
+    .input-sheet{
+      position:absolute;
+      inset:0;
+      background:rgba(15,23,42,.5);
+      z-index:200;
+      display:none;
+      align-items:flex-end;
+      border-radius:44px;
+      overflow:hidden;
+    }
+    .input-sheet.open{display:flex;}
+    .input-card{
+      background:white;
+      border-radius:24px 24px 0 0;
+      width:100%;
+      padding:16px 18px 28px;
+      animation:slideUp .25s cubic-bezier(.4,0,.2,1);
+    }
+    .input-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:0 auto 14px;}
+    .input-label{font-size:13px;font-weight:700;color:#64748B;margin-bottom:6px;}
+    .input-sublabel{font-size:16px;font-weight:900;color:#0f172a;margin-bottom:16px;}
+    .amount-input{width:100%;padding:14px 16px;border:1.5px solid #E5E7EB;border-radius:14px;font-size:22px;font-weight:900;font-family:Nunito,sans-serif;color:#0f172a;outline:none;text-align:center;letter-spacing:1px;}
+    .amount-input:focus{border-color:#3956E8;box-shadow:0 0 0 3px rgba(57,86,232,.1);}
+    .input-actions{display:flex;gap:10px;margin-top:14px;}
+    .btn-cancel{flex:1;padding:13px;background:#F3F4F6;color:#0f172a;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;}
+    .btn-confirm{flex:2;padding:13px;background:linear-gradient(135deg,#3956E8,#7459D9);color:white;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 6px 16px rgba(57,86,232,.3);}
+
+    /* Toast */
+    .toast{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.92);color:white;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:900;display:none;z-index:300;white-space:nowrap;}
+    .toast.show{display:block;animation:toastIn .3s ease;}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
   </style>
 </head>
-
 <body>
-  <!-- STICKY HEADER -->
-  <div class="sticky-wrap">
-    <div class="top">
-      <h1>Presupuesto</h1>
-      <div class="toggle" id="toggleTipo">
-        <span data-tipo="mensual" class="active">Mensual</span>
-        <span data-tipo="anual">Anual</span>
-      </div>
-    </div>
 
-    <select class="select-month" id="selectMonth">
-      <option>Enero 2025</option>
-      <option>Febrero 2025</option>
-      <option>Marzo 2025</option>
-    </select>
-  </div>
-
-  <main class="page">
-
-    <!-- SECCION INGRESOS -->
-    <section class="section ingresos collapsed">
-      <div class="section-header-row accordion-header" data-area="ingresos">
-        <div>
-          <div class="section-header">Ingresos</div>
-          <div class="section-label">Lo que entra en el periodo</div>
-        </div>
-        <div class="accordion-right">
-          <button class="btn-add-section" onclick="abrirModalCategorias(event, 'ingresos')">+</button>
-          <span class="accordion-icon">⌄</span>
-        </div>
-      </div>
-      <div class="section-body">
-        <div id="listaIngresos"></div>
-      </div>
-    </section>
-
-    <!-- SECCION GASTOS -->
-    <section class="section gastos collapsed">
-      <div class="section-header-row accordion-header" data-area="gastos">
-        <div>
-          <div class="section-header">Gastos</div>
-          <div class="section-label">Lo que sale en el periodo</div>
-        </div>
-        <div class="accordion-right">
-          <button class="btn-add-section" onclick="abrirModalCategorias(event, 'gastos')">+</button>
-          <span class="accordion-icon">⌄</span>
-        </div>
-      </div>
-      <div class="section-body">
-        <div id="listaGastos"></div>
-      </div>
-    </section>
-
-    <!-- SECCION AHORRO -->
-    <section class="section ahorro collapsed">
-      <div class="section-header-row accordion-header" data-area="ahorro">
-        <div>
-          <div class="section-header">Ahorro</div>
-          <div class="section-label">Lo que apartas del ingreso</div>
-        </div>
-        <div class="accordion-right">
-          <button class="btn-add-section" onclick="abrirModalCategorias(event, 'ahorro')">+</button>
-          <span class="accordion-icon">⌄</span>
-        </div>
-      </div>
-      <div class="section-body">
-        <div id="listaAhorro"></div>
-      </div>
-    </section>
-
-    <!-- TOTALES (COLLAPSIBLE) -->
-    <section class="totals" id="totalsCard">
-      <div class="totals-top" id="totalsToggle">
-        <div class="totals-title">Totales del periodo</div>
-        <div class="totals-chevron">⌄</div>
-      </div>
-      <div class="totals-body" id="totalsBody">
-        <div class="row">
-          <span>Total ingresos</span>
-          <span id="totalIngresos">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Total gastos</span>
-          <span id="totalGastos">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Total ahorro</span>
-          <span id="totalAhorro">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Disponible</span>
-          <span id="totalDisponible">$0.00</span>
-        </div>
-      </div>
-    </section>
-
-    <button class="save" id="btnGuardar">💾 Guardar presupuesto</button>
-
-    <!-- COMPARATIVO -->
-    <section class="card comp-card">
-      <div class="comp-header">
-        <div class="comp-title">Presupuesto vs Real</div>
-      </div>
-      
-      <div class="chips" id="chipsArea">
-        <button class="chip active" data-area="ingresos">Ingresos</button>
-        <button class="chip" data-area="gastos">Gastos</button>
-        <button class="chip" data-area="ahorro">Ahorro</button>
-      </div>
-
-      <div id="statusBanner" class="status-banner green">
-        <span><strong>Vas bien.</strong> Por debajo del presupuesto.</span>
-        <span id="bannerPct">90%</span>
-      </div>
-
-      <div class="mini-summary">
-        <div class="row">
-          <span>Presupuesto</span>
-          <span id="miniPres">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Real</span>
-          <span id="miniReal">$0.00</span>
-        </div>
-        <div class="row">
-          <span>Diferencia</span>
-          <span id="miniDiff">$0.00</span>
-        </div>
-      </div>
-
-      <div class="bullet-chart" id="bulletChart">
-        <div class="bullet-chart-label">
-          <span>Comparativa</span>
-        </div>
-        <div class="bullet-chart-bar">
-          <div class="bullet-budget" id="bulletBudget">
-            <span id="bulletBudgetText">$0</span>
-          </div>
-          <div class="bullet-actual" id="bulletActual">
-            <span id="bulletActualText">$0</span>
-          </div>
-        </div>
-        <div class="bullet-legend">
-          <div class="bullet-legend-item">
-            <div class="bullet-legend-color budget"></div>
-            <span>Presupuesto</span>
-          </div>
-          <div class="bullet-legend-item">
-            <div class="bullet-legend-color actual"></div>
-            <span>Real</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="top-deviations" id="topDeviations"></div>
-    </section>
-  </main>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">Guardado ✅</div>
-
-  <!-- Loading overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-  </div>
-
-  <!-- Delete confirmation -->
-  <div class="delete-confirm" id="deleteConfirm">
-    <div class="delete-confirm-text">¿Eliminar este elemento?</div>
-    <div class="delete-confirm-actions">
-      <button class="btn-delete-cancel" id="btnDeleteCancel">Cancelar</button>
-      <button class="btn-delete-confirm" id="btnDeleteConfirm">Eliminar</button>
-    </div>
-  </div>
-
-  <!-- MODAL CATEGORÍAS -->
-  <div class="modal-categorias" id="modalCategorias">
-    <div class="modal-categorias-content">
-      <div class="modal-cat-header">
-        <span class="modal-cat-title">Selecciona una categoría</span>
-        <button class="btn-cerrar-cat" onclick="cerrarModalCategorias()">×</button>
-      </div>
-
-      <!-- INGRESOS -->
-      <div class="bloque-sector-modal">
-        <div class="encabezado-modal" onclick="toggleBloqueModal(this)">
-          <div class="encabezado-left-modal">
-            <div class="icono-sector-modal icono-ingresos-modal"></div>
-            <span class="encabezado-title-modal">Ingresos</span>
-          </div>
-          <span class="chevron-modal">⌄</span>
-        </div>
-        <div class="contenido-bloque-modal">
-          <div class="contenido-inner-modal" id="contenedorIngresosModal"></div>
-        </div>
-      </div>
-
-      <!-- GASTOS -->
-      <div class="bloque-sector-modal">
-        <div class="encabezado-modal" onclick="toggleBloqueModal(this)">
-          <div class="encabezado-left-modal">
-            <div class="icono-sector-modal icono-gastos-modal"></div>
-            <span class="encabezado-title-modal">Gastos</span>
-          </div>
-          <span class="chevron-modal">⌄</span>
-        </div>
-        <div class="contenido-bloque-modal">
-          <div class="contenido-inner-modal" id="contenedorGastosModal"></div>
-        </div>
-      </div>
-
-      <!-- AHORRO -->
-      <div class="bloque-sector-modal">
-        <div class="encabezado-modal" onclick="toggleBloqueModal(this)">
-          <div class="encabezado-left-modal">
-            <div class="icono-sector-modal icono-ahorro-modal"></div>
-            <span class="encabezado-title-modal">Ahorro</span>
-          </div>
-          <span class="chevron-modal">⌄</span>
-        </div>
-        <div class="contenido-bloque-modal">
-          <div class="contenido-inner-modal" id="contenedorAhorroModal"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Datos de categorías
-    const categorias = {
-      ingresos: {
-        'Pago por trabajo': ['Salario', 'Pago por hora', 'Bono', 'Comisión', 'Negocio propio', 'Propina'],
-        'Ganancia de capital': ['Acciones', 'Auto', 'Bonos o renta fija', 'Casa/Apartamento/Tierra', 'ETF, fondo mutuo, etc.'],
-        'Ingreso pasivo': ['Anualidad', 'Dividendos e Intereses', 'Pensión', 'Renta inmueble', 'Seguro Social']
-      },
-      gastos: {
-        'Alimentación': ['Supermercado', 'Comidas fuera', 'Pedido a domicilio'],
-        'Casa': ['Hipoteca / Alquiler', 'Servicios básicos', 'Mantenimiento'],
-        'Impuestos': ['Seguro social', 'Propiedad', 'Venta', 'Estatales', 'Federales', 'Municipales'],
-        'Transportación': ['Gasolina', 'Mantenimiento', 'Transporte público / Uber'],
-        'Seguros': ['Salud', 'Auto', 'Vida'],
-        'Regalos y donaciones': ['Familia', 'Amigos', 'Instituciones'],
-        'Gastos Médicos': ['Consultas', 'Medicamentos', 'Procedimientos'],
-        'Cuidado Personal': ['Peluquería', 'Cosméticos', 'Spa / Barbería'],
-        'Dependientes': ['Cuidado de niños', 'Cuidado de mayores', 'Educación'],
-        'Deuda': ['Tarjetas de crédito', 'Préstamos estudiantiles', 'Otros préstamos'],
-        'Entretenimiento': ['Cine', 'Conciertos', 'Streaming'],
-        'Telecomunicaciones': ['Teléfono', 'Internet', 'TV']
-      },
-      ahorro: {
-        'Emergencia': ['Fondo corto plazo', 'Fondo largo plazo', 'Reserva médica'],
-        'Meta específica': ['Vacaciones', 'Auto', 'Casa', 'Boda', 'Educación de hijos'],
-        'Inversión': ['Cuenta brokerage', 'Fondo indexado', 'Cripto', 'Crowdfunding'],
-        'Retiro': ['IRA / Roth IRA', '401(k)', 'Pensión privada'],
-        'Ahorro personal': ['Ahorro mensual', 'Ahorro en efectivo', 'Cuenta de ahorro tradicional'],
-        'Ahorro para hijos': ['Educación', 'Regalos futuros', 'Fondo universitario'],
-        'Otros': ['Donaciones planificadas', 'Proyectos personales', 'Fondo de libertad financiera']
-      }
-    };
-
-    // -----------------------------
-    // DATOS (BASE MENSUAL) - VACÍO
-    // -----------------------------
-    const demoData = {
-      tipo: "mensual",
-      presupuesto: {
-        ingresos: [],
-        gastos: [],
-        ahorro: []
-      },
-      real: {
-        ingresos: [],
-        gastos: [],
-        ahorro: []
-      }
-    };
-
-    let tipoActual = "mensual";
-    let areaComparativa = "ingresos";
-
-    let categoriaSeleccionada = null;
-    let subcategoriaSeleccionada = null;
-    let areaSeleccionada = null;
-
-    let deleteTarget = null;
-
-    function factorTipo(){ return tipoActual === "anual" ? 12 : 1; }
-
-    function formatear(monto){
-      return "$" + monto.toLocaleString("es-US",{minimumFractionDigits:2,maximumFractionDigits:2});
-    }
-
-    function sumarLista(lista){
-      const f = factorTipo();
-      return lista.reduce((acc, item) => acc + item.monto * f, 0);
-    }
-
-    function getProgressColor(pct, isExpense = false){
-      if (isExpense){
-        if (pct <= 75) return '';
-        if (pct <= 90) return 'warning';
-        return 'danger';
-      } else {
-        if (pct >= 90) return '';
-        if (pct >= 70) return 'warning';
-        return 'danger';
-      }
-    }
-
-    function enableSwipe(element, onDelete){
-      let startX = 0;
-      let currentX = 0;
-      let isDragging = false;
-
-      element.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-      });
-
-      element.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        currentX = e.touches[0].clientX;
-        const diff = startX - currentX;
-        
-        if (diff > 0 && diff < 100) {
-          element.style.transform = `translateX(-${diff}px)`;
-        }
-      });
-
-      element.addEventListener('touchend', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        const diff = startX - currentX;
-        if (diff > 80) {
-          onDelete();
-        }
-        
-        element.style.transform = '';
-      });
-    }
-
-    function renderArea(area, contId){
-      const f = factorTipo();
-      const cont = document.getElementById(contId);
-      
-      // Remover solo los elementos que no son input-row
-      const existingInputRow = cont.querySelector('.input-row');
-      cont.innerHTML = "";
-      
-      // Si había un input-row, volver a agregarlo al inicio
-      if (existingInputRow) {
-        cont.appendChild(existingInputRow);
-      }
-      
-      const lista = demoData.presupuesto[area];
-
-      const mapaReal = {};
-      demoData.real[area].forEach(r => {
-        mapaReal[r.categoria] = (mapaReal[r.categoria] || 0) + r.monto * f;
-      });
-
-      const grupos = {};
-      lista.forEach((item, index) => {
-        const cat = item.categoria;
-        if (!grupos[cat]) grupos[cat] = { total: 0, items: [], real: 0 };
-        grupos[cat].total += item.monto * f;
-        grupos[cat].real = mapaReal[cat] || 0;
-        grupos[cat].items.push({ ...item, __index: index });
-      });
-
-      Object.keys(grupos).forEach(cat => {
-        const grupo = grupos[cat];
-
-        if (grupo.items.length === 1){
-          const item = grupo.items[0];
-          const wrapper = document.createElement("div");
-          wrapper.className = "row-wrapper";
-
-          const deleteBg = document.createElement("div");
-          deleteBg.className = "row-delete-bg";
-          deleteBg.textContent = "Eliminar";
-
-          const row = document.createElement("div");
-          row.className = "row";
-          row.dataset.area = area;
-          row.dataset.index = item.__index;
-
-          const labelSpan = document.createElement("span");
-          labelSpan.textContent = item.label || item.categoria;
-
-          const montoSpan = document.createElement("span");
-          montoSpan.textContent = formatear(item.monto * f);
-
-          row.appendChild(labelSpan);
-          row.appendChild(montoSpan);
-
-          enableSwipe(row, () => {
-            deleteTarget = { area, index: item.__index };
-            document.getElementById('deleteConfirm').classList.add('show');
-          });
-
-          wrapper.appendChild(deleteBg);
-          wrapper.appendChild(row);
-
-          if (area === 'gastos' && grupo.real > 0) {
-            const pct = Math.min((grupo.real / grupo.total) * 100, 100);
-            const progressWrap = document.createElement('div');
-            progressWrap.className = 'progress-wrapper';
-            progressWrap.innerHTML = `
-              <div class="progress-bar">
-                <div class="progress-fill ${getProgressColor(pct, true)}" style="width: ${pct}%"></div>
-              </div>
-              <div class="progress-label">${Math.round(pct)}% del presupuesto</div>
-            `;
-            wrapper.appendChild(progressWrap);
-          }
-
-          cont.appendChild(wrapper);
-          return;
-        }
-
-        const groupDiv = document.createElement("div");
-        groupDiv.className = "cat-group collapsed";
-
-        const header = document.createElement("div");
-        header.className = "cat-group-header";
-
-        const titleDiv = document.createElement("div");
-        titleDiv.className = "cat-group-title";
-
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "cat-group-name";
-        nameSpan.textContent = cat;
-
-        const summarySpan = document.createElement("span");
-        summarySpan.className = "cat-group-summary";
-        summarySpan.textContent = `${grupo.items.length} partida(s)`;
-
-        titleDiv.appendChild(nameSpan);
-        titleDiv.appendChild(summarySpan);
-
-        const rightDiv = document.createElement("div");
-        const totalSpan = document.createElement("span");
-        totalSpan.className = "cat-group-total";
-        totalSpan.textContent = formatear(grupo.total);
-
-        const arrowSpan = document.createElement("span");
-        arrowSpan.className = "cat-group-arrow";
-        arrowSpan.textContent = "⌄";
-
-        rightDiv.appendChild(totalSpan);
-        rightDiv.appendChild(arrowSpan);
-
-        header.appendChild(titleDiv);
-        header.appendChild(rightDiv);
-
-        const body = document.createElement("div");
-        body.className = "cat-group-body";
-
-        grupo.items.forEach(item => {
-          const wrapper = document.createElement("div");
-          wrapper.className = "row-wrapper";
-
-          const deleteBg = document.createElement("div");
-          deleteBg.className = "row-delete-bg";
-          deleteBg.textContent = "Eliminar";
-
-          const subRow = document.createElement("div");
-          subRow.className = "cat-sub-row";
-          subRow.dataset.area = area;
-          subRow.dataset.index = item.__index;
-
-          const labelSpan = document.createElement("span");
-          let subLabel = "";
-          if (item.label){
-            const parts = item.label.split(" – ");
-            subLabel = parts.length > 1 ? parts.slice(1).join(" – ") : item.label;
-          } else {
-            subLabel = item.categoria;
-          }
-          labelSpan.textContent = subLabel;
-
-          const montoSpan = document.createElement("span");
-          montoSpan.textContent = formatear(item.monto * f);
-
-          subRow.appendChild(labelSpan);
-          subRow.appendChild(montoSpan);
-
-          enableSwipe(subRow, () => {
-            deleteTarget = { area, index: item.__index };
-            document.getElementById('deleteConfirm').classList.add('show');
-          });
-
-          wrapper.appendChild(deleteBg);
-          wrapper.appendChild(subRow);
-          body.appendChild(wrapper);
-        });
-
-        if (area === 'gastos' && grupo.real > 0) {
-          const pct = Math.min((grupo.real / grupo.total) * 100, 100);
-          const progressWrap = document.createElement('div');
-          progressWrap.className = 'progress-wrapper';
-          progressWrap.style.marginTop = '8px';
-          progressWrap.innerHTML = `
-            <div class="progress-bar">
-              <div class="progress-fill ${getProgressColor(pct, true)}" style="width: ${pct}%"></div>
+<div class="iphone">
+  <div class="btn-left mute"></div>
+  <div class="btn-left vol1"></div>
+  <div class="btn-left vol2"></div>
+  <div class="btn-right"></div>
+
+  <div class="screen-outer">
+    <div class="dynamic-island"></div>
+
+    <div class="app-screen" id="appScreen">
+
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+            <rect x="0" y="3" width="3" height="9" rx="1" fill="#0f172a"/>
+            <rect x="4.5" y="2" width="3" height="10" rx="1" fill="#0f172a"/>
+            <rect x="9" y="0" width="3" height="12" rx="1" fill="#0f172a"/>
+            <rect x="13.5" y="0" width="3" height="12" rx="1" fill="#d1d5db"/>
+          </svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+            <path d="M8 2.5C10.5 2.5 12.7 3.5 14.3 5.1L15.5 3.9C13.6 2 11 .9 8 .9 5 .9 2.4 2 .5 3.9L1.7 5.1C3.3 3.5 5.5 2.5 8 2.5Z" fill="#0f172a"/>
+            <path d="M8 5.5C9.7 5.5 11.2 6.2 12.3 7.3L13.5 6.1C12.1 4.7 10.1 3.9 8 3.9 5.9 3.9 3.9 4.7 2.5 6.1L3.7 7.3C4.8 6.2 6.3 5.5 8 5.5Z" fill="#0f172a"/>
+            <circle cx="8" cy="10" r="1.8" fill="#0f172a"/>
+          </svg>
+          <div style="display:flex;align-items:center;">
+            <div style="width:22px;height:11px;border:1.5px solid #0f172a;border-radius:3px;padding:1.5px;display:flex;align-items:center;">
+              <div style="width:15px;height:6px;background:#0f172a;border-radius:1px;"></div>
             </div>
-            <div class="progress-label">${Math.round(pct)}% del presupuesto · Real: ${formatear(grupo.real)}</div>
-          `;
-          body.appendChild(progressWrap);
-        }
-
-        header.addEventListener("click", () => groupDiv.classList.toggle("collapsed"));
-        groupDiv.appendChild(header);
-        groupDiv.appendChild(body);
-        cont.appendChild(groupDiv);
-      });
-    }
-
-    function mostrarInputInline(area, categoria, subcategoria) {
-      const contId = area === 'ingresos' ? 'listaIngresos' : 
-                     area === 'gastos' ? 'listaGastos' : 'listaAhorro';
-      const cont = document.getElementById(contId);
-      
-      // Remover cualquier input-row existente
-      const existingInputRow = cont.querySelector('.input-row');
-      if (existingInputRow) {
-        existingInputRow.remove();
-      }
-      
-      // Crear nueva fila de input
-      const inputRow = document.createElement('div');
-      inputRow.className = 'input-row';
-      
-      const label = `${categoria} – ${subcategoria}`;
-      
-      inputRow.innerHTML = `
-        <div class="input-row-label">${label}</div>
-        <div class="input-row-field">
-          <input type="number" 
-                 class="input-row-monto" 
-                 id="inputMonto${area}" 
-                 placeholder="0.00" 
-                 step="0.01"
-                 inputmode="decimal"
-                 autofocus>
+            <div style="width:2px;height:5px;background:#0f172a;border-radius:1px;margin-left:1px;"></div>
+          </div>
         </div>
-        <div class="input-row-actions">
-          <button class="input-row-btn cancelar" onclick="cancelarInput('${area}')">Cancelar</button>
-          <button class="input-row-btn guardar" onclick="guardarInput('${area}', '${categoria}', '${subcategoria}')">Guardar</button>
+      </div>
+
+      <!-- App header -->
+      <div class="app-header">
+        <div class="header-top">
+          <div class="app-title">Presupuesto</div>
+          <div class="toggle-pill">
+            <span class="active" id="togMensual">Mensual</span>
+            <span id="togAnual">Anual</span>
+          </div>
         </div>
-      `;
-      
-      // Insertar al inicio
-      cont.insertBefore(inputRow, cont.firstChild);
-      
-      // Enfocar el input
-      setTimeout(() => {
-        document.getElementById(`inputMonto${area}`).focus();
-      }, 100);
-    }
+        <select class="month-select">
+          <option>Enero 2025</option>
+          <option>Febrero 2025</option>
+          <option>Marzo 2025</option>
+        </select>
+      </div>
 
-    function cancelarInput(area) {
-      const contId = area === 'ingresos' ? 'listaIngresos' : 
-                     area === 'gastos' ? 'listaGastos' : 'listaAhorro';
-      const cont = document.getElementById(contId);
-      const inputRow = cont.querySelector('.input-row');
-      if (inputRow) {
-        inputRow.remove();
+      <!-- Scrollable body -->
+      <div class="app-body">
+
+        <!-- INGRESOS -->
+        <div class="section ingresos" id="sec-ingresos">
+          <div class="section-header" data-sec="ingresos">
+            <div>
+              <div class="section-label">Ingresos</div>
+              <div class="section-sublabel">Lo que entra en el periodo</div>
+            </div>
+            <div class="section-right">
+              <button class="btn-add" data-area="ingresos">+</button>
+              <span class="chevron">⌄</span>
+            </div>
+          </div>
+          <div class="section-body" id="body-ingresos">
+            <div class="row-item"><span class="row-name">Salario</span><span class="row-amount">$4,500.00</span></div>
+            <div class="row-item"><span class="row-name">Bono</span><span class="row-amount">$750.00</span></div>
+          </div>
+        </div>
+
+        <!-- GASTOS -->
+        <div class="section gastos" id="sec-gastos">
+          <div class="section-header" data-sec="gastos">
+            <div>
+              <div class="section-label">Gastos</div>
+              <div class="section-sublabel">Lo que sale en el periodo</div>
+            </div>
+            <div class="section-right">
+              <button class="btn-add" data-area="gastos">+</button>
+              <span class="chevron">⌄</span>
+            </div>
+          </div>
+          <div class="section-body" id="body-gastos">
+            <div class="cat-group">
+              <div class="cat-group-header"><div><div class="cat-group-name">Alimentación</div><div class="cat-group-count">2 partidas</div></div><div class="cat-group-right"><span class="cat-group-total">$620.00</span><span class="cat-arrow">⌄</span></div></div>
+              <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill warn" style="width:72%"></div></div><div class="prog-label">72% del presupuesto</div></div>
+            </div>
+            <div class="row-item"><span class="row-name">Hipoteca / Alquiler</span><span class="row-amount">$1,200.00</span></div>
+            <div class="cat-group">
+              <div class="cat-group-header"><div><div class="cat-group-name">Transportación</div><div class="cat-group-count">2 partidas</div></div><div class="cat-group-right"><span class="cat-group-total">$320.00</span><span class="cat-arrow">⌄</span></div></div>
+              <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill danger" style="width:95%"></div></div><div class="prog-label">95% del presupuesto</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AHORRO -->
+        <div class="section ahorro collapsed" id="sec-ahorro">
+          <div class="section-header" data-sec="ahorro">
+            <div>
+              <div class="section-label">Ahorro</div>
+              <div class="section-sublabel">Lo que apartas del ingreso</div>
+            </div>
+            <div class="section-right">
+              <button class="btn-add" data-area="ahorro">+</button>
+              <span class="chevron">⌄</span>
+            </div>
+          </div>
+          <div class="section-body" id="body-ahorro">
+            <div class="row-item"><span class="row-name">Fondo de emergencia</span><span class="row-amount">$300.00</span></div>
+          </div>
+        </div>
+
+        <!-- TOTALES -->
+        <div class="totals">
+          <div class="totals-header"><span class="totals-title">Totales del periodo</span><span style="font-size:14px;color:#4B5563;font-weight:900;">⌄</span></div>
+          <div class="totals-row"><span>Total ingresos</span><span id="t-ing">$5,250.00</span></div>
+          <div class="totals-row"><span>Total gastos</span><span id="t-gas">$2,140.00</span></div>
+          <div class="totals-row"><span>Total ahorro</span><span id="t-aho">$300.00</span></div>
+          <div class="totals-row highlight"><span>Disponible</span><span id="t-dis">$2,810.00</span></div>
+        </div>
+
+        <button class="btn-save">💾 Guardar presupuesto</button>
+
+        <!-- COMPARATIVO -->
+        <div class="comp-card">
+          <div class="comp-title">Presupuesto vs Real</div>
+          <div class="chips" id="compChips">
+            <button class="chip active" data-comp="ingresos">Ingresos</button>
+            <button class="chip" data-comp="gastos">Gastos</button>
+            <button class="chip" data-comp="ahorro">Ahorro</button>
+          </div>
+          <div class="status-banner green" id="compBanner"><span id="compBannerText"><strong>Vas bien.</strong> Ingresos sobre lo planeado.</span><span id="compPct">104%</span></div>
+          <div class="mini-row"><span>Presupuesto</span><span id="compPres">$5,000.00</span></div>
+          <div class="mini-row"><span>Real</span><span id="compReal">$5,250.00</span></div>
+          <div class="mini-row"><span>Diferencia</span><span id="compDiff" class="diff-positive">+$250.00</span></div>
+          <div class="bullet-wrap">
+            <div class="bullet-label">Comparativa</div>
+            <div class="bullet-bar">
+              <div class="bullet-bg" id="compBulletBg" style="width:95%"><span id="compBulletBgText">$5,000</span></div>
+              <div class="bullet-fg" id="compBulletFg" style="width:99%"><span id="compBulletFgText">$5,250</span></div>
+            </div>
+            <div class="bullet-legend">
+              <div style="display:flex;align-items:center;gap:5px;"><div class="legend-dot" style="background:linear-gradient(90deg,#E0E7FF,#C7D2FE);"></div><span>Presupuesto</span></div>
+              <div style="display:flex;align-items:center;gap:5px;"><div class="legend-dot" id="compFgLegend" style="background:linear-gradient(135deg,#22C55E,#4ADE80);"></div><span>Real</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /app-body -->
+
+      <!-- ══ MODAL: CATEGORÍAS ══ -->
+      <div class="modal-overlay" id="modalCats">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <div class="modal-header">
+            <span class="modal-title">Selecciona una categoría</span>
+            <button class="modal-close" id="btnCloseCats">×</button>
+          </div>
+          <div class="modal-body" id="modalBody"></div>
+        </div>
+      </div>
+
+      <!-- ══ INPUT AMOUNT SHEET ══ -->
+      <div class="input-sheet" id="inputSheet">
+        <div class="input-card">
+          <div class="input-handle"></div>
+          <div class="input-label" id="inputAreaLabel">Ingresos</div>
+          <div class="input-sublabel" id="inputSubLabel">Salario</div>
+          <input class="amount-input" id="amountInput" type="number" inputmode="decimal" placeholder="0.00" step="0.01" min="0"/>
+          <div class="input-actions">
+            <button class="btn-cancel" id="btnCancelInput">Cancelar</button>
+            <button class="btn-confirm" id="btnConfirmInput">Guardar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast -->
+      <div class="toast" id="toast"></div>
+
+      <div class="home-indicator"></div>
+    </div><!-- /app-screen -->
+  </div><!-- /screen-outer -->
+</div><!-- /iphone -->
+
+<script>
+  /* ─── Data ─── */
+  const cats = {
+    ingresos:{
+      icon:'💰', cls:'ing',
+      cats:{
+        'Pago por trabajo':['Salario','Pago por hora','Bono','Comisión','Negocio propio','Propina'],
+        'Ganancia de capital':['Acciones','Auto','Bonos o renta fija','Casa / Apartamento','ETF / Fondo mutuo'],
+        'Ingreso pasivo':['Anualidad','Dividendos e Intereses','Pensión','Renta inmueble','Seguro Social']
+      }
+    },
+    gastos:{
+      icon:'🛒', cls:'gas',
+      cats:{
+        'Alimentación':['Supermercado','Comidas fuera','Pedido a domicilio'],
+        'Casa':['Hipoteca / Alquiler','Servicios básicos','Mantenimiento'],
+        'Impuestos':['Seguro social','Propiedad','Venta','Estatales','Federales'],
+        'Transportación':['Gasolina','Mantenimiento','Transporte público / Uber'],
+        'Seguros':['Salud','Auto','Vida'],
+        'Regalos y donaciones':['Familia','Amigos','Instituciones'],
+        'Gastos Médicos':['Consultas','Medicamentos','Procedimientos'],
+        'Cuidado Personal':['Peluquería','Cosméticos','Spa / Barbería'],
+        'Deuda':['Tarjetas de crédito','Préstamos estudiantiles','Otros préstamos'],
+        'Entretenimiento':['Cine','Conciertos','Streaming'],
+        'Telecomunicaciones':['Teléfono','Internet','TV']
+      }
+    },
+    ahorro:{
+      icon:'🎯', cls:'aho',
+      cats:{
+        'Emergencia':['Fondo corto plazo','Fondo largo plazo','Reserva médica'],
+        'Meta específica':['Vacaciones','Auto','Casa','Boda','Educación de hijos'],
+        'Inversión':['Cuenta brokerage','Fondo indexado','Cripto','Crowdfunding'],
+        'Retiro':['IRA / Roth IRA','401(k)','Pensión privada'],
+        'Ahorro personal':['Ahorro mensual','Ahorro en efectivo','Cuenta de ahorro tradicional'],
+        'Ahorro para hijos':['Educación','Regalos futuros','Fondo universitario']
       }
     }
+  };
 
-    function guardarInput(area, categoria, subcategoria) {
-      const input = document.getElementById(`inputMonto${area}`);
-      const valor = parseFloat(input.value);
-      
-      if (!valor || valor <= 0) {
-        showToast('⚠️ Ingresa un monto válido');
-        return;
-      }
+  const areaNames = {ingresos:'Ingresos', gastos:'Gastos', ahorro:'Ahorro'};
 
-      const f = factorTipo();
-      const label = `${categoria} – ${subcategoria}`;
-      const montoMensual = valor / f;
+  /* ─── State ─── */
+  let currentArea = null;
+  let currentSub  = null;
+  let currentCat  = null;
 
-      demoData.presupuesto[area].push({
-        categoria: categoria,
-        label: label,
-        monto: montoMensual
+  /* ─── Accordion: section headers ─── */
+  document.querySelectorAll('.section-header').forEach(h=>{
+    h.addEventListener('click', e=>{
+      if(e.target.classList.contains('btn-add')) return;
+      const area = h.dataset.sec;
+      document.getElementById('sec-'+area).classList.toggle('collapsed');
+    });
+  });
+
+  /* ─── Open modal on "+" ─── */
+  document.querySelectorAll('.btn-add').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      currentArea = btn.dataset.area;
+      // Expand section first
+      document.getElementById('sec-'+currentArea).classList.remove('collapsed');
+      openCatModal();
+    });
+  });
+
+  /* ─── Build & open category modal ─── */
+  function openCatModal(){
+    const body = document.getElementById('modalBody');
+    body.innerHTML = '';
+
+    const areas = Object.keys(cats);
+    areas.forEach(area=>{
+      const info = cats[area];
+      const block = document.createElement('div');
+      block.className = 'sector-block';
+
+      // Header
+      const hdr = document.createElement('div');
+      hdr.className = 'sector-header';
+      hdr.innerHTML = `
+        <div class="sector-left">
+          <div class="sector-icon ${info.cls}">${info.icon}</div>
+          <span class="sector-name">${areaNames[area]}</span>
+        </div>
+        <span class="sector-chevron">⌄</span>`;
+      hdr.addEventListener('click',()=>{
+        // close others
+        document.querySelectorAll('.sector-block').forEach(b=>{ if(b!==block) b.classList.remove('open'); });
+        block.classList.toggle('open');
       });
 
-      // Remover el input row
-      cancelarInput(area);
-      
-      showLoading();
-      setTimeout(() => {
-        renderSecciones();
-        renderTotales();
-        renderComparativo();
-        hideLoading();
-        showToast(`✅ ${subcategoria}: ${formatear(valor)}`);
-      }, 200);
-    }
+      // Content
+      const content = document.createElement('div');
+      content.className = 'sector-content';
+      const inner = document.createElement('div');
+      inner.className = 'sector-inner';
 
-    function renderSecciones(){
-      renderArea("ingresos", "listaIngresos");
-      renderArea("gastos", "listaGastos");
-      renderArea("ahorro", "listaAhorro");
-    }
-
-    function renderTotales(){
-      const tIng = sumarLista(demoData.presupuesto.ingresos);
-      const tGas = sumarLista(demoData.presupuesto.gastos);
-      const tAh  = sumarLista(demoData.presupuesto.ahorro);
-      const disp = tIng - tGas - tAh;
-
-      const totalIngresosEl = document.getElementById("totalIngresos");
-      const totalGastosEl = document.getElementById("totalGastos");
-      const totalAhorroEl = document.getElementById("totalAhorro");
-      const totalDisponibleEl = document.getElementById("totalDisponible");
-
-      if (totalIngresosEl) totalIngresosEl.textContent = formatear(tIng);
-      if (totalGastosEl) totalGastosEl.textContent = formatear(tGas);
-      if (totalAhorroEl) totalAhorroEl.textContent = formatear(tAh);
-      if (totalDisponibleEl) totalDisponibleEl.textContent = formatear(disp);
-    }
-
-    function actualizarBanner(pres, real, area){
-      const banner = document.getElementById("statusBanner");
-      if (!banner) return;
-
-      banner.classList.remove("green","yellow","red");
-
-      if (!pres || pres === 0){
-        banner.classList.add("yellow");
-        banner.innerHTML = `<span>Sin presupuesto en esta área.</span><span></span>`;
-        return;
-      }
-
-      const diff = real - pres;
-      const ratio = real / pres;
-      const pct = Math.round(ratio * 100);
-
-      const umbral = pres * 0.05;
-      const dentroRango = Math.abs(diff) <= umbral;
-      let texto = "";
-
-      if (area === "ingresos"){
-        if (diff > umbral){ banner.classList.add("green"); texto = "<strong>Ingresos arriba.</strong> Ganaste más de lo planificado."; }
-        else if (dentroRango){ banner.classList.add("yellow"); texto = "<strong>Cerca de lo planificado.</strong>"; }
-        else { banner.classList.add("red"); texto = "<strong>Ingresos abajo.</strong> Entró menos de lo esperado."; }
-      } else if (area === "gastos"){
-        if (diff < -umbral){ banner.classList.add("green"); texto = "<strong>Vas bien.</strong> Gasto por debajo del presupuesto."; }
-        else if (dentroRango){ banner.classList.add("yellow"); texto = "<strong>Casi al límite.</strong> Muy cerca del presupuesto."; }
-        else { banner.classList.add("red"); texto = "<strong>Te pasaste.</strong> Gasto por encima del presupuesto."; }
-      } else {
-        if (diff > umbral){ banner.classList.add("green"); texto = "<strong>Buen trabajo.</strong> Ahorro por encima de lo planificado."; }
-        else if (dentroRango){ banner.classList.add("yellow"); texto = "<strong>Cerca de la meta.</strong>"; }
-        else { banner.classList.add("red"); texto = "<strong>Ahorro bajo.</strong> Estás ahorrando menos de lo planeado."; }
-      }
-
-      banner.innerHTML = `<span>${texto}</span><span id="bannerPct">${pct}%</span>`;
-    }
-
-    function renderTopDeviations(){
-      const cont = document.getElementById("topDeviations");
-      cont.innerHTML = "";
-
-      if (areaComparativa !== "gastos"){
-        cont.style.display = "none";
-        return;
-      }
-
-      const f = factorTipo();
-      cont.style.display = "block";
-
-      const mapaPres = {};
-      demoData.presupuesto.gastos.forEach(g => mapaPres[g.categoria] = (mapaPres[g.categoria] || 0) + g.monto * f);
-
-      const mapaReal = {};
-      demoData.real.gastos.forEach(g => mapaReal[g.categoria] = (mapaReal[g.categoria] || 0) + g.monto * f);
-
-      const categorias = new Set([...Object.keys(mapaPres), ...Object.keys(mapaReal)]);
-      const desviaciones = [];
-
-      categorias.forEach(cat => {
-        const pres = mapaPres[cat] || 0;
-        const real = mapaReal[cat] || 0;
-        const diff = real - pres;
-        if (Math.abs(diff) > 0) desviaciones.push({ cat, pres, real, diff });
-      });
-
-      desviaciones.sort((a,b) => Math.abs(b.diff) - Math.abs(a.diff));
-      const top = desviaciones.slice(0,3);
-
-      if (top.length === 0){
-        cont.innerHTML = "<div class='top-dev-detail'>Sin desviaciones relevantes.</div>";
-        return;
-      }
-
-      top.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "top-dev-item";
-
-        const left = document.createElement("div");
-        left.innerHTML = `
-          <div class="top-dev-name">${item.cat}</div>
-          <div class="top-dev-detail">Pres: ${formatear(item.pres)} · Real: ${formatear(item.real)}</div>
-        `;
-
-        const diffSpan = document.createElement("div");
-        diffSpan.className = "top-dev-diff " + (item.diff > 0 ? "positive" : "negative");
-        const signo = item.diff > 0 ? "+" : "-";
-        diffSpan.textContent = signo + formatear(Math.abs(item.diff));
-
-        row.appendChild(left);
-        row.appendChild(diffSpan);
-        cont.appendChild(row);
-      });
-    }
-
-    function renderComparativo(){
-      const f = factorTipo();
-      const presLista = demoData.presupuesto[areaComparativa];
-      const realLista = demoData.real[areaComparativa];
-
-      const totalPres = sumarLista(presLista);
-      const totalReal = realLista.reduce((acc, item) => acc + item.monto * f, 0);
-
-      const diffRaw = totalReal - totalPres;
-      let diffVisual = diffRaw;
-      if (areaComparativa === "gastos") diffVisual = totalPres - totalReal;
-
-      const miniPresEl = document.getElementById("miniPres");
-      const miniRealEl = document.getElementById("miniReal");
-      const diffSpan = document.getElementById("miniDiff");
-
-      if (miniPresEl) miniPresEl.textContent = formatear(totalPres);
-      if (miniRealEl) miniRealEl.textContent = formatear(totalReal);
-
-      if (diffSpan) {
-        diffSpan.classList.remove("diff-positive","diff-negative");
-
-        if (diffVisual === 0){
-          diffSpan.textContent = formatear(0);
-        } else {
-          const signo = diffVisual > 0 ? "+" : "-";
-          diffSpan.textContent = signo + formatear(Math.abs(diffVisual));
-          diffSpan.classList.add(diffVisual > 0 ? "diff-positive" : "diff-negative");
-        }
-      }
-
-      actualizarBanner(totalPres, totalReal, areaComparativa);
-
-      // Renderizar Bullet Chart
-      renderBulletChart(totalPres, totalReal);
-
-      renderTopDeviations();
-    }
-
-    function renderBulletChart(presupuesto, real) {
-      const bulletBudget = document.getElementById('bulletBudget');
-      const bulletActual = document.getElementById('bulletActual');
-      const bulletBudgetText = document.getElementById('bulletBudgetText');
-      const bulletActualText = document.getElementById('bulletActualText');
-
-      if (!bulletBudget || !bulletActual) return;
-
-      // Determinar el máximo para el ancho
-      const maxValue = Math.max(presupuesto, real, 1); // Evitar división por 0
-
-      // Calcular porcentajes
-      const budgetWidth = (presupuesto / maxValue) * 100;
-      const actualWidth = (real / maxValue) * 100;
-
-      // Aplicar anchos
-      bulletBudget.style.width = budgetWidth + '%';
-      bulletActual.style.width = actualWidth + '%';
-
-      // Actualizar textos
-      if (bulletBudgetText) bulletBudgetText.textContent = formatear(presupuesto);
-      if (bulletActualText) bulletActualText.textContent = formatear(real);
-
-      // Aplicar colores según el área y si está sobre o bajo presupuesto
-      bulletActual.classList.remove('over-budget', 'under-budget');
-      
-      if (areaComparativa === 'gastos') {
-        // Para gastos: verde si gastaste menos, rojo si gastaste más
-        if (real > presupuesto) {
-          bulletActual.classList.add('over-budget');
-        } else if (real < presupuesto) {
-          bulletActual.classList.add('under-budget');
-        }
-      } else if (areaComparativa === 'ingresos') {
-        // Para ingresos: verde si ganaste más, rojo si ganaste menos
-        if (real > presupuesto) {
-          bulletActual.classList.add('under-budget');
-        } else if (real < presupuesto) {
-          bulletActual.classList.add('over-budget');
-        }
-      } else {
-        // Para ahorro: verde si ahorraste más, rojo si ahorraste menos
-        if (real > presupuesto) {
-          bulletActual.classList.add('under-budget');
-        } else if (real < presupuesto) {
-          bulletActual.classList.add('over-budget');
-        }
-      }
-    }
-
-    function configurarToggleTipo(){
-      const toggle = document.getElementById("toggleTipo");
-      const selectMonth = document.getElementById("selectMonth");
-
-      toggle.querySelectorAll("span").forEach(span => {
-        span.addEventListener("click", () => {
-          const nuevo = span.getAttribute("data-tipo");
-          if (nuevo === tipoActual) return;
-          tipoActual = nuevo;
-
-          toggle.querySelectorAll("span").forEach(s => s.classList.remove("active"));
-          span.classList.add("active");
-
-          selectMonth.style.display = (tipoActual === "mensual") ? "" : "none";
-
-          renderSecciones();
-          renderTotales();
-          renderComparativo();
+      Object.entries(info.cats).forEach(([catName, subs])=>{
+        const cb = document.createElement('div');
+        cb.className = 'cat-block';
+        const cbh = document.createElement('div');
+        cbh.className = 'cat-block-header';
+        cbh.innerHTML = `<span class="cat-block-name">${catName}</span><span class="cat-chevron">⌄</span>`;
+        cbh.addEventListener('click',()=>{
+          document.querySelectorAll('.cat-block').forEach(b=>{ if(b!==cb) b.classList.remove('open'); });
+          cb.classList.toggle('open');
         });
-      });
-
-      selectMonth.style.display = "";
-    }
-
-    function configurarChips(){
-      const chips = document.getElementById("chipsArea");
-      chips.querySelectorAll(".chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-          const area = chip.getAttribute("data-area");
-          if (area === areaComparativa) return;
-          areaComparativa = area;
-
-          chips.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-          chip.classList.add("active");
-
-          renderComparativo();
-        });
-      });
-    }
-
-    // Renderizar categorías en modal
-    function renderizarCategoriasModal(area, contenedorId) {
-      const contenedor = document.getElementById(contenedorId);
-      contenedor.innerHTML = '';
-
-      const cats = categorias[area];
-      
-      Object.entries(cats).forEach(([categoria, subcategorias]) => {
-        const bloqueDiv = document.createElement('div');
-        bloqueDiv.className = 'bloque-categoria-modal';
-
-        const tituloDiv = document.createElement('div');
-        tituloDiv.className = 'titulo-categoria-modal';
-        tituloDiv.onclick = () => toggleSubcategoriasModal(tituloDiv);
-
-        const nombreSpan = document.createElement('span');
-        nombreSpan.className = 'titulo-cat-nombre-modal';
-        nombreSpan.textContent = categoria;
-
-        const arrowSpan = document.createElement('span');
-        arrowSpan.textContent = '⌄';
-        arrowSpan.style.color = 'var(--muted)';
-        arrowSpan.style.transition = 'transform 0.3s ease';
-
-        tituloDiv.appendChild(nombreSpan);
-        tituloDiv.appendChild(arrowSpan);
-
-        const subDiv = document.createElement('div');
-        subDiv.className = 'subcategorias-modal';
-
-        subcategorias.forEach(sub => {
-          const filaDiv = document.createElement('div');
-          filaDiv.className = 'fila-sub-modal';
-
-          const nombreSubSpan = document.createElement('span');
-          nombreSubSpan.className = 'fila-sub-nombre-modal';
-          nombreSubSpan.textContent = sub;
-
-          filaDiv.appendChild(nombreSubSpan);
-
-          filaDiv.addEventListener('click', () => {
-            seleccionarSubcategoria(area, categoria, sub);
+        const subsDiv = document.createElement('div');
+        subsDiv.className = 'cat-subs';
+        subs.forEach(sub=>{
+          const sr = document.createElement('div');
+          sr.className = 'sub-row';
+          sr.innerHTML = `<span class="sub-row-name">${sub}</span><span class="sub-row-arrow">›</span>`;
+          sr.addEventListener('click',()=>{
+            currentCat = catName;
+            currentSub = sub;
+            closeCatModal();
+            openInputSheet();
           });
-
-          subDiv.appendChild(filaDiv);
+          subsDiv.appendChild(sr);
         });
-
-        bloqueDiv.appendChild(tituloDiv);
-        bloqueDiv.appendChild(subDiv);
-        contenedor.appendChild(bloqueDiv);
-      });
-    }
-
-    function toggleSubcategoriasModal(element) {
-      const subcats = element.closest('.bloque-categoria-modal').querySelector('.subcategorias-modal');
-      const arrow = element.querySelector('span:last-child');
-      const allSubcats = document.querySelectorAll('.subcategorias-modal');
-      
-      allSubcats.forEach(sc => {
-        if (sc !== subcats) {
-          sc.classList.remove('activo');
-          const otherArrow = sc.previousElementSibling?.querySelector('span:last-child');
-          if (otherArrow) otherArrow.style.transform = '';
-        }
-      });
-      
-      subcats.classList.toggle('activo');
-      if (subcats.classList.contains('activo')) {
-        arrow.style.transform = 'rotate(180deg)';
-      } else {
-        arrow.style.transform = '';
-      }
-    }
-
-    function toggleBloqueModal(encabezado) {
-      const parent = encabezado.closest('.bloque-sector-modal');
-      parent.classList.toggle('abierto');
-    }
-
-    function abrirModalCategorias(event, area) {
-      event.stopPropagation();
-      areaSeleccionada = area;
-      
-      // Asegurar que la sección esté abierta
-      const section = event.target.closest('.section');
-      section.classList.remove('collapsed');
-      
-      const modal = document.getElementById('modalCategorias');
-      
-      // Renderizar todas las categorías
-      renderizarCategoriasModal('ingresos', 'contenedorIngresosModal');
-      renderizarCategoriasModal('gastos', 'contenedorGastosModal');
-      renderizarCategoriasModal('ahorro', 'contenedorAhorroModal');
-      
-      modal.classList.add('open');
-    }
-
-    function cerrarModalCategorias() {
-      document.getElementById('modalCategorias').classList.remove('open');
-    }
-
-    function seleccionarSubcategoria(area, categoria, subcategoria) {
-      categoriaSeleccionada = categoria;
-      subcategoriaSeleccionada = subcategoria;
-      areaSeleccionada = area;
-      
-      // Cerrar modal
-      cerrarModalCategorias();
-      
-      // Mostrar input inline
-      mostrarInputInline(area, categoria, subcategoria);
-    }
-
-    function configurarAcordeones(){
-      document.querySelectorAll(".accordion-header").forEach(header => {
-        header.addEventListener("click", (e) => {
-          // Evitar toggle si se hace click en el botón +
-          if (e.target.classList.contains('btn-add-section')) return;
-          header.closest(".section").classList.toggle("collapsed");
-        });
-      });
-    }
-
-    function configurarTotalesCollapsible(){
-      const card = document.getElementById("totalsCard");
-      const toggle = document.getElementById("totalsToggle");
-      toggle.addEventListener("click", () => card.classList.toggle("collapsed"));
-      // Ahora inicia abierto por defecto
-    }
-
-    function showToast(msg){
-      const toast = document.getElementById("toast");
-      toast.textContent = msg;
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2000);
-    }
-
-    function showLoading(){
-      document.getElementById("loadingOverlay").classList.add("show");
-    }
-
-    function hideLoading(){
-      document.getElementById("loadingOverlay").classList.remove("show");
-    }
-
-    function configurarGuardar(){
-      document.getElementById("btnGuardar").addEventListener("click", () => {
-        showLoading();
-        setTimeout(() => {
-          hideLoading();
-          showToast("💾 Presupuesto guardado");
-        }, 800);
-      });
-    }
-
-    function configurarDeleteConfirm(){
-      document.getElementById('btnDeleteCancel').addEventListener('click', () => {
-        document.getElementById('deleteConfirm').classList.remove('show');
-        deleteTarget = null;
+        cb.appendChild(cbh);
+        cb.appendChild(subsDiv);
+        inner.appendChild(cb);
       });
 
-      document.getElementById('btnDeleteConfirm').addEventListener('click', () => {
-        if (deleteTarget) {
-          const { area, index } = deleteTarget;
-          demoData.presupuesto[area].splice(index, 1);
-          
-          showLoading();
-          setTimeout(() => {
-            renderSecciones();
-            renderTotales();
-            renderComparativo();
-            hideLoading();
-            showToast("🗑️ Elemento eliminado");
-          }, 300);
-          
-          document.getElementById('deleteConfirm').classList.remove('show');
-          deleteTarget = null;
-        }
-      });
-    }
+      content.appendChild(inner);
+      block.appendChild(hdr);
+      block.appendChild(content);
+      body.appendChild(block);
 
-    // Click fuera del modal
-    document.getElementById('modalCategorias').addEventListener('click', (e) => {
-      if (e.target.id === 'modalCategorias') {
-        cerrarModalCategorias();
-      }
+      // Auto-open the sector matching currentArea
+      if(area === currentArea) block.classList.add('open');
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      configurarToggleTipo();
-      configurarChips();
-      configurarAcordeones();
-      configurarTotalesCollapsible();
-      configurarGuardar();
-      configurarDeleteConfirm();
+    document.getElementById('modalCats').classList.add('open');
+  }
 
-      renderSecciones();
-      renderTotales();
-      renderComparativo();
+  function closeCatModal(){
+    document.getElementById('modalCats').classList.remove('open');
+  }
+  document.getElementById('btnCloseCats').addEventListener('click', closeCatModal);
+  document.getElementById('modalCats').addEventListener('click', e=>{
+    if(e.target === document.getElementById('modalCats')) closeCatModal();
+  });
+
+  /* ─── Input amount sheet ─── */
+  function openInputSheet(){
+    document.getElementById('inputAreaLabel').textContent = areaNames[currentArea];
+    document.getElementById('inputSubLabel').textContent  = currentCat + ' › ' + currentSub;
+    document.getElementById('amountInput').value = '';
+    document.getElementById('inputSheet').classList.add('open');
+    setTimeout(()=> document.getElementById('amountInput').focus(), 100);
+  }
+  function closeInputSheet(){
+    document.getElementById('inputSheet').classList.remove('open');
+  }
+  document.getElementById('btnCancelInput').addEventListener('click', closeInputSheet);
+
+  document.getElementById('btnConfirmInput').addEventListener('click',()=>{
+    const val = parseFloat(document.getElementById('amountInput').value);
+    if(!val || val<=0){ showToast('⚠️ Ingresa un monto válido'); return; }
+
+    // Add new row to the right section body
+    const body = document.getElementById('body-'+currentArea);
+    const row = document.createElement('div');
+    row.className = 'row-item';
+    row.innerHTML = `<span class="row-name">${currentSub}</span><span class="row-amount">$${val.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
+    body.appendChild(row);
+
+    closeInputSheet();
+    showToast('✅ '+currentSub+' guardado');
+  });
+
+  /* ─── Comparativo data & chip logic ─── */
+  const compData = {
+    ingresos: { pres: 5000, real: 5250 },
+    gastos:   { pres: 2500, real: 2140 },
+    ahorro:   { pres: 500,  real: 300  }
+  };
+
+  const compBanners = {
+    ingresos: {
+      positive: { cls:'green', text:'<strong>Vas bien.</strong> Ingresos sobre lo planeado.' },
+      negative: { cls:'red',   text:'<strong>Ingresos abajo.</strong> Entró menos de lo esperado.' },
+      neutral:  { cls:'yellow',text:'<strong>Cerca de lo planeado.</strong>' }
+    },
+    gastos: {
+      positive: { cls:'green', text:'<strong>Vas bien.</strong> Gasto por debajo del presupuesto.' },
+      negative: { cls:'red',   text:'<strong>Te pasaste.</strong> Gasto por encima del presupuesto.' },
+      neutral:  { cls:'yellow',text:'<strong>Casi al límite.</strong> Muy cerca del presupuesto.' }
+    },
+    ahorro: {
+      positive: { cls:'green', text:'<strong>Buen trabajo.</strong> Ahorro sobre lo planificado.' },
+      negative: { cls:'red',   text:'<strong>Ahorro bajo.</strong> Estás ahorrando menos de lo planeado.' },
+      neutral:  { cls:'yellow',text:'<strong>Cerca de la meta.</strong>' }
+    }
+  };
+
+  function fmt(n){ return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmtShort(n){ return '$'+n.toLocaleString('en-US',{maximumFractionDigits:0}); }
+
+  function renderComp(area){
+    const d = compData[area];
+    const pres = d.pres, real = d.real;
+    const diff = real - pres;
+    const pct  = Math.round((real / pres) * 100);
+    const umbral = pres * 0.05;
+
+    // For gastos: positive means under budget (good); others: positive means over (good)
+    const isGood = area === 'gastos' ? diff < -umbral : diff > umbral;
+    const isNeutral = Math.abs(diff) <= umbral;
+    const state = isNeutral ? 'neutral' : (isGood ? 'positive' : 'negative');
+
+    const banner = document.getElementById('compBanner');
+    banner.className = 'status-banner ' + compBanners[area][state].cls;
+    document.getElementById('compBannerText').innerHTML = compBanners[area][state].text;
+    document.getElementById('compPct').textContent = pct + '%';
+
+    document.getElementById('compPres').textContent = fmt(pres);
+    document.getElementById('compReal').textContent = fmt(real);
+
+    const diffEl = document.getElementById('compDiff');
+    diffEl.className = '';
+    // visual diff: for gastos show savings (pres-real), others show real-pres
+    const visualDiff = area === 'gastos' ? pres - real : diff;
+    if(visualDiff > 0){
+      diffEl.textContent = '+' + fmt(Math.abs(visualDiff));
+      diffEl.classList.add('diff-positive');
+    } else if(visualDiff < 0){
+      diffEl.textContent = '-' + fmt(Math.abs(visualDiff));
+      diffEl.classList.add('diff-negative');
+    } else {
+      diffEl.textContent = fmt(0);
+    }
+
+    // Bullet chart
+    const max = Math.max(pres, real);
+    const bgW  = Math.round((pres / max) * 100);
+    const fgW  = Math.round((real / max) * 100);
+    document.getElementById('compBulletBg').style.width = bgW + '%';
+    document.getElementById('compBulletFg').style.width = fgW + '%';
+    document.getElementById('compBulletBgText').textContent = fmtShort(pres);
+    document.getElementById('compBulletFgText').textContent = fmtShort(real);
+
+    // Bullet bar color
+    const fgEl = document.getElementById('compBulletFg');
+    const lgEl = document.getElementById('compFgLegend');
+    if(isGood){
+      fgEl.style.background = 'linear-gradient(135deg,#22C55E,#4ADE80)';
+      lgEl.style.background  = 'linear-gradient(135deg,#22C55E,#4ADE80)';
+    } else if(isNeutral){
+      fgEl.style.background = 'linear-gradient(135deg,#F59E0B,#FBBF24)';
+      lgEl.style.background  = 'linear-gradient(135deg,#F59E0B,#FBBF24)';
+    } else {
+      fgEl.style.background = 'linear-gradient(135deg,#EF4444,#F87171)';
+      lgEl.style.background  = 'linear-gradient(135deg,#EF4444,#F87171)';
+    }
+  }
+
+  // Wire up chips
+  document.querySelectorAll('#compChips .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#compChips .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderComp(chip.dataset.comp);
     });
-  </script>
+  });
+
+  // Init with ingresos
+  renderComp('ingresos');
+
+  /* ─── Toggle mensual / anual ─── */
+  document.getElementById('togMensual').addEventListener('click',()=>{
+    document.getElementById('togMensual').classList.add('active');
+    document.getElementById('togAnual').classList.remove('active');
+  });
+  document.getElementById('togAnual').addEventListener('click',()=>{
+    document.getElementById('togAnual').classList.add('active');
+    document.getElementById('togMensual').classList.remove('active');
+  });
+
+  /* ─── Toast ─── */
+  let toastTimer;
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> t.classList.remove('show'), 2200);
+  }
+</script>
 </body>
 </html>
