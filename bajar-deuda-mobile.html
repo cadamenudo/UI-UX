@@ -48,10 +48,9 @@
       background:#F7F8FC;
       transition:transform .3s cubic-bezier(.4,0,.2,1);
     }
-    #screenPlan{transform:translateX(0);}
+    #screenOnboarding{transform:translateX(0);}
+    #screenPlan{transform:translateX(100%);}
     #screenNueva{transform:translateX(100%);}
-    .app-active #screenPlan{transform:translateX(-30%);}
-    .app-active #screenNueva{transform:translateX(0);}
 
     /* ── Plan header ── */
     .plan-header{
@@ -289,12 +288,115 @@
     /* toast */
     .toast{position:absolute;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:9px 16px;border-radius:10px;font-weight:800;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:400;opacity:0;transition:transform .25s,opacity .25s;pointer-events:none;display:flex;gap:7px;align-items:center;white-space:nowrap;}
     .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+    /* onboarding screen */
+    #screenOnboarding{transform:translateX(0);}
+    .ob-hero{
+      background:linear-gradient(160deg,#594AE2 0%,#7459D9 100%);
+      padding:20px 18px 24px;flex-shrink:0;
+    }
+    .ob-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.18);border-radius:20px;
+      padding:4px 12px;font-size:11px;font-weight:800;color:#fff;
+      margin-bottom:14px;
+    }
+    .ob-hero-title{font-size:20px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:6px;}
+    .ob-hero-sub{font-size:13px;font-weight:700;color:rgba(255,255,255,.8);line-height:1.5;}
+    .ob-stat-row{display:flex;gap:8px;margin-top:16px;}
+    .ob-stat{flex:1;background:rgba(255,255,255,.15);border-radius:12px;padding:10px 12px;text-align:center;}
+    .ob-stat-val{font-size:18px;font-weight:900;color:#fff;}
+    .ob-stat-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.75);margin-top:2px;}
+    .ob-section-lbl{
+      font-size:10px;font-weight:900;color:#64748B;
+      text-transform:uppercase;letter-spacing:.09em;
+      margin:12px 0 8px;
+    }
+    .ob-payment-row{
+      display:flex;align-items:center;gap:10px;
+      padding:11px 12px;background:#fff;
+      border:1.5px solid #E5E7EB;border-radius:12px;
+      margin-bottom:7px;cursor:pointer;transition:all .12s;
+    }
+    .ob-payment-row.selected{
+      border-color:#594AE2;background:rgba(89,74,226,.04);
+    }
+    .ob-check{
+      width:22px;height:22px;border-radius:50%;
+      border:2px solid #CBD5E1;flex:0 0 22px;
+      display:grid;place-items:center;transition:all .12s;
+    }
+    .ob-check.on{background:#594AE2;border-color:#594AE2;}
+    .ob-start-btn{
+      width:100%;border:none;border-radius:14px;padding:14px;
+      background:#594AE2;color:#fff;font-family:"Nunito",sans-serif;
+      font-size:15px;font-weight:900;cursor:pointer;
+      box-shadow:0 8px 20px rgba(89,74,226,.3);
+      transition:opacity .15s;
+    }
+    .ob-start-btn:disabled{opacity:.4;cursor:not-allowed;}
+    .ob-skip{
+      display:block;width:100%;text-align:center;
+      font-size:12px;font-weight:800;color:#94A3B8;
+      background:none;border:none;cursor:pointer;
+      font-family:"Nunito",sans-serif;padding:10px 0 4px;
+    }
   </style>
 </head>
 <body>
 <div class="phone">
   <div class="phone-inner" id="appRoot">
     <div class="dynamic-island"></div>
+
+    <!-- ════════ ONBOARDING SCREEN ════════ -->
+    <div class="screen" id="screenOnboarding">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1" fill="#fff"/><rect x="9" y="0" width="3" height="11" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff" opacity=".3"/></svg>
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path d="M7.5 2C9.6 2 11.5 2.9 12.8 4.3L14.1 2.9C12.4 1 10.1 0 7.5 0C4.9 0 2.6 1 0.9 2.9L2.2 4.3C3.5 2.9 5.4 2 7.5 2Z" fill="#fff"/><path d="M7.5 5C8.8 5 10 5.5 10.9 6.4L12.2 5C10.9 3.7 9.3 2.9 7.5 2.9C5.7 2.9 4.1 3.7 2.8 5L4.1 6.4C5 5.5 6.2 5 7.5 5Z" fill="#fff"/><circle cx="7.5" cy="9.5" r="1.5" fill="#fff"/></svg>
+          <svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x="0.5" y="0.5" width="20" height="10" rx="3" stroke="#fff" stroke-opacity=".5"/><rect x="2" y="2" width="16" height="7" rx="1.5" fill="#fff"/><path d="M22 3.5V7.5C22.8 7.2 23.5 6.5 23.5 5.5S22.8 3.8 22 3.5Z" fill="#fff" opacity=".4"/></svg>
+        </div>
+      </div>
+
+      <!-- Hero -->
+      <div class="ob-hero">
+        <div class="ob-badge">💳 Plan de Deuda</div>
+        <div class="ob-hero-title">Encontramos pagos<br>de deuda en tus gastos</div>
+        <div class="ob-hero-sub">Regístralos como deudas para ver cuánto debes, cuánto has pagado y cuándo terminas.</div>
+        <div class="ob-stat-row">
+          <div class="ob-stat">
+            <div class="ob-stat-val" id="obTotalPayments">5</div>
+            <div class="ob-stat-lbl">Pagos encontrados</div>
+          </div>
+          <div class="ob-stat">
+            <div class="ob-stat-val" id="obTotalAmount">$1,840</div>
+            <div class="ob-stat-lbl">Total en pagos</div>
+          </div>
+          <div class="ob-stat">
+            <div class="ob-stat-val" id="obTotalCats">3</div>
+            <div class="ob-stat-lbl">Categorías</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment list -->
+      <div class="scroll" style="padding:0 14px 16px;" id="obScroll">
+        <div class="ob-section-lbl">Selecciona por dónde empezar</div>
+        <div id="obPaymentList"></div>
+        <div style="margin-top:4px">
+          <button class="ob-start-btn" id="obStartBtn" onclick="obStart()" disabled>Registrar deuda seleccionada →</button>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="nav-item"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></button>
+        <button class="nav-item active" onclick="openUnlinkedSheet()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg></button>
+        <button class="nav-item nav-fab"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="22" height="18" rx="3"/><path d="M9 7V5a5 5 0 0110 0v2"/><line x1="14" y1="13" x2="14" y2="19"/><line x1="11" y1="16" x2="17" y2="16"/></svg></button>
+        <button class="nav-item"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="4" height="7" rx="1"/><rect x="10" y="9" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/></svg></button>
+        <button class="nav-item"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10l6.5 3.5"/><path d="M12 12L5 7.5"/><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20"/></svg></button>
+      </div>
+    </div>
 
     <!-- ════════ PLAN SCREEN ════════ -->
     <div class="screen" id="screenPlan">
@@ -331,13 +433,19 @@
             <button class="sp" data-sort="pct">Menos pagado</button>
             <button class="sp" data-sort="name">A-Z</button>
           </div>
-          <div class="section-label">Mis deudas <span id="countDebts">0 registradas</span></div>
-          <button class="nueva-plan-btn" onclick="goNueva()"><span style="font-size:16px;font-weight:900">+</span> Nueva deuda</button>
+          <div class="section-label">Mis deudas <span id="countDebts" onclick="openUnlinkedSheet()" style="cursor:pointer">0 registradas</span></div>
+          <button class="nueva-plan-btn" onclick="openUnlinkedSheet()"><span style="font-size:16px;font-weight:900">+</span> Nueva deuda</button>
           <div class="debt-list" id="debtList"></div>
         </div>
 
         <!-- Detail panel inside plan -->
-        <div class="scroll" id="planDetail" style="position:absolute;inset:0;background:#F7F8FC;padding:10px 12px 20px;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);">
+        <div class="scroll" id="planDetail" style="position:absolute;inset:0;background:#F7F8FC;padding:0;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);">
+          <!-- back bar -->
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px 6px;background:#F7F8FC;flex-shrink:0;">
+            <button onclick="closeDetail()" style="width:34px;height:34px;border-radius:10px;background:#EEF0F6;border:1px solid #E5E7EB;color:#0F172A;font-size:20px;display:grid;place-items:center;cursor:pointer;font-family:'Nunito',sans-serif;flex:0 0 34px;">‹</button>
+            <span style="font-size:14px;font-weight:900;color:#0F172A" id="detailBackTitle">Detalle</span>
+          </div>
+          <div style="padding:0 12px 20px;overflow-y:auto;height:calc(100% - 54px);">
           <div class="detail-hero">
             <div class="dh-name" id="dName">—</div>
             <div class="dh-cat" id="dCat">—</div>
@@ -362,6 +470,7 @@
             <div class="source-note"><span>📥</span><span>Los abonos se registran desde <strong>Mis Gastos</strong>.</span></div>
             <div class="history-list" id="historyList"></div>
           </div>
+          </div><!-- end inner scroll wrapper -->
         </div>
       </div>
 
@@ -369,7 +478,7 @@
         <button class="nav-item">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
         </button>
-        <button class="nav-item active">
+        <button class="nav-item active" onclick="openUnlinkedSheet()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>
         </button>
         <button class="nav-item nav-fab">
@@ -514,6 +623,40 @@
       </div>
     </div>
 
+    <!-- ════════ UNLINKED PAYMENTS SHEET ════════ -->
+    <div class="sheet-overlay" id="unlinkedOverlay">
+      <div class="sheet" style="max-height:85%;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-head">
+          <div>
+            <b>Pagos de deuda registrados</b>
+            <div style="font-size:11px;font-weight:700;color:#64748B;margin-top:2px">Elige cuál quieres registrar como deuda</div>
+          </div>
+          <button class="sheet-x" onclick="closeUnlinkedSheet()">✕</button>
+        </div>
+
+        <!-- progress indicator -->
+        <div id="ulProgress" style="padding:10px 14px 0;display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:11px;font-weight:900;color:#64748B;text-transform:uppercase;letter-spacing:.07em">Progreso</span>
+            <span style="font-size:11px;font-weight:900;color:#594AE2" id="ulProgressLabel">0 de 0</span>
+          </div>
+          <div style="height:6px;border-radius:999px;background:#E9ECF6;overflow:hidden">
+            <div id="ulProgressBar" style="height:100%;border-radius:999px;background:linear-gradient(90deg,#594AE2,#7459D9);transition:width .4s;width:0%"></div>
+          </div>
+        </div>
+
+        <div class="sheet-body" id="ulBody" style="padding-top:12px;max-height:none;">
+          <!-- filled by JS -->
+        </div>
+
+        <div style="padding:8px 14px 16px;display:flex;gap:8px;" id="ulFooter">
+          <button class="btn ghost" style="flex:1" onclick="closeUnlinkedSheet()">Ahora no</button>
+          <button class="btn primary" id="ulContinueBtn" onclick="ulContinue()" disabled style="opacity:.4">Registrar deuda →</button>
+        </div>
+      </div>
+    </div>
+
     <div class="toast" id="toast"><span id="toastEmoji">✅</span><span id="toastMsg">Listo</span></div>
   </div>
 </div>
@@ -529,36 +672,63 @@ const BASE_CATEGORIES=[
   {id:'margen',name:'Margen corretaje'},
 ];
 
-let debts=[
-  {id:rid(),name:'Visa – Banco Popular',categoryId:'tarjetas',original:8200,apr:24.99,note:'',payments:[{date:'2026-01-10',amount:250,note:'Pago mínimo'},{date:'2026-02-05',amount:400,note:'Pago extra'}]},
-  {id:rid(),name:'Préstamo Auto',categoryId:'auto',original:14500,apr:7.5,note:'',payments:[{date:'2026-01-15',amount:375,note:'Pago mensual'},{date:'2026-02-15',amount:375,note:'Pago mensual'}]},
-  {id:rid(),name:'Préstamo Universidad',categoryId:'educacion',original:5200,apr:0,note:'',payments:[{date:'2026-02-01',amount:200,note:'Abono'}]},
+let debts=[];
+
+let unlinkedPayments = [
+  {id:'u1', date:'2026-05-03', amount:250,  subcat:'Tarjetas de crédito',   desc:'Pago Visa Popular',        catIcon:'💳', linked:false},
+  {id:'u2', date:'2026-05-10', amount:375,  subcat:'Tarjetas de crédito',   desc:'Pago Mastercard FirstBank', catIcon:'💳', linked:false},
+  {id:'u3', date:'2026-04-15', amount:410,  subcat:'Préstamos estudiantiles',desc:'Sallie Mae – abril',       catIcon:'🎓', linked:false},
+  {id:'u4', date:'2026-05-01', amount:620,  subcat:'Otros préstamos',        desc:'Préstamo auto Toyota',     catIcon:'🚗', linked:false},
+  {id:'u5', date:'2026-05-20', amount:185,  subcat:'Otros préstamos',        desc:'Loan Muebles Ashley',      catIcon:'🛋️', linked:false},
 ];
 
 let selectedId=null, editingId=null, currentSort='balance';
 let selCatVal=null, payMode='fijo';
 let detailOpen=false;
+let obSelected=null, ulSelected=null;
 
-BASE_CATEGORIES.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;document.getElementById('eCat').appendChild(o);});
-document.querySelectorAll('.sp').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.sp').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentSort=btn.dataset.sort;renderList();});});
-
-render();
+document.addEventListener('DOMContentLoaded', ()=>{
+  BASE_CATEGORIES.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;document.getElementById('eCat').appendChild(o);});
+  document.querySelectorAll('.sp').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.sp').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentSort=btn.dataset.sort;renderList();});});
+  document.getElementById('unlinkedOverlay').addEventListener('click',e=>{if(e.target.id==='unlinkedOverlay')closeUnlinkedSheet();});
+  render();
+  renderOnboarding();
+});
 
 /* ── Navigation ── */
-function goNueva(){document.getElementById('screenNueva').style.transform='translateX(0)';document.getElementById('screenPlan').style.transform='translateX(-30%)';}
-function goPlan(){
-  document.getElementById('screenNueva').style.transform='translateX(100%)';
-  document.getElementById('screenPlan').style.transform='translateX(0)';
+let fromOnboarding = false;
+
+function showScreen(name){
+  const sOb=document.getElementById('screenOnboarding');
+  const sPl=document.getElementById('screenPlan');
+  const sNv=document.getElementById('screenNueva');
+  sOb.style.transform='translateX(100%)';
+  sPl.style.transform='translateX(100%)';
+  sNv.style.transform='translateX(100%)';
+  if(name==='ob'){
+    sOb.style.transform='translateX(0)';
+  } else if(name==='plan'){
+    sPl.style.transform='translateX(0)';
+  } else if(name==='nueva'){
+    if(fromOnboarding){
+      sOb.style.transform='translateX(-30%)';
+    } else {
+      sPl.style.transform='translateX(-30%)';
+    }
+    sNv.style.transform='translateX(0)';
+  }
 }
-function goToPlan(){
-  document.getElementById('successOv').classList.remove('show');
-  goPlan();
-  render();
-  if(detailOpen) closeDetail();
-}
+
+function goNueva(){ fromOnboarding=false; showScreen('nueva'); }
+function goNuevaFromOb(){ fromOnboarding=true; showScreen('nueva'); }
+function goPlan(){ showScreen('plan'); }
+function goOnboarding(){ showScreen('ob'); }
 function openDetail(id){
   selectedId=id;
-  renderDetail(debts.find(d=>d.id===id));
+  const d=debts.find(d=>d.id===id);
+  renderDetail(d);
+  const bt=document.getElementById('detailBackTitle');
+  if(bt) bt.textContent=d?.name||'Detalle';
   document.getElementById('planDetail').style.transform='translateX(0)';
   detailOpen=true;
 }
@@ -585,7 +755,23 @@ function renderSummary(){
 function renderList(){
   let list=[...debts];
   list=list.sort((a,b)=>{const sa=compute(a),sb=compute(b);if(currentSort==='balance')return sb.balance-sa.balance;if(currentSort==='apr')return(b.apr||0)-(a.apr||0);if(currentSort==='pct')return sa.pct-sb.pct;return a.name.localeCompare(b.name,'es');});
-  document.getElementById('countDebts').textContent=debts.length+' registradas';
+  const pending = unlinkedPayments.filter(p=>!p.linked).length;
+  const countEl = document.getElementById('countDebts');
+  if(pending > 0){
+    countEl.textContent = `${pending} faltan por registrar ›`;
+    countEl.style.color = '#F97316';
+    countEl.style.background = 'rgba(249,115,22,.08)';
+    countEl.style.padding = '2px 8px';
+    countEl.style.borderRadius = '20px';
+    countEl.style.fontSize = '10px';
+  } else {
+    countEl.textContent = `${debts.length} registradas`;
+    countEl.style.color = '';
+    countEl.style.background = '';
+    countEl.style.padding = '';
+    countEl.style.borderRadius = '';
+    countEl.style.fontSize = '';
+  }
   const el=document.getElementById('debtList');el.innerHTML='';
   if(!list.length){el.innerHTML='<div class="empty-state"><div class="es-icon">🔍</div><div class="es-title">Sin resultados</div></div>';return;}
   list.forEach(d=>{
@@ -658,23 +844,297 @@ function doSave(){
 }
 function doAnother(){
   document.getElementById('successOv').classList.remove('show');
-  ['dName2','dOrig','dApr2','dMonths','dPmt'].forEach(id=>{const el=document.getElementById(id);el.value='';el.disabled=false;});
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('aHelper').classList.remove('show');
-  document.getElementById('mHelper').classList.remove('show');
-  document.getElementById('calcHelper').style.display='none';
-  document.getElementById('modeToggleWrap').style.display='none';
-  document.getElementById('dMonths').placeholder='36';
-  document.getElementById('dPmt').placeholder='250';
-  document.getElementById('monthsLbl').classList.remove('dlbl');
-  selCatVal=null;payMode='fijo';
-  document.getElementById('modeFijo').classList.add('active');
-  document.getElementById('modeMin').classList.remove('active');
-  chk();upd();
+  resetNuevaForm();
   document.getElementById('nuevaScroll').scrollTop=0;
+  ulSelected=null;
+  openUnlinkedSheet();
 }
 
-/* ── Shared utils ── */
+/* ── Onboarding ── */
+
+function renderOnboarding(){
+  const remaining = unlinkedPayments.filter(p=>!p.linked);
+  const total = money(remaining.reduce((s,p)=>s+p.amount,0));
+  const cats  = [...new Set(remaining.map(p=>p.subcat))].length;
+  const el = document.getElementById('obTotalPayments');
+  if(el) el.textContent = remaining.length;
+  const el2 = document.getElementById('obTotalAmount');
+  if(el2) el2.textContent = total;
+  const el3 = document.getElementById('obTotalCats');
+  if(el3) el3.textContent = cats;
+
+  const list = document.getElementById('obPaymentList');
+  if(!list) return;
+  list.innerHTML='';
+
+  // Group by subcat
+  const groups={};
+  remaining.forEach(p=>{if(!groups[p.subcat])groups[p.subcat]=[];groups[p.subcat].push(p);});
+
+  Object.entries(groups).forEach(([subcat,payments])=>{
+    const groupTotal=payments.reduce((s,p)=>s+p.amount,0);
+    const lbl=document.createElement('div');
+    lbl.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;margin-top:6px';
+    lbl.innerHTML=`<span style="font-size:10px;font-weight:900;color:#64748B;text-transform:uppercase;letter-spacing:.08em">${subcat}</span><span style="font-size:11px;font-weight:900;color:#594AE2;background:rgba(89,74,226,.08);padding:2px 9px;border-radius:20px;">${money(groupTotal)}</span>`;
+    list.appendChild(lbl);
+
+    payments.forEach(p=>{
+      const isSelected=obSelected===p.id;
+      const row=document.createElement('div');
+      row.className='ob-payment-row'+(isSelected?' selected':'');
+      row.innerHTML=`
+        <div class="ob-check${isSelected?' on':''}">${isSelected?`<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}</div>
+        <div style="font-size:20px;flex:0 0 auto">${p.catIcon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:900;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.desc)}</div>
+          <div style="font-size:11px;font-weight:700;color:#64748B;margin-top:1px">${fmtDate(p.date)}</div>
+        </div>
+        <div style="font-size:14px;font-weight:900;color:#0F172A;flex:0 0 auto">${money(p.amount)}</div>`;
+      row.addEventListener('click',()=>{obSelected=(obSelected===p.id)?null:p.id;renderOnboarding();});
+      list.appendChild(row);
+    });
+  });
+
+  const btn=document.getElementById('obStartBtn');
+  if(btn){btn.disabled=!obSelected;btn.style.opacity=obSelected?'1':'.4';}
+}
+
+function obStart(){
+  if(!obSelected)return;
+  const p=unlinkedPayments.find(x=>x.id===obSelected);
+  if(!p)return;
+  p.linked=true;
+  preloadNuevaFromPayment(p);
+  obSelected=null;
+  goNuevaFromOb();
+}
+
+function obSkip(){
+  showScreen('plan');
+}
+// Mock unlinked transactions — in production these come from Mis Gastos
+// grouped by debt subcategory, unlinked (debtId === null)
+
+function openUnlinkedSheet() {
+  renderUnlinkedSheet();
+  document.getElementById('unlinkedOverlay').classList.add('show');
+}
+
+function closeUnlinkedSheet() {
+  document.getElementById('unlinkedOverlay').classList.remove('show');
+  ulSelected = null;
+}
+
+function renderUnlinkedSheet() {
+  const remaining = unlinkedPayments.filter(p => !p.linked);
+  const total     = unlinkedPayments.length;
+  const done      = total - remaining.length;
+
+  // Progress bar
+  const prog = document.getElementById('ulProgress');
+  if(done > 0) {
+    prog.style.display = 'block';
+    document.getElementById('ulProgressLabel').textContent = `${done} de ${total} registradas`;
+    document.getElementById('ulProgressBar').style.width = (done/total*100)+'%';
+  } else {
+    prog.style.display = 'none';
+  }
+
+  const body = document.getElementById('ulBody');
+  body.innerHTML = '';
+
+  if(!remaining.length) {
+    // All linked — show completion state
+    body.innerHTML = `
+      <div style="text-align:center;padding:24px 16px">
+        <div style="font-size:44px;margin-bottom:10px">🎉</div>
+        <div style="font-size:16px;font-weight:900;color:#0F172A;margin-bottom:6px">¡Todo registrado!</div>
+        <div style="font-size:13px;font-weight:700;color:#64748B;line-height:1.6">Todos tus pagos de deuda están<br>vinculados a una deuda registrada.</div>
+      </div>`;
+    document.getElementById('ulFooter').innerHTML = `<button class="btn primary" style="flex:1" onclick="closeUnlinkedSheet()">Ver Plan de Deuda</button>`;
+    return;
+  }
+
+  // Group by subcat
+  const groups = {};
+  remaining.forEach(p => {
+    if(!groups[p.subcat]) groups[p.subcat] = [];
+    groups[p.subcat].push(p);
+  });
+
+  // Header count
+  const countEl = document.createElement('div');
+  countEl.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:10px 12px;background:rgba(89,74,226,.06);border:1px solid rgba(89,74,226,.15);border-radius:12px;font-size:12px;font-weight:700;color:#64748B;line-height:1.5';
+  countEl.innerHTML = `<span style="font-size:18px">📋</span><span>Tienes <strong style="color:#594AE2">${remaining.length} pago${remaining.length!==1?'s':''}</strong> sin vincular a una deuda. Selecciona uno para registrarlo.</span>`;
+  body.appendChild(countEl);
+
+  Object.entries(groups).forEach(([subcat, payments]) => {
+    const groupTotal = payments.reduce((s,p)=>s+p.amount,0);
+
+    const groupLabel = document.createElement('div');
+    groupLabel.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;margin-top:4px';
+    groupLabel.innerHTML = `<span style="font-size:10px;font-weight:900;color:#64748B;text-transform:uppercase;letter-spacing:.08em">${subcat}</span><span style="font-size:11px;font-weight:900;color:#594AE2;background:rgba(89,74,226,.08);padding:2px 9px;border-radius:20px">${money(groupTotal)}</span>`;
+    body.appendChild(groupLabel);
+
+    payments.forEach(p => {
+      const row = document.createElement('div');
+      const isSelected = ulSelected === p.id;
+      row.id = 'ul_'+p.id;
+      row.style.cssText=`display:flex;align-items:center;gap:10px;padding:11px 12px;background:#fff;border:1.5px solid ${isSelected?'#594AE2':'#E5E7EB'};border-radius:12px;margin-bottom:7px;cursor:pointer;transition:all .12s;${isSelected?'background:rgba(89,74,226,.05)':''}`;
+      row.innerHTML = `
+        <div style="font-size:22px;flex:0 0 auto">${p.catIcon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:900;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.desc)}</div>
+          <div style="font-size:11px;font-weight:700;color:#64748B;margin-top:1px">${fmtDate(p.date)}</div>
+        </div>
+        <div style="text-align:right;flex:0 0 auto">
+          <div style="font-size:14px;font-weight:900;color:#0F172A">${money(p.amount)}</div>
+          <div id="ulcheck_${p.id}" style="margin-top:3px;display:flex;justify-content:flex-end">
+            ${isSelected
+              ? `<span style="width:20px;height:20px;border-radius:50%;background:#594AE2;display:grid;place-items:center"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`
+              : `<span style="width:20px;height:20px;border-radius:50%;border:2px solid #CBD5E1;display:block"></span>`}
+          </div>
+        </div>`;
+      row.addEventListener('click', () => {
+        ulSelected = (ulSelected === p.id) ? null : p.id;
+        renderUnlinkedSheet();
+      });
+      body.appendChild(row);
+    });
+
+    // Spacer between groups
+    const spacer = document.createElement('div');
+    spacer.style.height='4px';
+    body.appendChild(spacer);
+  });
+
+  // Update continue button
+  const btn = document.getElementById('ulContinueBtn');
+  if(btn) {
+    btn.disabled = !ulSelected;
+    btn.style.opacity = ulSelected ? '1' : '.4';
+    btn.style.cursor  = ulSelected ? 'pointer' : 'not-allowed';
+  }
+}
+
+function ulContinue() {
+  if(!ulSelected) return;
+  const p = unlinkedPayments.find(x => x.id === ulSelected);
+  if(!p) return;
+  p.linked = true;
+  preloadNuevaFromPayment(p);
+  closeUnlinkedSheet();
+  goNueva();
+}
+
+function preloadNuevaFromPayment(p) {
+  // Reset form first
+  resetNuevaForm();
+
+  // Pre-fill name from description
+  document.getElementById('dName2').value = p.desc;
+
+  // Auto-fill monthly payment amount
+  document.getElementById('dPmt').value = p.amount;
+
+  // Auto-select category based on subcat
+  const catMap = {
+    'Tarjetas de crédito':      'tarjetas',
+    'Préstamos estudiantiles':  'educacion',
+    'Otros préstamos':          'linea_personal',
+    'Auto':                     'auto',
+    'Automóvil':                'auto',
+    'Muebles':                  'muebles',
+    'Muebles y Enseres':        'muebles',
+  };
+  // Also detect by keyword in desc
+  const desc = (p.desc||'').toLowerCase();
+  let catId = catMap[p.subcat] || 'otra';
+  if(desc.includes('auto') || desc.includes('toyota') || desc.includes('carro') || desc.includes('vehicle')) catId='auto';
+  if(desc.includes('mueble') || desc.includes('ashley') || desc.includes('furniture')) catId='muebles';
+  if(desc.includes('sallie') || desc.includes('student') || desc.includes('univers') || desc.includes('estudiantil')) catId='educacion';
+  if(desc.includes('visa') || desc.includes('mastercard') || desc.includes('tarjeta')) catId='tarjetas';
+  const catBtn = document.querySelector(`.cat-btn[data-cat="${catId}"]`);
+  if(catBtn) selCat(catBtn);
+
+  // Show pre-loaded payment badge
+  const badge = document.createElement('div');
+  badge.id = 'preloadBadge';
+  badge.style.cssText='display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(34,197,94,.08);border:1.5px solid rgba(34,197,94,.25);border-radius:10px;margin-bottom:10px;font-size:12px;font-weight:700;color:#15803d';
+  badge.innerHTML=`<span>✅</span><span>Pago de <strong>${money(p.amount)}</strong> del ${fmtDate(p.date)} vinculado a esta deuda.</span>`;
+  const firstCard = document.querySelector('.card-n');
+  if(firstCard && !document.getElementById('preloadBadge')) firstCard.parentNode.insertBefore(badge, firstCard);
+
+  upd(); chk();
+}
+
+// After saving a debt from unlinked flow, reopen sheet if payments remain
+const _origDoSave = doSave;
+function doSave() {
+  const name=(document.getElementById('dName2').value||'').trim();
+  const orig=Number(document.getElementById('dOrig').value||0);
+  if(!name||orig<=0||!selCatVal)return;
+  const newDebt={id:rid(),name,categoryId:selCatVal,original:orig,apr:Number(document.getElementById('dApr2').value||0),note:'',payments:[]};
+  debts.push(newDebt);
+  document.getElementById('scName').textContent=name;
+  document.getElementById('scAmt').textContent=money(orig);
+  document.getElementById('successOv').classList.add('show');
+  // Remove preload badge if present
+  const badge = document.getElementById('preloadBadge');
+  if(badge) badge.remove();
+}
+
+function goToPlan(){
+  document.getElementById('successOv').classList.remove('show');
+  render();
+  if(detailOpen)closeDetail();
+  showScreen('plan');
+  const remaining=unlinkedPayments.filter(p=>!p.linked);
+  if(remaining.length>0){
+    setTimeout(()=>openUnlinkedSheet(),400);
+  }
+}
+
+function doAnother(){
+  // Close success sheet
+  document.getElementById('successOv').classList.remove('show');
+  // Remove badge
+  const badge=document.getElementById('preloadBadge');
+  if(badge)badge.remove();
+  // Reset form
+  resetNuevaForm();
+  document.getElementById('nuevaScroll').scrollTop=0;
+  ulSelected=null;
+  obSelected=null;
+  // Route depending on remaining payments
+  const remaining=unlinkedPayments.filter(p=>!p.linked);
+  if(fromOnboarding && remaining.length>0){
+    obSelected=null;
+    renderOnboarding();
+    showScreen('ob');
+  } else if(!fromOnboarding && remaining.length>0){
+    goPlan();
+    setTimeout(()=>openUnlinkedSheet(),350);
+  } else {
+    goPlan();
+  }
+}
+
+function resetNuevaForm() {
+  ['dName2','dOrig','dApr2','dMonths','dPmt'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  const ah=document.getElementById('aHelper'),mh=document.getElementById('mHelper'),ch=document.getElementById('calcHelper');
+  if(ah)ah.classList.remove('show');if(mh)mh.classList.remove('show');if(ch)ch.style.display='none';
+  const tw=document.getElementById('modeToggleWrap');if(tw)tw.style.display='none';
+  const ml=document.getElementById('monthsLbl');if(ml)ml.classList.remove('dlbl');
+  const dm=document.getElementById('dMonths');if(dm)dm.placeholder='36';
+  const dp=document.getElementById('dPmt');if(dp)dp.placeholder='250';
+  selCatVal=null;payMode='fijo';
+  const mf=document.getElementById('modeFijo'),mm=document.getElementById('modeMin');
+  if(mf)mf.classList.add('active');if(mm)mm.classList.remove('active');
+  chk();upd();
+}
+
 function amortize(d){const mr=Number(d.apr||0)/100/12;let bal=Number(d.original||0);const sorted=[...(d.payments||[])].sort((a,b)=>a.date>b.date?1:-1);return sorted.map(p=>{const amt=Number(p.amount||0);const int=d.apr>0?bal*mr:0;const prin=amt-int;bal=bal-prin;return{date:p.date,amount:amt,interest:Math.round(int*100)/100,principal:Math.round(prin*100)/100,balanceAfter:Math.max(0,Math.round(bal*100)/100),isNegative:prin<0};});}
 function compute(d){const paid=totalPaid(d);let balance;if(d.apr>0&&(d.payments||[]).length>0){const a=amortize(d);balance=Math.max(0,a[a.length-1].balanceAfter);}else{balance=Math.max(0,Number(d.original||0)-paid);}const pct=d.original>0?((d.original-balance)/d.original*100):0;return{paid,balance,pct};}
 function totalPaid(d){return(d.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);}
