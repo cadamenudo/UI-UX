@@ -434,7 +434,7 @@
             <button class="sp" data-sort="name">A-Z</button>
           </div>
           <div class="section-label">Mis deudas <span id="countDebts" onclick="openUnlinkedSheet()" style="cursor:pointer">0 registradas</span></div>
-          <button class="nueva-plan-btn" onclick="openUnlinkedSheet()"><span style="font-size:16px;font-weight:900">+</span> Nueva deuda</button>
+          <button class="nueva-plan-btn" onclick="unlinkedPayments.filter(p=>!p.linked).length>0?openUnlinkedSheet():goNueva()"><span style="font-size:16px;font-weight:900">+</span> Nueva deuda</button>
           <div class="debt-list" id="debtList"></div>
         </div>
 
@@ -509,30 +509,33 @@
         <div style="width:34px"></div>
       </div>
       <div class="scroll n-body" id="nuevaScroll">
-        <!-- Step 1 -->
+        <!-- Step 1: Datos -->
         <div class="card-n">
-          <div class="card-title-n"><div class="step-num">1</div>Tipo de deuda</div>
-          <div class="cat-grid">
-            <button class="cat-btn" data-cat="tarjetas" onclick="selCat(this)"><span class="cat-icon-n">💳</span><span class="cat-lbl">Tarjetas de crédito</span></button>
-            <button class="cat-btn" data-cat="linea_personal" onclick="selCat(this)"><span class="cat-icon-n">🏦</span><span class="cat-lbl">Línea crédito personal</span></button>
-            <button class="cat-btn" data-cat="linea_propiedad" onclick="selCat(this)"><span class="cat-icon-n">🏘️</span><span class="cat-lbl">Línea crédito propiedad</span></button>
-            <button class="cat-btn" data-cat="casa" onclick="selCat(this)"><span class="cat-icon-n">🏠</span><span class="cat-lbl">Casa</span></button>
-            <button class="cat-btn" data-cat="otras" onclick="selCat(this)"><span class="cat-icon-n">⛵</span><span class="cat-lbl">Otras propiedades</span></button>
-            <button class="cat-btn" data-cat="auto" onclick="selCat(this)"><span class="cat-icon-n">🚗</span><span class="cat-lbl">Auto</span></button>
-            <button class="cat-btn" data-cat="educacion" onclick="selCat(this)"><span class="cat-icon-n">🎓</span><span class="cat-lbl">Educación</span></button>
-            <button class="cat-btn" data-cat="muebles" onclick="selCat(this)"><span class="cat-icon-n">🛋️</span><span class="cat-lbl">Muebles y Enseres</span></button>
-            <button class="cat-btn" data-cat="mejoras" onclick="selCat(this)"><span class="cat-icon-n">🔨</span><span class="cat-lbl">Mejoras al hogar</span></button>
-            <button class="cat-btn" data-cat="seguro" onclick="selCat(this)"><span class="cat-icon-n">🛡️</span><span class="cat-lbl">Seguro de vida</span></button>
-            <button class="cat-btn" data-cat="margen" onclick="selCat(this)"><span class="cat-icon-n">📈</span><span class="cat-lbl">Margen corretaje</span></button>
-            <button class="cat-btn" data-cat="otra" onclick="selCat(this)"><span class="cat-icon-n">📋</span><span class="cat-lbl">Otra</span></button>
-          </div>
-        </div>
-        <!-- Step 2 -->
-        <div class="card-n">
-          <div class="card-title-n"><div class="step-num">2</div>Datos de la deuda</div>
+          <div class="card-title-n"><div class="step-num">1</div>Datos de la deuda</div>
           <div class="n-field">
             <div class="n-field-lbl">Nombre de la deuda</div>
             <input id="dName2" type="text" placeholder="Ej. Visa Banco Popular…" oninput="upd();chk()"/>
+          </div>
+          <div class="n-field">
+            <div class="n-field-lbl">Tipo de deuda</div>
+            <div style="position:relative">
+              <select id="dCatSelect" style="width:100%;border:1.5px solid #E5E7EB;border-radius:9px;padding:9px 34px 9px 11px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#0F172A;background:#fff;outline:none;appearance:none;" onchange="onCatSelect()">
+                <option value="">Selecciona una categoría…</option>
+                <option value="tarjetas">Tarjetas de crédito</option>
+                <option value="linea_personal">Línea crédito personal</option>
+                <option value="linea_propiedad">Línea crédito propiedad</option>
+                <option value="casa">Casa</option>
+                <option value="otras">Otras propiedades</option>
+                <option value="auto">Auto</option>
+                <option value="educacion">Educación</option>
+                <option value="muebles">Muebles y Enseres</option>
+                <option value="mejoras">Mejoras al hogar</option>
+                <option value="seguro">Seguro de vida</option>
+                <option value="margen">Margen corretaje</option>
+                <option value="otra">Otra</option>
+              </select>
+              <span style="position:absolute;right:11px;top:50%;transform:translateY(-50%);pointer-events:none;color:#64748B;font-size:13px">▾</span>
+            </div>
           </div>
           <div class="row2">
             <div class="n-field"><div class="n-field-lbl">Monto total ($)</div><input id="dOrig" type="number" inputmode="decimal" placeholder="0.00" oninput="onOrig()"/></div>
@@ -559,9 +562,9 @@
           <div class="helper orange" id="aHelper">A <span id="aPct">0%</span> APR pagas <span id="aCost">$0</span>/mes solo en intereses.</div>
           <div class="helper purple" id="calcHelper" style="display:none">Pagarás en <span id="calcMonths">—</span> meses (<span id="calcDate">—</span>). Interés total: <span id="calcInterest">—</span>.</div>
         </div>
-        <!-- Step 3 -->
+        <!-- Step 2: Confirmar -->
         <div class="card-n" style="margin-bottom:0">
-          <div class="card-title-n"><div class="step-num">3</div>Confirmar</div>
+          <div class="card-title-n"><div class="step-num">2</div>Confirmar</div>
           <div class="sum-box">
             <div class="sum-row"><span class="sum-lbl">Nombre</span><span class="sum-val" id="sName">—</span></div>
             <div class="sum-row"><span class="sum-lbl">Tipo</span><span class="sum-val" id="sCat">—</span></div>
@@ -650,9 +653,12 @@
           <!-- filled by JS -->
         </div>
 
-        <div style="padding:8px 14px 16px;display:flex;gap:8px;" id="ulFooter">
-          <button class="btn ghost" style="flex:1" onclick="closeUnlinkedSheet()">Ahora no</button>
-          <button class="btn primary" id="ulContinueBtn" onclick="ulContinue()" disabled style="opacity:.4">Registrar deuda →</button>
+        <div style="padding:8px 14px 16px;display:flex;flex-direction:column;gap:8px;" id="ulFooter">
+          <div style="display:flex;gap:8px;">
+            <button class="btn ghost" style="flex:1" onclick="closeUnlinkedSheet()">Ahora no</button>
+            <button class="btn primary" id="ulContinueBtn" onclick="ulContinue()" disabled style="opacity:.4">Registrar deuda →</button>
+          </div>
+          <button onclick="closeUnlinkedSheet();goNueva();" style="width:100%;padding:10px;border:1.5px solid #E5E7EB;border-radius:12px;background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#64748B;cursor:pointer;">+ Agregar deuda que no está en la lista</button>
         </div>
       </div>
     </div>
@@ -719,7 +725,7 @@ function showScreen(name){
   }
 }
 
-function goNueva(){ fromOnboarding=false; showScreen('nueva'); }
+function goNueva(){ fromOnboarding=false; resetNuevaForm(); showScreen('nueva'); }
 function goNuevaFromOb(){ fromOnboarding=true; showScreen('nueva'); }
 function goPlan(){ showScreen('plan'); }
 function goOnboarding(){ showScreen('ob'); }
@@ -818,7 +824,12 @@ function doDelete(){debts=debts.filter(d=>d.id!==editingId);closeConfirm();close
 ['editOverlay','confirmOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target.id===id)e.target.classList.remove('show');});});
 
 /* ── Nueva deuda logic ── */
-function selCat(btn){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selCatVal=btn.dataset.cat;applyTarjetaMode();upd();chk();}
+function onCatSelect(){
+  const val=document.getElementById('dCatSelect').value;
+  selCatVal=val||null;
+  applyTarjetaMode();
+  upd();chk();
+}
 function applyTarjetaMode(){
   const isTarjeta=selCatVal==='tarjetas';
   const mi=document.getElementById('dMonths'),ml=document.getElementById('monthsLbl'),tw=document.getElementById('modeToggleWrap'),ch=document.getElementById('calcHelper'),mh=document.getElementById('mHelper');
@@ -1024,7 +1035,8 @@ function ulContinue() {
   p.linked = true;
   preloadNuevaFromPayment(p);
   closeUnlinkedSheet();
-  goNueva();
+  fromOnboarding=false;
+  showScreen('nueva');
 }
 
 function preloadNuevaFromPayment(p) {
@@ -1037,25 +1049,17 @@ function preloadNuevaFromPayment(p) {
   // Auto-fill monthly payment amount
   document.getElementById('dPmt').value = p.amount;
 
-  // Auto-select category based on subcat
-  const catMap = {
-    'Tarjetas de crédito':      'tarjetas',
-    'Préstamos estudiantiles':  'educacion',
-    'Otros préstamos':          'linea_personal',
-    'Auto':                     'auto',
-    'Automóvil':                'auto',
-    'Muebles':                  'muebles',
-    'Muebles y Enseres':        'muebles',
-  };
-  // Also detect by keyword in desc
-  const desc = (p.desc||'').toLowerCase();
-  let catId = catMap[p.subcat] || 'otra';
-  if(desc.includes('auto') || desc.includes('toyota') || desc.includes('carro') || desc.includes('vehicle')) catId='auto';
-  if(desc.includes('mueble') || desc.includes('ashley') || desc.includes('furniture')) catId='muebles';
-  if(desc.includes('sallie') || desc.includes('student') || desc.includes('univers') || desc.includes('estudiantil')) catId='educacion';
-  if(desc.includes('visa') || desc.includes('mastercard') || desc.includes('tarjeta')) catId='tarjetas';
-  const catBtn = document.querySelector(`.cat-btn[data-cat="${catId}"]`);
-  if(catBtn) selCat(catBtn);
+  // Auto-select category via dropdown
+  const descL=(p.desc||'').toLowerCase();
+  let catId='linea_personal';
+  if(descL.includes('visa')||descL.includes('mastercard')||descL.includes('tarjeta')) catId='tarjetas';
+  else if(descL.includes('sallie')||descL.includes('student')||descL.includes('univers')||descL.includes('estudiantil')) catId='educacion';
+  else if(descL.includes('auto')||descL.includes('toyota')||descL.includes('carro')||descL.includes('vehicle')) catId='auto';
+  else if(descL.includes('mueble')||descL.includes('ashley')||descL.includes('furniture')) catId='muebles';
+  else{const cm={'Tarjetas de crédito':'tarjetas','Préstamos estudiantiles':'educacion','Otros préstamos':'linea_personal','Auto':'auto','Muebles y Enseres':'muebles'};catId=cm[p.subcat]||'linea_personal';}
+  document.getElementById('dCatSelect').value=catId;
+  selCatVal=catId;
+  applyTarjetaMode();
 
   // Show pre-loaded payment badge
   const badge = document.createElement('div');
@@ -1123,6 +1127,8 @@ function doAnother(){
 function resetNuevaForm() {
   ['dName2','dOrig','dApr2','dMonths','dPmt'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
   document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  const catSel=document.getElementById('dCatSelect');if(catSel)catSel.value='';
+  const badge=document.getElementById('preloadBadge');if(badge)badge.remove();
   const ah=document.getElementById('aHelper'),mh=document.getElementById('mHelper'),ch=document.getElementById('calcHelper');
   if(ah)ah.classList.remove('show');if(mh)mh.classList.remove('show');if(ch)ch.style.display='none';
   const tw=document.getElementById('modeToggleWrap');if(tw)tw.style.display='none';
