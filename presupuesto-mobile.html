@@ -16,8 +16,48 @@
     .br{position:absolute;right:-3px;top:180px;height:90px;width:3px;background:#2a2a2a;border-radius:0 2px 2px 0}
     .screen-outer{background:#000;border-radius:44px;overflow:hidden;position:relative;}
     .di{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:118px;height:34px;background:#000;border-radius:20px;z-index:30;}
-    .app-screen{background:#f5f6ff;height:812px;overflow-y:auto;overflow-x:hidden;position:relative;color:#0f172a;font-family:Nunito,sans-serif;scrollbar-width:none;}
-    .app-screen::-webkit-scrollbar{display:none;}
+    /* app-screen is the fixed-height container; overflow hidden so overlays clip to it */
+    .app-screen{background:#f5f6ff;height:812px;overflow:hidden;position:relative;color:#0f172a;font-family:Nunito,sans-serif;}
+    /* inner scroll area */
+    .app-scroll{height:100%;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+    .app-scroll::-webkit-scrollbar{display:none;}
+
+    /* ══ Overlays — absolute inside app-screen ══ */
+    .modal-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:200;display:none;align-items:flex-end;}
+    .modal-ov.open{display:flex;}
+    .modal-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-height:75%;display:flex;flex-direction:column;animation:su .3s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+    @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .m-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:10px auto 0;flex-shrink:0;}
+    .m-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 12px;border-bottom:1px solid #F3F4F6;flex-shrink:0;}
+    .m-title{font-size:16px;font-weight:900;color:#0f172a;}
+    .m-close{background:none;border:none;font-size:22px;color:#64748B;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:Nunito,sans-serif;}
+    .m-body{overflow-y:auto;flex:1;scrollbar-width:none;}
+    .m-body::-webkit-scrollbar{display:none;}
+    .s-block{border-bottom:1px solid #F3F4F6;}
+    .s-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s;}
+    .s-hd:active{background:#f9fafb;}
+    .s-name{font-size:14px;font-weight:800;color:#0f172a;}
+    .s-chv{font-size:13px;color:#9ca3af;transition:transform .3s;display:inline-block;}
+    .s-block.open .s-chv{transform:rotate(180deg);}
+    .s-content{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+    .s-block.open .s-content{max-height:1200px;}
+    .s-inner{padding:4px 14px 10px;}
+    .sub-row-m{display:flex;align-items:center;justify-content:space-between;padding:12px 10px;border-radius:10px;cursor:pointer;transition:background .15s;font-size:13px;font-weight:600;color:#0f172a;}
+    .sub-row-m:active{background:rgba(57,86,232,.07);}
+    .input-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:300;display:none;align-items:flex-end;}
+    .input-ov.open{display:flex;}
+    .input-card{background:white;border-radius:24px 24px 0 0;width:100%;padding:16px 18px 30px;animation:su .25s cubic-bezier(.4,0,.2,1);}
+    .i-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:0 auto 14px;}
+    .i-area{font-size:12px;font-weight:700;color:#64748B;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+    .i-sub{font-size:17px;font-weight:900;color:#0f172a;margin-bottom:16px;}
+    .amt-input{width:100%;padding:14px 16px;border:1.5px solid #E5E7EB;border-radius:14px;font-size:22px;font-weight:900;font-family:Nunito,sans-serif;color:#0f172a;outline:none;text-align:center;letter-spacing:1px;}
+    .amt-input:focus{border-color:#3956E8;box-shadow:0 0 0 3px rgba(57,86,232,.1);}
+    .i-actions{display:flex;gap:10px;margin-top:14px;}
+    .btn-cancel{flex:1;padding:13px;background:#F3F4F6;color:#0f172a;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;}
+    .btn-confirm{flex:2;padding:13px;background:linear-gradient(135deg,#3956E8,#7459D9);color:white;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 6px 16px rgba(57,86,232,.3);}
+    .toast{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.92);color:white;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:900;display:none;z-index:400;white-space:nowrap;}
+    .toast.show{display:block;animation:ti .3s ease;}
+    @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
     /* Status bar */
     .sb{height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 10px;}
@@ -247,6 +287,7 @@
   <div class="screen-outer">
     <div class="di"></div>
     <div class="app-screen" id="appScreen">
+      <div class="app-scroll">
 
       <!-- Status bar -->
       <div class="sb">
@@ -499,7 +540,11 @@
 
       </div><!-- /app-body -->
 
-      <!-- ══ MODAL — inside app-screen ══ -->
+      <div class="home-ind"><div class="home-ind-bar"></div></div>
+
+      </div><!-- /app-scroll -->
+
+      <!-- ══ MODAL — inside app-screen, outside scroll ══ -->
       <div class="modal-ov" id="modalCats">
         <div class="modal-sheet">
           <div class="m-handle"></div>
@@ -508,7 +553,7 @@
         </div>
       </div>
 
-      <!-- ══ INPUT SHEET — inside app-screen ══ -->
+      <!-- ══ INPUT SHEET — inside app-screen, outside scroll ══ -->
       <div class="input-ov" id="inputOv">
         <div class="input-card">
           <div class="i-handle"></div>
@@ -524,9 +569,8 @@
 
       <div class="toast" id="toast"></div>
 
-      <div class="home-ind"><div class="home-ind-bar"></div></div>
-    </div>
-  </div>
+    </div><!-- /app-screen -->
+  </div><!-- /screen-outer -->
 </div>
 
 <script>
