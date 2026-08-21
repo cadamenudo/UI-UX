@@ -193,10 +193,10 @@
     .vr-sub-name{font-weight:700;color:#0f172a;}
     .vr-sub-diff{font-weight:800;}
 
-    /* ══ Modal overlay — full viewport ══ */
-    .modal-ov{position:fixed;inset:0;background:rgba(15,23,42,.52);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+    /* ══ Modal overlay — inside app-screen ══ */
+    .modal-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:200;display:none;align-items:flex-end;border-radius:44px;overflow:hidden;}
     .modal-ov.open{display:flex;}
-    .modal-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-height:75vh;display:flex;flex-direction:column;animation:su .3s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+    .modal-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-height:75%;display:flex;flex-direction:column;animation:su .3s cubic-bezier(.4,0,.2,1);overflow:hidden;}
     @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
     .m-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:10px auto 0;flex-shrink:0;}
     .m-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 12px;border-bottom:1px solid #F3F4F6;flex-shrink:0;}
@@ -218,8 +218,8 @@
     .sub-row-m{display:flex;align-items:center;justify-content:space-between;padding:12px 10px;border-radius:10px;cursor:pointer;transition:background .15s;font-size:13px;font-weight:600;color:#0f172a;}
     .sub-row-m:active{background:rgba(57,86,232,.07);}
 
-    /* ══ Input sheet — full viewport ══ */
-    .input-ov{position:fixed;inset:0;background:rgba(15,23,42,.52);z-index:300;display:none;align-items:flex-end;justify-content:center;}
+    /* ══ Input sheet — inside app-screen ══ */
+    .input-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:300;display:none;align-items:flex-end;border-radius:44px;overflow:hidden;}
     .input-ov.open{display:flex;}
     .input-card{background:white;border-radius:24px 24px 0 0;width:100%;padding:16px 18px 30px;animation:su .25s cubic-bezier(.4,0,.2,1);}
     .i-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:0 auto 14px;}
@@ -232,12 +232,13 @@
     .btn-confirm{flex:2;padding:13px;background:linear-gradient(135deg,#3956E8,#7459D9);color:white;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 6px 16px rgba(57,86,232,.3);}
 
     /* Toast */
-    .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.92);color:white;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:900;display:none;z-index:400;white-space:nowrap;}
+    .toast{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.92);color:white;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:900;display:none;z-index:400;white-space:nowrap;}
     .toast.show{display:block;animation:ti .3s ease;}
     @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
     /* Home indicator */
-    .home-ind{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:130px;height:5px;background:rgba(0,0,0,.22);border-radius:999px;}
+    .home-ind{position:sticky;bottom:0;left:0;right:0;height:28px;background:linear-gradient(to top,#f5f6ff 60%,transparent);display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;pointer-events:none;}
+    .home-ind-bar{width:130px;height:5px;background:rgba(0,0,0,.2);border-radius:999px;}
   </style>
 </head>
 <body>
@@ -498,35 +499,35 @@
 
       </div><!-- /app-body -->
 
-      <div class="home-ind"></div>
+      <!-- ══ MODAL — inside app-screen ══ -->
+      <div class="modal-ov" id="modalCats">
+        <div class="modal-sheet">
+          <div class="m-handle"></div>
+          <div class="m-hd"><span class="m-title" id="mTitle">Selecciona una categoría</span><button class="m-close" id="btnCloseCats">×</button></div>
+          <div class="m-body" id="mBody"></div>
+        </div>
+      </div>
+
+      <!-- ══ INPUT SHEET — inside app-screen ══ -->
+      <div class="input-ov" id="inputOv">
+        <div class="input-card">
+          <div class="i-handle"></div>
+          <div class="i-area" id="iArea">Ingresos</div>
+          <div class="i-sub" id="iSub">Salario</div>
+          <input class="amt-input" id="amtInput" type="number" inputmode="decimal" placeholder="0.00" step="0.01" min="0"/>
+          <div class="i-actions">
+            <button class="btn-cancel" id="btnCancelI">Cancelar</button>
+            <button class="btn-confirm" id="btnConfirmI">Guardar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+
+      <div class="home-ind"><div class="home-ind-bar"></div></div>
     </div>
   </div>
 </div>
-
-<!-- ══ MODAL CATEGORÍAS — outside iPhone, covers full viewport ══ -->
-<div class="modal-ov" id="modalCats">
-  <div class="modal-sheet">
-    <div class="m-handle"></div>
-    <div class="m-hd"><span class="m-title" id="mTitle">Selecciona una categoría</span><button class="m-close" id="btnCloseCats">×</button></div>
-    <div class="m-body" id="mBody"></div>
-  </div>
-</div>
-
-<!-- ══ INPUT SHEET — outside iPhone, covers full viewport ══ -->
-<div class="input-ov" id="inputOv">
-  <div class="input-card">
-    <div class="i-handle"></div>
-    <div class="i-area" id="iArea">Ingresos</div>
-    <div class="i-sub" id="iSub">Salario</div>
-    <input class="amt-input" id="amtInput" type="number" inputmode="decimal" placeholder="0.00" step="0.01" min="0"/>
-    <div class="i-actions">
-      <button class="btn-cancel" id="btnCancelI">Cancelar</button>
-      <button class="btn-confirm" id="btnConfirmI">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
 /* ════════════════════════════════════════
