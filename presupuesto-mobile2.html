@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Presupuesto – iPhone Mockup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Nunito,sans-serif;background:#e8eaf0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px 60px;}
+
+    /* ── iPhone ── */
+    .iphone{position:relative;width:375px;flex-shrink:0;background:#1a1a1a;border-radius:54px;padding:14px;box-shadow:0 0 0 1px #3a3a3a,0 60px 120px rgba(0,0,0,.45),inset 0 0 0 2px #2e2e2e;}
+    .bl{position:absolute;left:-3px;background:#2a2a2a;border-radius:2px 0 0 2px;width:3px}
+    .bl.m{top:100px;height:34px}.bl.v1{top:150px;height:62px}.bl.v2{top:224px;height:62px}
+    .br{position:absolute;right:-3px;top:180px;height:90px;width:3px;background:#2a2a2a;border-radius:0 2px 2px 0}
+    .screen-outer{background:#000;border-radius:44px;overflow:hidden;position:relative;}
+    .di{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:118px;height:34px;background:#000;border-radius:20px;z-index:30;}
+    /* app-screen is the fixed-height container; overflow hidden so overlays clip to it */
+    .app-screen{background:#f5f6ff;height:812px;overflow:hidden;position:relative;color:#0f172a;font-family:Nunito,sans-serif;}
+    /* inner scroll area */
+    .app-scroll{height:100%;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+    .app-scroll::-webkit-scrollbar{display:none;}
+
+    /* ══ Overlays — absolute inside app-screen ══ */
+    .modal-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:200;display:none;align-items:flex-end;}
+    .modal-ov.open{display:flex;}
+    .modal-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-height:75%;display:flex;flex-direction:column;animation:su .3s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+    @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .m-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:10px auto 0;flex-shrink:0;}
+    .m-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 12px;border-bottom:1px solid #F3F4F6;flex-shrink:0;}
+    .m-title{font-size:16px;font-weight:900;color:#0f172a;}
+    .m-close{background:none;border:none;font-size:22px;color:#64748B;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:Nunito,sans-serif;}
+    .m-body{overflow-y:auto;flex:1;scrollbar-width:none;}
+    .m-body::-webkit-scrollbar{display:none;}
+    .s-block{border-bottom:1px solid #F3F4F6;}
+    .s-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s;}
+    .s-hd:active{background:#f9fafb;}
+    .s-name{font-size:14px;font-weight:800;color:#0f172a;}
+    .s-chv{font-size:13px;color:#9ca3af;transition:transform .3s;display:inline-block;}
+    .s-block.open .s-chv{transform:rotate(180deg);}
+    .s-content{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+    .s-block.open .s-content{max-height:1200px;}
+    .s-inner{padding:4px 14px 10px;}
+    .sub-row-m{display:flex;align-items:center;justify-content:space-between;padding:12px 10px;border-radius:10px;cursor:pointer;transition:background .15s;font-size:13px;font-weight:600;color:#0f172a;}
+    .sub-row-m:active{background:rgba(57,86,232,.07);}
+    .input-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:300;display:none;align-items:flex-end;}
+    .input-ov.open{display:flex;}
+    .input-card{background:white;border-radius:24px 24px 0 0;width:100%;padding:16px 18px 30px;animation:su .25s cubic-bezier(.4,0,.2,1);}
+    .i-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:0 auto 14px;}
+    .i-area{font-size:12px;font-weight:700;color:#64748B;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+    .i-sub{font-size:17px;font-weight:900;color:#0f172a;margin-bottom:16px;}
+    .amt-input{width:100%;padding:14px 16px;border:1.5px solid #E5E7EB;border-radius:14px;font-size:22px;font-weight:900;font-family:Nunito,sans-serif;color:#0f172a;outline:none;text-align:center;letter-spacing:1px;}
+    .amt-input:focus{border-color:#3956E8;box-shadow:0 0 0 3px rgba(57,86,232,.1);}
+    .i-actions{display:flex;gap:10px;margin-top:14px;}
+    .btn-cancel{flex:1;padding:13px;background:#F3F4F6;color:#0f172a;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;}
+    .btn-confirm{flex:2;padding:13px;background:linear-gradient(135deg,#3956E8,#7459D9);color:white;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 6px 16px rgba(57,86,232,.3);}
+    .toast{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.92);color:white;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:900;display:none;z-index:400;white-space:nowrap;}
+    .toast.show{display:block;animation:ti .3s ease;}
+    @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+    /* Status bar */
+    .sb{height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 10px;}
+    .sb-t{font-size:15px;font-weight:700;color:#0f172a;}
+    .sb-i{display:flex;align-items:center;gap:6px;}
+
+    /* App header */
+    .ah{background:#fff;padding:14px 16px 16px;border-bottom:1px solid rgba(229,231,235,.8);}
+
+    /* Tab toggle — Presupuesto / Vs real */
+    .tab-row{display:flex;background:#f3f4f6;border-radius:999px;padding:4px;gap:3px;margin-bottom:14px;}
+    .tab-btn{flex:1;padding:9px 0;border-radius:999px;border:none;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:#64748B;background:transparent;transition:all .2s;}
+    .tab-btn.active{background:white;color:#5b21b6;font-weight:900;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+
+    /* Mensual / Anual toggle */
+    .period-type-row{display:flex;justify-content:center;gap:28px;margin-bottom:12px;border-bottom:1px solid #e5e7eb;padding-bottom:0;}
+    .period-type-btn{flex:none;padding:6px 0 10px;border:none;background:transparent;font-family:Nunito,sans-serif;font-size:14px;font-weight:700;color:#9ca3af;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+    .period-type-btn.active{color:#0f172a;font-weight:900;border-bottom-color:#7459D9;}
+
+    /* Month + Year selects row */
+    .selects-row{display:flex;gap:10px;margin-bottom:12px;}
+    .sel-wrap{flex:1;position:relative;}
+    .sel-wrap select{width:100%;appearance:none;background:white;border:1.5px solid #E5E7EB;border-radius:12px;padding:10px 32px 10px 14px;font-family:Nunito,sans-serif;font-size:14px;font-weight:700;color:#0f172a;outline:none;cursor:pointer;}
+    .sel-wrap select:focus{border-color:#7459D9;}
+    .sel-wrap::after{content:"⌄";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:#64748B;pointer-events:none;}
+
+    /* Copy button */
+    .btn-copy{width:100%;padding:12px;border-radius:14px;border:1.5px solid #E5E7EB;background:white;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;color:#0f172a;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+    .btn-copy:active{background:#f9fafb;}
+
+    /* App body */
+    .app-body{padding:12px 14px 32px;background:#f5f6ff;}
+
+    /* Sections */
+    .sec{background:white;border-radius:16px;margin-bottom:10px;border:1px solid rgba(229,231,235,.6);box-shadow:0 4px 12px rgba(0,0,0,.06);}
+    .sec.ing{border-left:4px solid #22C55E;}.sec.gas{border-left:4px solid #F97316;}.sec.aho{border-left:4px solid #3B82F6;}
+    .sec-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;cursor:pointer;user-select:none;}
+    .sec-lbl{font-weight:900;font-size:15px;color:#0f172a;}
+    .sec-sub{font-size:12px;color:#64748B;font-weight:600;margin-top:2px;}
+    .sec-rt{display:flex;align-items:center;gap:8px;}
+    .btn-add{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3956E8,#7459D9);border:none;color:white;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 10px rgba(57,86,232,.3);line-height:1;flex-shrink:0;}
+    .chv{font-size:14px;color:#64748B;transition:transform .3s;display:inline-block;}
+    .sec.collapsed .chv{transform:rotate(-90deg);}
+    .sec-body{padding:0 10px 10px;}
+    .sec.collapsed .sec-body{display:none;}
+
+    /* ── Category parent row (collapsible) ── */
+    .cg{background:#F9FAFB;border-radius:12px;margin-bottom:6px;border:1px solid rgba(229,231,235,.65);overflow:hidden;}
+    .cg-hd{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;cursor:pointer;user-select:none;}
+    .cg-left{flex:1;min-width:0;}
+    .cg-name{font-size:14px;font-weight:900;color:#0f172a;}
+    .cg-meta{font-size:11px;color:#64748B;font-weight:700;margin-top:2px;}
+    .cg-rt{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+    .cg-total{font-size:14px;font-weight:900;color:#0f172a;}
+    .cg-chv{font-size:11px;color:#9CA3AF;transition:transform .3s;display:inline-block;}
+    .cg.open .cg-chv{transform:rotate(180deg);}
+    .cg-body{max-height:0;overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1);}
+    .cg.open .cg-body{max-height:800px;}
+    .cg-inner{padding:0 10px 10px;border-top:1px dashed #E5E7EB;}
+
+    /* ── Sub-item row ── */
+    .sub-item{display:flex;align-items:center;justify-content:space-between;padding:10px 8px;border-radius:10px;margin-top:6px;background:white;border:1px solid rgba(229,231,235,.5);}
+    .sub-item-name{font-size:13px;font-weight:600;color:#0f172a;flex:1;min-width:0;}
+    .sub-item-rt{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+    .sub-item-amt{font-size:13px;font-weight:900;color:#0f172a;}
+    .btn-edit{width:26px;height:26px;border-radius:8px;border:1px solid #E5E7EB;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+    .btn-del{width:26px;height:26px;border-radius:8px;border:none;background:#FEF2F2;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:#EF4444;}
+
+    /* Single (no-group) row */
+    .row-item{display:flex;align-items:center;justify-content:space-between;padding:11px 10px;background:#F9FAFB;border-radius:10px;margin-bottom:6px;border:1px solid rgba(229,231,235,.5);}
+    .row-name{font-weight:600;font-size:13px;color:#0f172a;flex:1;min-width:0;}
+    .row-rt{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+    .row-amt{font-weight:900;font-size:13px;color:#0f172a;}
+
+    /* Progress bar */
+    .pg-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed #E5E7EB;}
+    .pg-bar{height:4px;background:#E5E7EB;border-radius:999px;overflow:hidden;}
+    .pg-fill{height:100%;border-radius:999px;}
+    .pg-fill.ok{background:linear-gradient(90deg,#22C55E,#4ADE80);}
+    .pg-fill.warn{background:linear-gradient(90deg,#F59E0B,#FBBF24);}
+    .pg-fill.danger{background:linear-gradient(90deg,#EF4444,#F87171);}
+    .pg-lbl{font-size:11px;color:#64748B;font-weight:700;margin-top:3px;}
+
+    /* Totals — clean list style matching screenshot */
+    .totals{background:white;border-radius:16px;border:1px solid rgba(229,231,235,.6);padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+    .totals-title{font-size:10px;font-weight:800;color:#9CA3AF;letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;}
+    .totals-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #F3F4F6;}
+    .totals-row:last-of-type{border-bottom:none;}
+    .totals-row span:first-child{font-size:14px;font-weight:700;color:#0f172a;}
+    .totals-row span:last-child{font-size:15px;font-weight:900;color:#0f172a;}
+    .totals-row.hi{margin-top:8px;padding:10px 12px;background:#EDE9FE;border-radius:12px;border:none;}
+    .totals-row.hi span:first-child{font-size:14px;font-weight:700;color:#5b21b6;}
+    .totals-row.hi span:last-child{font-size:15px;font-weight:900;color:#7c3aed;}
+
+    /* Donut card */
+    .donut-card{background:white;border-radius:16px;border:1px solid rgba(229,231,235,.6);padding:14px 16px 18px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+    .donut-title{font-size:10px;font-weight:800;color:#9CA3AF;letter-spacing:.8px;text-transform:uppercase;margin-bottom:14px;}
+    .donut-canvas-wrap{display:flex;justify-content:center;}
+    .donut-canvas-wrap canvas{max-width:200px;max-height:200px;}
+
+    /* Save button */
+    .btn-save{width:100%;padding:14px;background:linear-gradient(135deg,#7459D9,#3956E8);color:white;border-radius:14px;font-size:15px;font-weight:900;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 10px 24px rgba(116,89,217,.25);margin-bottom:12px;}
+
+    /* Promedio del año button */
+    .btn-avg{width:100%;padding:12px;border-radius:14px;border:1.5px solid #7459D9;background:linear-gradient(135deg,#F5F3FF,#EDE9FE);font-family:Nunito,sans-serif;font-size:13px;font-weight:800;color:#6D28D9;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;}
+    .btn-avg:active{background:#DDD6FE;}
+
+
+    /* Comparativo */
+    .comp-card{background:white;border-radius:16px;border:1px solid rgba(229,231,235,.6);box-shadow:0 4px 12px rgba(0,0,0,.06);padding:14px;margin-bottom:20px;}
+    .comp-title{font-weight:900;font-size:15px;color:#0f172a;margin-bottom:12px;}
+    .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+    .chip{border-radius:999px;border:1px solid #E5E7EB;padding:7px 12px;font-size:12px;font-weight:800;color:#64748B;background:white;cursor:pointer;font-family:Nunito,sans-serif;}
+    .chip.active{border-color:#3956E8;background:linear-gradient(135deg,#E8ECFF,#DDD6FE);color:#3956E8;}
+    .banner{border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid;}
+    .banner.green{background:#ECFDF3;color:#15803D;border-color:rgba(21,128,61,.2);}
+    .banner.yellow{background:#FEF9C3;color:#92400E;border-color:rgba(146,64,14,.2);}
+    .banner.red{background:#FEF2F2;color:#B91C1C;border-color:rgba(185,28,28,.2);}
+    .mini-row{display:flex;justify-content:space-between;padding:8px 0;}
+    .mini-row span:first-child{font-size:13px;color:#64748B;font-weight:800;}
+    .mini-row span:last-child{font-size:13px;font-weight:900;color:#0f172a;}
+    .diff-pos{color:#15803D;font-weight:900;}
+    .diff-neg{color:#B91C1C;font-weight:900;}
+    .bullet-wrap{margin:12px 0 0;}
+    .bullet-lbl{font-size:12px;font-weight:700;color:#64748B;margin-bottom:6px;}
+    .bullet-bar{position:relative;height:38px;background:#F3F4F6;border-radius:12px;overflow:hidden;}
+    .b-bg{position:absolute;height:100%;background:linear-gradient(90deg,#E0E7FF,#C7D2FE);border-radius:12px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;}
+    .b-bg span{font-weight:900;font-size:12px;color:#3956E8;}
+    .b-fg{position:absolute;height:24px;top:7px;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width .4s ease,background .3s;}
+    .b-fg span{font-weight:900;font-size:12px;color:white;}
+    .bullet-leg{display:flex;gap:12px;margin-top:8px;font-size:11px;font-weight:700;color:#64748B;}
+    .leg-dot{width:18px;height:10px;border-radius:3px;flex-shrink:0;}
+
+    /* ══ Period selector ══ */
+    .period-scroll-wrap{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin:0 -14px 10px;padding:0 14px;}
+    .period-scroll-wrap::-webkit-scrollbar{display:none;}
+    .period-pills{display:flex;gap:8px;width:max-content;padding-bottom:2px;}
+    .period-pill{white-space:nowrap;padding:8px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:white;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;color:#64748b;cursor:pointer;transition:all .2s;flex-shrink:0;}
+    .period-pill.active{background:#7459D9;border-color:#7459D9;color:white;font-weight:900;}
+    .custom-range{background:white;border-radius:14px;border:1px solid #e5e7eb;padding:14px;margin-bottom:10px;}
+    .custom-range-inner{display:flex;flex-direction:column;gap:12px;}
+    .custom-range-field{display:flex;flex-direction:column;gap:6px;}
+    .custom-range-field label{font-size:10px;font-weight:800;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;}
+    .custom-sel-row{display:flex;gap:8px;}
+    .custom-range-btn{padding:11px;border-radius:12px;border:none;background:linear-gradient(135deg,#3956E8,#7459D9);color:white;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;cursor:pointer;}
+    .period-label{font-size:11px;font-weight:700;color:#9ca3af;margin-bottom:8px;letter-spacing:.3px;}
+
+    /* ══ Custom dropdown ══ */
+    .cdd-wrap{position:relative;z-index:50;}
+    .cdd-trigger{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:white;border:1.5px solid #E5E7EB;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;color:#0f172a;user-select:none;transition:border-color .2s;}
+    .cdd-trigger:active,.cdd-trigger.open{border-color:#7459D9;}
+    .cdd-chv{font-size:12px;color:#9ca3af;transition:transform .25s;flex-shrink:0;}
+    .cdd-trigger.open .cdd-chv{transform:rotate(180deg);}
+    .cdd-list{position:absolute;top:calc(100% + 6px);left:0;right:0;background:white;border:1.5px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.12);max-height:220px;overflow-y:auto;scrollbar-width:none;}
+    .cdd-list::-webkit-scrollbar{display:none;}
+    .cdd-item{padding:12px 14px;font-size:13px;font-weight:700;color:#0f172a;cursor:pointer;border-bottom:1px solid #F3F4F6;transition:background .15s;}
+    .cdd-item:last-child{border-bottom:none;}
+    .cdd-item:active{background:#f0f0ff;}
+    .cdd-item.selected{color:#7459D9;background:#F5F3FF;}
+
+    /* ══ VS REAL styles ══ */
+    .vr-banner{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:#15803d;font-weight:600;line-height:1.5;}
+    .vr-banner strong{font-weight:900;}
+    .vr-kpi{background:white;border-radius:16px;border:1px solid rgba(229,231,235,.6);box-shadow:0 2px 10px rgba(0,0,0,.05);padding:14px 16px;margin-bottom:10px;}
+    .vr-kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .vr-kpi-label{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:800;color:#0f172a;}
+    .vr-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+    .vr-badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;}
+    .vr-badge.green{background:#f0fdf4;color:#15803d;}
+    .vr-badge.yellow{background:#fef9c3;color:#92400e;}
+    .vr-badge.red{background:#fef2f2;color:#b91c1c;}
+    .vr-kpi-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+    .vr-num-lbl{font-size:11px;color:#9ca3af;font-weight:600;margin-bottom:3px;}
+    .vr-num{font-size:15px;font-weight:900;color:#0f172a;}
+    .vr-num.pos{color:#15803d;}.vr-num.neg{color:#b91c1c;}
+    .vr-bar-wrap{margin-top:2px;}
+    .vr-bar{height:4px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-bottom:4px;}
+    .vr-bar-fill{height:100%;border-radius:999px;transition:width .5s ease;}
+    .vr-bar-lbl{font-size:11px;color:#9ca3af;font-weight:700;}
+    .vr-section-title{font-size:10px;font-weight:800;color:#9ca3af;letter-spacing:.8px;text-transform:uppercase;margin:14px 0 8px 2px;}
+    .vr-chips{display:flex;gap:8px;margin-bottom:10px;}
+    .vr-chip{flex:1;padding:8px 0;border-radius:999px;border:1.5px solid #e5e7eb;background:white;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;color:#64748b;cursor:pointer;transition:all .2s;}
+    .vr-chip.active{background:#7459D9;border-color:#7459D9;color:white;font-weight:900;}
+    .vr-dev-item{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f3f4f6;}
+    .vr-dev-item:last-child{border-bottom:none;}
+    .vr-dev-name{font-size:13px;font-weight:800;color:#0f172a;margin-bottom:4px;}
+    .vr-dev-amounts{font-size:12px;color:#64748b;font-weight:600;}
+    .vr-dev-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;margin-top:4px;display:inline-block;}
+    .vr-sub-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:12px;}
+    .vr-sub-row:last-child{border-bottom:none;}
+    .vr-sub-name{font-weight:700;color:#0f172a;}
+    .vr-sub-diff{font-weight:800;}
+
+    /* ══ Modal overlay — inside app-screen ══ */
+    .modal-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:200;display:none;align-items:flex-end;border-radius:44px;overflow:hidden;}
+    .modal-ov.open{display:flex;}
+    .modal-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-height:75%;display:flex;flex-direction:column;animation:su .3s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+    @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .m-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:10px auto 0;flex-shrink:0;}
+    .m-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 12px;border-bottom:1px solid #F3F4F6;flex-shrink:0;}
+    .m-title{font-size:16px;font-weight:900;color:#0f172a;}
+    .m-close{background:none;border:none;font-size:22px;color:#64748B;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:Nunito,sans-serif;}
+    .m-body{overflow-y:auto;flex:1;scrollbar-width:none;}
+    .m-body::-webkit-scrollbar{display:none;}
+
+    /* Sector blocks inside modal — no icon, simple row */
+    .s-block{border-bottom:1px solid #F3F4F6;}
+    .s-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s;}
+    .s-hd:active{background:#f9fafb;}
+    .s-name{font-size:14px;font-weight:800;color:#0f172a;}
+    .s-chv{font-size:13px;color:#9ca3af;transition:transform .3s;display:inline-block;}
+    .s-block.open .s-chv{transform:rotate(180deg);}
+    .s-content{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+    .s-block.open .s-content{max-height:1200px;}
+    .s-inner{padding:4px 14px 10px;}
+    .sub-row-m{display:flex;align-items:center;justify-content:space-between;padding:12px 10px;border-radius:10px;cursor:pointer;transition:background .15s;font-size:13px;font-weight:600;color:#0f172a;}
+    .sub-row-m:active{background:rgba(57,86,232,.07);}
+
+    /* ══ Input sheet — inside app-screen ══ */
+    .input-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:300;display:none;align-items:flex-end;border-radius:44px;overflow:hidden;}
+    .input-ov.open{display:flex;}
+    .input-card{background:white;border-radius:24px 24px 0 0;width:100%;padding:16px 18px 30px;animation:su .25s cubic-bezier(.4,0,.2,1);}
+    .i-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:0 auto 14px;}
+    .i-area{font-size:12px;font-weight:700;color:#64748B;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+    .i-sub{font-size:17px;font-weight:900;color:#0f172a;margin-bottom:16px;}
+    .amt-input{width:100%;padding:14px 16px;border:1.5px solid #E5E7EB;border-radius:14px;font-size:22px;font-weight:900;font-family:Nunito,sans-serif;color:#0f172a;outline:none;text-align:center;letter-spacing:1px;}
+    .amt-input:focus{border-color:#3956E8;box-shadow:0 0 0 3px rgba(57,86,232,.1);}
+    .i-actions{display:flex;gap:10px;margin-top:14px;}
+    .btn-cancel{flex:1;padding:13px;background:#F3F4F6;color:#0f172a;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;}
+    .btn-confirm{flex:2;padding:13px;background:linear-gradient(135deg,#3956E8,#7459D9);color:white;border-radius:12px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 6px 16px rgba(57,86,232,.3);}
+
+    /* Toast */
+    .toast{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.92);color:white;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:900;display:none;z-index:400;white-space:nowrap;}
+    .toast.show{display:block;animation:ti .3s ease;}
+    @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+    /* Home indicator */
+    .home-ind{position:sticky;bottom:0;left:0;right:0;height:28px;background:linear-gradient(to top,#f5f6ff 60%,transparent);display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;pointer-events:none;}
+    .home-ind-bar{width:130px;height:5px;background:rgba(0,0,0,.2);border-radius:999px;}
+  </style>
+</head>
+<body>
+<div class="iphone">
+  <div class="bl m"></div><div class="bl v1"></div><div class="bl v2"></div><div class="br"></div>
+  <div class="screen-outer">
+    <div class="di"></div>
+    <div class="app-screen" id="appScreen">
+      <div class="app-scroll">
+
+      <!-- Status bar -->
+      <div class="sb">
+        <span class="sb-t">9:41</span>
+        <div class="sb-i">
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect x="0" y="3" width="3" height="9" rx="1" fill="#0f172a"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#0f172a"/><rect x="9" y="0" width="3" height="12" rx="1" fill="#0f172a"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#d1d5db"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 2.5C10.5 2.5 12.7 3.5 14.3 5.1L15.5 3.9C13.6 2 11 .9 8 .9 5 .9 2.4 2 .5 3.9L1.7 5.1C3.3 3.5 5.5 2.5 8 2.5Z" fill="#0f172a"/><path d="M8 5.5C9.7 5.5 11.2 6.2 12.3 7.3L13.5 6.1C12.1 4.7 10.1 3.9 8 3.9 5.9 3.9 3.9 4.7 2.5 6.1L3.7 7.3C4.8 6.2 6.3 5.5 8 5.5Z" fill="#0f172a"/><circle cx="8" cy="10" r="1.8" fill="#0f172a"/></svg>
+          <div style="display:flex;align-items:center;"><div style="width:22px;height:11px;border:1.5px solid #0f172a;border-radius:3px;padding:1.5px;display:flex;align-items:center;"><div style="width:15px;height:6px;background:#0f172a;border-radius:1px;"></div></div><div style="width:2px;height:5px;background:#0f172a;border-radius:1px;margin-left:1px;"></div></div>
+        </div>
+      </div>
+
+      <!-- App header -->
+      <div class="ah">
+        <!-- Main tabs: Presupuesto / Vs real -->
+        <div class="tab-row">
+          <button class="tab-btn active" id="tabPres">Presupuesto</button>
+          <button class="tab-btn" id="tabVsReal">Vs real</button>
+        </div>
+        <!-- Mensual / Anual toggle — only on Presupuesto tab -->
+        <div class="period-type-row" id="periodTypeRow">
+          <button class="period-type-btn active" id="btnMensual">Mensual</button>
+          <button class="period-type-btn" id="btnAnual">Anual</button>
+        </div>
+        <!-- Month + Year selects -->
+        <div class="selects-row" id="selectsRow">
+          <div class="sel-wrap">
+            <select>
+              <option>Enero</option><option>Febrero</option><option>Marzo</option>
+              <option>Abril</option><option>Mayo</option><option>Junio</option>
+              <option selected>Julio</option><option>Agosto</option><option>Septiembre</option>
+              <option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
+            </select>
+          </div>
+          <div class="sel-wrap">
+            <select>
+              <option>2024</option><option selected>2026</option><option>2027</option>
+            </select>
+          </div>
+        </div>
+        <!-- Copy button -->
+        <button class="btn-copy" id="btnCopy">📋 Copiar presupuesto al mes siguiente</button>
+        <!-- Avg button -->
+        <button class="btn-avg" id="btnAvg">📊 Usar promedio del año</button>
+      </div>
+
+      <!-- Scrollable body -->
+      <div class="app-body">
+
+        <!-- ══ TAB: PRESUPUESTO ══ -->
+        <div id="panel-pres">
+
+        <!-- INGRESOS -->
+        <div class="sec ing collapsed" id="sec-ingresos">
+          <div class="sec-hd" data-sec="ingresos">
+            <div><div class="sec-lbl">Ingresos</div><div class="sec-sub">Lo que entra en el periodo</div></div>
+            <div class="sec-rt"><button class="btn-add" data-area="ingresos">+</button><span class="chv">⌄</span></div>
+          </div>
+          <div class="sec-body" id="body-ingresos"></div>
+        </div>
+
+        <!-- GASTOS -->
+        <div class="sec gas collapsed" id="sec-gastos">
+          <div class="sec-hd" data-sec="gastos">
+            <div><div class="sec-lbl">Gastos</div><div class="sec-sub">Lo que sale en el periodo</div></div>
+            <div class="sec-rt"><button class="btn-add" data-area="gastos">+</button><span class="chv">⌄</span></div>
+          </div>
+          <div class="sec-body" id="body-gastos"></div>
+        </div>
+
+        <!-- AHORRO -->
+        <div class="sec aho collapsed" id="sec-ahorro">
+          <div class="sec-hd" data-sec="ahorro">
+            <div><div class="sec-lbl">Ahorro</div><div class="sec-sub">Lo que apartas del ingreso</div></div>
+            <div class="sec-rt"><button class="btn-add" data-area="ahorro">+</button><span class="chv">⌄</span></div>
+          </div>
+          <div class="sec-body" id="body-ahorro"></div>
+        </div>
+
+        <!-- TOTALES -->
+        <div class="totals">
+          <div class="totals-title">Totales del presupuesto</div>
+          <div class="totals-row"><span>Ingresos</span><span id="t-ing">$0.00</span></div>
+          <div class="totals-row"><span>Gastos</span><span id="t-gas">$0.00</span></div>
+          <div class="totals-row"><span>Ahorro</span><span id="t-aho">$0.00</span></div>
+          <div class="totals-row hi"><span>Disponible</span><span id="t-dis">$0.00</span></div>
+        </div>
+
+        <!-- DONA con dropdown de categoría -->
+        <div class="donut-card">
+          <!-- Custom dropdown -->
+          <div class="cdd-wrap" id="donaDropWrap" style="margin-bottom:18px;">
+            <div class="cdd-trigger" id="donaDropTrigger">
+              <span id="donaDropLabel">Categoría (todas)</span>
+              <span class="cdd-chv">⌄</span>
+            </div>
+            <div class="cdd-list" id="donaDropList" style="display:none;"></div>
+          </div>
+          <div style="position:relative;height:220px;display:flex;justify-content:center;align-items:center;">
+            <canvas id="donaChart" style="max-width:220px;max-height:220px;"></canvas>
+            <div style="position:absolute;text-align:center;pointer-events:none;">
+              <div style="font-size:12px;font-weight:700;color:#64748B;margin-bottom:2px;">Total</div>
+              <div id="donaTotalLabel" style="font-size:20px;font-weight:900;color:#0f172a;">$0</div>
+            </div>
+          </div>
+        </div>
+
+        </div><!-- /panel-pres -->
+
+        <!-- ══ TAB: VS REAL ══ -->
+        <div id="panel-vsreal" style="display:none;">
+
+          <!-- Period selector -->
+          <div class="period-scroll-wrap">
+            <div class="period-pills" id="periodPills">
+              <button class="period-pill active" data-period="this_month">Este mes</button>
+              <button class="period-pill" data-period="last_month">Último mes</button>
+              <button class="period-pill" data-period="3_months">3 meses</button>
+              <button class="period-pill" data-period="6_months">6 meses</button>
+              <button class="period-pill" data-period="this_year">Este año</button>
+              <button class="period-pill" data-period="last_year">Último año</button>
+              <button class="period-pill" data-period="custom">⚙ Personalizado</button>
+            </div>
+          </div>
+
+          <!-- Custom date range (hidden by default) -->
+          <div class="custom-range" id="customRange" style="display:none;">
+            <div class="custom-range-inner">
+              <div class="custom-range-field">
+                <label>Desde</label>
+                <div class="custom-sel-row">
+                  <div class="sel-wrap" style="flex:.8;">
+                    <select id="rangeFromDay"></select>
+                  </div>
+                  <div class="sel-wrap" style="flex:1.4;">
+                    <select id="rangeFromMonth">
+                      <option value="0">Enero</option><option value="1">Febrero</option><option value="2">Marzo</option>
+                      <option value="3">Abril</option><option value="4">Mayo</option><option value="5">Junio</option>
+                      <option value="6">Julio</option><option value="7">Agosto</option><option value="8">Septiembre</option>
+                      <option value="9">Octubre</option><option value="10">Noviembre</option><option value="11">Diciembre</option>
+                    </select>
+                  </div>
+                  <div class="sel-wrap" style="flex:1;">
+                    <select id="rangeFromYear">
+                      <option>2024</option><option>2025</option><option selected>2026</option><option>2027</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="custom-range-field">
+                <label>Hasta</label>
+                <div class="custom-sel-row">
+                  <div class="sel-wrap" style="flex:.8;">
+                    <select id="rangeToDay"></select>
+                  </div>
+                  <div class="sel-wrap" style="flex:1.4;">
+                    <select id="rangeToMonth">
+                      <option value="0">Enero</option><option value="1">Febrero</option><option value="2">Marzo</option>
+                      <option value="3">Abril</option><option value="4">Mayo</option><option value="5">Junio</option>
+                      <option value="6" selected>Julio</option><option value="7">Agosto</option><option value="8">Septiembre</option>
+                      <option value="9">Octubre</option><option value="10">Noviembre</option><option value="11">Diciembre</option>
+                    </select>
+                  </div>
+                  <div class="sel-wrap" style="flex:1;">
+                    <select id="rangeToYear">
+                      <option>2024</option><option>2025</option><option selected>2026</option><option>2027</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button class="custom-range-btn" id="btnApplyRange">Aplicar</button>
+            </div>
+          </div>
+
+          <!-- Period label -->
+          <div class="period-label" id="periodLabel">Julio 2026</div>
+
+          <!-- Banner -->
+          <div class="vr-banner" id="vrBanner">
+            <div id="vrBannerText">Estás usando el <strong id="vrPct">0%</strong> de tu presupuesto de gastos.</div>
+            <div>Te quedan <strong id="vrRestante">$0.00</strong> para gastar sin salirte del plan.</div>
+          </div>
+
+          <!-- 3 KPI cards -->
+          <div class="vr-kpi" id="vrKpiIng">
+            <div class="vr-kpi-top">
+              <div class="vr-kpi-label"><span class="vr-dot" style="background:#22c55e;"></span>Ingresos</div>
+              <span class="vr-badge" id="vrBadgeIng">—</span>
+            </div>
+            <div class="vr-kpi-nums">
+              <div><div class="vr-num-lbl">Presupuestado</div><div class="vr-num" id="vrPresIng">$0</div></div>
+              <div><div class="vr-num-lbl">Real</div><div class="vr-num" id="vrRealIng">$0</div></div>
+              <div><div class="vr-num-lbl">Diferencia</div><div class="vr-num" id="vrDiffIng">$0</div></div>
+            </div>
+            <div class="vr-bar-wrap"><div class="vr-bar"><div class="vr-bar-fill" id="vrBarIng" style="width:0%"></div></div><div class="vr-bar-lbl" id="vrPctIng">0% ejecutado</div></div>
+          </div>
+
+          <div class="vr-kpi" id="vrKpiGas">
+            <div class="vr-kpi-top">
+              <div class="vr-kpi-label"><span class="vr-dot" style="background:#f97316;"></span>Gastos</div>
+              <span class="vr-badge" id="vrBadgeGas">—</span>
+            </div>
+            <div class="vr-kpi-nums">
+              <div><div class="vr-num-lbl">Presupuestado</div><div class="vr-num" id="vrPresGas">$0</div></div>
+              <div><div class="vr-num-lbl">Real</div><div class="vr-num" id="vrRealGas">$0</div></div>
+              <div><div class="vr-num-lbl">Diferencia</div><div class="vr-num" id="vrDiffGas">$0</div></div>
+            </div>
+            <div class="vr-bar-wrap"><div class="vr-bar"><div class="vr-bar-fill" id="vrBarGas" style="width:0%"></div></div><div class="vr-bar-lbl" id="vrPctGas">0% ejecutado</div></div>
+          </div>
+
+          <div class="vr-kpi" id="vrKpiAho">
+            <div class="vr-kpi-top">
+              <div class="vr-kpi-label"><span class="vr-dot" style="background:#3b82f6;"></span>Ahorro</div>
+              <span class="vr-badge" id="vrBadgeAho">—</span>
+            </div>
+            <div class="vr-kpi-nums">
+              <div><div class="vr-num-lbl">Presupuestado</div><div class="vr-num" id="vrPresAho">$0</div></div>
+              <div><div class="vr-num-lbl">Real</div><div class="vr-num" id="vrRealAho">$0</div></div>
+              <div><div class="vr-num-lbl">Diferencia</div><div class="vr-num" id="vrDiffAho">$0</div></div>
+            </div>
+            <div class="vr-bar-wrap"><div class="vr-bar"><div class="vr-bar-fill" id="vrBarAho" style="width:0%"></div></div><div class="vr-bar-lbl" id="vrPctAho">0% ejecutado</div></div>
+          </div>
+
+          <!-- Presupuesto vs Real por categoría -->
+          <div class="vr-section-title">Presupuesto vs Real por Categoría</div>
+          <div class="vr-chips" id="vrChips">
+            <button class="vr-chip active" data-area="ingresos">Ingresos</button>
+            <button class="vr-chip" data-area="gastos">Gastos</button>
+            <button class="vr-chip" data-area="ahorro">Ahorro</button>
+          </div>
+          <div class="donut-card" style="padding:14px 14px 18px;">
+            <div style="position:relative;height:180px;">
+              <canvas id="vrBarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Top desviaciones -->
+          <div class="vr-section-title">Top Desviaciones (Gastos)</div>
+          <div class="donut-card" style="padding:12px 14px;">
+            <div id="vrDesvios"></div>
+          </div>
+
+          <!-- Detalle subcategorías -->
+          <div class="vr-section-title">Detalle por Subcategorías</div>
+          <div class="donut-card" style="padding:14px;">
+            <div class="cdd-wrap" id="subcatDropWrap" style="margin-bottom:14px;">
+              <div class="cdd-trigger" id="subcatDropTrigger">
+                <span id="subcatDropLabel">Seleccionar categoría</span>
+                <span class="cdd-chv">⌄</span>
+              </div>
+              <div class="cdd-list" id="subcatDropList" style="display:none;"></div>
+            </div>
+            <div style="position:relative;height:180px;">
+              <canvas id="vrSubcatChart"></canvas>
+            </div>
+            <div id="vrSubcatTable" style="margin-top:12px;font-size:12px;"></div>
+          </div>
+
+        </div><!-- /panel-vsreal -->
+
+      </div><!-- /app-body -->
+
+      <div class="home-ind"><div class="home-ind-bar"></div></div>
+
+      </div><!-- /app-scroll -->
+
+      <!-- ══ MODAL — inside app-screen, outside scroll ══ -->
+      <div class="modal-ov" id="modalCats">
+        <div class="modal-sheet">
+          <div class="m-handle"></div>
+          <div class="m-hd"><span class="m-title" id="mTitle">Selecciona una categoría</span><button class="m-close" id="btnCloseCats">×</button></div>
+          <div class="m-body" id="mBody"></div>
+        </div>
+      </div>
+
+      <!-- ══ INPUT SHEET — inside app-screen, outside scroll ══ -->
+      <div class="input-ov" id="inputOv">
+        <div class="input-card">
+          <div class="i-handle"></div>
+          <div class="i-area" id="iArea">Ingresos</div>
+          <div class="i-sub" id="iSub">Salario</div>
+          <input class="amt-input" id="amtInput" type="number" inputmode="decimal" placeholder="0.00" step="0.01" min="0"/>
+          <div class="i-actions">
+            <button class="btn-cancel" id="btnCancelI">Cancelar</button>
+            <button class="btn-confirm" id="btnConfirmI">Guardar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+
+    </div><!-- /app-screen -->
+  </div><!-- /screen-outer -->
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   DATA STORE
+   ════════════════════════════════════════ */
+const CAT_DEF = {
+  ingresos:{icon:'💰',cls:'ing',cats:{
+    'Pago por trabajo':['Salario','Pago por hora','Bono','Comisión','Negocio propio','Propina'],
+    'Ganancia de capital':['Acciones','Auto','Bonos o renta fija','Casa / Apartamento','ETF / Fondo mutuo'],
+    'Ingreso pasivo':['Anualidad','Dividendos e Intereses','Pensión','Renta inmueble','Seguro Social']
+  }},
+  gastos:{icon:'🛒',cls:'gas',cats:{
+    'Alimentación':['Supermercado','Comidas fuera','Pedido a domicilio'],
+    'Casa':['Hipoteca / Alquiler','Servicios básicos','Mantenimiento'],
+    'Impuestos':['Seguro social','Propiedad','Venta','Estatales','Federales'],
+    'Transportación':['Gasolina','Mantenimiento','Transporte público / Uber'],
+    'Seguros':['Salud','Auto','Vida'],
+    'Regalos y donaciones':['Familia','Amigos','Instituciones'],
+    'Gastos Médicos':['Consultas','Medicamentos','Procedimientos'],
+    'Cuidado Personal':['Peluquería','Cosméticos','Spa / Barbería'],
+    'Deuda':['Tarjetas de crédito','Préstamos estudiantiles','Otros préstamos'],
+    'Entretenimiento':['Cine','Conciertos','Streaming'],
+    'Telecomunicaciones':['Teléfono','Internet','TV']
+  }},
+  ahorro:{icon:'🎯',cls:'aho',cats:{
+    'Emergencia':['Fondo corto plazo','Fondo largo plazo','Reserva médica'],
+    'Meta específica':['Vacaciones','Auto','Casa','Boda','Educación de hijos'],
+    'Inversión':['Cuenta brokerage','Fondo indexado','Cripto','Crowdfunding'],
+    'Retiro':['IRA / Roth IRA','401(k)','Pensión privada'],
+    'Ahorro personal':['Ahorro mensual','Ahorro en efectivo','Cuenta de ahorro tradicional'],
+    'Ahorro para hijos':['Educación','Regalos futuros','Fondo universitario']
+  }}
+};
+
+// Budget items: { id, area, cat, sub, monto }
+// Real (executed) stays static for demo
+let nextId = 1;
+// Presupuesto = promedio mensual Enero–Julio del Excel
+const budget = {
+  ingresos:[
+    {id:nextId++, cat:'Pago por trabajo', sub:'Salario', monto:10000}
+  ],
+  gastos:[
+    {id:nextId++, cat:'Casa',        sub:'Electricidad',                      monto:273},
+    {id:nextId++, cat:'Casa',        sub:'Servicio profesional (reparaciones)',monto:69},
+    {id:nextId++, cat:'Comida',      sub:'Comidas afuera',                    monto:161},
+    {id:nextId++, cat:'Comida',      sub:'Pedido a domicilio',                monto:111},
+    {id:nextId++, cat:'Comida',      sub:'Supermercado',                      monto:517},
+    {id:nextId++, cat:'Conexión',    sub:'Celular',                           monto:60},
+    {id:nextId++, cat:'Conexión',    sub:'Internet',                          monto:70},
+    {id:nextId++, cat:'Cuidado',     sub:'Salón de belleza / Barbería',       monto:43},
+    {id:nextId++, cat:'Deuda',       sub:'Hipoteca (o Renta)',                monto:2000},
+    {id:nextId++, cat:'Deuda',       sub:'Préstamo personal',                 monto:250},
+    {id:nextId++, cat:'Deuda',       sub:'Tarjetas de Crédito',               monto:324},
+    {id:nextId++, cat:'Impuestos',   sub:'Ingreso personal',                  monto:800},
+    {id:nextId++, cat:'Impuestos',   sub:'Propiedad',                         monto:257},
+    {id:nextId++, cat:'Impuestos',   sub:'Seguro social',                     monto:620},
+    {id:nextId++, cat:'Médicos',     sub:'Doctor',                            monto:57},
+    {id:nextId++, cat:'Médicos',     sub:'Medicamentos',                      monto:45},
+    {id:nextId++, cat:'Ocio',        sub:'Cine',                              monto:19},
+    {id:nextId++, cat:'Ocio',        sub:'Subscripción mensual',              monto:40},
+    {id:nextId++, cat:'Regalos',     sub:'Donaciones',                        monto:129},
+    {id:nextId++, cat:'Seguros',     sub:'Auto',                              monto:120},
+    {id:nextId++, cat:'Seguros',     sub:'Salud',                             monto:300},
+    {id:nextId++, cat:'Seguros',     sub:'Vida',                              monto:50},
+    {id:nextId++, cat:'Transporte',  sub:'Gasolina',                          monto:155},
+    {id:nextId++, cat:'Transporte',  sub:'Mantenimiento',                     monto:59}
+  ],
+  ahorro:[
+    {id:nextId++, cat:'Retiro',     sub:'Contribución al retiro', monto:800},
+    {id:nextId++, cat:'Hijos',      sub:'Cuenta hijo(a)',         monto:300},
+    {id:nextId++, cat:'Emergencia', sub:'Reserva emergencia',     monto:464}
+  ]
+};
+
+const realData = {
+  ingresos: 10000,
+  gastos:   6580,  // Julio real
+  ahorro:   1600   // Julio real
+};
+
+/* ════════════════════════════════════════
+   HELPERS
+   ════════════════════════════════════════ */
+const fmt  = n => '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtS = n => '$'+n.toLocaleString('en-US',{maximumFractionDigits:0});
+
+function sumArea(area){ return budget[area].reduce((a,i)=>a+i.monto,0); }
+
+function pgClass(pct){ return pct<=75?'ok':pct<=90?'warn':'danger'; }
+
+/* ════════════════════════════════════════
+   RENDER SECTIONS
+   ════════════════════════════════════════ */
+function renderAll(){
+  ['ingresos','gastos','ahorro'].forEach(area => renderArea(area));
+  renderTotals();
+}
+
+function renderArea(area){
+  const cont = document.getElementById('body-'+area);
+  cont.innerHTML='';
+
+  // Group items by cat
+  const groups = {};
+  budget[area].forEach(item=>{
+    if(!groups[item.cat]) groups[item.cat]=[];
+    groups[item.cat].push(item);
+  });
+
+  Object.entries(groups).forEach(([cat,items])=>{
+    const total = items.reduce((a,i)=>a+i.monto,0);
+
+    // Always render as collapsible parent group (even with 1 child)
+    const cgDiv = document.createElement('div');
+    cgDiv.className='cg';
+    cgDiv.dataset.cat=cat;
+
+    // Compute real for this cat (proportional demo)
+    const areaReal = realData[area];
+    const areaTotal = sumArea(area)||1;
+    const catReal = Math.round((total/areaTotal)*areaReal);
+    const pct = Math.min(Math.round((catReal/total)*100),100);
+    const pgCls = area==='gastos' ? pgClass(pct) : '';
+    const partLabel = items.length===1 ? '1 partida' : `${items.length} partidas`;
+
+    cgDiv.innerHTML=`
+      <div class="cg-hd">
+        <div class="cg-left">
+          <div class="cg-name">${cat}</div>
+          <div class="cg-meta">${partLabel} · ${fmt(total)}</div>
+        </div>
+        <div class="cg-rt">
+          <span class="cg-chv">⌄</span>
+        </div>
+      </div>
+      <div class="cg-body">
+        <div class="cg-inner" id="cgi-${area}-${cat.replace(/\W/g,'_')}">
+          ${area==='gastos'?`<div class="pg-wrap">
+            <div class="pg-bar"><div class="pg-fill ${pgCls}" style="width:${pct}%"></div></div>
+            <div class="pg-lbl">${pct}% ejecutado · Real: ${fmt(catReal)}</div>
+          </div>`:''}
+        </div>
+      </div>`;
+
+    // Append child rows into cg-inner — edit/delete only on children
+    const inner = cgDiv.querySelector('.cg-inner');
+    items.forEach(item=>{
+      const sd = document.createElement('div');
+      sd.className='sub-item';
+      sd.innerHTML=`
+        <span class="sub-item-name">${item.sub}</span>
+        <div class="sub-item-rt">
+          <span class="sub-item-amt">${fmt(item.monto)}</span>
+          <button class="btn-edit" data-id="${item.id}" data-area="${area}" title="Editar">✏️</button>
+          <button class="btn-del" data-id="${item.id}" data-area="${area}" title="Eliminar">✕</button>
+        </div>`;
+      inner.appendChild(sd);
+    });
+
+    // Toggle collapse — close siblings first
+    cgDiv.querySelector('.cg-hd').addEventListener('click', ()=>{
+      const isOpen = cgDiv.classList.contains('open');
+      cont.querySelectorAll('.cg').forEach(g => g.classList.remove('open'));
+      if(!isOpen) cgDiv.classList.add('open');
+    });
+
+    cont.appendChild(cgDiv);
+  });
+
+  // Wire edit buttons
+  cont.querySelectorAll('.btn-edit').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      editItem(parseInt(btn.dataset.id), btn.dataset.area);
+    });
+  });
+
+  // Wire delete buttons
+  cont.querySelectorAll('.btn-del').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      deleteItem(parseInt(btn.dataset.id), btn.dataset.area);
+    });
+  });
+}
+
+function renderTotals(){
+  const ing = sumArea('ingresos');
+  const gas = sumArea('gastos');
+  const aho = sumArea('ahorro');
+  document.getElementById('t-ing').textContent = fmt(ing);
+  document.getElementById('t-gas').textContent = fmt(gas);
+  document.getElementById('t-aho').textContent = fmt(aho);
+  document.getElementById('t-dis').textContent = fmt(ing - gas - aho);
+  if(typeof updateDona === 'function') updateDona();
+}
+
+/* ════════════════════════════════════════
+   ADD / EDIT / DELETE
+   ════════════════════════════════════════ */
+let currentArea=null, currentCat=null, currentSub=null, editingId=null;
+
+function openAddFlow(area){
+  editingId=null;
+  currentArea=area;
+  document.getElementById('sec-'+area).classList.remove('collapsed');
+  buildCatModal(area);
+  document.getElementById('modalCats').classList.add('open');
+}
+
+function editItem(id, area){
+  const item = budget[area].find(i=>i.id===id);
+  if(!item) return;
+  editingId=id;
+  currentArea=area;
+  currentCat=item.cat;
+  currentSub=item.sub;
+  openInputSheet(item.monto);
+}
+
+function deleteItem(id, area){
+  budget[area] = budget[area].filter(i=>i.id!==id);
+  renderArea(area);
+  renderTotals();
+  showToast('🗑️ Eliminado');
+}
+
+/* ════════════════════════════════════════
+   CATEGORY MODAL
+   ════════════════════════════════════════ */
+function buildCatModal(focusArea){
+  const body = document.getElementById('mBody');
+  body.innerHTML='';
+
+  // Update modal title to reflect the area
+  const titles = {ingresos:'Ingresos',gastos:'Gastos',ahorro:'Ahorro'};
+  document.getElementById('mTitle').textContent = 'Añadir '+titles[focusArea];
+
+  // Only show categories for the pressed area
+  const info = CAT_DEF[focusArea];
+
+  Object.entries(info.cats).forEach(([cat,subs])=>{
+    const block = document.createElement('div');
+    block.className='s-block';
+
+    const hd = document.createElement('div');
+    hd.className='s-hd';
+    hd.innerHTML=`<span class="s-name">${cat}</span><span class="s-chv">⌄</span>`;
+    hd.addEventListener('click',()=>{
+      document.querySelectorAll('.s-block').forEach(b=>{ if(b!==block) b.classList.remove('open'); });
+      block.classList.toggle('open');
+    });
+
+    const content = document.createElement('div');
+    content.className='s-content';
+    const inner = document.createElement('div');
+    inner.className='s-inner';
+
+    subs.forEach(sub=>{
+      const sr = document.createElement('div');
+      sr.className='sub-row-m';
+      sr.innerHTML=`<span>${sub}</span><span>›</span>`;
+      sr.addEventListener('click',()=>{
+        currentArea=focusArea;
+        currentCat=cat;
+        currentSub=sub;
+        closeCatModal();
+        openInputSheet(null);
+      });
+      inner.appendChild(sr);
+    });
+
+    content.appendChild(inner);
+    block.appendChild(hd);
+    block.appendChild(content);
+    body.appendChild(block);
+  });
+}
+
+function closeCatModal(){ document.getElementById('modalCats').classList.remove('open'); }
+document.getElementById('btnCloseCats').addEventListener('click', closeCatModal);
+document.getElementById('modalCats').addEventListener('click', e=>{ if(e.target===document.getElementById('modalCats')) closeCatModal(); });
+
+/* ════════════════════════════════════════
+   INPUT SHEET
+   ════════════════════════════════════════ */
+function openInputSheet(prefill){
+  document.getElementById('iArea').textContent = {ingresos:'Ingresos',gastos:'Gastos',ahorro:'Ahorro'}[currentArea];
+  document.getElementById('iSub').textContent  = currentCat + ' › ' + currentSub;
+  document.getElementById('amtInput').value    = prefill !== null ? prefill : '';
+  document.getElementById('inputOv').classList.add('open');
+  setTimeout(()=>document.getElementById('amtInput').focus(),100);
+}
+function closeInputSheet(){ document.getElementById('inputOv').classList.remove('open'); }
+document.getElementById('btnCancelI').addEventListener('click', closeInputSheet);
+
+document.getElementById('btnConfirmI').addEventListener('click',()=>{
+  const val = parseFloat(document.getElementById('amtInput').value);
+  if(!val||val<=0){ showToast('⚠️ Ingresa un monto válido'); return; }
+
+  if(editingId!==null){
+    // Update existing
+    const item = budget[currentArea].find(i=>i.id===editingId);
+    if(item){ item.monto=val; }
+    showToast('✅ Actualizado');
+  } else {
+    // Add new
+    budget[currentArea].push({id:nextId++, cat:currentCat, sub:currentSub, monto:val});
+    showToast('✅ '+currentSub+' guardado');
+  }
+
+  closeInputSheet();
+  renderArea(currentArea);
+  renderTotals();
+  editingId=null;
+});
+
+/* ════════════════════════════════════════
+   SECTION ACCORDIONS — one open at a time
+   ════════════════════════════════════════ */
+const allSecs = ['ingresos','gastos','ahorro'];
+document.querySelectorAll('.sec-hd').forEach(h=>{
+  h.addEventListener('click',e=>{
+    if(e.target.classList.contains('btn-add')) return;
+    const area = h.dataset.sec;
+    const sec  = document.getElementById('sec-'+area);
+    const isOpen = !sec.classList.contains('collapsed');
+    // close all
+    allSecs.forEach(a => document.getElementById('sec-'+a).classList.add('collapsed'));
+    // open clicked one only if it was closed
+    if(isOpen) return;
+    sec.classList.remove('collapsed');
+  });
+});
+document.querySelectorAll('.btn-add').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    openAddFlow(btn.dataset.area);
+  });
+});
+
+/* ════════════════════════════════════════
+   TOAST
+   ════════════════════════════════════════ */
+let toastT;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ════════════════════════════════════════
+   TAB TOGGLE
+   ════════════════════════════════════════ */
+document.getElementById('tabPres').addEventListener('click',()=>{
+  document.getElementById('tabPres').classList.add('active');
+  document.getElementById('tabVsReal').classList.remove('active');
+  document.getElementById('panel-pres').style.display='';
+  document.getElementById('panel-vsreal').style.display='none';
+  document.getElementById('btnCopy').style.display='';
+  document.getElementById('selectsRow').style.display='';
+  document.getElementById('periodTypeRow').style.display='';
+});
+document.getElementById('tabVsReal').addEventListener('click',()=>{
+  document.getElementById('tabVsReal').classList.add('active');
+  document.getElementById('tabPres').classList.remove('active');
+  document.getElementById('panel-pres').style.display='none';
+  document.getElementById('panel-vsreal').style.display='';
+  document.getElementById('btnCopy').style.display='none';
+  document.getElementById('selectsRow').style.display='none';
+  document.getElementById('periodTypeRow').style.display='none';
+  renderVsReal();
+});
+
+/* Mensual / Anual toggle */
+let tipoActual = 'mensual';
+const selMonth = document.querySelector('#selectsRow .sel-wrap:first-child');
+const appBody  = document.querySelector('.app-body');
+
+function setTipo(tipo){
+  tipoActual = tipo;
+  const isMensual = tipo === 'mensual';
+  document.getElementById('btnMensual').classList.toggle('active', isMensual);
+  document.getElementById('btnAnual').classList.toggle('active', !isMensual);
+  selMonth.style.display = isMensual ? '' : 'none';
+}
+
+document.getElementById('btnMensual').addEventListener('click',()=>{
+  if(tipoActual==='mensual') return;
+  ['ingresos','gastos','ahorro'].forEach(area=>{
+    budget[area].forEach(i=>{ i.monto=parseFloat((i.monto/12).toFixed(2)); });
+  });
+  setTipo('mensual');
+  renderAll();
+});
+
+document.getElementById('btnAnual').addEventListener('click',()=>{
+  if(tipoActual==='anual') return;
+  ['ingresos','gastos','ahorro'].forEach(area=>{
+    budget[area].forEach(i=>{ i.monto=parseFloat((i.monto*12).toFixed(2)); });
+  });
+  setTipo('anual');
+  renderAll();
+});
+
+/* ════════════════════════════════════════
+   PERIOD SELECTOR
+   ════════════════════════════════════════ */
+const periodCfg = {
+  this_month: { label:'Julio 2026',              mult:1   },
+  last_month: { label:'Junio 2026',              mult:1   },
+  '3_months': { label:'Mayo – Julio 2026',       mult:3   },
+  '6_months': { label:'Febrero – Julio 2026',    mult:6   },
+  this_year:  { label:'Enero – Julio 2026',      mult:7   },
+  last_year:  { label:'Enero – Dic 2025',        mult:12  },
+  custom:     { label:'Personalizado',           mult:1   }
+};
+
+// Demo real data scaled by period multiplier
+const vrRealBase = {
+  ingresos:[ {cat:'Pago por trabajo', sub:'Salario', monto:10000} ],
+  gastos:[
+    {cat:'Casa',       sub:'Electricidad',                      monto:360},
+    {cat:'Casa',       sub:'Servicio profesional (reparaciones)',monto:200},
+    {cat:'Comida',     sub:'Comidas afuera',                    monto:175},
+    {cat:'Comida',     sub:'Pedido a domicilio',                monto:120},
+    {cat:'Comida',     sub:'Supermercado',                      monto:540},
+    {cat:'Conexión',   sub:'Celular',                           monto:60},
+    {cat:'Conexión',   sub:'Internet',                          monto:70},
+    {cat:'Cuidado',    sub:'Salón de belleza / Barbería',       monto:60},
+    {cat:'Deuda',      sub:'Hipoteca (o Renta)',                monto:2000},
+    {cat:'Deuda',      sub:'Préstamo personal',                 monto:250},
+    {cat:'Deuda',      sub:'Tarjetas de Crédito',               monto:330},
+    {cat:'Impuestos',  sub:'Ingreso personal',                  monto:800},
+    {cat:'Impuestos',  sub:'Propiedad',                         monto:0},
+    {cat:'Impuestos',  sub:'Seguro social',                     monto:620},
+    {cat:'Médicos',    sub:'Doctor',                            monto:50},
+    {cat:'Médicos',    sub:'Medicamentos',                      monto:45},
+    {cat:'Ocio',       sub:'Cine',                              monto:25},
+    {cat:'Ocio',       sub:'Subscripción mensual',              monto:40},
+    {cat:'Regalos',    sub:'Donaciones',                        monto:150},
+    {cat:'Seguros',    sub:'Auto',                              monto:120},
+    {cat:'Seguros',    sub:'Salud',                             monto:300},
+    {cat:'Seguros',    sub:'Vida',                              monto:50},
+    {cat:'Transporte', sub:'Gasolina',                          monto:165},
+    {cat:'Transporte', sub:'Mantenimiento',                     monto:50}
+  ],
+  ahorro:[
+    {cat:'Retiro',     sub:'Contribución al retiro', monto:800},
+    {cat:'Hijos',      sub:'Cuenta hijo(a)',         monto:300},
+    {cat:'Emergencia', sub:'Reserva emergencia',     monto:500}
+  ]
+};
+
+let periodMult = 1;
+
+function applyPeriod(key){
+  const cfg = periodCfg[key] || periodCfg.this_month;
+  periodMult = cfg.mult;
+  document.getElementById('periodLabel').textContent = cfg.label;
+
+  // Scale real data by multiplier
+  vrReal.ingresos = vrRealBase.ingresos.map(i=>({...i, monto:i.monto*periodMult}));
+  vrReal.gastos   = vrRealBase.gastos.map(i=>({...i,   monto:i.monto*periodMult}));
+  vrReal.ahorro   = vrRealBase.ahorro.map(i=>({...i,   monto:i.monto*periodMult}));
+
+  // Show/hide custom range
+  document.getElementById('customRange').style.display = key==='custom' ? '' : 'none';
+
+  renderVsReal();
+}
+
+document.querySelectorAll('.period-pill').forEach(pill=>{
+  pill.addEventListener('click',()=>{
+    document.querySelectorAll('.period-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    applyPeriod(pill.dataset.period);
+  });
+});
+
+// Populate day selects (1–31, adjusted per month)
+function populateDays(daySelId, monthSelId, yearSelId){
+  const daySel   = document.getElementById(daySelId);
+  const monthSel = document.getElementById(monthSelId);
+  const yearSel  = document.getElementById(yearSelId);
+  const prev     = parseInt(daySel.value)||1;
+  const month    = parseInt(monthSel.value);
+  const year     = parseInt(yearSel.value);
+  const days     = new Date(year, month+1, 0).getDate(); // days in month
+  daySel.innerHTML='';
+  for(let d=1;d<=days;d++){
+    const o=document.createElement('option');
+    o.value=d; o.textContent=d<10?'0'+d:d;
+    if(d===Math.min(prev,days)) o.selected=true;
+    daySel.appendChild(o);
+  }
+}
+
+function initDaySelects(){
+  ['From','To'].forEach(t=>{
+    const m=document.getElementById('range'+t+'Month');
+    const y=document.getElementById('range'+t+'Year');
+    populateDays('range'+t+'Day','range'+t+'Month','range'+t+'Year');
+    m.addEventListener('change',()=>populateDays('range'+t+'Day','range'+t+'Month','range'+t+'Year'));
+    y.addEventListener('change',()=>populateDays('range'+t+'Day','range'+t+'Month','range'+t+'Year'));
+  });
+  // Default from day = 1, to day = today (21)
+  document.getElementById('rangeFromDay').value=1;
+  const toSel=document.getElementById('rangeToDay');
+  for(let o of toSel.options){ if(parseInt(o.value)===21){o.selected=true;break;} }
+}
+
+document.getElementById('btnApplyRange').addEventListener('click',()=>{
+  const meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const fd=parseInt(document.getElementById('rangeFromDay').value);
+  const fm=parseInt(document.getElementById('rangeFromMonth').value);
+  const fy=parseInt(document.getElementById('rangeFromYear').value);
+  const td=parseInt(document.getElementById('rangeToDay').value);
+  const tm=parseInt(document.getElementById('rangeToMonth').value);
+  const ty=parseInt(document.getElementById('rangeToYear').value);
+
+  const dateFrom = new Date(fy, fm, fd);
+  const dateTo   = new Date(ty, tm, td);
+  const diffMs   = dateTo - dateFrom;
+  const diffDays = Math.max(1, Math.round(diffMs/(1000*60*60*24))+1);
+  // Convert days to month fraction for budget scaling
+  const months = diffDays / 30.44;
+  periodMult = parseFloat(months.toFixed(4));
+
+  const label = `${fd} ${meses[fm]} ${fy} – ${td} ${meses[tm]} ${ty}`;
+  document.getElementById('periodLabel').textContent = label;
+
+  vrReal.ingresos = vrRealBase.ingresos.map(i=>({...i,monto:i.monto*months}));
+  vrReal.gastos   = vrRealBase.gastos.map(i=>({...i,  monto:i.monto*months}));
+  vrReal.ahorro   = vrRealBase.ahorro.map(i=>({...i,  monto:i.monto*months}));
+  renderVsReal();
+});
+
+/* ════════════════════════════════════════
+   VS REAL DATA (demo base — monthly)
+   ════════════════════════════════════════ */
+const vrReal = {
+  ingresos: vrRealBase.ingresos.map(i=>({...i})),
+  gastos:   vrRealBase.gastos.map(i=>({...i})),
+  ahorro:   []
+};
+
+function vrSumArea(area){ return vrReal[area].reduce((a,i)=>a+(i.monto||0),0); }
+// Always compare against monthly base × period months, independent of the Anual toggle
+function vrSumBudget(area){
+  // vrRealBase shares the same categories/montos as the original monthly budget
+  // so we use vrRealBase as the monthly reference (always stays monthly)
+  const monthlyBase = vrRealBase[area].reduce((a,i)=>a+(i.monto||0),0);
+  // If vrRealBase is empty for this area (like ingresos), fall back to budget / tipoFactor
+  if(monthlyBase===0){
+    const factor = tipoActual==='anual' ? 12 : 1;
+    return (budget[area].reduce((a,i)=>a+(i.monto||0),0) / factor) * periodMult;
+  }
+  return monthlyBase * periodMult;
+}
+
+let vrBarChartInst=null, vrSubChartInst=null, vrCurrentChipArea='gastos';
+
+function renderVsReal(){
+  renderVrBanner();
+  renderVrKpis();
+  renderVrBarChart(vrCurrentChipArea);
+  renderVrDesvios();
+  renderVrSubcatSelect();
+}
+
+function renderVrBanner(){
+  const pres = vrSumBudget('gastos');
+  const real = vrSumArea('gastos');
+  const pct  = pres>0 ? Math.round((real/pres)*100) : 0;
+  const left = pres - real;
+  document.getElementById('vrPct').textContent = pct+'%';
+  document.getElementById('vrRestante').textContent = fmt(left);
+}
+
+function renderVrKpis(){
+  const areas = ['ingresos','gastos','ahorro'];
+  const dots  = {ingresos:'#22c55e', gastos:'#f97316', ahorro:'#3b82f6'};
+  areas.forEach(area=>{
+    const pres = vrSumBudget(area);
+    const real = vrSumArea(area);
+    const pct  = pres>0 ? (real/pres)*100 : 0;
+    const diff = area==='gastos' ? pres-real : real-pres;
+    const pctR = Math.round(pct);
+    const A = area.charAt(0).toUpperCase()+area.slice(1,3);
+
+    document.getElementById('vrPres'+A).textContent = fmt(pres);
+    document.getElementById('vrReal'+A).textContent = fmt(real);
+
+    const dEl = document.getElementById('vrDiff'+A);
+    dEl.textContent = (diff>=0?'+':'')+fmt(diff);
+    dEl.className   = 'vr-num '+(diff>=0?'pos':'neg');
+
+    document.getElementById('vrPct'+A).textContent = pctR+'% ejecutado';
+
+    const bar = document.getElementById('vrBar'+A);
+    bar.style.width = Math.min(pct,100)+'%';
+    if(area==='gastos'){
+      bar.style.background = pct<=75?'#22c55e':pct<=100?'#f59e0b':'#ef4444';
+    } else {
+      bar.style.background = pct>=90?'#22c55e':pct>=60?'#f59e0b':'#ef4444';
+    }
+
+    const badge = document.getElementById('vrBadge'+A);
+    badge.className = 'vr-badge';
+    if(pres===0){ badge.classList.add('yellow'); badge.textContent='Sin presupuesto'; }
+    else if(area==='gastos'){
+      if(pct<=75){ badge.classList.add('green'); badge.textContent='Bajo presupuesto'; }
+      else if(pct<=100){ badge.classList.add('yellow'); badge.textContent='Cerca del límite'; }
+      else{ badge.classList.add('red'); badge.textContent='Sobre el presupuesto'; }
+    } else {
+      if(pct>=90){ badge.classList.add('green'); badge.textContent='En meta'; }
+      else if(pct>=60){ badge.classList.add('yellow'); badge.textContent='Cerca de la meta'; }
+      else{ badge.classList.add('red'); badge.textContent='Bajo la meta'; }
+    }
+  });
+}
+
+function renderVrBarChart(area){
+  vrCurrentChipArea = area;
+  document.querySelectorAll('.vr-chip').forEach(c=>{
+    c.classList.toggle('active', c.dataset.area===area);
+  });
+  const factor = tipoActual==='anual' ? 12 : 1;
+  // Group by cat — normalize budget to monthly then scale by periodMult
+  const pMap={}, rMap={};
+  budget[area].forEach(i=>{ pMap[i.cat]=(pMap[i.cat]||0)+((i.monto/factor)*periodMult); });
+  (vrReal[area]||[]).forEach(i=>{ rMap[i.cat]=(rMap[i.cat]||0)+(i.monto||0); });
+  const labels = [...new Set([...Object.keys(pMap),...Object.keys(rMap)])];
+  const dataPres = labels.map(l=>pMap[l]||0);
+  const dataReal = labels.map(l=>rMap[l]||0);
+
+  const ctx = document.getElementById('vrBarChart');
+  if(vrBarChartInst){ vrBarChartInst.destroy(); }
+  vrBarChartInst = new Chart(ctx,{
+    type:'bar',
+    data:{labels, datasets:[
+      {label:'Presupuesto', data:dataPres, backgroundColor:'#c7d2fe'},
+      {label:'Real',        data:dataReal, backgroundColor:'#7459D9'}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},
+      scales:{x:{ticks:{font:{size:9}}}, y:{beginAtZero:true,ticks:{font:{size:10},callback:v=>'$'+v}}}
+    }
+  });
+}
+
+function renderVrDesvios(){
+  const cont = document.getElementById('vrDesvios');
+  cont.innerHTML='';
+  const factor = tipoActual==='anual' ? 12 : 1;
+  const pMap={}, rMap={};
+  budget.gastos.forEach(i=>{ pMap[i.cat]=(pMap[i.cat]||0)+((i.monto/factor)*periodMult); });
+  (vrReal.gastos||[]).forEach(i=>{ rMap[i.cat]=(rMap[i.cat]||0)+(i.monto||0); });
+  const cats = [...new Set([...Object.keys(pMap),...Object.keys(rMap)])];
+  const items = cats.map(cat=>({cat, pres:pMap[cat]||0, real:rMap[cat]||0}))
+    .sort((a,b)=>b.real-a.real).slice(0,4);
+  items.forEach(item=>{
+    const pct = item.pres>0 ? Math.round((item.real/item.pres)*100) : 0;
+    const cls = pct>100?'red':pct>75?'yellow':'green';
+    const d = document.createElement('div');
+    d.className='vr-dev-item';
+    d.innerHTML=`
+      <div>
+        <div class="vr-dev-name">${item.cat}</div>
+        <span class="vr-dev-badge ${cls} vr-badge">${pct}% del presupuesto</span>
+      </div>
+      <div class="vr-dev-amounts">${fmt(item.pres)} / ${fmt(item.real)}</div>`;
+    cont.appendChild(d);
+  });
+}
+
+let subcatCDD = null;
+
+function renderVrSubcatSelect(){
+  if(!document.getElementById('subcatDropTrigger')) return;
+  const cats = [...new Set(budget.gastos.map(i=>i.cat))];
+  const opts = cats.map(c=>({value:c, label:c}));
+  if(!subcatCDD){
+    subcatCDD = createCDD('subcatDropTrigger','subcatDropList','subcatDropLabel', opts, ()=>renderVrSubcatChart());
+  } else {
+    subcatCDD.setOptions(opts);
+  }
+  renderVrSubcatChart();
+}
+
+function renderVrSubcatChart(){
+  const cat  = subcatCDD ? subcatCDD.getValue() : null;
+  if(!cat) return;
+  const pres = budget.gastos.filter(i=>i.cat===cat);
+  const real = (vrReal.gastos||[]).filter(i=>i.cat===cat);
+  const map  = {};
+  pres.forEach(i=>{ map[i.sub]=(map[i.sub]||{p:0,r:0}); map[i.sub].p+=(i.monto||0); });
+  real.forEach(i=>{ map[i.sub]=(map[i.sub]||{p:0,r:0}); map[i.sub].r+=(i.monto||0); });
+  const labels=Object.keys(map), dataPres=labels.map(l=>map[l].p), dataReal=labels.map(l=>map[l].r);
+
+  const ctx = document.getElementById('vrSubcatChart');
+  if(vrSubChartInst){ vrSubChartInst.destroy(); }
+  vrSubChartInst = new Chart(ctx,{
+    type:'bar',
+    data:{labels, datasets:[
+      {label:'Presupuesto', data:dataPres, backgroundColor:'#c7d2fe'},
+      {label:'Real',        data:dataReal, backgroundColor:'#7459D9'}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y||0)}}},
+      scales:{x:{ticks:{font:{size:9},maxRotation:30}}, y:{beginAtZero:true,ticks:{font:{size:10},callback:v=>'$'+v}}}
+    }
+  });
+
+  const table = document.getElementById('vrSubcatTable');
+  table.innerHTML='';
+  labels.forEach((sub,i)=>{
+    const p=dataPres[i], r=dataReal[i], diff=r-p;
+    const row=document.createElement('div');
+    row.className='vr-sub-row';
+    row.innerHTML=`<span class="vr-sub-name">${sub}</span><span class="vr-sub-diff" style="color:${diff>0?'#b91c1c':'#15803d'}">${fmt(p)} ${(diff>=0?'+':'')+fmt(diff)}</span>`;
+    table.appendChild(row);
+  });
+}
+
+document.querySelectorAll('.vr-chip').forEach(c=>{
+  c.addEventListener('click',()=>renderVrBarChart(c.dataset.area));
+});
+
+/* ════════════════════════════════════════
+   CUSTOM DROPDOWN HELPER
+   ════════════════════════════════════════ */
+function createCDD(triggerId, listId, labelId, options, onChange){
+  const trigger = document.getElementById(triggerId);
+  const list    = document.getElementById(listId);
+  const label   = document.getElementById(labelId);
+  let current   = options[0].value;
+
+  function buildList(){
+    list.innerHTML='';
+    options.forEach(opt=>{
+      const item = document.createElement('div');
+      item.className='cdd-item'+(opt.value===current?' selected':'');
+      item.textContent=opt.label;
+      item.addEventListener('click',()=>{
+        current=opt.value;
+        label.textContent=opt.label;
+        closeList();
+        onChange(current);
+      });
+      list.appendChild(item);
+    });
+  }
+
+  function openList(){
+    buildList();
+    list.style.display='block';
+    trigger.classList.add('open');
+    // close on outside click
+    setTimeout(()=>document.addEventListener('click', outsideClick), 0);
+  }
+
+  function closeList(){
+    list.style.display='none';
+    trigger.classList.remove('open');
+    document.removeEventListener('click', outsideClick);
+  }
+
+  function outsideClick(e){
+    if(!trigger.contains(e.target) && !list.contains(e.target)) closeList();
+  }
+
+  trigger.addEventListener('click', e=>{
+    e.stopPropagation();
+    list.style.display==='none' ? openList() : closeList();
+  });
+
+  // expose update method
+  return {
+    setOptions(newOpts){
+      options=newOpts;
+      current=newOpts[0].value;
+      label.textContent=newOpts[0].label;
+      closeList();
+    },
+    getValue(){ return current; }
+  };
+}
+
+/* ════════════════════════════════════════
+   DONUT CHART — custom dropdown driven
+   ════════════════════════════════════════ */
+const donaColors = ['#F5C842','#7459D9','#3b82f6','#22c55e','#f97316','#ec4899','#14b8a6','#9ca3af','#e879f9','#f43f5e'];
+let donaChart = null;
+
+function buildDonaData(sel){
+  // sel = 'all' → group by cat (gastos)
+  // sel = 'CatName' → group by sub within that cat
+  if(sel === 'all'){
+    const groups = {};
+    budget.gastos.forEach(i=>{ groups[i.cat]=(groups[i.cat]||0)+(i.monto||0); });
+    return { labels: Object.keys(groups), data: Object.values(groups) };
+  } else {
+    const subs = {};
+    budget.gastos.filter(i=>i.cat===sel).forEach(i=>{ subs[i.sub]=(subs[i.sub]||0)+(i.monto||0); });
+    return { labels: Object.keys(subs), data: Object.values(subs) };
+  }
+}
+
+let donaCDD = null;
+
+function updateDonaSelect(){
+  if(!document.getElementById('donaDropTrigger')) return;
+  const cats = [...new Set(budget.gastos.map(i=>i.cat))];
+  const opts = [{value:'all', label:'Categoría (todas)'},
+    ...cats.map(c=>({value:c, label:c}))];
+  if(!donaCDD){
+    donaCDD = createCDD('donaDropTrigger','donaDropList','donaDropLabel', opts, ()=>updateDona());
+  } else {
+    donaCDD.setOptions(opts);
+  }
+}
+
+function updateDona(){
+  updateDonaSelect();
+  const chosen = donaCDD ? donaCDD.getValue() : 'all';
+  const {labels, data} = buildDonaData(chosen);
+  const total = data.reduce((a,b)=>a+b,0);
+
+  const lbl = document.getElementById('donaTotalLabel');
+  if(lbl) lbl.textContent = '$'+total.toLocaleString('en-US',{maximumFractionDigits:0});
+
+  if(!donaChart) return;
+  donaChart.data.labels = labels;
+  donaChart.data.datasets[0].data = data;
+  donaChart.update();
+}
+
+function initDona(){
+  const ctx = document.getElementById('donaChart');
+  if(!ctx) return;
+  donaChart = new Chart(ctx,{
+    type:'doughnut',
+    data:{labels:[],datasets:[{data:[],backgroundColor:donaColors,borderWidth:3,borderColor:'#fff'}]},
+    options:{
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': $'+c.parsed.toLocaleString('en-US',{maximumFractionDigits:0})}}},
+      cutout:'60%'
+    }
+  });
+  updateDona();
+}
+
+/* ════════════════════════════════════════
+   PROMEDIO DEL AÑO
+   ════════════════════════════════════════ */
+
+// Number of months elapsed in the current year (Jan–Oct 2026 = 10)
+const MONTHS_SO_FAR = 10;
+
+// Simulated annual totals: vrRealBase has monthly amounts,
+// so we multiply by MONTHS_SO_FAR to get the year-to-date total,
+// then divide by MONTHS_SO_FAR to get the monthly average.
+// Net effect: same as vrRealBase. But we keep the logic explicit
+// so that when real cumulative data is plugged in, the math is correct.
+// vrRealBase items represent the typical monthly spend for each subcategory.
+// The annual total = monto * MONTHS_SO_FAR. The average = annual total / MONTHS_SO_FAR = monto.
+// We therefore show vrRealBase values directly as monthly averages.
+function calcYearAverages(){
+  // { area: [ {cat, sub, monto} ] }  where monto = monthly average
+  const result = { ingresos:[], gastos:[], ahorro:[] };
+
+  ['ingresos','gastos','ahorro'].forEach(area=>{
+    const src = vrRealBase[area] || [];
+    // accumulate yearly totals per cat+sub (in case there are multiple entries per sub)
+    const acc = {};
+    src.forEach(item=>{
+      const key = item.cat+'|||'+item.sub;
+      // vrRealBase stores monthly amounts; multiply by months to get YTD total
+      acc[key] = (acc[key]||0) + (item.monto||0) * MONTHS_SO_FAR;
+    });
+    // divide by months to get monthly average
+    Object.entries(acc).forEach(([key, total])=>{
+      const [cat, sub] = key.split('|||');
+      result[area].push({ cat, sub, monto: Math.round(total / MONTHS_SO_FAR * 100)/100 });
+    });
+  });
+
+  return result;
+}
+
+// Wire up avg button — apply directly without preview
+document.getElementById('btnAvg').addEventListener('click', ()=>{
+  const avgs = calcYearAverages();
+  ['ingresos','gastos','ahorro'].forEach(area=>{
+    if(avgs[area] && avgs[area].length > 0){
+      budget[area] = avgs[area].map(i=>({cat:i.cat, sub:i.sub, monto:i.monto}));
+    }
+  });
+  renderAll();
+  if(typeof updateDona === 'function') updateDona();
+  showToast('✅ Promedio del año aplicado');
+});
+
+/* ── INIT ── */
+renderAll();
+initDaySelects();
+// Init custom dropdowns immediately (DOM is ready)
+updateDonaSelect();
+const chartScript = document.createElement('script');
+chartScript.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+chartScript.onload = initDona;
+document.head.appendChild(chartScript);
+</script>
+</body>
+</html>
