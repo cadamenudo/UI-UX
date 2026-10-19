@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -160,6 +161,43 @@
 
     /* Save button */
     .btn-save{width:100%;padding:14px;background:linear-gradient(135deg,#7459D9,#3956E8);color:white;border-radius:14px;font-size:15px;font-weight:900;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 10px 24px rgba(116,89,217,.25);margin-bottom:12px;}
+
+    /* Promedio del año button */
+    .btn-avg{width:100%;padding:12px;border-radius:14px;border:1.5px solid #7459D9;background:linear-gradient(135deg,#F5F3FF,#EDE9FE);font-family:Nunito,sans-serif;font-size:13px;font-weight:800;color:#6D28D9;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;}
+    .btn-avg:active{background:#DDD6FE;}
+
+    /* Avg sheet overlay */
+    .avg-ov{position:absolute;inset:0;background:rgba(15,23,42,.52);z-index:250;display:none;align-items:flex-end;border-radius:44px;overflow:hidden;}
+    .avg-ov.open{display:flex;}
+    .avg-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-height:82%;display:flex;flex-direction:column;animation:su .3s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+    .avg-handle{width:36px;height:4px;background:#D1D5DB;border-radius:999px;margin:10px auto 0;flex-shrink:0;}
+    .avg-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 12px;border-bottom:1px solid #F3F4F6;flex-shrink:0;}
+    .avg-title{font-size:15px;font-weight:900;color:#0f172a;}
+    .avg-subtitle{font-size:11px;font-weight:600;color:#9CA3AF;margin-top:1px;}
+    .avg-close{background:none;border:none;font-size:22px;color:#64748B;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:Nunito,sans-serif;}
+    .avg-body{overflow-y:auto;flex:1;scrollbar-width:none;padding-bottom:8px;}
+    .avg-body::-webkit-scrollbar{display:none;}
+    .avg-section{border-bottom:1px solid #F3F4F6;}
+    .avg-sec-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;user-select:none;}
+    .avg-sec-hd:active{background:#f9fafb;}
+    .avg-sec-label{font-size:13px;font-weight:800;color:#0f172a;display:flex;align-items:center;gap:8px;}
+    .avg-sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .avg-sec-total{font-size:13px;font-weight:900;color:#0f172a;}
+    .avg-sec-chv{font-size:11px;color:#9ca3af;transition:transform .3s;display:inline-block;}
+    .avg-section.open .avg-sec-chv{transform:rotate(180deg);}
+    .avg-sec-body{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+    .avg-section.open .avg-sec-body{max-height:800px;}
+    .avg-sec-inner{padding:2px 16px 10px;}
+    .avg-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #F9FAFB;font-size:13px;}
+    .avg-row:last-child{border-bottom:none;}
+    .avg-row-cat{font-weight:700;color:#64748B;font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px;}
+    .avg-row-sub{font-weight:800;color:#0f172a;}
+    .avg-row-amt{font-weight:900;color:#0f172a;}
+    .avg-footer{padding:14px 16px;border-top:2px solid #F3F4F6;flex-shrink:0;display:flex;flex-direction:column;gap:8px;}
+    .avg-months-note{font-size:11px;font-weight:700;color:#9CA3AF;text-align:center;margin-bottom:2px;}
+    .btn-apply-avg{width:100%;padding:13px;background:linear-gradient(135deg,#3956E8,#7459D9);color:white;border-radius:14px;font-weight:900;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;box-shadow:0 6px 16px rgba(57,86,232,.3);}
+    .btn-apply-avg:active{opacity:.9;}
+    .btn-cancel-avg{width:100%;padding:12px;background:#F3F4F6;color:#0f172a;border-radius:14px;font-weight:800;font-size:14px;border:none;cursor:pointer;font-family:Nunito,sans-serif;}
 
     /* Comparativo */
     .comp-card{background:white;border-radius:16px;border:1px solid rgba(229,231,235,.6);box-shadow:0 4px 12px rgba(0,0,0,.06);padding:14px;margin-bottom:20px;}
@@ -342,6 +380,8 @@
         </div>
         <!-- Copy button -->
         <button class="btn-copy" id="btnCopy">📋 Copiar presupuesto al mes siguiente</button>
+        <!-- Avg button -->
+        <button class="btn-avg" id="btnAvg">📊 Usar promedio del año</button>
       </div>
 
       <!-- Scrollable body -->
@@ -1450,6 +1490,158 @@ function initDona(){
   updateDona();
 }
 
+/* ════════════════════════════════════════
+   PROMEDIO DEL AÑO
+   ════════════════════════════════════════ */
+
+// Number of months elapsed in the current year (Jan–Oct 2026 = 10)
+const MONTHS_SO_FAR = 10;
+
+// Simulated annual totals: vrRealBase has monthly amounts,
+// so we multiply by MONTHS_SO_FAR to get the year-to-date total,
+// then divide by MONTHS_SO_FAR to get the monthly average.
+// Net effect: same as vrRealBase. But we keep the logic explicit
+// so that when real cumulative data is plugged in, the math is correct.
+// vrRealBase items represent the typical monthly spend for each subcategory.
+// The annual total = monto * MONTHS_SO_FAR. The average = annual total / MONTHS_SO_FAR = monto.
+// We therefore show vrRealBase values directly as monthly averages.
+function calcYearAverages(){
+  // { area: [ {cat, sub, monto} ] }  where monto = monthly average
+  const result = { ingresos:[], gastos:[], ahorro:[] };
+
+  ['ingresos','gastos','ahorro'].forEach(area=>{
+    const src = vrRealBase[area] || [];
+    // accumulate yearly totals per cat+sub (in case there are multiple entries per sub)
+    const acc = {};
+    src.forEach(item=>{
+      const key = item.cat+'|||'+item.sub;
+      // vrRealBase stores monthly amounts; multiply by months to get YTD total
+      acc[key] = (acc[key]||0) + (item.monto||0) * MONTHS_SO_FAR;
+    });
+    // divide by months to get monthly average
+    Object.entries(acc).forEach(([key, total])=>{
+      const [cat, sub] = key.split('|||');
+      result[area].push({ cat, sub, monto: Math.round(total / MONTHS_SO_FAR * 100)/100 });
+    });
+  });
+
+  return result;
+}
+
+function openAvgSheet(){
+  const avgs = calcYearAverages();
+
+  // Build subtitle
+  const subtitle = document.getElementById('avgSubtitle');
+  if(subtitle) subtitle.textContent = `Basado en ${MONTHS_SO_FAR} meses reales (ene–oct ${new Date().getFullYear()})`;
+
+  const note = document.getElementById('avgMonthsNote');
+  if(note) note.textContent = `Promedio calculado con ${MONTHS_SO_FAR} meses de datos`;
+
+  const body = document.getElementById('avgBody');
+  if(!body) return;
+  body.innerHTML = '';
+
+  const sections = [
+    { key:'ingresos', label:'💰 Ingresos', dot:'#22c55e', accentColor:'#15803D' },
+    { key:'gastos',   label:'🛒 Gastos',   dot:'#f97316', accentColor:'#C2410C' },
+    { key:'ahorro',   label:'🎯 Ahorro',   dot:'#3b82f6', accentColor:'#1D4ED8' }
+  ];
+
+  sections.forEach(sec=>{
+    const items = avgs[sec.key] || [];
+    const totalAmt = items.reduce((a,b)=>a+b.monto,0);
+
+    const block = document.createElement('div');
+    block.className = 'avg-section open';
+
+    const hd = document.createElement('div');
+    hd.className = 'avg-sec-hd';
+    hd.innerHTML = `
+      <span class="avg-sec-label">
+        <span class="avg-sec-dot" style="background:${sec.dot}"></span>
+        ${sec.label}
+      </span>
+      <span style="display:flex;align-items:center;gap:8px;">
+        <span class="avg-sec-total" style="color:${sec.accentColor};">$${totalAmt.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}</span>
+        <span class="avg-sec-chv">⌄</span>
+      </span>`;
+    hd.addEventListener('click', ()=>block.classList.toggle('open'));
+
+    const content = document.createElement('div');
+    content.className = 'avg-sec-body';
+
+    if(items.length === 0){
+      content.innerHTML = `<div class="avg-sec-inner" style="font-size:12px;color:#9ca3af;font-weight:700;padding:10px 16px;">Sin datos reales registrados</div>`;
+    } else {
+      // Group by cat
+      const bycat = {};
+      items.forEach(i=>{ (bycat[i.cat]=bycat[i.cat]||[]).push(i); });
+      const inner = document.createElement('div');
+      inner.className = 'avg-sec-inner';
+
+      Object.entries(bycat).forEach(([cat, subs])=>{
+        const catTotal = subs.reduce((a,b)=>a+b.monto,0);
+        // cat header
+        const catHead = document.createElement('div');
+        catHead.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0 4px;border-bottom:1px solid #F3F4F6;margin-top:6px;';
+        catHead.innerHTML = `<span style="font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:.5px;">${cat}</span><span style="font-size:12px;font-weight:900;color:#64748B;">$${catTotal.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}</span>`;
+        inner.appendChild(catHead);
+
+        subs.forEach(item=>{
+          const row = document.createElement('div');
+          row.className = 'avg-row';
+          row.innerHTML = `<span class="avg-row-sub" style="padding-left:10px;">${item.sub}</span><span class="avg-row-amt">$${item.monto.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}</span>`;
+          inner.appendChild(row);
+        });
+      });
+      content.appendChild(inner);
+    }
+
+    block.appendChild(hd);
+    block.appendChild(content);
+    body.appendChild(block);
+  });
+
+  // Store avgs for apply action
+  document.getElementById('avgOv')._avgs = avgs;
+  document.getElementById('avgOv').classList.add('open');
+}
+
+function closeAvgSheet(){
+  document.getElementById('avgOv').classList.remove('open');
+}
+
+function applyAveragesAsBudget(){
+  const avgs = document.getElementById('avgOv')._avgs;
+  if(!avgs) return;
+
+  // Replace budget sections with averages
+  ['ingresos','gastos','ahorro'].forEach(area=>{
+    if(avgs[area] && avgs[area].length > 0){
+      budget[area] = avgs[area].map(i=>({cat:i.cat, sub:i.sub, monto:i.monto}));
+    }
+  });
+
+  closeAvgSheet();
+  renderAll();
+  updateDona && updateDona();
+  showToast('✅ Promedio del año aplicado como presupuesto');
+}
+
+// Wire up avg button — apply directly without preview
+document.getElementById('btnAvg').addEventListener('click', ()=>{
+  const avgs = calcYearAverages();
+  ['ingresos','gastos','ahorro'].forEach(area=>{
+    if(avgs[area] && avgs[area].length > 0){
+      budget[area] = avgs[area].map(i=>({cat:i.cat, sub:i.sub, monto:i.monto}));
+    }
+  });
+  renderAll();
+  if(typeof updateDona === 'function') updateDona();
+  showToast('✅ Promedio del año aplicado');
+});
+
 /* ── INIT ── */
 renderAll();
 initDaySelects();
@@ -1462,3 +1654,5 @@ document.head.appendChild(chartScript);
 </script>
 </body>
 </html>
+
+</body></html>
